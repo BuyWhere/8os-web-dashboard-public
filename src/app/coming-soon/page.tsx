@@ -89,10 +89,7 @@ export default function ComingSoonPage() {
             fontWeight: 800,
             letterSpacing: '-0.03em',
             marginBottom: '1.25rem',
-            background: 'linear-gradient(135deg, #fff 0%, #999 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
+            color: '#1e1b4b',
             lineHeight: 1.1,
             textAlign: 'center',
           }}

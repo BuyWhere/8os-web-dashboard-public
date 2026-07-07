@@ -228,7 +228,7 @@ export default function ComingSoonForm({
               flexShrink: 0,
             }}
           />
-          <span style={{ fontSize: '0.9rem', color: '#d4d4d4', lineHeight: 1.5 }}>
+          <span style={{ fontSize: '0.9rem', color: '#4b5563', lineHeight: 1.5 }}>
             <strong style={{ color: '#fff' }}>Yes, enroll me in the founding-affiliate program.</strong>{' '}
             Earn 30% recurring on Pro/Agent Connect referrals. Skip this if you only want launch
             updates.
