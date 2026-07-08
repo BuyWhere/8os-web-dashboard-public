@@ -11,9 +11,14 @@ const NAV_LINKS = [
   { href: '/contact', label: 'Contact' },
 ];
 
+const AUTH_ROUTES = ['/login', '/signup', '/forgot-password', '/reset-password'];
+
 export function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isAuthRoute =
+    pathname &&
+    AUTH_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));
 
   return (
     <>
@@ -24,7 +29,7 @@ export function Header() {
           left: 0,
           right: 0,
           height: 'var(--header-height)',
-          background: 'rgba(13, 13, 15, 0.92)',
+          background: isAuthRoute ? 'rgba(13, 13, 15, 0.92)' : 'rgba(250, 246, 239, 0.82)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
           borderBottom: '1px solid var(--color-border)',
@@ -51,7 +56,7 @@ export function Header() {
             style={{
               fontSize: '1.25rem',
               fontWeight: 800,
-              color: '#fff',
+              color: isAuthRoute ? '#fff' : 'var(--color-text-primary)',
               textDecoration: 'none',
               letterSpacing: '-0.03em',
               whiteSpace: 'nowrap',
@@ -123,7 +128,7 @@ export function Header() {
             style={{
               background: 'none',
               border: 'none',
-              color: '#fff',
+              color: isAuthRoute ? '#fff' : 'var(--color-text-primary)',
               cursor: 'pointer',
               padding: '0.5rem',
             }}
