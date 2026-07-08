@@ -41,7 +41,13 @@ const EMAIL_OPTIONS = [
   },
 ]
 
-export default function ContactPage() {
+export default function ContactPage({
+  searchParams,
+}: {
+  searchParams: { [key: string]: string | string[] | undefined }
+}) {
+  // Force dynamic rendering by using searchParams
+  void searchParams
   return (
     <div style={{
       minHeight: '100vh',
