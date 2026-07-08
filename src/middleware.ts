@@ -96,6 +96,11 @@ export async function middleware(req: NextRequest) {
     const res = NextResponse.redirect(new URL('/signup', req.url), 307)
     return applySecurityHeaders(res, req)
   }
+  // OS-2618: redirect legacy /signin alias to /login
+  if (pathname === '/signin') {
+    const res = NextResponse.redirect(new URL('/login', req.url), 307)
+    return applySecurityHeaders(res, req)
+  }
 
   // Handle CORS preflight
   if (req.method === 'OPTIONS') {
