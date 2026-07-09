@@ -160,3 +160,7 @@ body {
     padding-right: 1rem !important;
   }
 }
+
+.contact-email-link:hover {
+  color: var(--color-accent);
+}

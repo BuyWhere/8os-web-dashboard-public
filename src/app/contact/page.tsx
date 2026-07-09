@@ -164,6 +164,7 @@ export default function ContactPage({
                   </div>
                   <a
                     href={`mailto:${item.email}`}
+                    className="contact-email-link"
                     style={{
                       color: 'var(--color-text-primary)',
                       textDecoration: 'underline',
@@ -173,8 +174,6 @@ export default function ContactPage({
                       fontWeight: 500,
                       transition: 'color 0.15s',
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.color = 'var(--color-accent)')}
-                    onMouseLeave={(e) => (e.currentTarget.style.color = 'var(--color-text-primary)')}
                   >
                     {item.email}
                   </a>
