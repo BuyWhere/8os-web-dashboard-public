@@ -133,7 +133,11 @@ body {
   display: none;
 }
 
-@media (max-width: 640px) {
+/*
+ * Tablet breakpoint — collapse nav links + CTA group into hamburger at <=1024px
+ * (covers iPad portrait 768px-1024px where 'Contact' and 'Sign in' collide)
+ */
+@media (max-width: 1024px) {
   .header-nav-links {
     display: none;
   }
@@ -146,5 +150,13 @@ body {
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+}
+
+/* Extra-narrow mobile: tighten header padding so the hamburger has room. */
+@media (max-width: 640px) {
+  header {
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
   }
 }
