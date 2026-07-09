@@ -22,7 +22,7 @@ export default function TermsPage() {
         <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '2rem', marginBottom: '0.5rem' }}>
           Terms of Service
         </h1>
-        <p style={{ color: '#666', marginBottom: '3rem' }}>Last updated: May 2026</p>
+        <p style={{ color: '#666', marginBottom: '3rem' }}>Last updated: July 2026</p>
 
         <div style={{ lineHeight: 1.8, color: '#ccc' }}>
           <section style={{ marginBottom: '2.5rem' }}>
