@@ -108,7 +108,7 @@ export default function Home() {
               transition: 'color 0.2s',
             }}
           >
-            or{' '}
+            or&nbsp;
             <span style={{ color: '#c4b5fd', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
               reserve your spot
             </span>
