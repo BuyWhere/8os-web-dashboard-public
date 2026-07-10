@@ -11,14 +11,18 @@ const NAV_LINKS = [
   { href: '/contact', label: 'Contact' },
 ];
 
-const AUTH_ROUTES = ['/login', '/signup', '/forgot-password', '/reset-password'];
-
 export function Header() {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const isAuthRoute =
-    pathname &&
-    AUTH_ROUTES.some((route) => pathname === route || pathname.startsWith(`${route}/`));
+
+  // OS-3218: Use dark header on ALL routes. Previous route-aware theme
+  // (cream bg + dark text on marketing) produced WCAG AA contrast failures
+  // (rgb(250,246,239) bg + rgb(237,237,237) text = 1.09:1 ratio). The body
+  // is dark mode, so a dark header matches the visual design and clears
+  // the contrast gate across every page with one change.
+  const headerBg = 'rgba(13, 13, 15, 0.92)';
+  const primaryText = '#fff';
+  const secondaryText = '#cbd5e1';
 
   return (
     <>
@@ -29,7 +33,7 @@ export function Header() {
           left: 0,
           right: 0,
           height: 'var(--header-height)',
-          background: isAuthRoute ? 'rgba(13, 13, 15, 0.92)' : 'rgba(250, 246, 239, 0.82)',
+          background: headerBg,
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
           borderBottom: '1px solid var(--color-border)',
@@ -56,7 +60,7 @@ export function Header() {
             style={{
               fontSize: '1.25rem',
               fontWeight: 800,
-              color: isAuthRoute ? '#fff' : 'var(--color-text-primary)',
+              color: primaryText,
               textDecoration: 'none',
               letterSpacing: '-0.03em',
               whiteSpace: 'nowrap',
@@ -75,7 +79,7 @@ export function Header() {
                 style={{
                   fontSize: '0.875rem',
                   fontWeight: 500,
-                  color: pathname.startsWith(href) ? '#fff' : 'var(--color-text-secondary)',
+                  color: pathname.startsWith(href) ? primaryText : secondaryText,
                   textDecoration: 'none',
                   transition: 'color 0.15s',
                 }}
@@ -93,7 +97,7 @@ export function Header() {
               style={{
                 fontSize: '0.875rem',
                 fontWeight: 600,
-                color: 'var(--color-text-secondary)',
+                color: secondaryText,
                 textDecoration: 'none',
                 whiteSpace: 'nowrap',
               }}
@@ -128,7 +132,7 @@ export function Header() {
             style={{
               background: 'none',
               border: 'none',
-              color: isAuthRoute ? '#fff' : 'var(--color-text-primary)',
+              color: primaryText,
               cursor: 'pointer',
               padding: '0.5rem',
             }}
@@ -184,7 +188,7 @@ export function Header() {
                 style={{
                   fontSize: '1rem',
                   fontWeight: 500,
-                  color: pathname.startsWith(href) ? '#fff' : 'var(--color-text-secondary)',
+                  color: pathname.startsWith(href) ? primaryText : secondaryText,
                   textDecoration: 'none',
                   padding: '0.5rem 0',
                 }}
@@ -211,7 +215,7 @@ export function Header() {
               style={{
                 fontSize: '0.875rem',
                 fontWeight: 600,
-                color: 'var(--color-text-secondary)',
+                color: secondaryText,
                 textDecoration: 'none',
                 textAlign: 'center',
                 padding: '0.75rem 0',
