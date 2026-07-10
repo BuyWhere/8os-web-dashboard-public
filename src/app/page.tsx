@@ -177,7 +177,7 @@ export default function Home() {
           <p
             style={{
               fontSize: '0.875rem',
-              color: '#666',
+              color: '#888',
             }}
           >
             Join thousands who&apos;ve already built their personal operating system
@@ -215,7 +215,7 @@ export default function Home() {
               <div
                 style={{
                   fontSize: '0.875rem',
-                  color: '#666',
+                  color: '#888',
                 }}
               >
                 {feature.desc}
@@ -333,7 +333,7 @@ export default function Home() {
               textAlign: 'center',
               fontSize: '0.75rem',
               fontWeight: 600,
-              color: '#666',
+              color: '#888',
               textTransform: 'uppercase',
               letterSpacing: '0.1em',
               marginBottom: '1.5rem',
@@ -385,7 +385,7 @@ export default function Home() {
                   style={{
                     fontSize: '0.875rem',
                     fontWeight: 600,
-                    color: '#666',
+                    color: '#888',
                   }}
                 >
                   {logo.name}
@@ -538,7 +538,7 @@ export default function Home() {
           borderTop: '1px solid rgba(255,255,255,0.07)',
           marginTop: '4rem',
           padding: '3rem 2rem',
-          color: '#555',
+          color: '#999',
           fontSize: '0.875rem',
         }}
       >
@@ -562,7 +562,7 @@ export default function Home() {
               >
                 8os
               </div>
-              <p style={{ lineHeight: 1.6, color: '#555' }}>
+              <p style={{ lineHeight: 1.6, color: '#999' }}>
                 A personalized operating system unique to every person on Earth.
               </p>
             </div>
@@ -592,7 +592,7 @@ export default function Home() {
                 <li>
                   <Link
                     href="/features"
-                    style={{ color: '#666', textDecoration: 'none' }}
+                    style={{ color: '#888', textDecoration: 'none' }}
                   >
                     Features
                   </Link>
@@ -600,7 +600,7 @@ export default function Home() {
                 <li>
                   <Link
                     href="/onboarding"
-                    style={{ color: '#666', textDecoration: 'none' }}
+                    style={{ color: '#888', textDecoration: 'none' }}
                   >
                     Get Started
                   </Link>
@@ -633,7 +633,7 @@ export default function Home() {
                 <li>
                   <Link
                     href="/blog"
-                    style={{ color: '#666', textDecoration: 'none' }}
+                    style={{ color: '#888', textDecoration: 'none' }}
                   >
                     Blog
                   </Link>
@@ -641,7 +641,7 @@ export default function Home() {
                 <li>
                   <Link
                     href="/archetypes/explorer"
-                    style={{ color: '#666', textDecoration: 'none' }}
+                    style={{ color: '#888', textDecoration: 'none' }}
                   >
                     Archetype Explorer
                   </Link>
@@ -674,7 +674,7 @@ export default function Home() {
                 <li>
                   <Link
                     href="/contact"
-                    style={{ color: '#666', textDecoration: 'none' }}
+                    style={{ color: '#888', textDecoration: 'none' }}
                   >
                     Contact
                   </Link>
@@ -682,7 +682,7 @@ export default function Home() {
                 <li>
                   <Link
                     href="/privacy"
-                    style={{ color: '#666', textDecoration: 'none' }}
+                    style={{ color: '#888', textDecoration: 'none' }}
                   >
                     Privacy
                   </Link>
@@ -690,7 +690,7 @@ export default function Home() {
                 <li>
                   <Link
                     href="/terms"
-                    style={{ color: '#666', textDecoration: 'none' }}
+                    style={{ color: '#888', textDecoration: 'none' }}
                   >
                     Terms
                   </Link>
@@ -702,7 +702,7 @@ export default function Home() {
             style={{
               borderTop: '1px solid rgba(255,255,255,0.05)',
               paddingTop: '1.5rem',
-              color: '#444',
+              color: '#888',
               fontSize: '0.8rem',
             }}
           >

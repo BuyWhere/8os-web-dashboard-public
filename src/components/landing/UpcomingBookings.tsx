@@ -51,7 +51,7 @@ export default function UpcomingBookings() {
         Upcoming Bookings
       </h2>
       {loading ? (
-        <p style={{ color: '#666', fontSize: '0.875rem' }}>Loading bookings...</p>
+        <p style={{ color: '#888', fontSize: '0.875rem' }}>Loading bookings...</p>
       ) : bookings.length > 0 ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
           {bookings.map((booking) => (
@@ -68,7 +68,7 @@ export default function UpcomingBookings() {
             >
               <div style={{ textAlign: 'left' }}>
                 <div style={{ fontWeight: 500 }}>{booking.title}</div>
-                <div style={{ fontSize: '0.75rem', color: '#666' }}>
+                <div style={{ fontSize: '0.75rem', color: '#888' }}>
                   {new Date(booking.startTime).toLocaleString()}
                 </div>
               </div>
@@ -91,7 +91,7 @@ export default function UpcomingBookings() {
           ))}
         </div>
       ) : (
-        <p style={{ color: '#666', fontSize: '0.875rem' }}>
+        <p style={{ color: '#888', fontSize: '0.875rem' }}>
           No upcoming bookings. Configure Cal.diy to see your schedule here.
         </p>
       )}

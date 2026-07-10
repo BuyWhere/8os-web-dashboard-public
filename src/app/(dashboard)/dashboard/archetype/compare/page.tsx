@@ -41,9 +41,9 @@ export default async function CompareArchetypesPage() {
 
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
         <div style={{ marginBottom: 28 }}>
-          <Link href="/dashboard/archetype" style={{ color: '#555', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Your Archetype</Link>
+          <Link href="/dashboard/archetype" style={{ color: '#999', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Your Archetype</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Compare Archetypes</h1>
-          <p style={{ margin: '4px 0 0', color: '#666', fontSize: 14 }}>
+          <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>
             Explore all 10 archetypes and see how they differ
           </p>
         </div>
@@ -78,12 +78,12 @@ export default async function CompareArchetypesPage() {
                     <div style={{ color: arch.color, fontSize: 11, fontStyle: 'italic' }}>{arch.tagline}</div>
                   </div>
                 </div>
-                <div style={{ color: '#666', fontSize: 12, lineHeight: 1.5 }}>{arch.description}</div>
+                <div style={{ color: '#888', fontSize: 12, lineHeight: 1.5 }}>{arch.description}</div>
                 <div style={{ marginTop: 14, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                   {Object.entries(arch.baziElementAffinity)
                     .filter(([, v]) => v >= 0.7)
                     .map(([el]) => (
-                      <span key={el} style={{ background: '#1a1a1a', color: '#555', padding: '2px 7px', borderRadius: 4, fontSize: 10 }}>
+                      <span key={el} style={{ background: '#1a1a1a', color: '#999', padding: '2px 7px', borderRadius: 4, fontSize: 10 }}>
                         {el}
                       </span>
                     ))}
@@ -120,7 +120,7 @@ export default async function CompareArchetypesPage() {
                     <div style={{ color: hybrid.color, fontSize: 11, fontStyle: 'italic' }}>{hybrid.tagline}</div>
                   </div>
                 </div>
-                <div style={{ color: '#666', fontSize: 12, lineHeight: 1.5 }}>{hybrid.description}</div>
+                <div style={{ color: '#888', fontSize: 12, lineHeight: 1.5 }}>{hybrid.description}</div>
               </div>
             )
           })()}

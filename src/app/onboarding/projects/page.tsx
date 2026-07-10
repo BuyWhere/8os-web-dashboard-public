@@ -152,7 +152,7 @@ export default function ProjectsPage() {
         }} />
         <div style={{ textAlign: 'center' }}>
           <div style={{ color: '#ededed', fontWeight: 600, marginBottom: '0.5rem' }}>ARCHIE is analyzing your goals...</div>
-          <div style={{ color: '#444', fontSize: '0.875rem' }}>Generating adaptive projects tailored to you</div>
+          <div style={{ color: '#888', fontSize: '0.875rem' }}>Generating adaptive projects tailored to you</div>
         </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
@@ -187,7 +187,7 @@ export default function ProjectsPage() {
           padding: '0.375rem 1rem',
           marginBottom: '2rem',
           fontSize: '0.75rem',
-          color: '#666',
+          color: '#888',
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
         }}>
@@ -204,7 +204,7 @@ export default function ProjectsPage() {
         }}>
           ARCHIE built your project roadmap
         </h1>
-        <p style={{ color: '#555', fontSize: '0.9375rem' }}>
+        <p style={{ color: '#999', fontSize: '0.9375rem' }}>
           Accept, rename, reorder, or add projects. Rejected projects won't generate tasks.
         </p>
       </div>
@@ -229,7 +229,7 @@ export default function ProjectsPage() {
                 <span style={{ fontSize: '1.25rem' }}>{domain.icon}</span>
                 <div>
                   <div style={{ fontSize: '0.65rem', color: domain.color, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{domain.label}</div>
-                  <div style={{ fontSize: '0.85rem', color: '#444' }}>{domainProjects[0]?.goalName}</div>
+                  <div style={{ fontSize: '0.85rem', color: '#888' }}>{domainProjects[0]?.goalName}</div>
                 </div>
               </div>
 
@@ -294,13 +294,13 @@ export default function ProjectsPage() {
                             <span style={{ marginLeft: '0.5rem', fontSize: '0.65rem', color: '#333' }}>✏️</span>
                           </div>
                         )}
-                        <div style={{ fontSize: '0.8rem', color: '#555', lineHeight: 1.4, marginBottom: '0.5rem' }}>
+                        <div style={{ fontSize: '0.8rem', color: '#999', lineHeight: 1.4, marginBottom: '0.5rem' }}>
                           {project.description}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                           <span style={{
                             fontSize: '0.7rem',
-                            color: '#444',
+                            color: '#888',
                             background: '#141414',
                             padding: '0.2rem 0.5rem',
                             borderRadius: '999px',
@@ -395,7 +395,7 @@ export default function ProjectsPage() {
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
               <button onClick={addCustomProject} style={{ padding: '0.5rem 1rem', background: '#ededed', color: '#080808', border: 'none', borderRadius: '8px', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}>Add</button>
-              <button onClick={() => setShowAddForm(false)} style={{ padding: '0.5rem 1rem', background: 'transparent', color: '#555', border: '1px solid #1e1e1e', borderRadius: '8px', fontSize: '0.875rem', cursor: 'pointer' }}>Cancel</button>
+              <button onClick={() => setShowAddForm(false)} style={{ padding: '0.5rem 1rem', background: 'transparent', color: '#999', border: '1px solid #1e1e1e', borderRadius: '8px', fontSize: '0.875rem', cursor: 'pointer' }}>Cancel</button>
             </div>
           </div>
         ) : (
@@ -406,7 +406,7 @@ export default function ProjectsPage() {
               background: 'transparent',
               border: '1px dashed #1e1e1e',
               borderRadius: '10px',
-              color: '#444',
+              color: '#888',
               fontSize: '0.875rem',
               cursor: 'pointer',
               width: '100%',
@@ -419,7 +419,7 @@ export default function ProjectsPage() {
 
       {/* CTA */}
       <div style={{ maxWidth: 680, width: '100%', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-        <div style={{ fontSize: '0.875rem', color: '#444', textAlign: 'center' }}>
+        <div style={{ fontSize: '0.875rem', color: '#888', textAlign: 'center' }}>
           {acceptedCount} project{acceptedCount !== 1 ? 's' : ''} accepted · ARCHIE will generate tasks for these
         </div>
         <button

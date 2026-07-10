@@ -200,7 +200,7 @@ const styles: Record<string, React.CSSProperties> = {
     display: 'flex',
     alignItems: 'center',
     gap: '0.75rem',
-    color: '#555',
+    color: '#999',
     fontSize: '0.8rem',
   },
   dividerLine: {
@@ -224,7 +224,7 @@ const styles: Record<string, React.CSSProperties> = {
   footer: {
     textAlign: 'center',
     fontSize: '0.875rem',
-    color: '#666',
+    color: '#888',
     margin: '0.5rem 0 0',
   },
   link: {

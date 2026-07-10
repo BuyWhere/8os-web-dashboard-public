@@ -99,7 +99,7 @@ export default function WaitlistForm() {
       <p
         style={{
           fontSize: '0.875rem',
-          color: '#666',
+          color: '#888',
           marginBottom: '1.5rem',
         }}
       >

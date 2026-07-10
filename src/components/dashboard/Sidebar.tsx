@@ -53,7 +53,7 @@ export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
         {!collapsed && <span style={{ fontWeight: 700, fontSize: 16, letterSpacing: '-0.02em' }}>8os</span>}
         <button
           onClick={() => setCollapsed((c) => !c)}
-          style={{ background: 'none', border: 'none', color: '#666', cursor: 'pointer', fontSize: 16, padding: 4, lineHeight: 1, marginLeft: collapsed ? 'auto' : 0 }}
+          style={{ background: 'none', border: 'none', color: '#888', cursor: 'pointer', fontSize: 16, padding: 4, lineHeight: 1, marginLeft: collapsed ? 'auto' : 0 }}
           title={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
         >
           {collapsed ? '▶' : '◀'}
@@ -96,7 +96,7 @@ export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
       {/* Goals list */}
       {!collapsed && goals.length > 0 && (
         <div style={{ padding: '12px 16px', borderTop: '1px solid #1a1a1a' }}>
-          <div style={{ color: '#444', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
+          <div style={{ color: '#888', fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 8 }}>
             Goals
           </div>
           {goals.slice(0, 5).map((g) => (
@@ -112,7 +112,7 @@ export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
               <span style={{ color: '#888', fontSize: 12, flex: 1, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                 {g.name}
               </span>
-              <span style={{ color: '#444', fontSize: 11 }}>{Math.round(g.progress * 100)}%</span>
+              <span style={{ color: '#888', fontSize: 11 }}>{Math.round(g.progress * 100)}%</span>
             </Link>
           ))}
         </div>

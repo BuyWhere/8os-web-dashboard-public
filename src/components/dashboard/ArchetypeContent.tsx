@@ -180,7 +180,7 @@ export function ArchetypeContent() {
             <div style={{ color: '#888', fontSize: 14, fontStyle: 'italic', marginBottom: 10 }}>
               &ldquo;{archetypeDef?.tagline}&rdquo;
             </div>
-            <div style={{ color: '#666', fontSize: 13, maxWidth: 500 }}>{archetypeDef?.description}</div>
+            <div style={{ color: '#888', fontSize: 13, maxWidth: 500 }}>{archetypeDef?.description}</div>
             <div style={{ display: 'flex', gap: 12, marginTop: 14, flexWrap: 'wrap' }}>
               <span style={{ background: '#1e1e2e', color: '#888', padding: '3px 10px', borderRadius: 5, fontSize: 11 }}>
                 Confidence {Math.round(data.confidence * 100)}%
@@ -216,7 +216,7 @@ export function ArchetypeContent() {
                   <div style={{ height: 6, background: '#1a1a1a', borderRadius: 3, overflow: 'hidden' }}>
                     <div style={{ height: '100%', width: `${value * 100}%`, background: archetypeDef?.color ?? '#6366f1', borderRadius: 3 }} />
                   </div>
-                  <div style={{ textAlign: 'right', fontSize: 11, color: '#555', marginTop: 4 }}>
+                  <div style={{ textAlign: 'right', fontSize: 11, color: '#999', marginTop: 4 }}>
                     {Math.round(value * 100)}%
                   </div>
                 </div>

@@ -115,18 +115,18 @@ export default async function DashboardPage() {
             <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>
               {greeting}, {userName} ✦
             </h1>
-            <p style={{ margin: '4px 0 0', color: '#666', fontSize: 14 }}>
+            <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>
               {archetypeName} · {new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
             </p>
           </div>
           <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: 20, fontWeight: 700, color: '#22c55e' }}>{streakDays}</div>
-              <div style={{ fontSize: 10, color: '#555', textTransform: 'uppercase' }}>Streak</div>
+              <div style={{ fontSize: 10, color: '#999', textTransform: 'uppercase' }}>Streak</div>
             </div>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: 20, fontWeight: 700, color: '#6366f1' }}>{completedThisWeek}</div>
-              <div style={{ fontSize: 10, color: '#555', textTransform: 'uppercase' }}>This week</div>
+              <div style={{ fontSize: 10, color: '#999', textTransform: 'uppercase' }}>This week</div>
             </div>
           </div>
         </div>
@@ -141,7 +141,7 @@ export default async function DashboardPage() {
             <div style={{ fontSize: 48 }}>{archetype.archetypeId === 'pioneer' ? '🌱' : archetype.archetypeId === 'sage' ? '🌊' : archetype.archetypeId === 'catalyst' ? '🔥' : archetype.archetypeId === 'architect' ? '⚙️' : '✨'}</div>
             <div>
               <div style={{ fontWeight: 600, fontSize: 16 }}>{archetype.archetypeName}</div>
-              <div style={{ color: '#666', fontSize: 13, marginTop: 2 }}>
+              <div style={{ color: '#888', fontSize: 13, marginTop: 2 }}>
                 Confidence {Math.round(archetype.confidence * 100)}% · {(archetype.dominantElements as string[]).join(', ')} dominant
                 {archetype.isHybrid && <span style={{ color: '#f59e0b', marginLeft: 8 }}>Hybrid</span>}
               </div>
@@ -172,7 +172,7 @@ export default async function DashboardPage() {
             priorityReason={insightPriorityReason}
           />
           ) : (
-          <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: 14, padding: 20, color: '#444', fontSize: 13 }}>
+          <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: 14, padding: 20, color: '#888', fontSize: 13 }}>
             Daily insight unavailable — check back soon.
           </div>
           )}
@@ -184,7 +184,7 @@ export default async function DashboardPage() {
               <Link href="/goals" style={{ color: '#6366f1', fontSize: 12, textDecoration: 'none' }}>View all →</Link>
             </div>
             {goals.length === 0 ? (
-              <div style={{ color: '#444', fontSize: 13, textAlign: 'center', padding: '20px 0' }}>
+              <div style={{ color: '#888', fontSize: 13, textAlign: 'center', padding: '20px 0' }}>
                 No active goals yet. <Link href="/onboarding/goals" style={{ color: '#6366f1' }}>Add one →</Link>
               </div>
             ) : (
@@ -213,7 +213,7 @@ export default async function DashboardPage() {
               <Link href="/calendar" style={{ color: '#6366f1', fontSize: 12, textDecoration: 'none' }}>Calendar →</Link>
             </div>
             {todayTasks.length === 0 ? (
-              <div style={{ color: '#444', fontSize: 13, textAlign: 'center', padding: '16px 0' }}>
+              <div style={{ color: '#888', fontSize: 13, textAlign: 'center', padding: '16px 0' }}>
                 No tasks scheduled. Press ⌘K to add one.
               </div>
             ) : (
@@ -286,7 +286,7 @@ function MetricCard({ label, value, color, icon }: { label: string; value: strin
     <div style={{ background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 10, padding: '12px 14px' }}>
       <div style={{ fontSize: 20, marginBottom: 6 }}>{icon}</div>
       <div style={{ fontSize: 22, fontWeight: 700, color }}>{value}</div>
-      <div style={{ fontSize: 11, color: '#555', marginTop: 2 }}>{label}</div>
+      <div style={{ fontSize: 11, color: '#999', marginTop: 2 }}>{label}</div>
     </div>
   )
 }

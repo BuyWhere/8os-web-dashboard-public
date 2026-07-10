@@ -179,7 +179,7 @@ export default function ComingSoonForm({
               width: '100%',
               padding: '0.875rem 1rem',
               fontSize: '1rem',
-              background: 'rgba(0,0,0,0.4)',
+              background: '#1a1a1d',
               border: status === 'error' ? '2px solid #ef4444' : '1px solid rgba(255,255,255,0.1)',
               borderRadius: '8px',
               color: '#fff',
@@ -228,7 +228,7 @@ export default function ComingSoonForm({
               flexShrink: 0,
             }}
           />
-          <span style={{ fontSize: '0.9rem', color: '#4b5563', lineHeight: 1.5 }}>
+          <span style={{ fontSize: '0.9rem', color: '#a78bfa', lineHeight: 1.5 }}>
             <strong style={{ color: '#fff' }}>Yes, enroll me in the founding-affiliate program.</strong>{' '}
             Earn 30% recurring on Pro/Agent Connect referrals. Skip this if you only want launch
             updates.

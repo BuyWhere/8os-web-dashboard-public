@@ -48,9 +48,9 @@ export default async function JournalPage() {
 
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
         <div style={{ marginBottom: 28 }}>
-          <Link href="/dashboard" style={{ color: '#555', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+          <Link href="/dashboard" style={{ color: '#999', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Journal</h1>
-          <p style={{ margin: '4px 0 0', color: '#666', fontSize: 14 }}>
+          <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>
             Reflect, record, and grow
           </p>
         </div>
@@ -93,7 +93,7 @@ export default async function JournalPage() {
               >
                 Upgrade to Pro →
               </Link>
-              <div style={{ marginTop: 12, color: '#444', fontSize: 12 }}>
+              <div style={{ marginTop: 12, color: '#888', fontSize: 12 }}>
                 Starting from $12/month · cancel anytime
               </div>
             </div>
@@ -104,7 +104,7 @@ export default async function JournalPage() {
             <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: 14, padding: 32, textAlign: 'center' }}>
               <div style={{ fontSize: 40, marginBottom: 12 }}>📔</div>
               <div style={{ color: '#888', fontSize: 15, marginBottom: 8 }}>Journal is coming soon.</div>
-              <div style={{ color: '#555', fontSize: 13 }}>
+              <div style={{ color: '#999', fontSize: 13 }}>
                 Your first entry will appear here. Check back after your next daily briefing.
               </div>
             </div>

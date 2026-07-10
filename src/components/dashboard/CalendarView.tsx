@@ -214,7 +214,7 @@ export function CalendarView({ events, unscheduledTasks, workPreferences }: Prop
       {/* Unscheduled Tasks Sidebar */}
       {unscheduledTasks.length > 0 && (
         <div style={{ width: 220, borderLeft: '1px solid #1a1a1a', background: '#0d0d0d', padding: '16px 14px', overflowY: 'auto', flexShrink: 0 }}>
-          <div style={{ fontSize: 11, color: '#555', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12 }}>
+          <div style={{ fontSize: 11, color: '#999', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12 }}>
             Unscheduled ({unscheduledTasks.length})
           </div>
           {schedulingResult && (
@@ -226,7 +226,7 @@ export function CalendarView({ events, unscheduledTasks, workPreferences }: Prop
             <div key={t.id} style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: 8, padding: '10px 12px', marginBottom: 8 }}>
               <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{t.name}</div>
               <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 6 }}>
-                <span style={{ fontSize: 10, color: '#555' }}>{t.duration}m</span>
+                <span style={{ fontSize: 10, color: '#999' }}>{t.duration}m</span>
                 <span style={{ fontSize: 10, color: t.priority === 'high' ? '#ef4444' : t.priority === 'medium' ? '#f59e0b' : '#22c55e' }}>
                   {t.priority}
                 </span>
@@ -265,7 +265,7 @@ function MonthView({ days, events, todayKey }: { days: Date[]; events: CalendarE
     <div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', borderBottom: '1px solid #1a1a1a' }}>
         {WEEKDAYS.map((d) => (
-          <div key={d} style={{ padding: '8px 12px', fontSize: 11, color: '#555', textTransform: 'uppercase', textAlign: 'center' }}>{d}</div>
+          <div key={d} style={{ padding: '8px 12px', fontSize: 11, color: '#999', textTransform: 'uppercase', textAlign: 'center' }}>{d}</div>
         ))}
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gridTemplateRows: 'repeat(6, minmax(100px, 1fr))' }}>
@@ -302,7 +302,7 @@ function MonthView({ days, events, todayKey }: { days: Date[]; events: CalendarE
                 </div>
               ))}
               {dayEvents.length > 3 && (
-                <div style={{ fontSize: 10, color: '#555' }}>+{dayEvents.length - 3} more</div>
+                <div style={{ fontSize: 10, color: '#999' }}>+{dayEvents.length - 3} more</div>
               )}
             </div>
           )
@@ -327,7 +327,7 @@ function WeekView({ days, events, workPreferences, todayKey }: { days: Date[]; e
           const isToday = key === todayKey
           return (
             <div key={i} style={{ padding: '10px 8px', textAlign: 'center', borderLeft: '1px solid #141414' }}>
-              <div style={{ fontSize: 10, color: '#555' }}>{WEEKDAYS_SHORT[i]}</div>
+              <div style={{ fontSize: 10, color: '#999' }}>{WEEKDAYS_SHORT[i]}</div>
               <div style={{
                 width: 28, height: 28, borderRadius: '50%', margin: '2px auto 0',
                 background: isToday ? '#6366f1' : 'transparent',
@@ -348,7 +348,7 @@ function WeekView({ days, events, workPreferences, todayKey }: { days: Date[]; e
           <div>
             {HOURS.map((h) => (
               <div key={h} style={{ height: 52, display: 'flex', alignItems: 'flex-start', paddingTop: 4, paddingRight: 8, justifyContent: 'flex-end' }}>
-                <span style={{ fontSize: 10, color: '#444' }}>{formatHour(h)}</span>
+                <span style={{ fontSize: 10, color: '#888' }}>{formatHour(h)}</span>
               </div>
             ))}
           </div>
@@ -396,7 +396,7 @@ function WeekView({ days, events, workPreferences, todayKey }: { days: Date[]; e
 
         {/* Working window legend */}
         <div style={{ padding: '8px 12px', display: 'flex', gap: 16, borderTop: '1px solid #141414' }}>
-          <span style={{ fontSize: 10, color: '#555' }}>Working window: {formatHour(workPreferences.workingWindowStart)}–{formatHour(workPreferences.workingWindowEnd)} · {workPreferences.blockLengthMin}m blocks · {workPreferences.batching} · {workPreferences.planningCadence}</span>
+          <span style={{ fontSize: 10, color: '#999' }}>Working window: {formatHour(workPreferences.workingWindowStart)}–{formatHour(workPreferences.workingWindowEnd)} · {workPreferences.blockLengthMin}m blocks · {workPreferences.batching} · {workPreferences.planningCadence}</span>
         </div>
       </div>
     </div>
@@ -421,7 +421,7 @@ function DayView({ day, events, workPreferences }: { day: Date; events: Calendar
       <div>
         {HOURS.map((h) => (
           <div key={h} style={{ height: 52, display: 'flex', alignItems: 'flex-start', paddingTop: 4, paddingRight: 8, justifyContent: 'flex-end' }}>
-            <span style={{ fontSize: 10, color: '#444' }}>{formatHour(h)}</span>
+            <span style={{ fontSize: 10, color: '#888' }}>{formatHour(h)}</span>
           </div>
         ))}
       </div>
@@ -464,7 +464,7 @@ function DayView({ day, events, workPreferences }: { day: Date; events: Calendar
                 {new Date(e.endAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
               </div>
               {e.task && height > 60 && (
-                <div style={{ fontSize: 11, color: '#666', marginTop: 4 }}>
+                <div style={{ fontSize: 11, color: '#888', marginTop: 4 }}>
                   {e.task.priority} · {e.task.duration}m
                 </div>
               )}

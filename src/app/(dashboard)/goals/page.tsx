@@ -61,7 +61,7 @@ export default async function GoalsPage() {
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28 }}>
           <div>
-            <Link href="/dashboard" style={{ color: '#555', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+            <Link href="/dashboard" style={{ color: '#999', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
             <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Goals</h1>
           </div>
         </div>
@@ -98,7 +98,7 @@ export default async function GoalsPage() {
                           <span style={{ fontSize: 10, color: domainColor, fontWeight: 700, textTransform: 'uppercase' }}>{g.domainId}</span>
                         </div>
                         <div style={{ fontWeight: 600, fontSize: 14, color: '#ededed' }}>{g.name}</div>
-                        <div style={{ fontSize: 12, color: '#666', marginTop: 2 }}>{g.definition.slice(0, 80)}{g.definition.length > 80 ? '…' : ''}</div>
+                        <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>{g.definition.slice(0, 80)}{g.definition.length > 80 ? '…' : ''}</div>
                         {tagline && (
                           <div style={{
                             marginTop: 8, fontSize: 11, fontStyle: 'italic', color: domainColor,
@@ -113,7 +113,7 @@ export default async function GoalsPage() {
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div style={{ fontSize: 11, color: '#555' }}>
+                      <div style={{ fontSize: 11, color: '#999' }}>
                         {doneTasks}/{totalTasks} tasks · {g.projects.length} projects
                       </div>
                       <span style={{ padding: '2px 8px', borderRadius: 4, background: g.status === 'active' ? '#22c55e22' : '#1e1e1e', color: g.status === 'active' ? '#22c55e' : '#555', fontSize: 10 }}>

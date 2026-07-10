@@ -8,7 +8,7 @@
   --color-border-strong: #1a1a1a;
   --color-text-primary: #ededed;
   --color-text-secondary: #888888;
-  --color-text-muted: #666666;
+  --color-text-muted: #999999;
   --color-accent: #667eea;
   --color-accent-2: #764ba2;
   --header-height: 72px;
@@ -164,3 +164,31 @@ body {
 .contact-email-link:hover {
   color: var(--color-accent);
 }
+
+
+/* WCAG AA placeholder and input styling */
+input::placeholder {
+  color: #999999;
+  opacity: 1;
+}
+
+input:-ms-input-placeholder {
+  color: #999999;
+  opacity: 1;
+}
+
+input::-ms-input-placeholder {
+  color: #999999;
+  opacity: 1;
+}
+
+/* WCAG AA: ensure all inputs have light backgrounds for visible text/placeholder */
+input[type="email"],
+input[type="text"],
+input[type="password"],
+input[type="search"] {
+  background: #1a1a1d;
+  border-color: rgba(255, 255, 255, 0.15);
+  color: #ededed;
+}
+

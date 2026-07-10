@@ -129,7 +129,7 @@ export default function ContactForm() {
             Message sent!
           </span>
         </div>
-        <p style={{ color: '#666', fontSize: '0.9375rem', margin: '0 0 1.25rem' }}>
+        <p style={{ color: '#888', fontSize: '0.9375rem', margin: '0 0 1.25rem' }}>
           {statusMessage}
         </p>
         <button
@@ -301,7 +301,7 @@ export default function ContactForm() {
         {status === 'loading' ? 'Sending…' : 'Send message →'}
       </button>
 
-      <p style={{ color: '#555', fontSize: '0.8125rem', margin: 0 }}>
+      <p style={{ color: '#999', fontSize: '0.8125rem', margin: 0 }}>
         We typically reply within 1 business day.
       </p>
     </form>

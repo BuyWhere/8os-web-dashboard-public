@@ -133,7 +133,7 @@ export default function ArchetypeExplorerPage() {
                     </span>
                   ))}
                 </div>
-                <p style={{ color: '#666', fontSize: '0.8rem' }}>
+                <p style={{ color: '#888', fontSize: '0.8rem' }}>
                   ⚡ Peak hours: {a.peak}
                 </p>
               </div>

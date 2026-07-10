@@ -160,7 +160,7 @@ export default function QuizPage() {
     // All skipped or empty
     return (
       <div style={{ minHeight: '100vh', background: '#080808', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ textAlign: 'center', color: '#666' }}>
+        <div style={{ textAlign: 'center', color: '#888' }}>
           <p>Calculating your archetype...</p>
         </div>
       </div>
@@ -190,7 +190,7 @@ export default function QuizPage() {
             borderRadius: '999px',
             padding: '0.375rem 1rem',
             fontSize: '0.75rem',
-            color: '#666',
+            color: '#888',
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
           }}>
@@ -282,7 +282,7 @@ export default function QuizPage() {
                 background: 'transparent',
                 border: '1px solid #1e1e1e',
                 borderRadius: '8px',
-                color: '#444',
+                color: '#888',
                 cursor: 'pointer',
                 fontSize: '0.8rem',
               }}
@@ -295,7 +295,7 @@ export default function QuizPage() {
         {/* Skip info if any questions skipped */}
         {skipSet.size > 0 && (
           <div style={{ marginTop: '2rem', padding: '0.75rem 1rem', background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: '10px' }}>
-            <p style={{ color: '#444', fontSize: '0.75rem', margin: 0 }}>
+            <p style={{ color: '#888', fontSize: '0.75rem', margin: 0 }}>
               Your BaZi chart revealed strong signals — {skipSet.size} question{skipSet.size > 1 ? 's' : ''} skipped
             </p>
           </div>

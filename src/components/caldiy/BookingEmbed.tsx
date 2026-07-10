@@ -49,7 +49,7 @@ export function BookingEmbed({
   if (!calDiyUrl) {
     return (
       <div className={className} style={containerStyle}>
-        <p style={{ color: '#666' }}>
+        <p style={{ color: '#888' }}>
           Cal.diy not configured. Set NEXT_PUBLIC_CALDIY_URL in environment.
         </p>
       </div>

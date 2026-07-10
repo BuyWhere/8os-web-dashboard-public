@@ -89,6 +89,6 @@ const styles: Record<string, React.CSSProperties> = {
   btn: { background: '#ededed', color: '#0a0a0a', border: 'none', borderRadius: '8px', padding: '0.75rem', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', marginTop: '0.5rem' },
   errorBox: { background: '#1a0808', border: '1px solid #5c1818', color: '#ff6b6b', borderRadius: '8px', padding: '0.75rem 1rem', fontSize: '0.875rem', marginBottom: '0.5rem' },
   successBox: { background: '#081a08', border: '1px solid #185c18', color: '#6bff6b', borderRadius: '8px', padding: '0.75rem 1rem', fontSize: '0.875rem', marginBottom: '0.5rem' },
-  footer: { textAlign: 'center', fontSize: '0.875rem', color: '#666', margin: '1rem 0 0' },
+  footer: { textAlign: 'center', fontSize: '0.875rem', color: '#888', margin: '1rem 0 0' },
   link: { color: '#ededed' },
 }

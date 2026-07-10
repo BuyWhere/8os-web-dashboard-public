@@ -53,7 +53,7 @@ export default function GoalsPage() {
           padding: '0.375rem 1rem',
           marginBottom: '2rem',
           fontSize: '0.75rem',
-          color: '#666',
+          color: '#888',
           letterSpacing: '0.1em',
           textTransform: 'uppercase',
         }}>
@@ -71,7 +71,7 @@ export default function GoalsPage() {
         }}>
           What areas of your life<br />are you forging?
         </h1>
-        <p style={{ color: '#666', fontSize: '1rem', lineHeight: 1.6 }}>
+        <p style={{ color: '#888', fontSize: '1rem', lineHeight: 1.6 }}>
           Select 1–5 domains. Your OS will generate goals, projects, and tasks around them.
         </p>
       </div>
@@ -140,7 +140,7 @@ export default function GoalsPage() {
               }}>
                 {domain.label}
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#555', lineHeight: 1.4 }}>
+              <div style={{ fontSize: '0.75rem', color: '#999', lineHeight: 1.4 }}>
                 {domain.description}
               </div>
             </button>
@@ -157,7 +157,7 @@ export default function GoalsPage() {
         maxWidth: 680,
         width: '100%',
       }}>
-        <div style={{ fontSize: '0.875rem', color: '#444' }}>
+        <div style={{ fontSize: '0.875rem', color: '#888' }}>
           {selected.length === 0
             ? 'Select at least 1 domain'
             : selected.length === 5

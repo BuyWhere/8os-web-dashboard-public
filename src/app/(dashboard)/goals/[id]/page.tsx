@@ -78,7 +78,7 @@ export default async function GoalDetailPage({ params }: { params: { id: string 
       <main style={{ flex: 1, overflowY: 'auto', padding: '24px 32px' }}>
         {/* Header */}
         <div style={{ marginBottom: 28 }}>
-          <Link href="/dashboard" style={{ color: '#555', fontSize: 13, textDecoration: 'none', marginBottom: 12, display: 'inline-block' }}>
+          <Link href="/dashboard" style={{ color: '#999', fontSize: 13, textDecoration: 'none', marginBottom: 12, display: 'inline-block' }}>
             ← Dashboard
           </Link>
           <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
@@ -111,7 +111,7 @@ export default async function GoalDetailPage({ params }: { params: { id: string 
           <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: 14, padding: 20 }}>
             <h2 style={{ margin: '0 0 16px', fontSize: 14, fontWeight: 600 }}>Projects</h2>
             {goal.projects.length === 0 ? (
-              <div style={{ color: '#444', fontSize: 13 }}>No projects yet.</div>
+              <div style={{ color: '#888', fontSize: 13 }}>No projects yet.</div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {goal.projects.map((p) => {
@@ -123,9 +123,9 @@ export default async function GoalDetailPage({ params }: { params: { id: string 
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                         <div>
                           <div style={{ fontWeight: 600, fontSize: 13 }}>{p.name}</div>
-                          {p.description && <div style={{ color: '#666', fontSize: 12, marginTop: 2 }}>{p.description}</div>}
+                          {p.description && <div style={{ color: '#888', fontSize: 12, marginTop: 2 }}>{p.description}</div>}
                         </div>
-                        <span style={{ color: '#555', fontSize: 12 }}>{pDone}/{pTotal}</span>
+                        <span style={{ color: '#999', fontSize: 12 }}>{pDone}/{pTotal}</span>
                       </div>
                       <div style={{ marginTop: 8, height: 3, background: '#1e1e1e', borderRadius: 2, overflow: 'hidden' }}>
                         <div style={{ height: '100%', width: `${pProgress * 100}%`, background: domainColor, borderRadius: 2, transition: 'width 0.3s' }} />
@@ -151,7 +151,7 @@ export default async function GoalDetailPage({ params }: { params: { id: string 
                   <div style={{ width: 3, alignSelf: 'stretch', borderRadius: 2, background: e.color ?? domainColor }} />
                   <div>
                     <div style={{ fontSize: 13 }}>{e.title}</div>
-                    <div style={{ fontSize: 11, color: '#555', marginTop: 2 }}>
+                    <div style={{ fontSize: 11, color: '#999', marginTop: 2 }}>
                       {new Date(e.startAt).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                       {' '}
                       {new Date(e.startAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
@@ -169,12 +169,12 @@ export default async function GoalDetailPage({ params }: { params: { id: string 
         <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: 14, padding: 20 }}>
           <h2 style={{ margin: '0 0 16px', fontSize: 14, fontWeight: 600 }}>Activity</h2>
           {goal.activityLogs.length === 0 ? (
-            <div style={{ color: '#444', fontSize: 13 }}>No activity yet.</div>
+            <div style={{ color: '#888', fontSize: 13 }}>No activity yet.</div>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
               {goal.activityLogs.map((log) => (
                 <div key={log.id} style={{ display: 'flex', gap: 12, alignItems: 'flex-start', padding: '6px 0', borderBottom: '1px solid #141414' }}>
-                  <span style={{ color: '#444', fontSize: 11, whiteSpace: 'nowrap', paddingTop: 1 }}>
+                  <span style={{ color: '#888', fontSize: 11, whiteSpace: 'nowrap', paddingTop: 1 }}>
                     {new Date(log.createdAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                   </span>
                   <span style={{ fontSize: 11, color: '#888' }}>
@@ -196,7 +196,7 @@ function Stat({ label, value }: { label: string; value: string }) {
   return (
     <div>
       <div style={{ fontSize: 18, fontWeight: 700 }}>{value}</div>
-      <div style={{ fontSize: 11, color: '#555', textTransform: 'uppercase' }}>{label}</div>
+      <div style={{ fontSize: 11, color: '#999', textTransform: 'uppercase' }}>{label}</div>
     </div>
   )
 }
@@ -225,7 +225,7 @@ function GoalTasksPanel({ tasks, domainColor }: { tasks: Task[]; domainColor: st
     <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: 14, padding: 20 }}>
       <h2 style={{ margin: '0 0 16px', fontSize: 14, fontWeight: 600 }}>Tasks ({tasks.length})</h2>
       {tasks.length === 0 ? (
-        <div style={{ color: '#444', fontSize: 13 }}>No tasks yet.</div>
+        <div style={{ color: '#888', fontSize: 13 }}>No tasks yet.</div>
       ) : (
         <div>
           {(['in_progress', 'todo', 'done'] as const).map((status) => {
@@ -233,7 +233,7 @@ function GoalTasksPanel({ tasks, domainColor }: { tasks: Task[]; domainColor: st
             if (group.length === 0) return null
             return (
               <div key={status} style={{ marginBottom: 16 }}>
-                <div style={{ color: '#555', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>
+                <div style={{ color: '#999', fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 6 }}>
                   {status.replace('_', ' ')} ({group.length})
                 </div>
                 {group.map((t) => (
@@ -246,7 +246,7 @@ function GoalTasksPanel({ tasks, domainColor }: { tasks: Task[]; domainColor: st
                       {t.name}
                     </div>
                     {t.scheduledAt && (
-                      <span style={{ fontSize: 10, color: '#444' }}>
+                      <span style={{ fontSize: 10, color: '#888' }}>
                         {new Date(t.scheduledAt).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                       </span>
                     )}

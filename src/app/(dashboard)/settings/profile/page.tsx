@@ -162,7 +162,7 @@ export default function ProfileSettingsPage() {
     setTimeout(() => router.push('/login'), 2000)
   }
 
-  if (loading) return <main style={styles.main}><p style={{ color: '#666' }}>Loading…</p></main>
+  if (loading) return <main style={styles.main}><p style={{ color: '#888' }}>Loading…</p></main>
   if (error) return <main style={styles.main}><p style={{ color: '#ff6b6b' }}>{error}</p></main>
   if (!user) return null
 
@@ -249,7 +249,7 @@ export default function ProfileSettingsPage() {
                   <p style={{ color: '#ccc', fontSize: '0.875rem' }}>Scan this QR code with your authenticator app:</p>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={totpQr} alt="TOTP QR code" style={{ width: 180, height: 180, margin: '1rem 0' }} />
-                  <p style={{ color: '#666', fontSize: '0.75rem', wordBreak: 'break-all' }}>
+                  <p style={{ color: '#888', fontSize: '0.75rem', wordBreak: 'break-all' }}>
                     Manual key: <code>{totpSecret}</code>
                   </p>
                   <form onSubmit={confirmTotp} style={{ display: 'flex', gap: '0.5rem', alignItems: 'center', marginTop: '0.75rem' }}>
@@ -276,7 +276,7 @@ export default function ProfileSettingsPage() {
           <h2 style={styles.sectionTitle}>Active sessions</h2>
           {sessionMsg && <p style={{ color: '#ffb86b', fontSize: '0.875rem' }}>{sessionMsg}</p>}
           {sessions.length === 0 ? (
-            <p style={{ color: '#666', fontSize: '0.875rem' }}>No active sessions found.</p>
+            <p style={{ color: '#888', fontSize: '0.875rem' }}>No active sessions found.</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               {sessions.map((s) => (
@@ -286,7 +286,7 @@ export default function ProfileSettingsPage() {
                       {s.deviceName ?? s.userAgent?.slice(0, 60) ?? 'Unknown device'}
                       {s.current ? ' (current)' : ''}
                     </p>
-                    <p style={{ margin: '0.25rem 0 0', color: '#666', fontSize: '0.75rem' }}>
+                    <p style={{ margin: '0.25rem 0 0', color: '#888', fontSize: '0.75rem' }}>
                       {s.ipAddress ?? 'IP unavailable'} · Since {new Date(s.createdAt).toLocaleDateString()} · Expires {new Date(s.expiresAt).toLocaleDateString()}
                     </p>
                   </div>
@@ -345,17 +345,17 @@ const styles: Record<string, React.CSSProperties> = {
   main: { display: 'flex', justifyContent: 'center', minHeight: '100vh', padding: '2rem 1rem', background: '#0a0a0a' },
   container: { width: '100%', maxWidth: '600px' },
   header: { marginBottom: '2rem' },
-  back: { color: '#666', textDecoration: 'none', fontSize: '0.875rem' },
+  back: { color: '#888', textDecoration: 'none', fontSize: '0.875rem' },
   title: { fontSize: '1.5rem', fontWeight: '700', color: '#ededed', margin: '0.5rem 0 0' },
   section: { background: '#111', border: '1px solid #222', borderRadius: '12px', padding: '1.5rem', marginBottom: '1.5rem' },
   sectionTitle: { fontSize: '1rem', fontWeight: '600', color: '#ededed', margin: '0 0 1rem' },
   row: { display: 'flex', justifyContent: 'space-between', padding: '0.5rem 0', borderBottom: '1px solid #1a1a1a' },
-  label: { color: '#666', fontSize: '0.875rem' },
+  label: { color: '#888', fontSize: '0.875rem' },
   value: { color: '#ccc', fontSize: '0.875rem' },
   input: { background: '#0a0a0a', border: '1px solid #333', borderRadius: '8px', padding: '0.625rem 0.875rem', color: '#ededed', fontSize: '0.9rem', outline: 'none' },
   btn: { background: '#ededed', color: '#0a0a0a', border: 'none', borderRadius: '8px', padding: '0.625rem 1.25rem', fontSize: '0.9rem', fontWeight: '600', cursor: 'pointer' },
   dangerBtn: { background: '#3d1a1a', color: '#ff6b6b', border: '1px solid #5c2020', borderRadius: '8px', padding: '0.625rem 1.25rem', fontSize: '0.9rem', fontWeight: '600', cursor: 'pointer' },
-  ghostBtn: { background: 'none', color: '#666', border: '1px solid #333', borderRadius: '8px', padding: '0.625rem 1rem', fontSize: '0.9rem', cursor: 'pointer' },
+  ghostBtn: { background: 'none', color: '#888', border: '1px solid #333', borderRadius: '8px', padding: '0.625rem 1rem', fontSize: '0.9rem', cursor: 'pointer' },
   sessionRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.75rem', background: '#0a0a0a', borderRadius: '8px', border: '1px solid #1a1a1a' },
   smallDangerBtn: { background: 'none', color: '#ff6b6b', border: '1px solid #3d1a1a', borderRadius: '6px', padding: '0.375rem 0.75rem', fontSize: '0.8rem', cursor: 'pointer' },
 }

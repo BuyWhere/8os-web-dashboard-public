@@ -239,7 +239,7 @@ export default function BirthPage() {
   const labelStyle = {
     display: 'block' as const,
     fontSize: '0.75rem',
-    color: '#666',
+    color: '#888',
     marginBottom: '0.5rem',
     letterSpacing: '0.08em',
     textTransform: 'uppercase' as const,
@@ -268,7 +268,7 @@ export default function BirthPage() {
             borderRadius: '999px',
             padding: '0.375rem 1rem',
             fontSize: '0.75rem',
-            color: '#666',
+            color: '#888',
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
           }}>
@@ -281,7 +281,7 @@ export default function BirthPage() {
         <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#ededed', letterSpacing: '-0.03em', marginBottom: '0.5rem' }}>
           When were you born?
         </h1>
-        <p style={{ color: '#555', marginBottom: '2.5rem', lineHeight: 1.6 }}>
+        <p style={{ color: '#999', marginBottom: '2.5rem', lineHeight: 1.6 }}>
           Your birth data anchors your personalized OS. We use BaZi — the Chinese Four-Pillar system — to map your energetic blueprint.
         </p>
 
@@ -351,7 +351,7 @@ export default function BirthPage() {
               <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#ededed', letterSpacing: '-0.02em' }}>
                 {dayMasterStem} — {STEM_NAMES_EN[dayMasterStem]}
               </div>
-              <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.1rem' }}>
+              <div style={{ fontSize: '0.85rem', color: '#888', marginTop: '0.1rem' }}>
                 {dmPolarity.charAt(0).toUpperCase() + dmPolarity.slice(1)} {dmElement.charAt(0).toUpperCase() + dmElement.slice(1)}
               </div>
             </div>
@@ -421,14 +421,14 @@ export default function BirthPage() {
               </div>
             </div>
           ) : (
-            <p style={{ color: '#444', fontSize: '0.85rem', padding: '0.75rem 1rem', background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: '10px' }}>
+            <p style={{ color: '#888', fontSize: '0.85rem', padding: '0.75rem 1rem', background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: '10px' }}>
               Defaulting to 12:00 noon — add your birth time for more precise results
             </p>
           )}
 
           {/* Timezone */}
           {timezone && (
-            <p style={{ color: '#444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+            <p style={{ color: '#888', fontSize: '0.75rem', marginTop: '0.5rem' }}>
               Timezone auto-detected: {timezone}
             </p>
           )}
@@ -493,7 +493,7 @@ export default function BirthPage() {
                 background: '#0f0f0f',
                 border: '1px solid #1e1e1e',
                 borderRadius: '10px',
-                color: '#555',
+                color: '#999',
                 cursor: locationLoading ? 'wait' : 'pointer',
                 fontSize: '1rem',
                 whiteSpace: 'nowrap',
@@ -544,7 +544,7 @@ export default function BirthPage() {
             }}>
               {gdprAccepted && <span style={{ color: '#000', fontSize: '0.75rem', fontWeight: 700 }}>✓</span>}
             </div>
-            <p style={{ fontSize: '0.8rem', color: '#555', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: '0.8rem', color: '#999', lineHeight: 1.6, margin: 0 }}>
               I consent to 8os storing my birth data securely. This data is encrypted at rest with AES-256 and is used solely to compute my personalized operating system. I can request deletion at any time.
             </p>
           </div>

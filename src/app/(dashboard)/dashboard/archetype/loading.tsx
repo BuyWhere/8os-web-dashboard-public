@@ -8,9 +8,9 @@ export default function Loading() {
       <main style={pageMainStyle}>
         <DashboardPageStyles />
         <div style={{ marginBottom: 28 }}>
-          <div style={{ color: '#555', fontSize: 13, marginBottom: 4 }}>← Dashboard</div>
+          <div style={{ color: '#999', fontSize: 13, marginBottom: 4 }}>← Dashboard</div>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Your Archetype</h1>
-          <p style={{ margin: '4px 0 0', color: '#666', fontSize: 14 }}>
+          <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>
             Understand your core operating style
           </p>
         </div>

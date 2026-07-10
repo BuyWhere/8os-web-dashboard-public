@@ -41,9 +41,9 @@ export default async function ArchetypePage() {
 
       <main style={pageMainStyle}>
         <div style={{ marginBottom: 28 }}>
-          <Link href="/dashboard" style={{ color: '#555', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+          <Link href="/dashboard" style={{ color: '#999', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Your Archetype</h1>
-          <p style={{ margin: '4px 0 0', color: '#666', fontSize: 14 }}>
+          <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>
             Understand your core operating style
           </p>
         </div>

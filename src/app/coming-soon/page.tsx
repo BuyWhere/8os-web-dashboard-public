@@ -89,7 +89,7 @@ export default function ComingSoonPage() {
             fontWeight: 800,
             letterSpacing: '-0.03em',
             marginBottom: '1.25rem',
-            color: '#1e1b4b',
+            color: '#e2e8f0',
             lineHeight: 1.1,
             textAlign: 'center',
           }}

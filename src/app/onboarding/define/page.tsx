@@ -132,7 +132,7 @@ export default function DefinePage() {
             borderRadius: '999px',
             padding: '0.375rem 1rem',
             fontSize: '0.75rem',
-            color: '#666',
+            color: '#888',
             letterSpacing: '0.1em',
             textTransform: 'uppercase',
           }}>
@@ -188,7 +188,7 @@ export default function DefinePage() {
 
         {/* Goal name */}
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: '#666', marginBottom: '0.5rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+          <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
             Goal Name
           </label>
           <div style={{ position: 'relative' }}>
@@ -245,7 +245,7 @@ export default function DefinePage() {
                   background: '#111',
                   border: '1px solid #1e1e1e',
                   borderRadius: '999px',
-                  color: '#555',
+                  color: '#999',
                   fontSize: '0.7rem',
                   cursor: 'pointer',
                 }}
@@ -258,7 +258,7 @@ export default function DefinePage() {
 
         {/* Goal definition */}
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: '#666', marginBottom: '0.5rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+          <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
             {domain.promptHint}
           </label>
           <textarea
@@ -285,7 +285,7 @@ export default function DefinePage() {
 
         {/* Check method */}
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: '#666', marginBottom: '0.75rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
+          <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.75rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
             How will you measure this?
           </label>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '0.5rem' }}>
@@ -313,7 +313,7 @@ export default function DefinePage() {
               )
             })}
           </div>
-          <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', color: '#444', textAlign: 'center' }}>
+          <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', color: '#888', textAlign: 'center' }}>
             {CHECK_METHODS.find(m => m.id === currentGoal.checkMethod)?.description}
           </div>
         </div>
@@ -322,7 +322,7 @@ export default function DefinePage() {
         {(currentGoal.checkMethod === 'numeric' || currentGoal.checkMethod === 'time') && (
           <div style={{ display: 'flex', gap: '0.75rem' }}>
             <div style={{ flex: 1 }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: '#666', marginBottom: '0.5rem' }}>Target</label>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem' }}>Target</label>
               <input
                 type="number"
                 value={currentGoal.checkConfig.target ?? ''}
@@ -342,7 +342,7 @@ export default function DefinePage() {
               />
             </div>
             <div style={{ flex: 1 }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: '#666', marginBottom: '0.5rem' }}>Unit</label>
+              <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem' }}>Unit</label>
               <input
                 type="text"
                 value={currentGoal.checkConfig.unit ?? ''}
@@ -367,7 +367,7 @@ export default function DefinePage() {
         {/* Streak target */}
         {currentGoal.checkMethod === 'streak' && (
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', color: '#666', marginBottom: '0.5rem' }}>
+            <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem' }}>
               Target streak (days)
             </label>
             <input
@@ -398,7 +398,7 @@ export default function DefinePage() {
               background: '#0f0f0f',
               border: '1px solid #1e1e1e',
               borderRadius: '10px',
-              color: '#666',
+              color: '#888',
               fontSize: '0.9375rem',
               cursor: 'pointer',
             }}

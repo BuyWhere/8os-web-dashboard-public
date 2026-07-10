@@ -311,7 +311,7 @@ export function QuickAdd({ onTaskAdded }: Props) {
                   }}
                   disabled={loading}
                 />
-                {loading && <span style={{ color: '#666', fontSize: 13 }}>...</span>}
+                {loading && <span style={{ color: '#888', fontSize: 13 }}>...</span>}
                 {confirmingSuccess && (
                   <span style={{ color: '#22c55e', fontSize: 18 }}>✓</span>
                 )}
@@ -322,7 +322,7 @@ export function QuickAdd({ onTaskAdded }: Props) {
                 <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
                   {/* Priority */}
                   <div>
-                    <div style={{ color: '#666', fontSize: 11, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>
+                    <div style={{ color: '#888', fontSize: 11, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>
                       Priority
                     </div>
                     <ChipSelector
@@ -335,7 +335,7 @@ export function QuickAdd({ onTaskAdded }: Props) {
 
                   {/* Domain */}
                   <div>
-                    <div style={{ color: '#666', fontSize: 11, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>
+                    <div style={{ color: '#888', fontSize: 11, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>
                       Domain
                     </div>
                     <ChipSelector
@@ -348,7 +348,7 @@ export function QuickAdd({ onTaskAdded }: Props) {
 
                   {/* Duration */}
                   <div>
-                    <div style={{ color: '#666', fontSize: 11, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>
+                    <div style={{ color: '#888', fontSize: 11, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>
                       Duration
                     </div>
                     <ChipSelector
@@ -360,7 +360,7 @@ export function QuickAdd({ onTaskAdded }: Props) {
 
                   {/* Time */}
                   <div>
-                    <div style={{ color: '#666', fontSize: 11, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>
+                    <div style={{ color: '#888', fontSize: 11, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>
                       Time
                     </div>
                     <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -389,8 +389,8 @@ export function QuickAdd({ onTaskAdded }: Props) {
                           textAlign: 'center',
                         }}
                       />
-                      <span style={{ color: '#666', fontSize: 12 }}>hour (0-23)</span>
-                      <span style={{ color: '#444', fontSize: 12 }}>·</span>
+                      <span style={{ color: '#888', fontSize: 12 }}>hour (0-23)</span>
+                      <span style={{ color: '#888', fontSize: 12 }}>·</span>
                       <div style={{ display: 'flex', gap: 4 }}>
                         {[0, 1, 2].map((d) => (
                           <button
@@ -518,7 +518,7 @@ export function QuickAdd({ onTaskAdded }: Props) {
                       borderRadius: 6,
                       background: '#1a1a1a',
                       border: '1px solid #2a2a2a',
-                      color: '#666',
+                      color: '#888',
                       fontSize: 11,
                       cursor: 'pointer',
                       fontFamily: 'inherit',
@@ -529,7 +529,7 @@ export function QuickAdd({ onTaskAdded }: Props) {
                 )
               )}
             </div>
-            <div style={{ marginTop: 10, color: '#444', fontSize: 11 }}>
+            <div style={{ marginTop: 10, color: '#888', fontSize: 11 }}>
               Press ⌘K to open · Esc to close
             </div>
           </div>
