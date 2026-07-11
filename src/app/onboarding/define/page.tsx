@@ -5,6 +5,18 @@ import { useRouter } from 'next/navigation'
 import { DOMAINS, getDomain } from '@/lib/domains'
 import { getOnboardingState, saveOnboardingState } from '@/lib/storage'
 import type { DomainId, GoalDefinition, CheckMethod } from '@/lib/types'
+import { OnboardingProgress } from '@/components/onboarding/OnboardingProgress'
+
+// ─── Warm-editorial tokens ──────────────────────────────────────────────────
+const CREAM = '#F7F3EC'
+const WHITE = '#FFFFFF'
+const INK = '#221F1A'
+const WARM_GRAY = '#6B6257'
+const MUTED = '#8A8175'
+const GOLD = '#B08637'
+const HAIRLINE = '#E7DFD2'
+const TRACK = '#EAE1D2'
+const SERIF = 'var(--font-serif), Georgia, serif'
 
 const CHECK_METHODS: { id: CheckMethod; label: string; icon: string; description: string }[] = [
   { id: 'binary', label: 'Binary', icon: '✅', description: 'Done or not done' },
@@ -106,38 +118,66 @@ export default function DefinePage() {
   const domain = currentDomain
   const isLast = currentIndex === domains.length - 1
 
+  const inputBase = {
+    width: '100%',
+    padding: '0.875rem 1rem',
+    background: WHITE,
+    border: `1px solid ${HAIRLINE}`,
+    borderRadius: '10px',
+    color: INK,
+    fontSize: '0.9375rem',
+    outline: 'none',
+    boxSizing: 'border-box' as const,
+  }
+  const fieldLabel = {
+    display: 'block' as const,
+    fontSize: '0.72rem',
+    color: MUTED,
+    marginBottom: '0.5rem',
+    letterSpacing: '0.08em',
+    textTransform: 'uppercase' as const,
+    fontWeight: 700,
+  }
+
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#080808',
+      background: CREAM,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      padding: '3rem 1.5rem',
+      padding: '3rem 1.5rem 5rem',
     }}>
+      {/* Shared step indicator */}
+      <OnboardingProgress current="define" />
+
       {/* Header */}
-      <div style={{ maxWidth: 560, width: '100%', marginBottom: '2.5rem' }}>
+      <div style={{ maxWidth: 560, width: '100%', marginBottom: '2rem' }}>
+        <div style={{ marginBottom: '1.25rem' }}>
+          <h1 style={{ fontFamily: SERIF, fontSize: '1.7rem', fontWeight: 500, color: INK, letterSpacing: '-0.02em', marginBottom: '0.4rem', lineHeight: 1.15 }}>
+            Turn each domain into a real goal
+          </h1>
+          <p style={{ color: WARM_GRAY, fontSize: '0.95rem', lineHeight: 1.6 }}>
+            Name what you want and how you&apos;ll know you&apos;re making progress. We&apos;ll do this
+            one domain at a time — pick a measure that fits.
+          </p>
+        </div>
+
         <div style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
-          marginBottom: '2rem',
+          marginBottom: '1.5rem',
+          gap: '1rem',
         }}>
           <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            background: '#111',
-            border: '1px solid #1e1e1e',
-            borderRadius: '999px',
-            padding: '0.375rem 1rem',
-            fontSize: '0.75rem',
-            color: '#888',
-            letterSpacing: '0.1em',
+            fontSize: '0.72rem',
+            color: WARM_GRAY,
+            fontWeight: 700,
+            letterSpacing: '0.08em',
             textTransform: 'uppercase',
           }}>
-            <span style={{ width: 6, height: 6, background: '#10b981', borderRadius: '50%', display: 'inline-block' }} />
-            Step 2 of 6 — Define Goals
+            Domain {currentIndex + 1} of {domains.length}
           </div>
 
           {/* Domain progress dots */}
@@ -151,7 +191,7 @@ export default function DefinePage() {
                     width: i === currentIndex ? 20 : 8,
                     height: 8,
                     borderRadius: '999px',
-                    background: i <= currentIndex ? (dm?.color ?? '#666') : '#1a1a1a',
+                    background: i <= currentIndex ? (dm?.color ?? GOLD) : TRACK,
                     transition: 'all 0.3s ease',
                   }}
                 />
@@ -166,18 +206,17 @@ export default function DefinePage() {
           alignItems: 'center',
           gap: '1rem',
           padding: '1.25rem',
-          background: `${domain.color}10`,
-          border: `1px solid ${domain.color}30`,
+          background: `${domain.color}12`,
+          border: `1px solid ${domain.color}35`,
           borderRadius: '12px',
-          marginBottom: '2rem',
         }}>
           <div style={{ fontSize: '2.5rem' }}>{domain.icon}</div>
           <div>
-            <div style={{ fontSize: '0.7rem', color: domain.color, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.2rem' }}>
-              Domain {currentIndex + 1} of {domains.length}
-            </div>
-            <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#ededed', letterSpacing: '-0.02em' }}>
+            <div style={{ fontSize: '0.68rem', color: domain.color, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.2rem', fontWeight: 700 }}>
               {domain.label}
+            </div>
+            <div style={{ fontFamily: SERIF, fontSize: '1.25rem', fontWeight: 600, color: INK, letterSpacing: '-0.01em' }}>
+              What&apos;s your {domain.label.toLowerCase()} goal?
             </div>
           </div>
         </div>
@@ -188,9 +227,7 @@ export default function DefinePage() {
 
         {/* Goal name */}
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-            Goal Name
-          </label>
+          <label style={fieldLabel}>Goal Name</label>
           <div style={{ position: 'relative' }}>
             <input
               ref={nameRef}
@@ -205,16 +242,10 @@ export default function DefinePage() {
               }}
               placeholder={domain.suggestions[0]}
               style={{
-                width: '100%',
-                padding: '0.875rem 1rem',
-                background: '#0f0f0f',
-                border: `1px solid ${currentGoal.name ? domain.color + '50' : '#1e1e1e'}`,
-                borderRadius: '10px',
-                color: '#ededed',
+                ...inputBase,
                 fontSize: '1rem',
-                outline: 'none',
+                border: `1px solid ${currentGoal.name ? domain.color + '66' : HAIRLINE}`,
                 transition: 'border-color 0.15s',
-                boxSizing: 'border-box',
               }}
             />
             {/* Ghost suggestion */}
@@ -230,8 +261,8 @@ export default function DefinePage() {
                 userSelect: 'none',
               }}>
                 <span style={{ color: 'transparent' }}>{currentGoal.name}</span>
-                <span style={{ color: '#333' }}>{suggestion}</span>
-                <span style={{ marginLeft: '0.5rem', fontSize: '0.7rem', color: '#333', background: '#1a1a1a', padding: '0.1rem 0.3rem', borderRadius: '4px' }}>tab</span>
+                <span style={{ color: '#C7BBA6' }}>{suggestion}</span>
+                <span style={{ marginLeft: '0.5rem', fontSize: '0.7rem', color: MUTED, background: CREAM, padding: '0.1rem 0.3rem', borderRadius: '4px', border: `1px solid ${HAIRLINE}` }}>tab</span>
               </div>
             )}
           </div>
@@ -241,12 +272,13 @@ export default function DefinePage() {
                 key={s}
                 onClick={() => { updateGoal({ name: s }); setSuggestion('') }}
                 style={{
-                  padding: '0.25rem 0.625rem',
-                  background: '#111',
-                  border: '1px solid #1e1e1e',
+                  padding: '0.3rem 0.7rem',
+                  background: WHITE,
+                  border: `1px solid ${HAIRLINE}`,
                   borderRadius: '999px',
-                  color: '#999',
-                  fontSize: '0.7rem',
+                  color: WARM_GRAY,
+                  fontSize: '0.72rem',
+                  fontWeight: 500,
                   cursor: 'pointer',
                 }}
               >
@@ -258,36 +290,24 @@ export default function DefinePage() {
 
         {/* Goal definition */}
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-            {domain.promptHint}
-          </label>
+          <label style={fieldLabel}>{domain.promptHint}</label>
           <textarea
             value={currentGoal.definition}
             onChange={e => updateGoal({ definition: e.target.value })}
             placeholder="Be specific — what does success look like in 12 months?"
             rows={3}
             style={{
-              width: '100%',
-              padding: '0.875rem 1rem',
-              background: '#0f0f0f',
-              border: '1px solid #1e1e1e',
-              borderRadius: '10px',
-              color: '#ededed',
-              fontSize: '0.9375rem',
-              outline: 'none',
+              ...inputBase,
               resize: 'vertical',
               fontFamily: 'inherit',
               lineHeight: 1.5,
-              boxSizing: 'border-box',
             }}
           />
         </div>
 
         {/* Check method */}
         <div>
-          <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.75rem', letterSpacing: '0.05em', textTransform: 'uppercase' }}>
-            How will you measure this?
-          </label>
+          <label style={fieldLabel}>How will you measure this?</label>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: '0.5rem' }}>
             {CHECK_METHODS.map(m => {
               const isActive = currentGoal.checkMethod === m.id
@@ -297,8 +317,8 @@ export default function DefinePage() {
                   onClick={() => updateGoal({ checkMethod: m.id })}
                   style={{
                     padding: '0.75rem 0.5rem',
-                    background: isActive ? `${domain.color}20` : '#0f0f0f',
-                    border: `1px solid ${isActive ? domain.color : '#1e1e1e'}`,
+                    background: isActive ? `${domain.color}18` : WHITE,
+                    border: `1px solid ${isActive ? domain.color : HAIRLINE}`,
                     borderRadius: '10px',
                     cursor: 'pointer',
                     textAlign: 'center',
@@ -306,14 +326,14 @@ export default function DefinePage() {
                   }}
                 >
                   <div style={{ fontSize: '1.25rem', marginBottom: '0.25rem' }}>{m.icon}</div>
-                  <div style={{ fontSize: '0.65rem', color: isActive ? domain.color : '#555', fontWeight: 600, letterSpacing: '0.02em' }}>
+                  <div style={{ fontSize: '0.62rem', color: isActive ? domain.color : WARM_GRAY, fontWeight: 700, letterSpacing: '0.02em' }}>
                     {m.label}
                   </div>
                 </button>
               )
             })}
           </div>
-          <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', color: '#888', textAlign: 'center' }}>
+          <div style={{ marginTop: '0.5rem', fontSize: '0.8rem', color: MUTED, textAlign: 'center' }}>
             {CHECK_METHODS.find(m => m.id === currentGoal.checkMethod)?.description}
           </div>
         </div>
@@ -322,43 +342,23 @@ export default function DefinePage() {
         {(currentGoal.checkMethod === 'numeric' || currentGoal.checkMethod === 'time') && (
           <div style={{ display: 'flex', gap: '0.75rem' }}>
             <div style={{ flex: 1 }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem' }}>Target</label>
+              <label style={{ ...fieldLabel, textTransform: 'none', letterSpacing: 0 }}>Target</label>
               <input
                 type="number"
                 value={currentGoal.checkConfig.target ?? ''}
                 onChange={e => updateGoal({ checkConfig: { ...currentGoal.checkConfig, target: Number(e.target.value) } })}
                 placeholder="e.g. 100"
-                style={{
-                  width: '100%',
-                  padding: '0.75rem 1rem',
-                  background: '#0f0f0f',
-                  border: '1px solid #1e1e1e',
-                  borderRadius: '10px',
-                  color: '#ededed',
-                  fontSize: '0.9375rem',
-                  outline: 'none',
-                  boxSizing: 'border-box',
-                }}
+                style={inputBase}
               />
             </div>
             <div style={{ flex: 1 }}>
-              <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem' }}>Unit</label>
+              <label style={{ ...fieldLabel, textTransform: 'none', letterSpacing: 0 }}>Unit</label>
               <input
                 type="text"
                 value={currentGoal.checkConfig.unit ?? ''}
                 onChange={e => updateGoal({ checkConfig: { ...currentGoal.checkConfig, unit: e.target.value } })}
                 placeholder={currentGoal.checkMethod === 'time' ? 'hours' : 'books, pounds, $...'}
-                style={{
-                  width: '100%',
-                  padding: '0.75rem 1rem',
-                  background: '#0f0f0f',
-                  border: '1px solid #1e1e1e',
-                  borderRadius: '10px',
-                  color: '#ededed',
-                  fontSize: '0.9375rem',
-                  outline: 'none',
-                  boxSizing: 'border-box',
-                }}
+                style={inputBase}
               />
             </div>
           </div>
@@ -367,24 +367,14 @@ export default function DefinePage() {
         {/* Streak target */}
         {currentGoal.checkMethod === 'streak' && (
           <div>
-            <label style={{ display: 'block', fontSize: '0.8rem', color: '#888', marginBottom: '0.5rem' }}>
+            <label style={{ ...fieldLabel, textTransform: 'none', letterSpacing: 0 }}>
               Target streak (days)
             </label>
             <input
               type="number"
               value={currentGoal.checkConfig.target ?? 365}
               onChange={e => updateGoal({ checkConfig: { target: Number(e.target.value) } })}
-              style={{
-                width: '100%',
-                padding: '0.75rem 1rem',
-                background: '#0f0f0f',
-                border: '1px solid #1e1e1e',
-                borderRadius: '10px',
-                color: '#ededed',
-                fontSize: '0.9375rem',
-                outline: 'none',
-                boxSizing: 'border-box',
-              }}
+              style={inputBase}
             />
           </div>
         )}
@@ -395,11 +385,12 @@ export default function DefinePage() {
             onClick={handleBack}
             style={{
               padding: '0.875rem 1.5rem',
-              background: '#0f0f0f',
-              border: '1px solid #1e1e1e',
+              background: WHITE,
+              border: `1px solid ${HAIRLINE}`,
               borderRadius: '10px',
-              color: '#888',
+              color: WARM_GRAY,
               fontSize: '0.9375rem',
+              fontWeight: 600,
               cursor: 'pointer',
             }}
           >
@@ -411,12 +402,12 @@ export default function DefinePage() {
             style={{
               flex: 1,
               padding: '0.875rem',
-              background: currentGoal.name.trim() ? '#ededed' : '#1a1a1a',
-              color: currentGoal.name.trim() ? '#080808' : '#333',
+              background: currentGoal.name.trim() ? GOLD : '#E3D8C4',
+              color: currentGoal.name.trim() ? '#fff' : '#A99A82',
               border: 'none',
               borderRadius: '10px',
               fontSize: '0.9375rem',
-              fontWeight: 600,
+              fontWeight: 700,
               cursor: currentGoal.name.trim() ? 'pointer' : 'not-allowed',
               letterSpacing: '-0.01em',
             }}

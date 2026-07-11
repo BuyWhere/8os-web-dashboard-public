@@ -14,37 +14,37 @@ const ARCHETYPE_STYLES: Record<string, {
 }> = {
   pioneer: {
     icon: '◈',
-    accent: '#34d399',
-    glow: 'rgba(52, 211, 153, 0.18)',
-    background: 'linear-gradient(135deg, rgba(11, 26, 22, 0.98), rgba(9, 14, 18, 0.96))',
+    accent: 'var(--skin-color-primary, #34d399)',
+    glow: 'var(--skin-glow-primary, rgba(52, 211, 153, 0.18))',
+    background: 'var(--skin-gradient-card, linear-gradient(135deg, rgba(11, 26, 22, 0.98), rgba(9, 14, 18, 0.96)))',
     label: 'Momentum',
   },
   sage: {
     icon: '◌',
-    accent: '#60a5fa',
-    glow: 'rgba(96, 165, 250, 0.18)',
-    background: 'linear-gradient(135deg, rgba(10, 19, 34, 0.98), rgba(8, 12, 20, 0.96))',
+    accent: 'var(--skin-color-primary, #60a5fa)',
+    glow: 'var(--skin-glow-primary, rgba(96, 165, 250, 0.18))',
+    background: 'var(--skin-gradient-card, linear-gradient(135deg, rgba(10, 19, 34, 0.98), rgba(8, 12, 20, 0.96)))',
     label: 'Clarity',
   },
   catalyst: {
     icon: '✦',
-    accent: '#f97316',
-    glow: 'rgba(249, 115, 22, 0.2)',
-    background: 'linear-gradient(135deg, rgba(35, 16, 8, 0.98), rgba(20, 10, 8, 0.96))',
+    accent: 'var(--skin-color-primary, #f97316)',
+    glow: 'var(--skin-glow-primary, rgba(249, 115, 22, 0.2))',
+    background: 'var(--skin-gradient-card, linear-gradient(135deg, rgba(35, 16, 8, 0.98), rgba(20, 10, 8, 0.96)))',
     label: 'Charge',
   },
   architect: {
     icon: '▣',
-    accent: '#a78bfa',
-    glow: 'rgba(167, 139, 250, 0.2)',
-    background: 'linear-gradient(135deg, rgba(20, 15, 35, 0.98), rgba(12, 10, 22, 0.96))',
+    accent: 'var(--skin-color-primary, #a78bfa)',
+    glow: 'var(--skin-glow-primary, rgba(167, 139, 250, 0.2))',
+    background: 'var(--skin-gradient-card, linear-gradient(135deg, rgba(20, 15, 35, 0.98), rgba(12, 10, 22, 0.96)))',
     label: 'Structure',
   },
   default: {
     icon: '◐',
-    accent: '#f59e0b',
-    glow: 'rgba(245, 158, 11, 0.18)',
-    background: 'linear-gradient(135deg, rgba(28, 22, 10, 0.98), rgba(12, 11, 8, 0.96))',
+    accent: 'var(--skin-color-primary, #f59e0b)',
+    glow: 'var(--skin-glow-primary, rgba(245, 158, 11, 0.18))',
+    background: 'var(--skin-gradient-card, linear-gradient(135deg, rgba(28, 22, 10, 0.98), rgba(12, 11, 8, 0.96)))',
     label: 'Signal',
   },
 }
@@ -190,10 +190,10 @@ export function InsightDisplayCard({
               <span>{style.icon}</span>
               <span>{style.label} insight</span>
             </div>
-            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#f5f5f5' }}>
+            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 'var(--skin-typo-heading-weight)', color: 'var(--skin-color-text)' }}>
               Daily insight for {archetypeName}
             </h2>
-            <p style={{ margin: '6px 0 0', color: '#9ca3af', fontSize: 13 }}>
+            <p style={{ margin: '6px 0 0', color: 'var(--skin-color-text-secondary)', fontSize: 13 }}>
               {new Date(date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
             </p>
           </div>
@@ -213,7 +213,7 @@ export function InsightDisplayCard({
             border: '1px solid rgba(255, 255, 255, 0.05)',
           }}
         >
-          <p style={{ margin: 0, color: '#e5e7eb', fontSize: 15, lineHeight: 1.7 }}>
+          <p style={{ margin: 0, color: 'var(--skin-color-text)', fontSize: 15, lineHeight: 1.7 }}>
             {expanded ? insight : collapsedText}
           </p>
 
@@ -248,10 +248,10 @@ export function InsightDisplayCard({
           }}
         >
           <div>
-            <div style={{ color: '#d1d5db', fontSize: 12, fontWeight: 600, marginBottom: 4 }}>
+            <div style={{ color: 'var(--skin-color-text-secondary)', fontSize: 12, fontWeight: 600, marginBottom: 4 }}>
               Why this priority
             </div>
-            <div style={{ color: '#9ca3af', fontSize: 12 }}>
+            <div style={{ color: 'var(--skin-color-text-muted)', fontSize: 12 }}>
               {priorityReason}
             </div>
           </div>

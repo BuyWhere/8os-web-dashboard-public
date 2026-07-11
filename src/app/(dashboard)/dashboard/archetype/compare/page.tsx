@@ -1,6 +1,7 @@
 /**
  * /dashboard/archetype/compare — Compare all archetypes
  */
+import { getServerAppUserId } from '@/lib/auth/server-user'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { jwtVerify, importSPKI } from 'jose'
@@ -10,18 +11,9 @@ import { ARCHETYPES } from '@/lib/archetype'
 import Link from 'next/link'
 
 async function getUserId(): Promise<string> {
-  const cookieStore = await cookies()
-  const token = cookieStore.get('access_token')?.value
-  if (!token) redirect('/login?next=/dashboard/archetype/compare')
-  const pem = (process.env.JWT_PUBLIC_KEY ?? '').replace(/\\n/g, '\n')
-  if (!pem) redirect('/login')
-  try {
-    const key = await importSPKI(pem, 'RS256')
-    const { payload } = await jwtVerify(token, key, { issuer: '8os' })
-    return payload.sub as string
-  } catch {
-    redirect('/login?next=/dashboard/archetype/compare')
-  }
+  // Clerk is the source of truth (2026-07-10). Resolves the Clerk session
+  // to an app User.id (lazy-provisioning if needed) or redirects to /login.
+  return await getServerAppUserId('/dashboard/archetype/compare')
 }
 
 export default async function CompareArchetypesPage() {
@@ -36,14 +28,14 @@ export default async function CompareArchetypesPage() {
   const sidebarGoals = goals.map((g) => ({ id: g.id, domainId: g.domainId, name: g.name, progress: g.progress }))
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#0a0a0a' }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
       <Sidebar goals={sidebarGoals} initialCollapsed={settings?.sidebarCollapsed ?? false} />
 
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
         <div style={{ marginBottom: 28 }}>
-          <Link href="/dashboard/archetype" style={{ color: '#999', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Your Archetype</Link>
-          <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Compare Archetypes</h1>
-          <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>
+          <Link href="/dashboard/archetype" style={{ color: '#8A8175', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Your Archetype</Link>
+          <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>Compare Archetypes</h1>
+          <p style={{ margin: '4px 0 0', color: '#6B6257', fontSize: 14 }}>
             Explore all 10 archetypes and see how they differ
           </p>
         </div>
@@ -55,8 +47,8 @@ export default async function CompareArchetypesPage() {
               <div
                 key={arch.id}
                 style={{
-                  background: '#111',
-                  border: `1px solid ${isYours ? arch.color + '55' : '#1e1e1e'}`,
+                  background: '#FFFFFF',
+                  border: `1px solid ${isYours ? arch.color + '55' : '#E7DFD2'}`,
                   borderRadius: 14,
                   padding: 20,
                   position: 'relative',
@@ -78,12 +70,12 @@ export default async function CompareArchetypesPage() {
                     <div style={{ color: arch.color, fontSize: 11, fontStyle: 'italic' }}>{arch.tagline}</div>
                   </div>
                 </div>
-                <div style={{ color: '#888', fontSize: 12, lineHeight: 1.5 }}>{arch.description}</div>
+                <div style={{ color: '#6B6257', fontSize: 12, lineHeight: 1.5 }}>{arch.description}</div>
                 <div style={{ marginTop: 14, display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                   {Object.entries(arch.baziElementAffinity)
                     .filter(([, v]) => v >= 0.7)
                     .map(([el]) => (
-                      <span key={el} style={{ background: '#1a1a1a', color: '#999', padding: '2px 7px', borderRadius: 4, fontSize: 10 }}>
+                      <span key={el} style={{ background: '#F7F3EC', color: '#8A8175', padding: '2px 7px', borderRadius: 4, fontSize: 10 }}>
                         {el}
                       </span>
                     ))}
@@ -99,8 +91,8 @@ export default async function CompareArchetypesPage() {
             return (
               <div
                 style={{
-                  background: '#111',
-                  border: `1px solid ${isYours ? hybrid.color + '55' : '#1e1e1e'}`,
+                  background: '#FFFFFF',
+                  border: `1px solid ${isYours ? hybrid.color + '55' : '#E7DFD2'}`,
                   borderRadius: 14, padding: 20, position: 'relative',
                 }}
               >
@@ -120,7 +112,7 @@ export default async function CompareArchetypesPage() {
                     <div style={{ color: hybrid.color, fontSize: 11, fontStyle: 'italic' }}>{hybrid.tagline}</div>
                   </div>
                 </div>
-                <div style={{ color: '#888', fontSize: 12, lineHeight: 1.5 }}>{hybrid.description}</div>
+                <div style={{ color: '#6B6257', fontSize: 12, lineHeight: 1.5 }}>{hybrid.description}</div>
               </div>
             )
           })()}

@@ -209,21 +209,6 @@ export default function AffiliatesPage() {
         </div>
       </section>
 
-      {/* Testimonial */}
-      <section style={sectionStyle}>
-        <div style={containerStyle}>
-          <blockquote style={testimonialStyle}>
-            <p style={testimonialQuoteStyle}>
-              &ldquo;I&apos;ve promoted a lot of products — 8os.ai is the first one my audience genuinely raves about.
-              The archetype angle is irresistible.&rdquo;
-            </p>
-            <footer style={testimonialAuthorStyle}>
-              — [Affiliate Name], Astrologer &amp; Content Creator
-            </footer>
-          </blockquote>
-        </div>
-      </section>
-
       {/* FAQ */}
       <section style={{ ...sectionStyle, background: 'var(--color-bg-secondary)' }}>
         <div style={containerStyle}>

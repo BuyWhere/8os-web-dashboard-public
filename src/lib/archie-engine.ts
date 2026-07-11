@@ -483,27 +483,50 @@ const PERSONALITY_PEAK_ADJUSTMENTS: Record<PersonalityCode, number[]> = {
   ip: [19, 20, 21, 22],    // intuitive-process: evening creative flow
 }
 
-// ─── Archetype → WorkPreferences defaults (replaces old energyHours, OS-2114) ─
+export interface EnergyHourMap {
+  peak: number[]           // 0-23, best hours for deep work
+  moderate: number[]       // good for lighter tasks
+  rest: number[]           // protect — low energy / recovery
+}
 
-import type { WorkPreferences } from './types'
+function calculateEnergyHours(
+  dayElement: string,
+  personalityCode: PersonalityCode,
+  hourIndex?: number,
+): EnergyHourMap {
+  const elementPeak = ELEMENT_PEAK_HOURS[dayElement] ?? [9, 10, 11]
+  const personalityPeak = PERSONALITY_PEAK_ADJUSTMENTS[personalityCode]
 
-/**
- * Map an archetype's personality code to a default WorkPreferences profile.
- * Users can override any field via /api/work-preferences.
- */
-export function defaultWorkPreferences(personalityCode: PersonalityCode): WorkPreferences {
-  switch (personalityCode) {
-    case 'sg': // systematic-goal
-      return { workingWindowStart: 8, workingWindowEnd: 18, blockLengthMin: 50, batching: 'batch', planningCadence: 'daily' }
-    case 'sp': // systematic-process
-      return { workingWindowStart: 9, workingWindowEnd: 17, blockLengthMin: 90, batching: 'batch', planningCadence: 'weekly' }
-    case 'ig': // intuitive-goal
-      return { workingWindowStart: 11, workingWindowEnd: 21, blockLengthMin: 50, batching: 'spread', planningCadence: 'weekly' }
-    case 'ip': // intuitive-process
-      return { workingWindowStart: 13, workingWindowEnd: 22, blockLengthMin: 90, batching: 'spread', planningCadence: 'biweekly' }
-    default:
-      return { workingWindowStart: 9, workingWindowEnd: 17, blockLengthMin: 50, batching: 'batch', planningCadence: 'weekly' }
+  // Merge and deduplicate
+  const peakSet = new Set([...elementPeak, ...personalityPeak])
+
+  // If hour pillar known, boost those hours slightly
+  if (hourIndex !== undefined) {
+    const slot = SHICHEN_SLOTS[hourIndex % 12]
+    if (slot) {
+      peakSet.add(slot.startHour)
+      if (slot.endHour > slot.startHour) {
+        peakSet.add(slot.startHour + 1)
+      }
+    }
   }
+
+  const peak = Array.from(peakSet).sort((a, b) => a - b)
+  const allHours = Array.from({ length: 24 }, (_, i) => i)
+  const peakHourSet = new Set(peak)
+
+  // Rest hours = 6h window farthest from peak (roughly opposite)
+  const peakCenter = peak.reduce((a, b) => a + b, 0) / peak.length
+  const restCenter = (peakCenter + 12) % 24
+  const rest = allHours.filter(h => {
+    const diff = Math.abs(h - restCenter)
+    return Math.min(diff, 24 - diff) <= 3
+  })
+
+  const restSet = new Set(rest)
+  const moderate = allHours.filter(h => !peakHourSet.has(h) && !restSet.has(h))
+
+  return { peak, moderate, rest }
 }
 
 // ─── ARCHIE Archetype ID ──────────────────────────────────────────────────────
@@ -556,6 +579,7 @@ export interface ArchieResult {
   // Templates
   goalTemplates: Record<string, string[]>
   taskTemplateFn: string        // personality code for task generation
+  energyHours: EnergyHourMap
   // Metadata
   combinationCount: number      // total archetype combinations possible
   calculatedAt: string
@@ -632,8 +656,9 @@ export function generateArchetype(input: ArchieInput): ArchieResult {
     personalityCode,
   )
 
-  // 9. Goal templates (energy-hours removed in OS-2114; replaced by WorkPreferences)
+  // 9. Goal templates & energy hours
   const goalTemplates = generateGoalTemplates(personalityCode)
+  const energyHours = calculateEnergyHours(bazi.dayElement, personalityCode, hourPillarIndex)
 
   return {
     archetypeId,
@@ -665,6 +690,7 @@ export function generateArchetype(input: ArchieInput): ArchieResult {
     dashboardTokens: tokens,
     goalTemplates,
     taskTemplateFn: personalityCode,
+    energyHours,
     combinationCount: 17280,
     calculatedAt: new Date().toISOString(),
   }

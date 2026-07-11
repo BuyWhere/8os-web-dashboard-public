@@ -16,6 +16,23 @@ ENV DATABASE_URL="postgresql://placeholder:placeholder@localhost:5432/placeholde
 ENV JWT_PRIVATE_KEY="placeholder"
 ENV JWT_PUBLIC_KEY="placeholder"
 
+# NEXT_PUBLIC_* vars must be present at BUILD time so Next.js can inline them
+# into the client bundle. Railway passes matching service variables as Docker
+# --build-arg values when declared as ARG here. The Clerk publishable key is a
+# PUBLIC value (pk_live, already shipped to browsers), so it is safe in the
+# build layer. Without this, <ClerkProvider> throws "Missing publishableKey"
+# while prerendering static pages and the build fails.
+ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ARG NEXT_PUBLIC_CLERK_SIGN_IN_URL
+ARG NEXT_PUBLIC_CLERK_SIGN_UP_URL
+ARG NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL
+ARG NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL
+ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
+ENV NEXT_PUBLIC_CLERK_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_SIGN_IN_URL
+ENV NEXT_PUBLIC_CLERK_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_SIGN_UP_URL
+ENV NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL
+ENV NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL
+
 # Generate Prisma client then build Next.js
 # output: 'standalone' is set in next.config.js for optimal image size
 RUN npx prisma generate --schema=./prisma/schema.prisma && npx next build

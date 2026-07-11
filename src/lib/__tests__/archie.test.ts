@@ -15,7 +15,7 @@ import { calculateSunSign, SUN_SIGNS } from '../sun-sign'
 import { calculateBazi, STEMS } from '../bazi'
 import { calculateDayMasterStrength } from '../bazi-strength'
 import { scoreTimeQuiz, TIME_QUIZ_QUESTIONS, hourToShichen } from '../time-quiz'
-import { generateArchetype, generateTaskTemplates, SUN_SIGN_DASHBOARD_TOKENS, defaultWorkPreferences } from '../archie-engine'
+import { generateArchetype, generateTaskTemplates, SUN_SIGN_DASHBOARD_TOKENS } from '../archie-engine'
 
 // ─── Sun Sign Tests ───────────────────────────────────────────────────────────
 
@@ -295,15 +295,13 @@ describe('ARCHIE Engine — 50 Sample Profiles', () => {
     expect(result.dashboardTokens.typography.heading).toBeTruthy()
     expect(result.dashboardTokens.coachingTone.exampleMessages).toHaveLength(3)
 
-    // Energy hours removed in OS-2114; replaced by defaultWorkPreferences(archetype).
-    // Verify the helper produces sane values for this personality code.
-    const wp = defaultWorkPreferences(result.personalityCode)
-    expect(wp.workingWindowStart).toBeGreaterThanOrEqual(0)
-    expect(wp.workingWindowEnd).toBeLessThanOrEqual(24)
-    expect(wp.workingWindowEnd).toBeGreaterThan(wp.workingWindowStart)
-    expect([25, 50, 90]).toContain(wp.blockLengthMin)
-    expect(['batch', 'spread']).toContain(wp.batching)
-    expect(['daily', 'weekly', 'biweekly']).toContain(wp.planningCadence)
+    // Energy hours valid
+    expect(result.energyHours.peak.length).toBeGreaterThan(0)
+    expect(result.energyHours.rest.length).toBeGreaterThan(0)
+    result.energyHours.peak.forEach(h => {
+      expect(h).toBeGreaterThanOrEqual(0)
+      expect(h).toBeLessThan(24)
+    })
 
     // Goal templates for all 6 domains
     const domains = ['career', 'wealth', 'health', 'relationships', 'learning', 'legacy']

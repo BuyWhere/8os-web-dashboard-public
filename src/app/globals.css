@@ -1,17 +1,62 @@
-/* 8os Global Styles — dark theme */
+/* 8os Global Styles — warm editorial (matches the landing) */
 
 :root {
-  --color-bg-primary: #0D0D0F;
-  --color-bg-secondary: #1A1A1D;
-  --color-bg-card: rgba(255, 255, 255, 0.03);
-  --color-border: rgba(255, 255, 255, 0.08);
-  --color-border-strong: #1a1a1a;
-  --color-text-primary: #ededed;
-  --color-text-secondary: #888888;
-  --color-text-muted: #999999;
-  --color-accent: #667eea;
-  --color-accent-2: #764ba2;
-  --header-height: 72px;
+  /* Warm editorial palette */
+  --color-bg-primary: #F7F3EC;   /* cream app background */
+  --color-bg-secondary: #FFFFFF; /* white card surface */
+  --color-bg-card: #FFFFFF;
+  --color-border: #E7DFD2;       /* hairline */
+  --color-border-strong: #D9CFBE;
+  --color-text-primary: #221F1A; /* ink */
+  --color-text-secondary: #6B6257; /* warm gray */
+  --color-text-muted: #8A8175;
+  --color-accent: #B08637;       /* gold */
+  --color-accent-2: #7A3B2E;     /* oxblood (rare emphasis) */
+  --header-height: 68px;
+
+  /* ── Warm-editorial defaults for the archetype skin tokens ──────────
+   * Pages not wrapped in ArchetypeThemeProvider read these. Base chrome
+   * stays cream/white/ink/gold; a sun-sign skin only overrides the
+   * ACCENT tokens (primary/accent/icon/badge) — never repaints dark.
+   */
+  --skin-color-primary: #B08637;
+  --skin-color-primary-muted: #E9DCC4;
+  --skin-color-accent: #B08637;
+  --skin-color-surface: #FFFFFF;
+  --skin-color-surface-alt: #F7F3EC;
+  --skin-color-text: #221F1A;
+  --skin-color-text-secondary: #6B6257;
+  --skin-color-text-muted: #8A8175;
+  --skin-color-border: #E7DFD2;
+  --skin-color-border-strong: #D9CFBE;
+  --skin-color-badge-bg: #F2E9D6;
+  --skin-color-badge-text: #7A5A1E;
+  --skin-gradient-hero: linear-gradient(135deg, #FBF7F0 0%, #F2E9D6 100%);
+  --skin-gradient-card: linear-gradient(135deg, #FFFFFF 0%, #FBF7F0 100%);
+  --skin-gradient-button: linear-gradient(135deg, #B08637 0%, #98722C 100%);
+  --skin-typo-heading-weight: 600;
+  --skin-typo-heading-scale: 1.0;
+  --skin-typo-body-weight: 400;
+  --skin-typo-letter-spacing: 0;
+  --skin-glow-primary: 0 8px 24px rgba(34, 31, 26, 0.05);
+  --skin-glow-hover: 0 12px 30px rgba(34, 31, 26, 0.08);
+  --skin-card-bg: #FFFFFF;
+  --skin-card-border: #E7DFD2;
+  --skin-card-hover-bg: #FBF7F0;
+  --skin-card-hover-border: #E1D4BC;
+  --skin-button-primary-bg: #B08637;
+  --skin-button-primary-text: #FFFFFF;
+  --skin-button-primary-hover: #98722C;
+  --skin-button-secondary-bg: #F2E9D6;
+  --skin-button-secondary-text: #7A5A1E;
+  --skin-button-secondary-border: #E7DFD2;
+  --skin-radius-card: 16px;
+  --skin-radius-button: 10px;
+  --skin-radius-pill: 999px;
+  --skin-radius-input: 10px;
+  --skin-icon-color: #B08637;
+  --skin-badge-color: #7A5A1E;
+  --skin-divider: #E7DFD2;
 }
 
 *,
@@ -121,74 +166,75 @@ body {
   align-items: center;
 }
 
-/* Header CTA desktop */
-.header-cta-desktop {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-/* Header hamburger */
-.header-hamburger {
-  display: none;
-}
-
-/*
- * Tablet breakpoint — collapse nav links + CTA group into hamburger at <=1024px
- * (covers iPad portrait 768px-1024px where 'Contact' and 'Sign in' collide)
- */
-@media (max-width: 1024px) {
+@media (max-width: 640px) {
   .header-nav-links {
     display: none;
   }
 
-  .header-cta-desktop {
-    display: none;
-  }
-
-  .header-hamburger {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+  .table-scroll-hint {
+    display: block !important;
   }
 }
 
-/* Extra-narrow mobile: tighten header padding so the hamburger has room. */
-@media (max-width: 640px) {
-  header {
-    padding-left: 1rem !important;
-    padding-right: 1rem !important;
-  }
+/* ── Archetype skin CSS variable defaults ──────────────────────────────
+ * These are overridden at runtime by ArchetypeThemeProvider's injected
+ * <style> block, but we define fallback values here so pages that are
+ * not wrapped in the provider still render with a coherent look.
+ */
+
+[data-archetype-skin] {
+  /* Warm-editorial fallback — inherits the :root warm defaults above.
+   * A resolved sun-sign skin overrides only accent tokens on top of this. */
+  --skin-color-primary: #B08637;
+  --skin-color-primary-muted: #E9DCC4;
+  --skin-color-accent: #B08637;
+  --skin-color-surface: #FFFFFF;
+  --skin-color-surface-alt: #F7F3EC;
+  --skin-color-text: #221F1A;
+  --skin-color-text-secondary: #6B6257;
+  --skin-color-text-muted: #8A8175;
+  --skin-color-border: #E7DFD2;
+  --skin-color-border-strong: #D9CFBE;
+  --skin-color-badge-bg: #F2E9D6;
+  --skin-color-badge-text: #7A5A1E;
+  --skin-gradient-hero: linear-gradient(135deg, #FBF7F0 0%, #F2E9D6 100%);
+  --skin-gradient-card: linear-gradient(135deg, #FFFFFF 0%, #FBF7F0 100%);
+  --skin-gradient-button: linear-gradient(135deg, #B08637 0%, #98722C 100%);
+  --skin-typo-heading-weight: 600;
+  --skin-typo-heading-scale: 1.0;
+  --skin-typo-body-weight: 400;
+  --skin-typo-letter-spacing: 0;
+  --skin-glow-primary: 0 8px 24px rgba(34, 31, 26, 0.05);
+  --skin-glow-hover: 0 12px 30px rgba(34, 31, 26, 0.08);
+  --skin-card-bg: #FFFFFF;
+  --skin-card-border: #E7DFD2;
+  --skin-card-hover-bg: #FBF7F0;
+  --skin-card-hover-border: #E1D4BC;
+  --skin-button-primary-bg: #B08637;
+  --skin-button-primary-text: #FFFFFF;
+  --skin-button-primary-hover: #98722C;
+  --skin-button-secondary-bg: #F2E9D6;
+  --skin-button-secondary-text: #7A5A1E;
+  --skin-button-secondary-border: #E7DFD2;
+  --skin-radius-card: 16px;
+  --skin-radius-button: 10px;
+  --skin-radius-pill: 999px;
+  --skin-radius-input: 10px;
+  --skin-icon-color: #B08637;
+  --skin-badge-color: #7A5A1E;
+  --skin-divider: #E7DFD2;
 }
 
-.contact-email-link:hover {
-  color: var(--color-accent);
+/* ── Legacy archetype theme class stubs (for backward compat) ────────── */
+.theme-pioneer,
+.theme-sage,
+.theme-catalyst,
+.theme-architect,
+.theme-nurturer,
+.theme-innovator,
+.theme-sentinel,
+.theme-mystic,
+.theme-builder,
+.theme-hybrid-explorer {
+  /* These are snapshots; runtime ArchetypeThemeProvider takes precedence. */
 }
-
-
-/* WCAG AA placeholder and input styling */
-input::placeholder {
-  color: #999999;
-  opacity: 1;
-}
-
-input:-ms-input-placeholder {
-  color: #999999;
-  opacity: 1;
-}
-
-input::-ms-input-placeholder {
-  color: #999999;
-  opacity: 1;
-}
-
-/* WCAG AA: ensure all inputs have light backgrounds for visible text/placeholder */
-input[type="email"],
-input[type="text"],
-input[type="password"],
-input[type="search"] {
-  background: #1a1a1d;
-  border-color: rgba(255, 255, 255, 0.15);
-  color: #ededed;
-}
-

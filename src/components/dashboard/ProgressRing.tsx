@@ -16,7 +16,7 @@ export function ProgressRing({ progress, size = 56, strokeWidth = 5, color = '#2
   return (
     <div style={{ position: 'relative', width: size, height: size, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
       <svg width={size} height={size} style={{ transform: 'rotate(-90deg)', position: 'absolute' }}>
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#1e1e1e" strokeWidth={strokeWidth} />
+        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="#E7DFD2" strokeWidth={strokeWidth} />
         <circle
           cx={size / 2} cy={size / 2} r={r}
           fill="none"
@@ -28,7 +28,7 @@ export function ProgressRing({ progress, size = 56, strokeWidth = 5, color = '#2
         />
       </svg>
       {label && (
-        <span style={{ fontSize: size < 48 ? '9px' : '11px', color: '#aaa', fontWeight: 600, zIndex: 1 }}>
+        <span style={{ fontSize: size < 48 ? '9px' : '11px', color: '#6B6257', fontWeight: 600, zIndex: 1 }}>
           {label}
         </span>
       )}

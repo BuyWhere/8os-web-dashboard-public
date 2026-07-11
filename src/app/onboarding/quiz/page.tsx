@@ -4,7 +4,21 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { QUESTIONS, getSkipQuestions } from '@/lib/quiz'
 import type { QuizQuestion } from '@/lib/quiz'
+import { generateOSConfig, mapQuizAnswersToScale, cacheOSConfig } from '@/lib/os-generator'
 import posthog from 'posthog-js'
+import { OnboardingProgress } from '@/components/onboarding/OnboardingProgress'
+
+// ─── Warm-editorial tokens ──────────────────────────────────────────────────
+const CREAM = '#F7F3EC'
+const WHITE = '#FFFFFF'
+const INK = '#221F1A'
+const WARM_GRAY = '#6B6257'
+const MUTED = '#8A8175'
+const GOLD = '#B08637'
+const GOLD_DARK = '#98722C'
+const HAIRLINE = '#E7DFD2'
+const TRACK = '#EAE1D2'
+const SERIF = 'var(--font-serif), Georgia, serif'
 
 // ─── Local Storage ────────────────────────────────────────────────────────────
 
@@ -130,12 +144,11 @@ export default function QuizPage() {
   }
 
   async function finishQuiz() {
-    // Calculate archetype on server
+    // 1. Call local archetype API (persists to DB, backward compat)
     try {
       const res = await fetch('/api/onboarding/archetype', { method: 'POST' })
       if (res.ok) {
         const data = await res.json()
-        // Cache result locally
         try {
           localStorage.setItem('8os_archetype', JSON.stringify(data))
           if (data?.archetypeId) {
@@ -149,6 +162,50 @@ export default function QuizPage() {
       }
     } catch {}
 
+    // 2. Call live os-generator service for full OS config
+    try {
+      // Read birth data from localStorage (saved by birth page)
+      let birthDate = ''
+      let birthTime: string | null = null
+      try {
+        const baziRaw = localStorage.getItem('8os_bazi_result')
+        if (baziRaw) {
+          const bazi = JSON.parse(baziRaw)
+          if (bazi.birthDate) birthDate = bazi.birthDate
+          if (bazi.birthTime) birthTime = bazi.birthTime
+        }
+      } catch {}
+
+      // Fallback: read from the form's stored state
+      if (!birthDate) {
+        try {
+          const onboardingRaw = localStorage.getItem('8os_onboarding')
+          if (onboardingRaw) {
+            const onb = JSON.parse(onboardingRaw)
+            if (onb.birthDate) birthDate = onb.birthDate
+            if (onb.birthTime) birthTime = onb.birthTime
+          }
+        } catch {}
+      }
+
+      if (birthDate) {
+        const quizScaled = mapQuizAnswersToScale(answers)
+        const osConfig = await generateOSConfig({
+          birth_date: birthDate,
+          quiz_answers: quizScaled,
+        })
+        cacheOSConfig(osConfig)
+        posthog.capture('os_generated', {
+          archetype: osConfig.user.archetype,
+          element: osConfig.user.bazi_element,
+          buckets: osConfig.buckets.length,
+        })
+      }
+    } catch (err) {
+      // Non-fatal — local archetype is still available
+      console.warn('os-generator call failed, using local archetype', err)
+    }
+
     // Clear quiz progress
     try { localStorage.removeItem(LS_KEY) } catch {}
     router.push('/onboarding/archetype')
@@ -159,8 +216,8 @@ export default function QuizPage() {
   if (!current) {
     // All skipped or empty
     return (
-      <div style={{ minHeight: '100vh', background: '#080808', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ textAlign: 'center', color: '#888' }}>
+      <div style={{ minHeight: '100vh', background: CREAM, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ textAlign: 'center', color: WARM_GRAY }}>
           <p>Calculating your archetype...</p>
         </div>
       </div>
@@ -173,44 +230,59 @@ export default function QuizPage() {
 
   return (
     <div
-      style={{ minHeight: '100vh', background: '#080808', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '3rem 1.5rem' }}
+      style={{ minHeight: '100vh', background: CREAM, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '3rem 1.5rem' }}
       onTouchStart={onTouchStart}
       onTouchEnd={onTouchEnd}
     >
       <div style={{ maxWidth: 560, width: '100%' }}>
 
-        {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2.5rem' }}>
+        {/* Shared step indicator */}
+        <OnboardingProgress current="quiz" note={saving ? 'Saving…' : undefined} />
+
+        {/* Intro */}
+        <h1 style={{ fontFamily: SERIF, fontSize: '1.6rem', fontWeight: 500, color: INK, letterSpacing: '-0.02em', marginBottom: '0.4rem' }}>
+          A few questions about how you work
+        </h1>
+        <p style={{ color: WARM_GRAY, fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '2rem' }}>
+          Your answers fine-tune the BaZi reading into an archetype that fits how you actually
+          operate. There are no wrong answers — go with your gut.
+        </p>
+
+        {/* Within-step question progress */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '2rem' }}>
           <div style={{
             display: 'inline-flex',
             alignItems: 'center',
             gap: '0.5rem',
-            background: '#111',
-            border: '1px solid #1e1e1e',
+            background: WHITE,
+            border: `1px solid ${HAIRLINE}`,
             borderRadius: '999px',
-            padding: '0.375rem 1rem',
-            fontSize: '0.75rem',
-            color: '#888',
-            letterSpacing: '0.1em',
+            padding: '0.375rem 0.9rem',
+            fontSize: '0.72rem',
+            color: WARM_GRAY,
+            fontWeight: 700,
+            letterSpacing: '0.08em',
             textTransform: 'uppercase',
+            whiteSpace: 'nowrap',
           }}>
-            <span style={{ width: 6, height: 6, background: '#a855f7', borderRadius: '50%', display: 'inline-block' }} />
-            {saving ? 'Saving...' : `Q${currentIdx + 1} of ${totalActive}`}
+            <span style={{ width: 6, height: 6, background: GOLD, borderRadius: '50%', display: 'inline-block' }} />
+            Question {currentIdx + 1} of {totalActive}
           </div>
 
           {/* Progress bar */}
-          <div style={{ flex: 1, marginLeft: '1rem', height: 3, background: '#1a1a1a', borderRadius: '999px', overflow: 'hidden' }}>
-            <div style={{ height: '100%', width: `${progress}%`, background: '#a855f7', borderRadius: '999px', transition: 'width 0.3s ease' }} />
+          <div style={{ flex: 1, height: 4, background: TRACK, borderRadius: '999px', overflow: 'hidden' }}>
+            <div style={{ height: '100%', width: `${progress}%`, background: GOLD, borderRadius: '999px', transition: 'width 0.3s ease' }} />
           </div>
         </div>
 
         {/* Question */}
         <div style={{ opacity: transitioning ? 0 : 1, transition: 'opacity 0.2s ease' }}>
           <h2 style={{
+            fontFamily: SERIF,
             fontSize: '1.5rem',
-            fontWeight: 700,
-            color: '#ededed',
-            letterSpacing: '-0.02em',
+            fontWeight: 500,
+            color: INK,
+            letterSpacing: '-0.01em',
             lineHeight: 1.3,
             marginBottom: '2rem',
             minHeight: '4rem',
@@ -231,10 +303,10 @@ export default function QuizPage() {
                     alignItems: 'center',
                     gap: '1rem',
                     padding: '1rem 1.25rem',
-                    background: isSelected ? '#a855f720' : '#0f0f0f',
-                    border: `1px solid ${isSelected ? '#a855f7' : '#1e1e1e'}`,
+                    background: isSelected ? `${GOLD}14` : WHITE,
+                    border: `1px solid ${isSelected ? GOLD : HAIRLINE}`,
                     borderRadius: '12px',
-                    color: isSelected ? '#d8b4fe' : '#aaa',
+                    color: isSelected ? GOLD_DARK : INK,
                     cursor: 'pointer',
                     textAlign: 'left',
                     fontSize: '0.9375rem',
@@ -248,14 +320,14 @@ export default function QuizPage() {
                     width: 28,
                     height: 28,
                     borderRadius: '6px',
-                    background: isSelected ? '#a855f740' : '#1a1a1a',
-                    border: `1px solid ${isSelected ? '#a855f7' : '#222'}`,
+                    background: isSelected ? `${GOLD}22` : CREAM,
+                    border: `1px solid ${isSelected ? GOLD : HAIRLINE}`,
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
                     fontSize: '0.75rem',
                     fontWeight: 700,
-                    color: isSelected ? '#d8b4fe' : '#444',
+                    color: isSelected ? GOLD_DARK : MUTED,
                     flexShrink: 0,
                   }}>
                     {i + 1}
@@ -267,7 +339,7 @@ export default function QuizPage() {
           </div>
 
           {/* Keyboard hint */}
-          <p style={{ color: '#333', fontSize: '0.7rem', marginTop: '1.5rem', textAlign: 'center', letterSpacing: '0.05em' }}>
+          <p style={{ color: MUTED, fontSize: '0.72rem', marginTop: '1.5rem', textAlign: 'center', letterSpacing: '0.03em' }}>
             Press 1–4 to answer · ← to go back · swipe right to go back
           </p>
 
@@ -280,11 +352,12 @@ export default function QuizPage() {
                 margin: '1rem auto 0',
                 padding: '0.5rem 1.5rem',
                 background: 'transparent',
-                border: '1px solid #1e1e1e',
+                border: `1px solid ${HAIRLINE}`,
                 borderRadius: '8px',
-                color: '#888',
+                color: WARM_GRAY,
                 cursor: 'pointer',
                 fontSize: '0.8rem',
+                fontWeight: 600,
               }}
             >
               ← Previous
@@ -294,8 +367,8 @@ export default function QuizPage() {
 
         {/* Skip info if any questions skipped */}
         {skipSet.size > 0 && (
-          <div style={{ marginTop: '2rem', padding: '0.75rem 1rem', background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: '10px' }}>
-            <p style={{ color: '#888', fontSize: '0.75rem', margin: 0 }}>
+          <div style={{ marginTop: '2rem', padding: '0.75rem 1rem', background: WHITE, border: `1px solid ${HAIRLINE}`, borderRadius: '10px' }}>
+            <p style={{ color: WARM_GRAY, fontSize: '0.78rem', margin: 0 }}>
               Your BaZi chart revealed strong signals — {skipSet.size} question{skipSet.size > 1 ? 's' : ''} skipped
             </p>
           </div>

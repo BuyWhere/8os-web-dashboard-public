@@ -3,7 +3,7 @@ import type { CSSProperties } from 'react'
 export const pageShellStyle: CSSProperties = {
   display: 'flex',
   minHeight: '100vh',
-  background: '#0a0a0a',
+  background: 'var(--skin-color-surface-alt, #F7F3EC)',
 }
 
 export const pageMainStyle: CSSProperties = {

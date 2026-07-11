@@ -5,6 +5,17 @@ import { useRouter } from 'next/navigation'
 import { getDomain } from '@/lib/domains'
 import { getOnboardingState, saveOnboardingState } from '@/lib/storage'
 import type { Project, DomainId } from '@/lib/types'
+import { OnboardingProgress } from '@/components/onboarding/OnboardingProgress'
+
+// ─── Warm-editorial tokens ──────────────────────────────────────────────────
+const CREAM = '#F7F3EC'
+const WHITE = '#FFFFFF'
+const INK = '#221F1A'
+const WARM_GRAY = '#6B6257'
+const MUTED = '#8A8175'
+const GOLD = '#B08637'
+const HAIRLINE = '#E7DFD2'
+const SERIF = 'var(--font-serif), Georgia, serif'
 
 export default function ProjectsPage() {
   const router = useRouter()
@@ -135,7 +146,7 @@ export default function ProjectsPage() {
     return (
       <div style={{
         minHeight: '100vh',
-        background: '#080808',
+        background: CREAM,
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
@@ -145,14 +156,14 @@ export default function ProjectsPage() {
         <div style={{
           width: 48,
           height: 48,
-          border: '2px solid #1e1e1e',
-          borderTop: '2px solid #3b82f6',
+          border: `2px solid ${HAIRLINE}`,
+          borderTop: `2px solid ${GOLD}`,
           borderRadius: '50%',
           animation: 'spin 1s linear infinite',
         }} />
         <div style={{ textAlign: 'center' }}>
-          <div style={{ color: '#ededed', fontWeight: 600, marginBottom: '0.5rem' }}>ARCHIE is analyzing your goals...</div>
-          <div style={{ color: '#888', fontSize: '0.875rem' }}>Generating adaptive projects tailored to you</div>
+          <div style={{ color: INK, fontWeight: 600, marginBottom: '0.5rem' }}>ARCHIE is analyzing your goals...</div>
+          <div style={{ color: WARM_GRAY, fontSize: '0.875rem' }}>Generating adaptive projects tailored to you</div>
         </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
@@ -169,43 +180,31 @@ export default function ProjectsPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#080808',
+      background: CREAM,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      padding: '3rem 1.5rem',
+      padding: '3rem 1.5rem 5rem',
     }}>
+      {/* Shared step indicator */}
+      <OnboardingProgress current="projects" />
+
       {/* Header */}
       <div style={{ maxWidth: 680, width: '100%', marginBottom: '2.5rem', textAlign: 'center' }}>
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          background: '#111',
-          border: '1px solid #1e1e1e',
-          borderRadius: '999px',
-          padding: '0.375rem 1rem',
-          marginBottom: '2rem',
-          fontSize: '0.75rem',
-          color: '#888',
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
-        }}>
-          <span style={{ width: 6, height: 6, background: '#3b82f6', borderRadius: '50%', display: 'inline-block' }} />
-          Step 3 of 6 — ARCHIE Projects
-        </div>
         <h1 style={{
-          fontSize: 'clamp(1.5rem, 4vw, 2.25rem)',
-          fontWeight: 700,
-          letterSpacing: '-0.03em',
+          fontFamily: SERIF,
+          fontSize: 'clamp(1.5rem, 4vw, 2.2rem)',
+          fontWeight: 500,
+          letterSpacing: '-0.02em',
           lineHeight: 1.1,
           marginBottom: '0.75rem',
-          color: '#ededed',
+          color: INK,
         }}>
-          ARCHIE built your project roadmap
+          ARCHIE drafted your project roadmap
         </h1>
-        <p style={{ color: '#999', fontSize: '0.9375rem' }}>
-          Accept, rename, reorder, or add projects. Rejected projects won't generate tasks.
+        <p style={{ color: WARM_GRAY, fontSize: '0.95rem', lineHeight: 1.6, maxWidth: 480, margin: '0 auto' }}>
+          These are the projects ARCHIE thinks will move your goals forward. Keep the ones that fit,
+          rename or reorder them, add your own — anything you remove won&apos;t generate tasks.
         </p>
       </div>
 
@@ -224,12 +223,12 @@ export default function ProjectsPage() {
                 gap: '0.75rem',
                 marginBottom: '0.75rem',
                 paddingBottom: '0.75rem',
-                borderBottom: `1px solid ${domain.color}20`,
+                borderBottom: `1px solid ${domain.color}33`,
               }}>
                 <span style={{ fontSize: '1.25rem' }}>{domain.icon}</span>
                 <div>
-                  <div style={{ fontSize: '0.65rem', color: domain.color, letterSpacing: '0.1em', textTransform: 'uppercase' }}>{domain.label}</div>
-                  <div style={{ fontSize: '0.85rem', color: '#888' }}>{domainProjects[0]?.goalName}</div>
+                  <div style={{ fontSize: '0.65rem', color: domain.color, letterSpacing: '0.1em', textTransform: 'uppercase', fontWeight: 700 }}>{domain.label}</div>
+                  <div style={{ fontSize: '0.85rem', color: WARM_GRAY }}>{domainProjects[0]?.goalName}</div>
                 </div>
               </div>
 
@@ -243,18 +242,18 @@ export default function ProjectsPage() {
                     onDrop={() => handleDrop(project.id)}
                     onDragLeave={() => setDragOver(null)}
                     style={{
-                      background: project.accepted ? '#0f0f0f' : '#090909',
-                      border: `1px solid ${dragOver === project.id ? domain.color + '60' : project.accepted ? '#1e1e1e' : '#121212'}`,
-                      borderRadius: '10px',
+                      background: WHITE,
+                      border: `1px solid ${dragOver === project.id ? domain.color + '80' : HAIRLINE}`,
+                      borderRadius: '12px',
                       padding: '1rem',
-                      opacity: project.accepted ? 1 : 0.45,
+                      opacity: project.accepted ? 1 : 0.5,
                       cursor: 'grab',
                       transition: 'all 0.15s',
                     }}
                   >
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.75rem' }}>
                       {/* Drag handle */}
-                      <div style={{ color: '#333', fontSize: '0.75rem', paddingTop: '0.125rem', userSelect: 'none' }}>⠿</div>
+                      <div style={{ color: MUTED, fontSize: '0.75rem', paddingTop: '0.125rem', userSelect: 'none' }}>⠿</div>
 
                       <div style={{ flex: 1 }}>
                         {editingId === project.id ? (
@@ -267,10 +266,10 @@ export default function ProjectsPage() {
                             style={{
                               width: '100%',
                               padding: '0.25rem 0.5rem',
-                              background: '#1a1a1a',
+                              background: CREAM,
                               border: `1px solid ${domain.color}`,
                               borderRadius: '6px',
-                              color: '#ededed',
+                              color: INK,
                               fontSize: '0.9375rem',
                               fontWeight: 600,
                               outline: 'none',
@@ -284,24 +283,25 @@ export default function ProjectsPage() {
                             style={{
                               fontSize: '0.9375rem',
                               fontWeight: 600,
-                              color: project.accepted ? '#ededed' : '#444',
+                              color: project.accepted ? INK : MUTED,
                               marginBottom: '0.25rem',
                               cursor: 'text',
                               letterSpacing: '-0.01em',
                             }}
                           >
                             {project.name}
-                            <span style={{ marginLeft: '0.5rem', fontSize: '0.65rem', color: '#333' }}>✏️</span>
+                            <span style={{ marginLeft: '0.5rem', fontSize: '0.65rem', color: MUTED }}>✏️</span>
                           </div>
                         )}
-                        <div style={{ fontSize: '0.8rem', color: '#999', lineHeight: 1.4, marginBottom: '0.5rem' }}>
+                        <div style={{ fontSize: '0.8rem', color: WARM_GRAY, lineHeight: 1.4, marginBottom: '0.5rem' }}>
                           {project.description}
                         </div>
                         <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem' }}>
                           <span style={{
                             fontSize: '0.7rem',
-                            color: '#888',
-                            background: '#141414',
+                            color: WARM_GRAY,
+                            background: CREAM,
+                            border: `1px solid ${HAIRLINE}`,
                             padding: '0.2rem 0.5rem',
                             borderRadius: '999px',
                           }}>
@@ -311,8 +311,9 @@ export default function ProjectsPage() {
                             fontSize: '0.7rem',
                             padding: '0.2rem 0.5rem',
                             borderRadius: '999px',
-                            background: `${domain.color}15`,
+                            background: `${domain.color}18`,
                             color: domain.color,
+                            fontWeight: 600,
                           }}>
                             {domain.label}
                           </span>
@@ -326,9 +327,9 @@ export default function ProjectsPage() {
                           width: 28,
                           height: 28,
                           borderRadius: '50%',
-                          border: `1px solid ${project.accepted ? '#10b981' : '#1e1e1e'}`,
-                          background: project.accepted ? '#10b98120' : 'transparent',
-                          color: project.accepted ? '#10b981' : '#333',
+                          border: `1px solid ${project.accepted ? '#4F7A52' : HAIRLINE}`,
+                          background: project.accepted ? '#4F7A5220' : 'transparent',
+                          color: project.accepted ? '#4F7A52' : MUTED,
                           fontSize: '0.7rem',
                           cursor: 'pointer',
                           display: 'flex',
@@ -350,9 +351,9 @@ export default function ProjectsPage() {
         {/* Add custom project */}
         {showAddForm ? (
           <div style={{
-            background: '#0f0f0f',
-            border: '1px solid #1e1e1e',
-            borderRadius: '10px',
+            background: WHITE,
+            border: `1px solid ${HAIRLINE}`,
+            borderRadius: '12px',
             padding: '1rem',
           }}>
             <div style={{ display: 'flex', gap: '0.75rem', marginBottom: '0.75rem' }}>
@@ -366,10 +367,10 @@ export default function ProjectsPage() {
                 style={{
                   flex: 1,
                   padding: '0.625rem 0.875rem',
-                  background: '#141414',
-                  border: '1px solid #2a2a2a',
+                  background: CREAM,
+                  border: `1px solid ${HAIRLINE}`,
                   borderRadius: '8px',
-                  color: '#ededed',
+                  color: INK,
                   fontSize: '0.9375rem',
                   outline: 'none',
                 }}
@@ -379,10 +380,10 @@ export default function ProjectsPage() {
                 onChange={e => setAddDomain(e.target.value as DomainId)}
                 style={{
                   padding: '0.625rem',
-                  background: '#141414',
-                  border: '1px solid #2a2a2a',
+                  background: CREAM,
+                  border: `1px solid ${HAIRLINE}`,
                   borderRadius: '8px',
-                  color: '#ededed',
+                  color: INK,
                   fontSize: '0.875rem',
                   outline: 'none',
                 }}
@@ -394,20 +395,21 @@ export default function ProjectsPage() {
               </select>
             </div>
             <div style={{ display: 'flex', gap: '0.5rem' }}>
-              <button onClick={addCustomProject} style={{ padding: '0.5rem 1rem', background: '#ededed', color: '#080808', border: 'none', borderRadius: '8px', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}>Add</button>
-              <button onClick={() => setShowAddForm(false)} style={{ padding: '0.5rem 1rem', background: 'transparent', color: '#999', border: '1px solid #1e1e1e', borderRadius: '8px', fontSize: '0.875rem', cursor: 'pointer' }}>Cancel</button>
+              <button onClick={addCustomProject} style={{ padding: '0.5rem 1rem', background: GOLD, color: '#fff', border: 'none', borderRadius: '8px', fontSize: '0.875rem', fontWeight: 600, cursor: 'pointer' }}>Add</button>
+              <button onClick={() => setShowAddForm(false)} style={{ padding: '0.5rem 1rem', background: 'transparent', color: WARM_GRAY, border: `1px solid ${HAIRLINE}`, borderRadius: '8px', fontSize: '0.875rem', cursor: 'pointer' }}>Cancel</button>
             </div>
           </div>
         ) : (
           <button
             onClick={() => setShowAddForm(true)}
             style={{
-              padding: '0.75rem',
+              padding: '0.85rem',
               background: 'transparent',
-              border: '1px dashed #1e1e1e',
-              borderRadius: '10px',
-              color: '#888',
+              border: `1px dashed #D9CFBE`,
+              borderRadius: '12px',
+              color: WARM_GRAY,
               fontSize: '0.875rem',
+              fontWeight: 600,
               cursor: 'pointer',
               width: '100%',
             }}
@@ -419,20 +421,20 @@ export default function ProjectsPage() {
 
       {/* CTA */}
       <div style={{ maxWidth: 680, width: '100%', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-        <div style={{ fontSize: '0.875rem', color: '#888', textAlign: 'center' }}>
+        <div style={{ fontSize: '0.875rem', color: MUTED, textAlign: 'center' }}>
           {acceptedCount} project{acceptedCount !== 1 ? 's' : ''} accepted · ARCHIE will generate tasks for these
         </div>
         <button
           onClick={handleContinue}
           disabled={acceptedCount === 0}
           style={{
-            padding: '0.875rem',
-            background: acceptedCount > 0 ? '#ededed' : '#1a1a1a',
-            color: acceptedCount > 0 ? '#080808' : '#333',
+            padding: '1rem',
+            background: acceptedCount > 0 ? GOLD : '#E3D8C4',
+            color: acceptedCount > 0 ? '#fff' : '#A99A82',
             border: 'none',
-            borderRadius: '10px',
-            fontSize: '0.9375rem',
-            fontWeight: 600,
+            borderRadius: '12px',
+            fontSize: '0.95rem',
+            fontWeight: 700,
             cursor: acceptedCount > 0 ? 'pointer' : 'not-allowed',
             letterSpacing: '-0.01em',
           }}

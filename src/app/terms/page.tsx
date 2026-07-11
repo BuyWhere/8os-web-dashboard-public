@@ -15,14 +15,14 @@ export default function TermsPage() {
       padding: '4rem 2rem',
     }}>
       <div style={{ maxWidth: '720px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '0.875rem' }}>
+        <Link href="/" style={{ color: '#667eea', textDecoration: 'none', fontSize: '0.875rem' }}>
           ← Back to 8os
         </Link>
 
         <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '2rem', marginBottom: '0.5rem' }}>
           Terms of Service
         </h1>
-        <p style={{ color: '#888', marginBottom: '3rem' }}>Last updated: July 2026</p>
+        <p style={{ color: '#666', marginBottom: '3rem' }}>Last updated: May 2026</p>
 
         <div style={{ lineHeight: 1.8, color: '#ccc' }}>
           <section style={{ marginBottom: '2.5rem' }}>

@@ -19,7 +19,7 @@ export function SkeletonBlock({
         width,
         height,
         borderRadius: radius,
-        background: 'linear-gradient(90deg, #141414 0%, #1d1d1d 50%, #141414 100%)',
+        background: 'linear-gradient(90deg, #F7F3EC 0%, #EFE8DC 50%, #F7F3EC 100%)',
         backgroundSize: '200% 100%',
         animation: 'dashboardSkeletonPulse 1.6s ease-in-out infinite',
         ...style,
@@ -30,7 +30,7 @@ export function SkeletonBlock({
 
 export function SectionCard({
   children,
-  accent = '#1e1e1e',
+  accent = '#E7DFD2',
   style,
 }: {
   children: ReactNode
@@ -40,7 +40,7 @@ export function SectionCard({
   return (
     <div
       style={{
-        background: '#111',
+        background: '#FFFFFF',
         border: `1px solid ${accent}`,
         borderRadius: 14,
         padding: 24,
@@ -61,9 +61,9 @@ export function LoadingMessage({ children }: { children: ReactNode }) {
         gap: 10,
         padding: '10px 14px',
         borderRadius: 999,
-        border: '1px solid #26263a',
-        background: '#11131c',
-        color: '#a5b4fc',
+        border: '1px solid #E7DFD2',
+        background: '#F7F3EC',
+        color: '#B08637',
         fontSize: 13,
       }}
     >
@@ -72,8 +72,8 @@ export function LoadingMessage({ children }: { children: ReactNode }) {
           width: 8,
           height: 8,
           borderRadius: '50%',
-          background: '#818cf8',
-          boxShadow: '0 0 0 0 rgba(129, 140, 248, 0.45)',
+          background: '#B08637',
+          boxShadow: '0 0 0 0 rgba(176, 134, 55, 0.45)',
           animation: 'dashboardStatusPulse 1.4s ease-in-out infinite',
         }}
       />
@@ -94,17 +94,17 @@ export function ErrorCard({
   onAction: () => void
 }) {
   return (
-    <SectionCard accent="#3a1f24" style={{ textAlign: 'center', padding: 36 }}>
+    <SectionCard accent="#E7C7B8" style={{ textAlign: 'center', padding: 36 }}>
       <div style={{ fontSize: 32, marginBottom: 12 }}>⚠️</div>
       <h2 style={{ margin: '0 0 8px', fontSize: 18 }}>{title}</h2>
-      <p style={{ margin: '0 auto 20px', color: '#8f8f96', fontSize: 14, maxWidth: 480, lineHeight: 1.6 }}>
+      <p style={{ margin: '0 auto 20px', color: '#8A8175', fontSize: 14, maxWidth: 480, lineHeight: 1.6 }}>
         {message}
       </p>
       <button
         onClick={onAction}
         style={{
-          background: '#ededed',
-          color: '#0a0a0a',
+          background: '#B08637',
+          color: '#FFFFFF',
           border: 'none',
           borderRadius: 8,
           padding: '10px 16px',
@@ -128,9 +128,9 @@ export function DashboardPageStyles() {
       }
 
       @keyframes dashboardStatusPulse {
-        0% { box-shadow: 0 0 0 0 rgba(129, 140, 248, 0.45); }
-        70% { box-shadow: 0 0 0 8px rgba(129, 140, 248, 0); }
-        100% { box-shadow: 0 0 0 0 rgba(129, 140, 248, 0); }
+        0% { box-shadow: 0 0 0 0 rgba(176, 134, 55, 0.45); }
+        70% { box-shadow: 0 0 0 8px rgba(176, 134, 55, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(176, 134, 55, 0); }
       }
     `}</style>
   )

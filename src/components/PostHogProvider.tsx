@@ -47,12 +47,8 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
         // Filter bot noise: sessions shorter than 5s are discarded
         minimumDurationMilliseconds: 5000,
       },
-      // Pillar 3: Error Tracking — PostHog captures unhandled exceptions
-      // automatically via its auto-capture pipeline. capture_exceptions is
-      // disabled because it installs a global error boundary that interferes
-      // with React's hydration commit phase, causing errors #418/#423/#425
-      // on every page (OS-2615).
-      capture_exceptions: false,
+      // Pillar 3: Error Tracking — capture unhandled exceptions automatically
+      capture_exceptions: true,
     })
 
     // Pillar 4: Web Vitals — report CLS, FCP, FID, LCP, TTFB as PostHog events

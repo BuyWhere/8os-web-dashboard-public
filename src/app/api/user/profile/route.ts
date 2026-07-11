@@ -1,15 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
-import { authenticateAccessToken } from '@/lib/auth/authenticate'
+import { requireAuth } from '@/lib/auth/require-auth'
 import { prisma } from '@/lib/db/prisma'
 
 /** GET /api/user/profile — return full user info for settings page */
 export async function GET(req: NextRequest) {
-  const auth = await authenticateAccessToken(req)
-  if (!auth) return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 })
+  const auth = await requireAuth(req)
+  if (auth instanceof NextResponse) return auth
 
   const user = await prisma.user.findUnique({
-    where: { id: auth.payload.sub },
+    where: { id: auth.userId },
     select: {
       id: true,
       email: true,
@@ -47,8 +47,8 @@ const updateSchema = z.object({
 
 /** PATCH /api/user/profile — update email or phone (triggers re-verification) */
 export async function PATCH(req: NextRequest) {
-  const auth = await authenticateAccessToken(req)
-  if (!auth) return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 })
+  const auth = await requireAuth(req)
+  if (auth instanceof NextResponse) return auth
 
   let body: unknown
   try {
@@ -66,16 +66,16 @@ export async function PATCH(req: NextRequest) {
 
   // Check uniqueness
   if (email) {
-    const conflict = await prisma.user.findFirst({ where: { email, NOT: { id: auth.payload.sub } } })
+    const conflict = await prisma.user.findFirst({ where: { email, NOT: { id: auth.userId } } })
     if (conflict) return NextResponse.json({ error: 'Email already in use' }, { status: 409 })
   }
   if (phone) {
-    const conflict = await prisma.user.findFirst({ where: { phone, NOT: { id: auth.payload.sub } } })
+    const conflict = await prisma.user.findFirst({ where: { phone, NOT: { id: auth.userId } } })
     if (conflict) return NextResponse.json({ error: 'Phone already in use' }, { status: 409 })
   }
 
   const updated = await prisma.user.update({
-    where: { id: auth.payload.sub },
+    where: { id: auth.userId },
     data: {
       ...(email ? { email, emailVerified: false } : {}),
       ...(phone ? { phone, phoneVerified: false } : {}),

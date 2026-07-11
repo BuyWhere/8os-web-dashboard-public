@@ -3,6 +3,8 @@ export interface BlogSection {
   paragraphs: string[]
 }
 
+export type BlogCategory = 'BaZi' | 'Productivity' | 'Archetypes' | 'Mental Health' | 'Comparisons'
+
 export interface BlogPost {
   slug: string
   title: string
@@ -12,6 +14,9 @@ export interface BlogPost {
   isoDate: string
   readTime: string
   keywords: string[]
+  category: BlogCategory
+  featured?: boolean
+  coverImage?: string
   sections: BlogSection[]
 }
 
@@ -25,6 +30,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-07',
     readTime: '8 min read',
     keywords: ['BaZi', 'personal operating system', 'goal setting'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'What BaZi Actually Is',
@@ -80,6 +86,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-07',
     readTime: '6 min read',
     keywords: ['star sign', 'BaZi', 'western astrology'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'What Your Star Sign Gets Right',
@@ -124,6 +131,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-07',
     readTime: '7 min read',
     keywords: ['goal timing', 'BaZi timing', 'five elements'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Why Timing Changes Everything',
@@ -170,6 +178,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-07',
     readTime: '9 min read',
     keywords: ['strategic commander', 'geng metal', 'capricorn bazi'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'The Archetype at a Glance',
@@ -221,6 +230,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-07',
     readTime: '10 min read',
     keywords: ['famous archetypes', 'celebrity BaZi', 'archetype examples'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'How to Read Famous BaZi Profiles',
@@ -281,6 +291,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-07',
     readTime: '5 min read',
     keywords: ['birth time BaZi', 'BaZi without time', '8os methodology'],
+    category: 'BaZi',
     sections: [
       {
         heading: "The Problem With Birth Time in BaZi",
@@ -317,6 +328,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-07',
     readTime: '7 min read',
     keywords: ['BaZi free will', 'fate vs agency', 'BaZi practical'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'The Fatalism Misreading',
@@ -361,6 +373,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-07',
     readTime: '8 min read',
     keywords: ['BaZi productivity', 'personality productivity', 'five elements work'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'The Productivity System Mismatch Problem',
@@ -413,6 +426,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['goal setting personality', 'BaZi goals', 'element goal system'],
+    category: 'Productivity',
     sections: [
       {
         heading: 'The Problem with Universal Goal-Setting Advice',
@@ -457,6 +471,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '9 min read',
     keywords: ['productivity archetypes', '5 archetypes', 'strategic commander nurturing creative'],
+    category: 'Productivity',
     sections: [
       {
         heading: 'Why Archetypes Are More Useful Than Types',
@@ -524,6 +539,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '6 min read',
     keywords: ['todoist vs notion', 'productivity app element', 'best app by personality'],
+    category: 'Comparisons',
     sections: [
       {
         heading: 'Why the "Best Tool" Question Is Wrong',
@@ -576,6 +592,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '6 min read',
     keywords: ['personal operating system', 'personal OS', 'life system'],
+    category: 'Productivity',
     sections: [
       {
         heading: 'The Operating System Analogy',
@@ -622,6 +639,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '8 min read',
     keywords: ['myers briggs vs bazi', 'MBTI vs BaZi', 'personality test comparison'],
+    category: 'Comparisons',
     sections: [
       {
         heading: 'The Core Difference: Snapshot vs Operating System',
@@ -674,6 +692,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['morning routine archetype', 'BaZi morning', 'five elements routine'],
+    category: 'Productivity',
     sections: [
       {
         heading: 'Why Generic Morning Routines Fail',
@@ -734,6 +753,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '6 min read',
     keywords: ['best time start goal', 'BaZi timing goals', 'when to start new project'],
+    category: 'Productivity',
     sections: [
       {
         heading: 'The Question Productivity Culture Never Asks',
@@ -771,6 +791,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '8 min read',
     keywords: ['five elements leadership', 'BaZi leadership style', 'archetype leadership'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Why Leadership Style Is Not a Choice',
@@ -845,6 +866,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '6 min read',
     keywords: ['bazi vs enneagram', 'enneagram vs bazi', 'personality system comparison'],
+    category: 'Comparisons',
     sections: [
       {
         heading: 'What the Enneagram Actually Measures',
@@ -889,6 +911,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '9 min read',
     keywords: ['how to use bazi archetype', 'apply personality type productivity', '8os guide'],
+    category: 'Archetypes',
     sections: [
       {
         heading: 'Step 1: Confirm Your Archetype',
@@ -949,6 +972,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['bazi timing', 'when to make career change', 'five elements seasonal timing'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Timing Is Not Superstition — It Is Strategy',
@@ -1004,6 +1028,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '8 min read',
     keywords: ['best productivity apps bazi element', 'notion vs obsidian element'],
+    category: 'Archetypes',
     sections: [
       {
         heading: 'Why App Reviews Miss the Most Important Variable',
@@ -1064,6 +1089,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['deep work personality type', 'focus strategies bazi element', 'deep work archetype'],
+    category: 'Productivity',
     sections: [
       {
         heading: 'Why Cal Newport Got It Half Right',
@@ -1124,6 +1150,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['burnout recovery by personality', 'bazi burnout', 'five elements stress'],
+    category: 'Mental Health',
     sections: [
       {
         heading: 'The Problem With Generic Burnout Advice',
@@ -1192,6 +1219,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '8 min read',
     keywords: ['weekly planning by personality type', 'time blocking bazi', 'archetype weekly schedule'],
+    category: 'Productivity',
     sections: [
       {
         heading: 'The Weekly Plan Is Not Universal',
@@ -1252,6 +1280,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '8 min read',
     keywords: ['bazi vs human design', 'human design vs bazi productivity', 'best personality system'],
+    category: 'Comparisons',
     sections: [
       {
         heading: 'Two Systems, Different Claims',
@@ -1304,6 +1333,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['five elements communication style', 'bazi interpersonal', 'element communication'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Why Some Conversations Flow and Others Feel Impossible',
@@ -1364,6 +1394,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '9 min read',
     keywords: ['career change bazi element', 'archetype career pivot', 'bazi career advice'],
+    category: 'Archetypes',
     sections: [
       {
         heading: 'The Element Mismatch That Kills Career Changes',
@@ -1424,6 +1455,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '9 min read',
     keywords: ['bazi for entrepreneurs', 'founder personality type', 'five elements startups'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'The Founder-Company Fit Problem',
@@ -1468,6 +1500,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '8 min read',
     keywords: ['habit building personality type', 'bazi habits', 'atomic habits by element'],
+    category: 'Productivity',
     sections: [
       {
         heading: 'The Atomic Habits Problem',
@@ -1533,6 +1566,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '10 min read',
     keywords: ['bazi team building', 'five elements team dynamics', 'archetype team productivity'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Why Most Team-Building Misses the Operating Level',
@@ -1585,6 +1619,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '8 min read',
     keywords: ['bazi annual cycle', 'seasonal goal setting', 'five elements year planning'],
+    category: 'Productivity',
     sections: [
       {
         heading: 'Why January Is the Wrong Month for Annual Planning',
@@ -1633,6 +1668,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['relationship goals personality type', 'bazi relationships', 'five elements love'],
+    category: 'Productivity',
     sections: [
       {
         heading: 'Elemental Patterns in How We Connect',
@@ -1693,6 +1729,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '9 min read',
     keywords: ['metal element bazi', 'geng metal ren metal', 'metal archetype guide'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Metal in the Five Elements System',
@@ -1756,6 +1793,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '9 min read',
     keywords: ['water element bazi', 'ren water gui water', 'water archetype guide'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Water in the Five Elements System',
@@ -1811,6 +1849,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '9 min read',
     keywords: ['wood element bazi', 'jia wood yi wood', 'wood archetype guide'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Wood in the Five Elements System',
@@ -1866,6 +1905,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '9 min read',
     keywords: ['fire element bazi', 'bing fire ding fire', 'fire archetype guide'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Fire in the Five Elements System',
@@ -1921,6 +1961,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '9 min read',
     keywords: ['earth element bazi', 'wu earth ji earth', 'earth archetype guide'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Earth in the Five Elements System',
@@ -1976,6 +2017,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['bazi vs disc', 'disc assessment alternative', 'bazi personality assessment comparison'],
+    category: 'Comparisons',
     sections: [
       {
         heading: 'What DISC Measures — and What It Misses',
@@ -2012,6 +2054,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['bazi sleep habits', 'recovery by personality type', 'five elements rest'],
+    category: 'Mental Health',
     sections: [
       {
         heading: 'Why Sleep Science Misses the Individual Variable',
@@ -2072,6 +2115,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '8 min read',
     keywords: ['decision making personality type', 'bazi decision making', 'five elements choices'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'The Hidden Variable in Every Bad Decision',
@@ -2140,6 +2184,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '9 min read',
     keywords: ['bazi leadership style', 'five elements management', 'archetype leadership'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'What Element Are You Leading From?',
@@ -2213,6 +2258,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '8 min read',
     keywords: ['bazi money mindset', 'five elements financial habits', 'archetype financial goals'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Money Is Not Neutral — It Has an Element',
@@ -2247,6 +2293,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '8 min read',
     keywords: ['bazi for students', 'study tips by personality type', 'five elements learning style'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'The Study Strategy Problem',
@@ -2281,6 +2328,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['bazi fitness', 'exercise by personality type', 'five elements workout'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Why Generic Fitness Advice Fails',
@@ -2315,6 +2363,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['creativity by personality type', 'bazi creativity', 'five elements creative process'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Creativity Is Not Uniform',
@@ -2369,6 +2418,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['networking tips personality type', 'bazi networking', 'introvert networking archetype'],
+    category: 'Archetypes',
     sections: [
       {
         heading: 'Why Standard Networking Advice Fails Most Elements',
@@ -2409,6 +2459,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '8 min read',
     keywords: ['bazi parenting style', 'five elements parenting', 'archetype family dynamics'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'You Parent From Your Element',
@@ -2447,6 +2498,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['conflict resolution personality type', 'bazi conflict', 'five elements disagreement'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'The Element Underneath the Disagreement',
@@ -2488,6 +2540,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '7 min read',
     keywords: ['remote work personality type', 'bazi remote work', 'five elements work from home'],
+    category: 'BaZi',
     sections: [
       {
         heading: 'Remote Work Is Not Neutral',
@@ -2529,6 +2582,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '6 min read',
     keywords: ['books by personality type', 'bazi reading list', 'five elements book recommendations'],
+    category: 'Archetypes',
     sections: [
       {
         heading: 'Books That Match Your Operating System',
@@ -2593,6 +2647,7 @@ export const blogPosts: BlogPost[] = [
     isoDate: '2026-05-08',
     readTime: '9 min read',
     keywords: ['mental health personality type', 'bazi mental health', 'five elements anxiety depression'],
+    category: 'Mental Health',
     sections: [
       {
         heading: 'A Note on What This Piece Is',

@@ -1,34 +1,24 @@
 /**
  * /goals — Goals list page
  */
+import { getServerAppUserId } from '@/lib/auth/server-user'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { prisma } from '@/lib/db/prisma'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { ProgressRing } from '@/components/dashboard/ProgressRing'
 import { QuickAdd } from '@/components/dashboard/QuickAdd'
-import { goalTaglineForDomain, type GoalDomain } from '@/lib/goal-taglines'
 import Link from 'next/link'
 
 async function getUserId(): Promise<string> {
-  const cookieStore = await cookies()
-  const token = cookieStore.get('access_token')?.value
-  if (!token) redirect('/login?next=/goals')
-  const pem = (process.env.JWT_PUBLIC_KEY ?? '').replace(/\\n/g, '\n')
-  if (!pem) redirect('/login')
-  try {
-    const { importSPKI, jwtVerify } = await import('jose')
-    const key = await importSPKI(pem, 'RS256')
-    const { payload } = await jwtVerify(token, key, { issuer: '8os' })
-    return payload.sub as string
-  } catch {
-    redirect('/login?next=/goals')
-  }
+  // Clerk is the source of truth (2026-07-10). Resolves the Clerk session
+  // to an app User.id (lazy-provisioning if needed) or redirects to /login.
+  return await getServerAppUserId('/goals')
 }
 
 const DOMAIN_COLORS: Record<string, string> = {
-  career: '#6366f1', wealth: '#f59e0b', health: '#22c55e',
-  relationships: '#ec4899', learning: '#3b82f6', legacy: '#8b5cf6',
+  career: '#3F6C8E', wealth: '#B08637', health: '#4F7A52',
+  relationships: '#B5652F', learning: '#3E8494', legacy: '#7E5A94',
 }
 
 const DOMAIN_ICONS: Record<string, string> = {
@@ -38,39 +28,33 @@ const DOMAIN_ICONS: Record<string, string> = {
 export default async function GoalsPage() {
   const userId = await getUserId()
 
-  const [goals, profile] = await Promise.all([
-    prisma.goal.findMany({
-      where: { userId, status: { in: ['active', 'paused'] } },
-      include: {
-        projects: { select: { id: true, tasks: { where: { status: { not: 'cancelled' } }, select: { status: true } } } },
-      },
-      orderBy: { createdAt: 'asc' },
-    }),
-    prisma.userProfile.findUnique({
-      where: { userId },
-      select: { dayElement: true, dayPolarity: true, dominantElement: true },
-    }),
-  ])
+  const goals = await prisma.goal.findMany({
+    where: { userId, status: { in: ['active', 'paused'] } },
+    include: {
+      projects: { select: { id: true, tasks: { where: { status: { not: 'cancelled' } }, select: { status: true } } } },
+    },
+    orderBy: { createdAt: 'asc' },
+  })
 
   const sidebarGoals = goals.map((g) => ({ id: g.id, domainId: g.domainId, name: g.name, progress: g.progress }))
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#0a0a0a' }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
       <Sidebar goals={sidebarGoals} />
 
-      <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
+      <main style={{ flex: 1, padding: '32px clamp(20px, 4vw, 44px)', overflowY: 'auto', maxWidth: 1120, margin: '0 auto', width: '100%' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28 }}>
           <div>
-            <Link href="/dashboard" style={{ color: '#999', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
-            <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Goals</h1>
+            <Link href="/dashboard" style={{ color: '#8A8175', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 6 }}>← Dashboard</Link>
+            <h1 style={{ margin: 0, fontFamily: 'var(--font-serif), Georgia, serif', fontSize: 32, fontWeight: 500, letterSpacing: '-0.02em', color: '#221F1A' }}>Goals</h1>
           </div>
         </div>
 
         {goals.length === 0 ? (
-          <div style={{ background: '#111', border: '1px solid #1e1e1e', borderRadius: 14, padding: 40, textAlign: 'center' }}>
-            <div style={{ fontSize: 32, marginBottom: 12 }}>◎</div>
-            <div style={{ color: '#888', marginBottom: 16 }}>No active goals yet.</div>
-            <Link href="/onboarding/goals" style={{ color: '#6366f1', fontSize: 14 }}>Set up your first goal →</Link>
+          <div style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 16, padding: 40, textAlign: 'center' }}>
+            <div style={{ fontSize: 32, marginBottom: 12, color: '#B08637' }}>◎</div>
+            <div style={{ color: '#6B6257', marginBottom: 16 }}>No active goals yet.</div>
+            <Link href="/onboarding/goals" style={{ color: '#B08637', fontSize: 14, fontWeight: 600 }}>Set up your first goal →</Link>
           </div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))', gap: 20 }}>
@@ -78,17 +62,14 @@ export default async function GoalsPage() {
               const allTasks = g.projects.flatMap((p) => p.tasks)
               const doneTasks = allTasks.filter((t) => t.status === 'done').length
               const totalTasks = allTasks.length
-              const domainColor = DOMAIN_COLORS[g.domainId] ?? '#6366f1'
-              const tagline = goalTaglineForDomain(profile, g.domainId as GoalDomain)
+              const domainColor = DOMAIN_COLORS[g.domainId] ?? '#B08637'
 
               return (
                 <Link key={g.id} href={`/goals/${g.id}`} style={{ textDecoration: 'none' }}>
                   <div style={{
-                    background: '#111', border: '1px solid #1e1e1e', borderRadius: 14, padding: 20,
-                    transition: 'border-color 0.15s', cursor: 'pointer',
+                    background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 16, padding: 20,
+                    boxShadow: '0 8px 24px rgba(34, 31, 26, 0.04)', transition: 'border-color 0.15s', cursor: 'pointer',
                   }}
-                    onMouseEnter={(e) => (e.currentTarget.style.borderColor = domainColor + '44')}
-                    onMouseLeave={(e) => (e.currentTarget.style.borderColor = '#1e1e1e')}
                   >
                     <div style={{ display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 16 }}>
                       <ProgressRing progress={g.progress} size={56} color={domainColor} label={`${Math.round(g.progress * 100)}%`} />
@@ -97,32 +78,22 @@ export default async function GoalsPage() {
                           <span style={{ fontSize: 16 }}>{DOMAIN_ICONS[g.domainId]}</span>
                           <span style={{ fontSize: 10, color: domainColor, fontWeight: 700, textTransform: 'uppercase' }}>{g.domainId}</span>
                         </div>
-                        <div style={{ fontWeight: 600, fontSize: 14, color: '#ededed' }}>{g.name}</div>
-                        <div style={{ fontSize: 12, color: '#888', marginTop: 2 }}>{g.definition.slice(0, 80)}{g.definition.length > 80 ? '…' : ''}</div>
-                        {tagline && (
-                          <div style={{
-                            marginTop: 8, fontSize: 11, fontStyle: 'italic', color: domainColor,
-                            opacity: 0.85, lineHeight: 1.4,
-                            borderLeft: `2px solid ${domainColor}55`,
-                            paddingLeft: 8,
-                          }}>
-                            {tagline}
-                          </div>
-                        )}
+                        <div style={{ fontWeight: 600, fontSize: 14.5, color: '#221F1A' }}>{g.name}</div>
+                        <div style={{ fontSize: 12.5, color: '#6B6257', marginTop: 3, lineHeight: 1.45 }}>{g.definition.slice(0, 80)}{g.definition.length > 80 ? '…' : ''}</div>
                       </div>
                     </div>
 
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                      <div style={{ fontSize: 11, color: '#999' }}>
+                      <div style={{ fontSize: 11.5, color: '#8A8175' }}>
                         {doneTasks}/{totalTasks} tasks · {g.projects.length} projects
                       </div>
-                      <span style={{ padding: '2px 8px', borderRadius: 4, background: g.status === 'active' ? '#22c55e22' : '#1e1e1e', color: g.status === 'active' ? '#22c55e' : '#555', fontSize: 10 }}>
+                      <span style={{ padding: '2px 9px', borderRadius: 999, background: g.status === 'active' ? '#E7EFE0' : '#F2E9D6', color: g.status === 'active' ? '#3C5C3E' : '#8A8175', fontSize: 10.5, fontWeight: 600 }}>
                         {g.status}
                       </span>
                     </div>
 
                     {/* Progress bar */}
-                    <div style={{ marginTop: 12, height: 3, background: '#1a1a1a', borderRadius: 2, overflow: 'hidden' }}>
+                    <div style={{ marginTop: 14, height: 4, background: '#F2E9D6', borderRadius: 3, overflow: 'hidden' }}>
                       <div style={{ height: '100%', width: `${g.progress * 100}%`, background: domainColor, borderRadius: 2 }} />
                     </div>
                   </div>

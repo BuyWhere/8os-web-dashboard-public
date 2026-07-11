@@ -210,16 +210,12 @@ export function normalizeScores(raw: QuizScoreVector): Record<string, number> {
   const [, systematic, , intuitive] = normalize('systematic', 'intuitive')
   const [, goalDriven, , processDriven] = normalize('goalDriven', 'processDriven')
 
-  const dominantWindowTotal = s.energyMorning + s.energyAfternoon + s.energyEvening + s.energySteady || 1
+  const energyTotal = s.energyMorning + s.energyAfternoon + s.energyEvening + s.energySteady || 1
   const stressTotal = s.stressFocus + s.stressWithdraw + s.stressSocial + s.stressPhysical || 1
   const leaderTotal = s.leaderCharismatic + s.leaderDemonstrative + s.leaderSupportive + s.leaderStrategic || 1
   const rechargeTotal = s.rechargeExtrovert + s.rechargeIntrovert + s.rechargeCreative + s.rechargeKinesthetic || 1
 
-  // Reuses the legacy energyMorning/Afternoon/Evening/Steady quiz scores, but
-  // reframed as the user's preferred working-window start (OS-2114). We keep
-  // the field name `dominantEnergy` for backward compatibility with the
-  // archetype on-disk schema; semantically it's now a window seed.
-  const dominantEnergy = dominantWindowTotal === 1 ? 'steady' :
+  const dominantEnergy = energyTotal === 1 ? 'steady' :
     ['morning', 'afternoon', 'evening', 'steady']
       .sort((a, b) => (s[`energy${b.charAt(0).toUpperCase() + b.slice(1)}`] || 0) - (s[`energy${a.charAt(0).toUpperCase() + a.slice(1)}`] || 0))[0]
 

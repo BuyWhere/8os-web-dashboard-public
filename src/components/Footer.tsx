@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 const FOOTER_LINKS = [
   { href: '/features', label: 'Features' },
@@ -18,8 +18,16 @@ const SOCIAL_LINKS = [
 ];
 
 export function Footer() {
-  const [year, setYear] = useState('2026')
-  useEffect(() => setYear(String(new Date().getFullYear())), [])
+  const pathname = usePathname();
+
+  // The landing page ("/") ships its own warm editorial footer
+  // (see src/app/page.tsx). Suppress the global footer there.
+  if (pathname === '/') return null;
+
+  // Inside the authenticated app the marketing footer is out of place —
+  // the app is a full-height shell (sidebar + main). Suppress it there.
+  const APP_PREFIXES = ['/dashboard', '/goals', '/calendar', '/settings', '/onboarding'];
+  if (APP_PREFIXES.some((p) => pathname === p || pathname.startsWith(p + '/'))) return null;
 
   return (
     <footer
@@ -53,7 +61,6 @@ export function Footer() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
             <Link
               href="/"
-              prefetch={false}
               style={{
                 fontSize: '1.25rem',
                 fontWeight: 800,
@@ -72,7 +79,7 @@ export function Footer() {
                 maxWidth: '280px',
               }}
             >
-              Your personalized life operating system. Free. No credit card. Works in Telegram.
+              Your personalized life operating system. Free. No credit card. Works in your browser.
             </p>
           </div>
 
@@ -103,7 +110,6 @@ export function Footer() {
                   <Link
                     key={href}
                     href={href}
-                    prefetch={false}
                     style={{
                       fontSize: '0.875rem',
                       color: 'var(--color-text-secondary)',
@@ -135,7 +141,6 @@ export function Footer() {
                   <Link
                     key={href}
                     href={href}
-                    prefetch={false}
                     style={{
                       fontSize: '0.875rem',
                       color: 'var(--color-text-secondary)',
@@ -213,7 +218,7 @@ export function Footer() {
               color: 'var(--color-text-muted)',
             }}
           >
-            © {year} 8os. All rights reserved.
+            © {new Date().getFullYear()} 8os. All rights reserved.
           </p>
           <p
             style={{

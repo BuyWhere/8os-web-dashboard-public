@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { ClerkProvider } from '@clerk/nextjs'
 import { Suspense } from 'react'
 import { PostHogProvider } from '@/components/PostHogProvider'
 import { MetaPixel } from '@/components/MetaPixel'
@@ -8,7 +9,7 @@ import './globals.css'
 
 export const metadata: Metadata = {
   title: '8os - Your Personalized Life Operating System',
-  description: 'A personalized operating system unique to you. Free. No credit card. Works in Telegram.',
+  description: 'A personalized operating system unique to you. Free. No credit card. Works in your browser.',
   keywords: ['personalized OS', 'productivity', 'life operating system', 'AI productivity', 'operating system for life'],
   authors: [{ name: '8os' }],
   creator: '8os',
@@ -25,7 +26,7 @@ export const metadata: Metadata = {
     url: 'https://8os.ai/',
     siteName: '8os',
     title: '8os - Your Personalized Life Operating System',
-    description: 'A personalized operating system unique to you. Free. No credit card. Works in Telegram.',
+    description: 'A personalized operating system unique to you. Free. No credit card. Works in your browser.',
     images: [
       {
         url: '/og-image.png',
@@ -39,7 +40,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: '8os - Your Personalized Life Operating System',
-    description: 'A personalized operating system unique to you. Free. No credit card. Works in Telegram.',
+    description: 'A personalized operating system unique to you. Free. No credit card. Works in your browser.',
     images: ['/og-image.png'],
     creator: '@8os',
   },
@@ -93,14 +94,20 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <ClerkProvider
+      signInUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL ?? '/login'}
+      signUpUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL ?? '/signup'}
+      signInFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL ?? '/dashboard'}
+      signUpFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL ?? '/onboarding'}
+    >
+    <html lang="en">
       <head>
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
         />
       </head>
-      <body suppressHydrationWarning>
+      <body>
         {/* Meta Pixel — fires PageView on every route change. Bails out when
             NEXT_PUBLIC_META_PIXEL_ID is unset (local dev, pre-pixel deploys).
             See src/components/MetaPixel.tsx. */}
@@ -117,5 +124,6 @@ export default function RootLayout({
         <Footer />
       </body>
     </html>
+    </ClerkProvider>
   )
 }

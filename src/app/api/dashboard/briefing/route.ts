@@ -2,7 +2,50 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
 import { requireAuth } from '@/lib/auth/require-auth'
 import { getDailyInsight } from '@/lib/deepseek/insights'
-import { goalTaglineForDomain, type GoalDomain } from '@/lib/goal-taglines'
+
+const STALL_THRESHOLD_DAYS = 7
+const AT_RISK_PROGRESS_THRESHOLD = 0.15
+
+/** Compute accountability pulse from active goals. */
+export function computeAccountabilityPulse(goals: { id: string; name: string; progress: number; updatedAt: Date; domainId: string }[]) {
+  const now = Date.now()
+  const stallMs = STALL_THRESHOLD_DAYS * 86400000
+  const atRiskMs = 3 * 86400000
+
+  const stalled: { id: string; name: string; daysSinceUpdate: number; domainId: string }[] = []
+  const atRisk: { id: string; name: string; progress: number; daysSinceUpdate: number }[] = []
+
+  for (const goal of goals) {
+    const daysSinceUpdate = Math.floor((now - goal.updatedAt.getTime()) / 86400000)
+
+    if (goal.progress < 1 && daysSinceUpdate >= STALL_THRESHOLD_DAYS) {
+      stalled.push({ id: goal.id, name: goal.name, daysSinceUpdate, domainId: goal.domainId })
+    } else if (goal.progress < AT_RISK_PROGRESS_THRESHOLD && daysSinceUpdate >= 3) {
+      atRisk.push({ id: goal.id, name: goal.name, progress: goal.progress, daysSinceUpdate })
+    }
+  }
+
+  const archetypeNudge = stalled.length > 0
+    ? `You've got ${stalled.length} goal${stalled.length > 1 ? 's' : ''} that ${stalled.length === 1 ? 'has' : 'have'} been waiting — time to check in and move forward.`
+    : null
+
+  const summary = {
+    stalledGoalCount: stalled.length,
+    atRiskGoalCount: atRisk.length,
+  }
+
+  return {
+    summary,
+    stalledGoals: stalled.map(g => ({ id: g.id, name: g.name, daysSinceUpdate: g.daysSinceUpdate })),
+    atRiskGoals: atRisk.map(g => ({ id: g.id, name: g.name, progress: g.progress, daysSinceUpdate: g.daysSinceUpdate })),
+    archetypeNudge,
+    followUpPrompt: stalled.length > 0
+      ? `Which goal would you like to make progress on today? (You have ${stalled.length} stalled goal${stalled.length > 1 ? 's' : ''})`
+      : atRisk.length > 0
+      ? `You have ${atRisk.length} goal${atRisk.length > 1 ? 's' : ''} at risk. Want to do a quick check-in?`
+      : null,
+  }
+}
 
 export async function GET(req: NextRequest) {
   const auth = await requireAuth(req)
@@ -18,7 +61,7 @@ export async function GET(req: NextRequest) {
   try {
     const [archetype, goals, todayTasks, upcomingEvents, userProfile] = await Promise.all([
       prisma.archetypeResult.findUnique({ where: { userId } }),
-      prisma.goal.findMany({ where: { userId, status: 'active' }, orderBy: { createdAt: 'asc' }, take: 5 }),
+      prisma.goal.findMany({ where: { userId, status: 'active' }, orderBy: { createdAt: 'asc' }, take: 20 }),
       prisma.oSTask.findMany({
         where: {
           userId,
@@ -32,19 +75,8 @@ export async function GET(req: NextRequest) {
         orderBy: { startAt: 'asc' },
         take: 10,
       }),
-      prisma.userProfile.findUnique({
-        where: { userId },
-        select: { birthTimezone: true, dayElement: true, dayPolarity: true, dominantElement: true },
-      }),
+      prisma.userProfile.findUnique({ where: { userId }, select: { birthTimezone: true } }),
     ])
-
-    const taglineInput = userProfile && userProfile.dayElement
-      ? {
-          dayElement: userProfile.dayElement,
-          dayPolarity: userProfile.dayPolarity,
-          dominantElement: userProfile.dominantElement,
-        }
-      : null
 
     const insight = await getDailyInsight(userId, userProfile?.birthTimezone ?? 'UTC')
     const todayDate = now.toLocaleDateString('en-US', {
@@ -54,12 +86,16 @@ export async function GET(req: NextRequest) {
       day: 'numeric',
     })
 
+    const accountabilityPulse = computeAccountabilityPulse(goals)
+
     return NextResponse.json({
       todayDate,
       archetype: archetype
         ? {
             archetypeId: archetype.archetypeId,
             archetypeName: archetype.archetypeName,
+            skinArchetypeId:
+              ((archetype.calculationLog as Record<string, unknown> | null)?.skinArchetypeId as string | undefined) ?? null,
           }
         : null,
       insight,
@@ -77,13 +113,12 @@ export async function GET(req: NextRequest) {
         startAt: event.startAt.toISOString(),
         color: event.color,
       })),
-      goals: goals.map((goal) => ({
+      goals: goals.slice(0, 5).map((goal) => ({
         id: goal.id,
         name: goal.name,
-        domainId: goal.domainId,
         progress: goal.progress,
-        tagline: goalTaglineForDomain(taglineInput, goal.domainId as GoalDomain),
       })),
+      accountabilityPulse,
     })
   } catch (error) {
     console.error('[/api/dashboard/briefing GET]', error)

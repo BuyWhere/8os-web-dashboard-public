@@ -1,13 +1,15 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { prisma } from '@/lib/db/prisma';
 
-// OS-1722: ALWAYS use the direct Railway orchestrator URL. The previous
-// fallback chain was broken because NEXT_PUBLIC_API_URL was set to
-// https://api.8os.ai in Vercel production, causing a circular proxy:
-// Vercel → api.8os.ai → Vercel → api.8os.ai → 502. The env var is
-// intentionally ignored so that the waitlist proxy always talks directly
-// to Railway. ORCHESTRATOR_URL is also skipped because it's set to the
-// unreachable http://orchestrator.railway.internal:8000 in some envs.
-const ORCHESTRATOR_URL = 'https://orchestrator-production-1643.up.railway.app';
+// OS-1173: prefer a configurable orchestrator URL. The default previously
+// pointed to https://api.8os.ai which was the Railway orchestrator; after
+// the OS-1718 redeploy, api.8os.ai now serves the Next.js frontend.
+// OS-1719: default to the direct Railway orchestrator URL so POST/join
+// still works even without the env var override.
+const ORCHESTRATOR_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  process.env.ORCHESTRATOR_URL ||
+  'https://orchestrator-production-1643.up.railway.app';
 
 // OS-1173: allow the prelaunch /coming-soon landing page to attribute its
 // signups (vs the dashboard waitlist form, telegram bot, and 8os.ai homepage).
@@ -116,87 +118,40 @@ export async function POST(request: NextRequest) {
     // previous proxy posted to /waitlist which returned 404, so the live
     // 8os.ai waitlist form was silently broken and never captured a single
     // signup. Fix the path so the existing form starts working too.
-    const orchResponse = await fetch(`${ORCHESTRATOR_URL}/waitlist/join`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email, source, affiliate_opt_in: affiliateOptIn }),
-    });
-
-    if (orchResponse.status === 409) {
-      return NextResponse.json(
-        { error: 'Email already on waitlist' },
-        { status: 409 }
-      );
-    }
-
-    // OS-1187: pass through orchestrator 429s with the upstream Retry-After
-    // header so the form can back off cleanly. Previously the catch-all below
-    // converted 429 to 502 "Failed to join waitlist", which conflated rate
-    // limits with real upstream failures and made the smoke probe (OS-1180)
-    // body assertion fail 40-60% of the time during legitimate bursts.
-    if (orchResponse.status === 429) {
-      const retryAfter = orchResponse.headers.get('retry-after');
-      const headers: Record<string, string> = {};
-      if (retryAfter) headers['Retry-After'] = retryAfter;
-      return NextResponse.json(
-        { error: 'Rate limit exceeded — please try again in a moment' },
-        { status: 429, headers }
-      );
-    }
-
-    if (!orchResponse.ok) {
-      const errBody = await orchResponse.json().catch(() => ({}));
-      // Pydantic returns `detail` as an array of {msg,...} objects;
-      // SQLAlchemy / hand-raised 5xx return a string. Normalize to a
-      // string before any string ops so the duplicate-key check below
-      // doesn't throw on a non-string detail.
-      const detailRaw = (errBody as { detail?: unknown }).detail;
-      const detail: string = Array.isArray(detailRaw)
-        ? ((detailRaw[0] as { msg?: string } | undefined)?.msg ?? '')
-        : typeof detailRaw === 'string'
-          ? detailRaw
-          : '';
-      // SQLAlchemy unique constraint violation surfaces as 500 with "duplicate key" in detail
-      if (detail.toLowerCase().includes('duplicate') || detail.toLowerCase().includes('unique')) {
+    // OS-1744: orchestrator returning 500 on all routes.
+    // Write directly to database via Prisma instead of proxying.
+    try {
+      await prisma.$executeRaw`
+        INSERT INTO waitlist_entries (email, source, affiliate_opt_in)
+        VALUES (${email}, ${source}, ${affiliateOptIn})
+      `;
+    } catch (insertErr) {
+      const msg = insertErr instanceof Error ? insertErr.message : '';
+      if (msg.includes('unique') || msg.includes('duplicate')) {
         return NextResponse.json(
           { error: 'Email already on waitlist' },
           { status: 409 }
         );
       }
-      // OS-1242: pass through orchestrator 422 (validation) so the form
-      // gets a useful 4xx instead of a misleading 502. The pre-validation
-      // blocklist above catches reserved TLDs at the proxy, so this
-      // branch is a defense-in-depth fallback for any future pydantic
-      // rejection (new reserved TLD, deliverability check, etc.) the
-      // blocklist doesn't know about.
-      if (orchResponse.status === 422) {
-        return NextResponse.json(
-          {
-            error: 'Invalid email format',
-            detail: detail || 'Email failed validation',
-          },
-          { status: 422 }
-        );
-      }
-      console.error('Orchestrator waitlist error:', orchResponse.status, errBody);
-      // OS-1187: distinguish orchestrator 5xx (real upstream issue, e.g.
-      // Cloudflare 530 origin error) from network failures below. The
-      // orchestrator response was received, so surface its status + detail
-      // in the body so the form can show a useful message and the smoke
-      // probe can detect the 502 vs 429 vs 200 split.
+      console.error('Waitlist insert error:', insertErr);
       return NextResponse.json(
-        { error: 'Failed to join waitlist', detail: detail || `orchestrator returned ${orchResponse.status}` },
-        { status: 502 }
+        { error: 'Failed to join waitlist' },
+        { status: 500 }
       );
     }
 
-    const data = await orchResponse.json() as { success: boolean; message: string; position: number; total: number };
+    // Compute position and total directly from the database
+    const posRow = await prisma.$queryRaw<[{ position: bigint; total: bigint }]>`
+      SELECT
+        (SELECT COUNT(*)::bigint FROM waitlist_entries WHERE email <= ${email}) AS position,
+        (SELECT COUNT(*)::bigint FROM waitlist_entries) AS total
+    `;
 
     return NextResponse.json({
       success: true,
-      message: data.message ?? 'Successfully joined waitlist',
-      position: data.position,
-      total: data.total,
+      message: 'Successfully joined waitlist',
+      position: Number(posRow[0].position),
+      total: Number(posRow[0].total),
     });
   } catch (err) {
     // OS-1173: distinguish upstream/orchestrator failures from a malformed
@@ -226,21 +181,40 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 
-  // OS-1173: forward to the live FastAPI /waitlist/stats so the dashboard
-  // can render the new coming-soon channel breakdown. Auth boundary is
-  // preserved by re-checking ADMIN_SECRET here; the orchestrator also
-  // protects /waitlist/stats by default.
-  const auth = `Bearer ${adminSecret}`;
+  // OS-1719: direct DB query for /api/waitlist. The per-endpoint stats
+  // handler lives at src/app/api/waitlist/stats/route.ts. This catch-all
+  // GET returns the summary for the base /api/waitlist path.
   try {
-    const r = await fetch(`${ORCHESTRATOR_URL}/waitlist/stats`, {
-      headers: { authorization: auth },
-      cache: 'no-store',
+    const count = await prisma.$queryRaw<[{ count: bigint }]>`
+      SELECT COUNT(*)::bigint AS count FROM waitlist_entries
+    `;
+    const entries = await prisma.$queryRaw<
+      Array<{
+        id: string;
+        email: string;
+        source: string;
+        archetype: string | null;
+        created_at: Date;
+      }>
+    >`
+      SELECT id, email, source, archetype, created_at
+      FROM waitlist_entries
+      ORDER BY created_at ASC
+      LIMIT 50
+    `;
+
+    return NextResponse.json({
+      count: Number(count[0].count),
+      entries: entries.map((e) => ({
+        id: e.id,
+        email: e.email,
+        source: e.source,
+        archetype: e.archetype,
+        created_at: e.created_at.toISOString(),
+      })),
     });
-    if (!r.ok) {
-      return NextResponse.json({ count: 0, entries: [] }, { status: 200 });
-    }
-    return NextResponse.json(await r.json());
-  } catch {
+  } catch (err) {
+    console.error('Waitlist stats DB error:', err);
     return NextResponse.json({ count: 0, entries: [] }, { status: 200 });
   }
 }

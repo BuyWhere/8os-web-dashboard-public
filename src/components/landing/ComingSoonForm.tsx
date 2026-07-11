@@ -4,8 +4,6 @@ import { FormEvent, useState } from 'react'
 
 type Status = 'idle' | 'loading' | 'success' | 'error'
 
-const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
 interface ComingSoonFormProps {
   // The /coming-soon page is the canonical prelaunch URL. Other 8os.ai
   // surfaces (homepage hero, /how-it-works, /pricing, /quiz) embed this
@@ -22,35 +20,13 @@ export default function ComingSoonForm({
   archetype,
 }: ComingSoonFormProps) {
   const [email, setEmail] = useState('')
-  const [affiliateOptIn, setAffiliateOptIn] = useState(false)
+  const [affiliateOptIn, setAffiliateOptIn] = useState(true)
   const [status, setStatus] = useState<Status>('idle')
   const [message, setMessage] = useState('')
   const [position, setPosition] = useState<number | null>(null)
 
-  const validateEmail = () => {
-    const trimmedEmail = email.trim()
-
-    if (!trimmedEmail) {
-      return 'Please enter your email address.'
-    }
-
-    if (!EMAIL_PATTERN.test(trimmedEmail)) {
-      return 'Please enter a valid email address.'
-    }
-
-    return ''
-  }
-
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    const validationError = validateEmail()
-
-    if (validationError) {
-      setStatus('error')
-      setMessage(validationError)
-      return
-    }
-
     setStatus('loading')
     setMessage('')
 
@@ -143,7 +119,7 @@ export default function ComingSoonForm({
 
   return (
     <div data-testid="coming-soon-form" style={cardStyle}>
-      <form noValidate onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+      <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
         <div>
           <label
             htmlFor="coming-soon-email"
@@ -164,43 +140,21 @@ export default function ComingSoonForm({
             type="email"
             placeholder="you@example.com"
             value={email}
-            onChange={(e) => {
-              setEmail(e.target.value)
-              if (status === 'error') {
-                setStatus('idle')
-                setMessage('')
-              }
-            }}
+            onChange={(e) => setEmail(e.target.value)}
             required
             autoComplete="email"
-            aria-invalid={status === 'error' ? 'true' : 'false'}
-            aria-describedby={status === 'error' ? 'coming-soon-email-error' : undefined}
             style={{
               width: '100%',
               padding: '0.875rem 1rem',
               fontSize: '1rem',
-              background: '#1a1a1d',
-              border: status === 'error' ? '2px solid #ef4444' : '1px solid rgba(255,255,255,0.1)',
+              background: 'rgba(0,0,0,0.4)',
+              border: '1px solid rgba(255,255,255,0.1)',
               borderRadius: '8px',
               color: '#fff',
               outline: 'none',
               boxSizing: 'border-box',
             }}
           />
-          {status === 'error' && (
-            <p
-              id="coming-soon-email-error"
-              role="alert"
-              style={{
-                margin: '0.5rem 0 0',
-                color: '#f87171',
-                fontSize: '0.875rem',
-                lineHeight: 1.4,
-              }}
-            >
-              {message}
-            </p>
-          )}
         </div>
 
         <label
@@ -228,10 +182,9 @@ export default function ComingSoonForm({
               flexShrink: 0,
             }}
           />
-          <span style={{ fontSize: '0.9rem', color: '#a78bfa', lineHeight: 1.5 }}>
-            <strong style={{ color: '#fff' }}>Yes, enroll me in the founding-affiliate program.</strong>{' '}
-            Earn 30% recurring on Pro/Agent Connect referrals. Skip this if you only want launch
-            updates.
+          <span style={{ fontSize: '0.9rem', color: '#d4d4d4', lineHeight: 1.5 }}>
+            <strong style={{ color: '#fff' }}>Join the affiliate program.</strong> Earn 30% recurring
+            on Pro/Agent Connect referrals. Pre-launch partners get founding-affiliate rates.
           </span>
         </label>
 
@@ -257,7 +210,7 @@ export default function ComingSoonForm({
         </button>
       </form>
 
-      {status === 'error' && message !== 'Please enter your email address.' && message !== 'Please enter a valid email address.' && (
+      {status === 'error' && (
         <p
           role="alert"
           style={{

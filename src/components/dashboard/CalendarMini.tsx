@@ -55,13 +55,13 @@ export function CalendarMini({ events }: Props) {
 
           return (
             <div key={key} style={{ textAlign: 'center' }}>
-              <div style={{ color: '#999', fontSize: 10, marginBottom: 4 }}>{DAYS[d.getDay()]}</div>
+              <div style={{ color: '#8A8175', fontSize: 10, marginBottom: 4 }}>{DAYS[d.getDay()]}</div>
               <div style={{
                 width: 30, height: 30, borderRadius: '50%', margin: '0 auto',
-                background: isToday ? '#6366f1' : 'transparent',
-                border: isToday ? 'none' : '1px solid #1e1e1e',
+                background: isToday ? '#B08637' : 'transparent',
+                border: isToday ? 'none' : '1px solid #E7DFD2',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 12, color: isToday ? '#fff' : '#888',
+                fontSize: 12, color: isToday ? '#fff' : '#6B6257',
                 fontWeight: isToday ? 700 : 400,
               }}>
                 {d.getDate()}
@@ -73,12 +73,12 @@ export function CalendarMini({ events }: Props) {
                     title={e.title}
                     style={{
                       width: 20, height: 4, borderRadius: 2,
-                      background: e.color ?? (e.domainId ? DOMAIN_COLORS[e.domainId] : '#6366f1') ?? '#6366f1',
+                      background: e.color ?? (e.domainId ? DOMAIN_COLORS[e.domainId] : '#B08637') ?? '#B08637',
                     }}
                   />
                 ))}
                 {dayEvents.length > 3 && (
-                  <div style={{ fontSize: 9, color: '#999' }}>+{dayEvents.length - 3}</div>
+                  <div style={{ fontSize: 9, color: '#8A8175' }}>+{dayEvents.length - 3}</div>
                 )}
               </div>
             </div>

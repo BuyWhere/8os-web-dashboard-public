@@ -133,7 +133,7 @@ function FeatureValue({ value }: { value: boolean | string }) {
 
 export default function PricingPage() {
   return (
-    <div style={pageStyle}>
+    <main style={pageStyle} aria-label="Pricing tiers">
       <div style={innerStyle}>
         <div style={headerStyle}>
           <p style={eyebrowStyle}>Pricing</p>
@@ -202,15 +202,15 @@ export default function PricingPage() {
         {/* Comparison table */}
         <div style={tableSection}>
           <h2 style={sectionTitleStyle}>Full Feature Comparison</h2>
-          <div style={tableWrapStyle}>
+          <div style={tableWrapStyle} role="region" aria-label="Feature comparison table">
             <table style={tableStyle}>
               <thead>
                 <tr>
-                  <th style={{ ...thStyle, textAlign: 'left' }}>Feature</th>
-                  <th style={thStyle}>Free</th>
-                  <th style={thStyle}>Agent Connect<br /><span style={thPriceStyle}>$9.99</span></th>
-                  <th style={{ ...thStyle, color: '#a78bfa' }}>Pro<br /><span style={thPriceStyle}>$18</span></th>
-                  <th style={thStyle}>Enterprise</th>
+                  <th style={{ ...thStyle, textAlign: 'left', width: '32%' }}>Feature</th>
+                  <th style={{ ...thStyle, width: '17%' }}>Free</th>
+                  <th style={{ ...thStyle, width: '17%' }}>Agent Connect<br /><span style={thPriceStyle}>$9.99</span></th>
+                  <th style={{ ...thStyle, color: '#a78bfa', width: '17%' }}>Pro<br /><span style={thPriceStyle}>$18</span></th>
+                  <th style={{ ...thStyle, width: '17%' }}>Enterprise</th>
                 </tr>
               </thead>
               <tbody>
@@ -226,6 +226,7 @@ export default function PricingPage() {
               </tbody>
             </table>
           </div>
+          <p className="table-scroll-hint" style={tableScrollHintStyle}>Swipe horizontally on mobile to compare all tiers.</p>
         </div>
 
         {/* FAQ note */}
@@ -244,11 +245,10 @@ export default function PricingPage() {
           <p style={ctaDescStyle}>30 seconds. No credit card. Your archetype is waiting.</p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link href="/onboarding" style={ctaButtonStyle}>Get Your Free Archetype</Link>
-            {/* OS-1173: cross-link to the prelaunch landing page. Pricing
-                visitors are high-intent; surface the affiliate program CTA
-                alongside the primary onboarding link. */}
+            {/* De-prelaunch: product is live; secondary CTA sends high-intent
+                pricing visitors straight to account creation. */}
             <Link
-              href="/coming-soon"
+              href="/signup"
               style={{
                 ...ctaButtonStyle,
                 background: 'rgba(118, 75, 162, 0.15)',
@@ -257,17 +257,17 @@ export default function PricingPage() {
                 color: '#c4b5fd',
               }}
             >
-              Reserve your spot — July 7
+              Get started
             </Link>
           </div>
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 
 const pageStyle: React.CSSProperties = { background: '#060608', color: '#f8fafc', minHeight: '100vh' };
-const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '5rem 2rem' };
+const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '5rem 2rem', minWidth: 0 };
 const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '4rem' };
 const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#a78bfa' };
 const pageTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.1, letterSpacing: '-0.04em' };
@@ -302,8 +302,9 @@ const tierCtaHighlightedStyle: React.CSSProperties = { background: 'linear-gradi
 
 const tableSection: React.CSSProperties = { marginBottom: '4rem' };
 const sectionTitleStyle: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', letterSpacing: '-0.03em' };
-const tableWrapStyle: React.CSSProperties = { overflowX: 'auto', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)' };
-const tableStyle: React.CSSProperties = { width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem' };
+const tableWrapStyle: React.CSSProperties = { overflowX: 'auto', WebkitOverflowScrolling: 'touch', width: '100%', maxWidth: '100%', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)' };
+const tableStyle: React.CSSProperties = { width: '100%', minWidth: '640px', borderCollapse: 'collapse', tableLayout: 'fixed', fontSize: '0.88rem' };
+const tableScrollHintStyle: React.CSSProperties = { display: 'none', margin: '0.75rem 0 0', fontSize: '0.78rem', color: 'rgba(248,250,252,0.4)', textAlign: 'center' };
 const thStyle: React.CSSProperties = { padding: '1rem', textAlign: 'center', fontSize: '0.8rem', fontWeight: 700, color: 'rgba(248,250,252,0.45)', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' };
 const thPriceStyle: React.CSSProperties = { fontWeight: 400, fontSize: '0.75rem', color: 'rgba(248,250,252,0.3)' };
 const trEvenStyle: React.CSSProperties = { background: 'rgba(255,255,255,0.02)' };

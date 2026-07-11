@@ -222,7 +222,7 @@ export default function QuizPage() {
                 <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#f1f5f9', marginBottom: '8px' }}>
                   {step.title}
                 </h3>
-                <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.6 }}>
+                <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.6 }}>
                   {step.description}
                 </p>
               </div>
@@ -246,7 +246,7 @@ export default function QuizPage() {
           <p
             style={{
               fontSize: '16px',
-              color: '#94a3b8',
+              color: '#64748b',
               textAlign: 'center',
               marginBottom: '36px',
             }}
@@ -359,10 +359,10 @@ export default function QuizPage() {
               display: 'inline-block',
             }}
           />
-          {/* OS-1173: prelaunch /coming-soon cross-link on the quiz page. */}
+          {/* De-prelaunch: point the secondary quiz CTA at the free archetype reveal. */}
           <div style={{ marginTop: '1.5rem' }}>
             <a
-              href="/coming-soon"
+              href="/reveal"
               style={{
                 color: '#c4b5fd',
                 fontSize: '0.95rem',
@@ -370,10 +370,10 @@ export default function QuizPage() {
                 borderBottom: '1px solid rgba(196, 181, 253, 0.3)',
               }}
             >
-              Not ready? Reserve your spot for the July 7 launch →
+              Take the quiz →
             </a>
           </div>
-          <p style={{ color: '#94a3b8', fontSize: '13px', marginTop: '12px' }}>
+          <p style={{ color: '#64748b', fontSize: '13px', marginTop: '12px' }}>
             Free · No credit card · No birth time needed
           </p>
         </div>

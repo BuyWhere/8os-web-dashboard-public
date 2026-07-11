@@ -32,9 +32,7 @@ interface BriefingPayload {
   goals: Array<{
     id: string
     name: string
-    domainId: string
     progress: number
-    tagline: string | null
   }>
 }
 
@@ -64,7 +62,7 @@ export function BriefingSkeleton({ showSlowMessage }: { showSlowMessage: boolean
         {showSlowMessage ? 'Generating your briefing...' : 'Loading your briefing...'}
       </LoadingMessage>
 
-      <SectionCard accent="#25253a">
+      <SectionCard accent="#E7DFD2">
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
           <SkeletonBlock width={24} height={24} radius={999} />
           <div>
@@ -84,7 +82,7 @@ export function BriefingSkeleton({ showSlowMessage }: { showSlowMessage: boolean
         </div>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {Array.from({ length: 3 }).map((_, index) => (
-            <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 8, background: '#0d0d0d', border: '1px solid #1a1a1a' }}>
+            <div key={index} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px', borderRadius: 8, background: '#F7F3EC', border: '1px solid #E7DFD2' }}>
               <SkeletonBlock width={8} height={8} radius={999} />
               <div style={{ flex: 1 }}>
                 <SkeletonBlock width="52%" height={13} style={{ marginBottom: 6 }} />
@@ -165,9 +163,9 @@ export function BriefingContent() {
       <>
         <DashboardPageStyles />
         <div style={{ marginBottom: 28 }}>
-          <Link href="/dashboard" style={{ color: '#999', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+          <Link href="/dashboard" style={{ color: '#8A8175', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Daily Briefing</h1>
-          <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>{todayDate}</p>
+          <p style={{ margin: '4px 0 0', color: '#8A8175', fontSize: 14 }}>{todayDate}</p>
         </div>
         <BriefingSkeleton showSlowMessage={showSlowMessage} />
       </>
@@ -179,9 +177,9 @@ export function BriefingContent() {
       <>
         <DashboardPageStyles />
         <div style={{ marginBottom: 28 }}>
-          <Link href="/dashboard" style={{ color: '#999', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+          <Link href="/dashboard" style={{ color: '#8A8175', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Daily Briefing</h1>
-          <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>{todayDate}</p>
+          <p style={{ margin: '4px 0 0', color: '#8A8175', fontSize: 14 }}>{todayDate}</p>
         </div>
         <ErrorCard
           title="Could not load your daily briefing"
@@ -199,27 +197,27 @@ export function BriefingContent() {
     <>
       <DashboardPageStyles />
       <div style={{ marginBottom: 28 }}>
-        <Link href="/dashboard" style={{ color: '#999', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+        <Link href="/dashboard" style={{ color: '#8A8175', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
         <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Daily Briefing</h1>
-        <p style={{ margin: '4px 0 0', color: '#888', fontSize: 14 }}>{data.todayDate}</p>
+        <p style={{ margin: '4px 0 0', color: '#8A8175', fontSize: 14 }}>{data.todayDate}</p>
       </div>
 
       <div style={{ display: 'grid', gap: 20, maxWidth: 800 }}>
-        <SectionCard accent="#1e1e2e">
+        <SectionCard accent="#B08637">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
             <span style={{ fontSize: 20 }}>{getArchetypeIcon(data.archetype?.archetypeId)}</span>
             <div>
               <div style={{ fontWeight: 600, fontSize: 14 }}>Today&apos;s Insight</div>
-              <div style={{ color: '#999', fontSize: 11 }}>
+              <div style={{ color: '#8A8175', fontSize: 11 }}>
                 {data.archetype?.archetypeName ?? 'Personalized'} · {data.insight.date}
               </div>
             </div>
           </div>
-          <p style={{ color: '#ccc', fontSize: 14, lineHeight: 1.7, margin: 0 }}>
+          <p style={{ color: '#221F1A', fontSize: 14, lineHeight: 1.7, margin: 0 }}>
             {data.insight.content}
           </p>
           {data.insight.isFallback && (
-            <div style={{ color: '#888', fontSize: 11, marginTop: 10 }}>
+            <div style={{ color: '#8A8175', fontSize: 11, marginTop: 10 }}>
               ⚡ AI insight unavailable today — using a curated fallback.
             </div>
           )}
@@ -228,10 +226,10 @@ export function BriefingContent() {
         <SectionCard>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h2 style={{ margin: 0, fontSize: 15, fontWeight: 600 }}>Today&apos;s Tasks</h2>
-            <span style={{ color: '#999', fontSize: 12 }}>{data.todayTasks.length} scheduled</span>
+            <span style={{ color: '#8A8175', fontSize: 12 }}>{data.todayTasks.length} scheduled</span>
           </div>
           {data.todayTasks.length === 0 ? (
-            <div style={{ color: '#888', fontSize: 13, textAlign: 'center', padding: '16px 0' }}>
+            <div style={{ color: '#8A8175', fontSize: 13, textAlign: 'center', padding: '16px 0' }}>
               No tasks scheduled for today.
             </div>
           ) : (
@@ -245,8 +243,8 @@ export function BriefingContent() {
                     gap: 12,
                     padding: '10px 12px',
                     borderRadius: 8,
-                    background: '#0d0d0d',
-                    border: '1px solid #1a1a1a',
+                    background: '#F7F3EC',
+                    border: '1px solid #E7DFD2',
                     opacity: task.status === 'done' ? 0.5 : 1,
                   }}
                 >
@@ -256,21 +254,21 @@ export function BriefingContent() {
                       height: 8,
                       borderRadius: '50%',
                       flexShrink: 0,
-                      background: PRIORITY_COLORS[task.priority] ?? '#555',
+                      background: PRIORITY_COLORS[task.priority] ?? '#8A8175',
                     }}
                   />
                   <div style={{ flex: 1 }}>
                     <div
                       style={{
                         fontSize: 13,
-                        color: task.status === 'done' ? '#555' : '#ededed',
+                        color: task.status === 'done' ? '#8A8175' : '#221F1A',
                         textDecoration: task.status === 'done' ? 'line-through' : 'none',
                       }}
                     >
                       {task.name}
                     </div>
                     {task.scheduledAt && (
-                      <div style={{ fontSize: 11, color: '#999', marginTop: 1 }}>
+                      <div style={{ fontSize: 11, color: '#8A8175', marginTop: 1 }}>
                         {new Date(task.scheduledAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                         {task.duration ? ` · ${task.duration}m` : ''}
                       </div>
@@ -281,8 +279,8 @@ export function BriefingContent() {
                       padding: '2px 7px',
                       borderRadius: 4,
                       fontSize: 10,
-                      background: task.status === 'done' ? '#1e1e1e' : '#1a1a2e',
-                      color: task.status === 'done' ? '#444' : '#888',
+                      background: task.status === 'done' ? '#F7F3EC' : '#F7F3EC',
+                      color: task.status === 'done' ? '#8A8175' : '#6B6257',
                     }}
                   >
                     {task.status}
@@ -297,7 +295,7 @@ export function BriefingContent() {
           <SectionCard>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <h2 style={{ margin: 0, fontSize: 15, fontWeight: 600 }}>Upcoming Events</h2>
-              <Link href="/calendar" style={{ color: '#6366f1', fontSize: 12, textDecoration: 'none' }}>Calendar →</Link>
+              <Link href="/calendar" style={{ color: '#B08637', fontSize: 12, textDecoration: 'none' }}>Calendar →</Link>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
               {data.upcomingEvents.map((event) => (
@@ -309,14 +307,14 @@ export function BriefingContent() {
                     gap: 12,
                     padding: '10px 12px',
                     borderRadius: 8,
-                    background: '#0d0d0d',
-                    border: '1px solid #1a1a1a',
+                    background: '#F7F3EC',
+                    border: '1px solid #E7DFD2',
                   }}
                 >
-                  <div style={{ width: 3, height: 32, borderRadius: 2, background: event.color ?? '#6366f1', flexShrink: 0 }} />
+                  <div style={{ width: 3, height: 32, borderRadius: 2, background: event.color ?? '#B08637', flexShrink: 0 }} />
                   <div>
-                    <div style={{ fontSize: 13, color: '#ededed' }}>{event.title}</div>
-                    <div style={{ fontSize: 11, color: '#999', marginTop: 1 }}>
+                    <div style={{ fontSize: 13, color: '#221F1A' }}>{event.title}</div>
+                    <div style={{ fontSize: 11, color: '#8A8175', marginTop: 1 }}>
                       {new Date(event.startAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                     </div>
                   </div>
@@ -330,23 +328,18 @@ export function BriefingContent() {
           <SectionCard>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
               <h2 style={{ margin: 0, fontSize: 15, fontWeight: 600 }}>Active Goals</h2>
-              <Link href="/goals" style={{ color: '#6366f1', fontSize: 12, textDecoration: 'none' }}>View all →</Link>
+              <Link href="/goals" style={{ color: '#B08637', fontSize: 12, textDecoration: 'none' }}>View all →</Link>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {data.goals.map((goal) => (
                 <div key={goal.id} style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                   <div style={{ flex: 1 }}>
-                    <div style={{ fontSize: 13, color: '#ccc', marginBottom: 4 }}>{goal.name}</div>
-                    {goal.tagline ? (
-                      <div style={{ fontSize: 11, color: '#6366f1', fontStyle: 'italic', marginBottom: 4, lineHeight: 1.4 }}>
-                        {goal.tagline}
-                      </div>
-                    ) : null}
-                    <div style={{ height: 4, background: '#1a1a1a', borderRadius: 2, overflow: 'hidden' }}>
-                      <div style={{ height: '100%', width: `${goal.progress * 100}%`, background: '#6366f1', borderRadius: 2 }} />
+                    <div style={{ fontSize: 13, color: '#221F1A', marginBottom: 4 }}>{goal.name}</div>
+                    <div style={{ height: 4, background: '#E7DFD2', borderRadius: 2, overflow: 'hidden' }}>
+                      <div style={{ height: '100%', width: `${goal.progress * 100}%`, background: '#B08637', borderRadius: 2 }} />
                     </div>
                   </div>
-                  <span style={{ color: '#999', fontSize: 12, flexShrink: 0 }}>{Math.round(goal.progress * 100)}%</span>
+                  <span style={{ color: '#8A8175', fontSize: 12, flexShrink: 0 }}>{Math.round(goal.progress * 100)}%</span>
                 </div>
               ))}
             </div>
