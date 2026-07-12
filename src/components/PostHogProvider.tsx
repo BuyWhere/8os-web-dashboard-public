@@ -25,11 +25,15 @@ function PostHogPageView() {
   return null
 }
 
+let _initialized = false
+
 export function PostHogProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
+    if (_initialized) return
     const token = process.env.NEXT_PUBLIC_POSTHOG_KEY
     if (!token) return
 
+    _initialized = true
     posthog.init(token, {
       api_host: process.env.NEXT_PUBLIC_POSTHOG_HOST ?? 'https://us.i.posthog.com',
       // Pillar 1: autocapture clicks, forms, inputs automatically
@@ -37,14 +41,15 @@ export function PostHogProvider({ children }: { children: React.ReactNode }) {
       person_profiles: 'identified_only',
       capture_pageview: false, // manual pageviews via PostHogPageView
       capture_pageleave: true,
-      // Pillar 2: Session Replay — full behavioral capture
+      // Pillar 2: Session Replay — minimum config for Lighthouse perf (OS-3498).
+      // networkPayloadCapture removed — body/header recording pulls in ~200 KiB
+      // of rrweb instrumentation code that blocks LCP. consoleLogRecording
+      // removed for the same reason. Re-enable per-flag via FLAGS.SESSION_REPLAY
+      // in posthog-flags.ts when session replay is needed.
       session_recording: {
         maskAllInputs: true,
-        // Capture network requests/responses for debugging
         recordCrossOriginIframes: false,
-        networkPayloadCapture: { recordBody: true, recordHeaders: true },
-        consoleLogRecordingEnabled: true,
-        // Filter bot noise: sessions shorter than 5s are discarded
+        consoleLogRecordingEnabled: false,
         minimumDurationMilliseconds: 5000,
       },
       // Pillar 3: Error Tracking — capture unhandled exceptions automatically

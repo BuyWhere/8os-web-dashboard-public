@@ -1,7 +1,8 @@
 import type { Metadata } from 'next'
 import { ClerkProvider } from '@clerk/nextjs'
 import { Suspense } from 'react'
-import { PostHogProvider } from '@/components/PostHogProvider'
+// PostHogProvider moved to (dashboard)/layout.tsx — keeps PostHog SDK (~188 KiB)
+// off public marketing pages to improve Lighthouse perf on /, /features, etc.
 import { MetaPixel } from '@/components/MetaPixel'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
@@ -126,9 +127,7 @@ export default function RootLayout({
           </a>
           <Header />
           <div id="main-content" tabIndex={-1}>
-            <PostHogProvider>
-              {children}
-            </PostHogProvider>
+            {children}
           </div>
           <Footer />
         </ThemeProvider>
