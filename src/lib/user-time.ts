@@ -54,6 +54,21 @@ export async function getUserTimezone(userId: string): Promise<string> {
   }
 }
 
+/**
+ * The local wall-clock hour (0-23) in `tz` at instant `at`. Pure Intl —
+ * safe in client bundles. Used to pick morning/afternoon/evening greetings
+ * from the USER's local time instead of the server's.
+ */
+export function userLocalHour(tz: string, at: Date = new Date()): number {
+  const zone = isValidTimezone(tz) ? tz : DEFAULT_TIMEZONE
+  const hh = new Intl.DateTimeFormat('en-US', {
+    timeZone: zone, hour: '2-digit', hour12: false,
+  }).format(at)
+  // en-US hour12:false can emit "24" at midnight — normalise to 0.
+  const n = Number(hh)
+  return Number.isFinite(n) ? n % 24 : 0
+}
+
 export interface CivilDate {
   year: number
   month: number // 1-12

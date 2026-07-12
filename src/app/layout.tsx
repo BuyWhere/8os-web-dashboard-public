@@ -5,6 +5,8 @@ import { PostHogProvider } from '@/components/PostHogProvider'
 import { MetaPixel } from '@/components/MetaPixel'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
+import { ThemeProvider } from '@/components/ThemeProvider'
+import { THEME_BOOT_SCRIPT } from '@/lib/theme'
 import './globals.css'
 
 export const metadata: Metadata = {
@@ -100,28 +102,36 @@ export default function RootLayout({
       signInFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL ?? '/dashboard'}
       signUpFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL ?? '/onboarding'}
     >
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <head>
+        {/* No-flash theme boot — sets <html data-theme> synchronously from the
+            persisted choice + OS preference, BEFORE first paint. Must run
+            before any styled content renders. See src/lib/theme.ts. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
         />
       </head>
       <body>
-        {/* Meta Pixel — fires PageView on every route change. Bails out when
-            NEXT_PUBLIC_META_PIXEL_ID is unset (local dev, pre-pixel deploys).
-            See src/components/MetaPixel.tsx. */}
-        <MetaPixel />
-        <a href="#main-content" className="skip-link">
-          Skip to content
-        </a>
-        <Header />
-        <div id="main-content" tabIndex={-1}>
-          <PostHogProvider>
-            {children}
-          </PostHogProvider>
-        </div>
-        <Footer />
+        {/* ThemeProvider wraps all chrome (Header/Footer) + content so the
+            whole tree can read/toggle the light/dark theme via useTheme(). */}
+        <ThemeProvider>
+          {/* Meta Pixel — fires PageView on every route change. Bails out when
+              NEXT_PUBLIC_META_PIXEL_ID is unset (local dev, pre-pixel deploys).
+              See src/components/MetaPixel.tsx. */}
+          <MetaPixel />
+          <a href="#main-content" className="skip-link">
+            Skip to content
+          </a>
+          <Header />
+          <div id="main-content" tabIndex={-1}>
+            <PostHogProvider>
+              {children}
+            </PostHogProvider>
+          </div>
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
     </ClerkProvider>

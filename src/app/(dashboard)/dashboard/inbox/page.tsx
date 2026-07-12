@@ -36,6 +36,8 @@ export default function InboxPage() {
   const [error, setError] = useState<string | null>(null)
   const [marking, setMarking] = useState(false)
   const [actionState, setActionState] = useState<Record<string, 'busy' | 'done' | 'error'>>({})
+  // Which messages are expanded to show their full body (accordion).
+  const [expanded, setExpanded] = useState<Record<string, boolean>>({})
 
   const load = useCallback(async () => {
     try {
@@ -99,6 +101,13 @@ export default function InboxPage() {
     } catch {
       setActionState((s) => ({ ...s, [actionId]: 'error' }))
     }
+  }
+
+  // Open/close an item's full body. Opening also marks it read.
+  function toggleExpand(m: InboxMessage) {
+    const willOpen = !expanded[m.id]
+    setExpanded((s) => ({ ...s, [m.id]: willOpen }))
+    if (willOpen && !m.read) markRead([m.id])
   }
 
   async function markRead(ids: string[] | 'all') {
@@ -181,28 +190,64 @@ export default function InboxPage() {
         )}
 
         <div style={{ maxWidth: 720, display: 'flex', flexDirection: 'column', gap: 10 }}>
-          {messages.map((m) => (
+          {messages.map((m) => {
+            const isOpen = !!expanded[m.id]
+            return (
             <div
               key={m.id}
-              onClick={() => { if (!m.read) markRead([m.id]) }}
+              onClick={() => toggleExpand(m)}
+              role="button"
+              tabIndex={0}
+              aria-expanded={isOpen}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); toggleExpand(m) }
+              }}
               style={{
-                background: '#FFFFFF',
-                border: '1px solid #E7DFD2',
-                borderLeft: m.read ? '2px solid #E7DFD2' : '2px solid #B08637',
+                background: 'var(--color-surface, #FFFFFF)',
+                border: '1px solid var(--color-border, #E7DFD2)',
+                borderLeft: m.read ? '2px solid var(--color-border, #E7DFD2)' : '2px solid var(--color-accent, #B08637)',
                 borderRadius: 12,
                 padding: '14px 16px',
-                cursor: m.read ? 'default' : 'pointer',
-                opacity: m.read ? 0.75 : 1,
+                cursor: 'pointer',
+                opacity: m.read ? 0.85 : 1,
               }}
             >
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                {!m.read && <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#B08637', flexShrink: 0, alignSelf: 'center' }} />}
+                {!m.read && <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--color-accent, #B08637)', flexShrink: 0, alignSelf: 'center' }} />}
                 <div style={{ fontSize: 14, fontWeight: m.read ? 500 : 700, flex: 1 }}>
                   {m.title || 'Message'}
                 </div>
                 <div style={{ color: '#8A8175', fontSize: 11, whiteSpace: 'nowrap' }}>{fmtWhen(m.createdAt)}</div>
+                <span
+                  aria-hidden
+                  style={{
+                    color: '#8A8175', fontSize: 12, flexShrink: 0, marginLeft: 2,
+                    transform: isOpen ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s ease',
+                  }}
+                >
+                  ›
+                </span>
               </div>
-              <div style={{ color: '#6B6257', fontSize: 13, marginTop: 6, whiteSpace: 'pre-wrap' }}>{m.body}</div>
+              <div
+                style={{
+                  color: '#6B6257', fontSize: 13, marginTop: 6, whiteSpace: 'pre-wrap',
+                  ...(isOpen
+                    ? { maxHeight: 360, overflowY: 'auto' as const }
+                    : {
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical' as const,
+                        overflow: 'hidden',
+                      }),
+                }}
+              >
+                {m.body}
+              </div>
+              {!isOpen && m.body.length > 120 && (
+                <div style={{ color: 'var(--color-accent, #B08637)', fontSize: 12, fontWeight: 600, marginTop: 4 }}>
+                  Read more
+                </div>
+              )}
               {m.actions.length > 0 && (
                 <div
                   onClick={(e) => e.stopPropagation()}
@@ -277,7 +322,8 @@ export default function InboxPage() {
                 </div>
               )}
             </div>
-          ))}
+            )
+          })}
         </div>
       </main>
     </div>

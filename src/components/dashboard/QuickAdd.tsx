@@ -109,26 +109,9 @@ export function QuickAdd({ onTaskAdded }: Props) {
 
   return (
     <>
-      {/* Quick-add button (⌘K) — sits above the coach launcher, warm + subtle */}
-      <button
-        onClick={() => setOpen(true)}
-        title="Quick add (⌘K)"
-        aria-label="Quick add"
-        style={{
-          position: 'fixed', bottom: 84, right: 28, zIndex: 90,
-          width: 48, height: 48, borderRadius: '50%',
-          background: '#FFFFFF',
-          border: '1px solid #E7DFD2', cursor: 'pointer',
-          boxShadow: '0 6px 18px rgba(34, 31, 26, 0.10)',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-          fontSize: 24, fontWeight: 400, color: '#B08637', lineHeight: 1,
-          transition: 'transform 0.15s, box-shadow 0.15s',
-        }}
-        onMouseEnter={(e) => { e.currentTarget.style.transform = 'scale(1.06)'; e.currentTarget.style.boxShadow = '0 10px 24px rgba(34, 31, 26, 0.14)' }}
-        onMouseLeave={(e) => { e.currentTarget.style.transform = 'scale(1)'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(34, 31, 26, 0.10)' }}
-      >
-        +
-      </button>
+      {/* Quick-add FAB removed: unified into the single "Coach" launcher.
+          The ⌘K modal below is preserved for the keyboard shortcut, and
+          quick-capture also lives inside the Coach pop-up. */}
 
       {/* Modal Overlay */}
       {open && (

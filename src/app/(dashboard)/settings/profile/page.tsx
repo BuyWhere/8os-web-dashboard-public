@@ -2,8 +2,10 @@
 
 import { useState, useEffect, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
-import Link from 'next/link'
+import { UserProfile as ClerkUserProfile } from '@clerk/nextjs'
 import { GoogleAuthButton } from '@/components/auth/GoogleAuthButton'
+import { Sidebar } from '@/components/dashboard/Sidebar'
+import { SettingsTabs } from '@/components/SettingsTabs'
 
 interface UserProfile {
   id: string
@@ -162,21 +164,36 @@ export default function ProfileSettingsPage() {
     setTimeout(() => router.push('/login'), 2000)
   }
 
-  if (loading) return <main style={styles.main}><p style={{ color: '#8A8175' }}>Loading…</p></main>
-  if (error) return <main style={styles.main}><p style={{ color: '#B5502F' }}>{error}</p></main>
-  if (!user) return null
-
   return (
-    <main style={styles.main}>
-      <div style={styles.container}>
-        <div style={styles.header}>
-          <Link href="/dashboard" style={styles.back}>← Dashboard</Link>
-          <h1 style={styles.title}>Account settings</h1>
-        </div>
+    <div style={styles.shell}>
+      <Sidebar goals={[]} />
+      <main style={styles.mainCol}>
+        <div style={styles.container}>
+          <SettingsTabs active="/settings/profile" />
+
+          {/* Clerk-managed identity — name, email, connected accounts,
+              password/passkeys, and Clerk security. This is the primary Profile
+              surface; the sections below cover data/privacy + legacy security. */}
+          <section style={styles.clerkSection}>
+            <ClerkUserProfile
+              routing="hash"
+              appearance={{
+                elements: {
+                  rootBox: { width: '100%' },
+                  card: { boxShadow: 'none', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)' },
+                },
+              }}
+            />
+          </section>
+
+          {loading && <p style={{ color: 'var(--color-text-muted)' }}>Loading account details…</p>}
+          {error && <p style={{ color: 'var(--color-accent-2)' }}>{error}</p>}
+          {!loading && !error && user && (
+          <>
 
         {/* Profile info */}
         <section style={styles.section}>
-          <h2 style={styles.sectionTitle}>Profile</h2>
+          <h2 style={styles.sectionTitle}>Account details</h2>
           <div style={styles.row}>
             <span style={styles.label}>Email</span>
             <span style={styles.value}>{user.email ?? '—'} {user.emailVerified ? '✓' : '(unverified)'}</span>
@@ -336,14 +353,20 @@ export default function ProfileSettingsPage() {
             </form>
           )}
         </section>
-      </div>
-    </main>
+          </>
+          )}
+        </div>
+      </main>
+    </div>
   )
 }
 
 const styles: Record<string, React.CSSProperties> = {
+  shell: { display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' },
+  mainCol: { flex: 1, padding: '24px 32px', overflowY: 'auto' },
   main: { display: 'flex', justifyContent: 'center', minHeight: '100vh', padding: '2rem 1rem', background: '#F7F3EC' },
-  container: { width: '100%', maxWidth: '600px' },
+  container: { width: '100%', maxWidth: '720px' },
+  clerkSection: { marginBottom: '1.5rem' },
   header: { marginBottom: '2rem' },
   back: { color: '#8A8175', textDecoration: 'none', fontSize: '0.875rem' },
   title: { fontSize: '1.5rem', fontWeight: '700', color: '#221F1A', margin: '0.5rem 0 0', fontFamily: 'var(--font-serif), Georgia, serif' },

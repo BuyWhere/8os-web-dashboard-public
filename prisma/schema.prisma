@@ -464,6 +464,9 @@ model UserSettings {
   sidebarCollapsed   Boolean  @default(false)
   defaultCalendarView String  @default("week")     // day | week | month
   driftSensitivity   Float    @default(0.3)        // 0-1, higher = more sensitive
+  // Account-hub preferences (unified account hub build).
+  theme              String   @default("system")   // light | dark | system
+  firstDayOfWeek     Int      @default(1)           // 1 = Monday, 0 = Sunday
   updatedAt          DateTime @updatedAt
   createdAt          DateTime @default(now())
 

@@ -108,7 +108,14 @@ export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
       data-open={drawerOpen ? 'true' : 'false'}
       style={{
         width: collapsed ? 64 : 236,
-        minHeight: 'calc(100vh - var(--header-height))',
+        // Sticky on desktop: stays pinned below the fixed header while the
+        // page scrolls, with its own internal scroll. The mobile media query
+        // below overrides these to a fixed slide-in drawer (position/height
+        // are set with !important there, so this does not affect mobile).
+        position: 'sticky',
+        top: 'var(--header-height)',
+        height: 'calc(100vh - var(--header-height))',
+        alignSelf: 'flex-start',
         background: SURFACE,
         borderRight: `1px solid ${HAIRLINE}`,
         display: 'flex',

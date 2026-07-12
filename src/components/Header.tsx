@@ -3,8 +3,9 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Fraunces } from 'next/font/google';
-import { SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
+import { SignedIn, SignedOut } from '@clerk/nextjs';
 import { openSidebarDrawer } from '@/lib/ui/sidebarDrawer';
+import { AccountMenu } from '@/components/AccountMenu';
 
 // Editorial serif for the wordmark — matches the landing header.
 const fraunces = Fraunces({
@@ -113,17 +114,12 @@ export function Header() {
             </svg>
           </button>
 
-          {/* Account menu — logged-in state only */}
+          {/* Account menu — the single account surface. The profile avatar
+              opens AccountMenu (Profile / Billing / Preferences / Notifications
+              / Sources / theme / Sign out), replacing Clerk's <UserButton>. */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
             <SignedIn>
-              <UserButton
-                afterSignOutUrl="/"
-                appearance={{
-                  elements: {
-                    userButtonAvatarBox: { width: '34px', height: '34px' },
-                  },
-                }}
-              />
+              <AccountMenu />
             </SignedIn>
             {/* If a session somehow isn't present on an app route, offer a
                 quiet sign-in link — never the marketing Sign up CTA. */}
@@ -250,7 +246,7 @@ export function Header() {
             >
               Dashboard
             </Link>
-            <UserButton afterSignOutUrl="/" />
+            <AccountMenu />
           </SignedIn>
         </div>
       </div>

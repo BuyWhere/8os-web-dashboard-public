@@ -564,3 +564,13 @@ ALTER TABLE "insight_feedback" ADD CONSTRAINT "insight_feedback_insightId_fkey" 
 -- AddForeignKey
 ALTER TABLE "insight_feedback" ADD CONSTRAINT "insight_feedback_userId_fkey" FOREIGN KEY ("userId") REFERENCES "users"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
+
+-- ── Unified account hub — user preferences (appended additively) ──────────
+-- The startup migration loop (scripts/railway-start.sh) applies ONLY this
+-- 0_init file, so account-hub prefs are appended here (idempotent) to ensure
+-- the columns exist on deploy. Canonical migration also lives at
+-- prisma/migrations/*_user_prefs/migration.sql. Timezone stays on
+-- user_profiles.timezone (E-0).
+ALTER TABLE "user_settings" ADD COLUMN IF NOT EXISTS "theme" TEXT NOT NULL DEFAULT 'system';
+ALTER TABLE "user_settings" ADD COLUMN IF NOT EXISTS "firstDayOfWeek" INTEGER NOT NULL DEFAULT 1;
+ALTER TABLE "user_profiles" ADD COLUMN IF NOT EXISTS "timezone" TEXT;

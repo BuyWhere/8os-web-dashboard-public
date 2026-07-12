@@ -18,6 +18,8 @@ import { AlignmentPanel } from '@/components/dashboard/AlignmentPanel'
 import { DailyBig3 } from '@/components/dashboard/DailyBig3'
 import { GoalHygieneCard } from '@/components/dashboard/GoalHygieneCard'
 import { getDailyInsight } from '@/lib/deepseek/insights'
+import { getUserTimezone, userLocalHour, userLocalDate } from '@/lib/user-time'
+import { monthlyPillar } from '@/lib/bazi-phases'
 import Link from 'next/link'
 import { PostHogIdentify } from '@/components/PostHogIdentify'
 
@@ -57,9 +59,22 @@ export default async function DashboardPage() {
   const userId = await getUserId()
 
   const now = new Date()
-  const todayStart = new Date(now); todayStart.setHours(0, 0, 0, 0)
-  const todayEnd = new Date(now); todayEnd.setHours(23, 59, 59, 999)
-  const weekEnd = new Date(now); weekEnd.setDate(weekEnd.getDate() + 7)
+  // E-0 (OS-2651): "today" and the greeting must derive from the USER's
+  // local civil time, not the server's. Resolve the stored timezone first.
+  const timezone = await getUserTimezone(userId)
+  // User-local calendar day → UTC bounds for "today" task queries.
+  const { year: ly, month: lm, day: ld } = userLocalDate(timezone, now)
+  const todayStart = new Date(Date.UTC(ly, lm - 1, ld, 0, 0, 0, 0))
+  const todayEnd = new Date(Date.UTC(ly, lm - 1, ld, 23, 59, 59, 999))
+  // "This week" box: fetch the whole current calendar week (Mon..Sun by
+  // default) so a selected earlier-today / past-this-week day still shows its
+  // items — not just events from `now` forward.
+  const weekStartAt = new Date(todayStart.getTime())
+  // JS getUTCDay: 0=Sun..6=Sat. Default first-day = Monday (see note in
+  // CalendarMini re: first-day-of-week preference, wired defensively there).
+  const dowUTC = weekStartAt.getUTCDay()
+  weekStartAt.setUTCDate(weekStartAt.getUTCDate() - (dowUTC === 0 ? 6 : dowUTC - 1))
+  const weekEnd = new Date(weekStartAt.getTime() + 7 * 86400000) // exclusive end of week
 
   const [user, archetype, goals, todayTasksRaw, energyProfileRaw, settings, upcomingEvents, completedThisWeek, streakDays, userProfile] =
     await Promise.all([
@@ -69,7 +84,7 @@ export default async function DashboardPage() {
       prisma.oSTask.findMany({ where: { userId, scheduledAt: { gte: todayStart, lte: todayEnd }, status: { not: 'cancelled' } }, orderBy: { scheduledAt: 'asc' } }),
       prisma.energyProfile.findUnique({ where: { userId } }),
       prisma.userSettings.findUnique({ where: { userId } }),
-      prisma.calendarEvent.findMany({ where: { userId, startAt: { gte: now, lte: weekEnd } }, orderBy: { startAt: 'asc' }, take: 20 }),
+      prisma.calendarEvent.findMany({ where: { userId, startAt: { gte: weekStartAt, lt: weekEnd } }, orderBy: { startAt: 'asc' }, take: 60 }),
       prisma.activityLog.count({ where: { userId, action: 'task_completed', createdAt: { gte: new Date(now.getTime() - 7 * 86400000) } } }),
       computeStreak(userId),
       prisma.userProfile.findUnique({ where: { userId }, select: { birthTimezone: true } }),
@@ -105,7 +120,7 @@ export default async function DashboardPage() {
   const todayTasks = todayTasksOrdered.map((t) => todayTaskMap.get(t.id)!)
 
 
-  const greeting = getGreeting()
+  const greeting = getGreeting(userLocalHour(timezone, now))
   const userName = user?.email?.split('@')[0] ?? 'there'
   const archetypeName = archetype?.archetypeName ?? 'Explorer'
   const insightResult = await getDailyInsight(userId, userProfile?.birthTimezone ?? 'UTC')
@@ -117,7 +132,21 @@ export default async function DashboardPage() {
   const insightPriorityReason = getInsightPriorityReason(insightPriority, todayTasks.length, goals.length)
 
   const serif = 'var(--font-serif), Georgia, serif'
-  const todayLabel = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
+  // Date label rendered in the user's timezone (not the server's).
+  const todayLabel = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', timeZone: timezone })
+
+  // ── Weekly reminder (this-week focus) ────────────────────────────────
+  // Honest + brief: the current 流月 solar-month theme (pure date math, no
+  // birth data needed) + the user's top weekly priority (first active goal).
+  const solarMonth = monthlyPillar(now)
+  const topGoal = goals[0] ?? null
+  const weeklyReminder = {
+    theme: `${solarMonth.termEn} · ${solarMonth.termName}`,
+    focus: topGoal
+      ? `Keep attention on ${topGoal.name} this week.`
+      : 'No active goal set — pick one focus to move this week.',
+    domain: topGoal ? (DOMAIN_ICONS[topGoal.domainId] ?? '🎯') : '🎯',
+  }
   const briefLine = todayTasks.length === 0
     ? 'A clear day. Choose one thing that moves a goal forward.'
     : `${todayTasks.length} scheduled ${todayTasks.length === 1 ? 'task' : 'tasks'} today · ${completedThisWeek} done this week.`
@@ -165,6 +194,7 @@ export default async function DashboardPage() {
             priority={insightPriority}
             priorityReason={insightPriorityReason}
           />
+          <WeeklyReminder serif={serif} reminder={weeklyReminder} />
         </Section>
 
         {/* ── Today's focus (Big 3) + this week ──────────────────────── */}
@@ -195,10 +225,13 @@ export default async function DashboardPage() {
             </Card>
             <Card>
               <CardHead serif={serif} title="This week" href="/calendar" cta="Calendar" />
-              <CalendarMini events={[
-                ...upcomingEvents.map((e) => ({ id: e.id, title: e.title, startAt: e.startAt.toISOString(), endAt: e.endAt.toISOString(), domainId: e.domainId, color: e.color })),
-                ...caldiyMiniEvents,
-              ]} />
+              <CalendarMini
+                timezone={timezone}
+                events={[
+                  ...upcomingEvents.map((e) => ({ id: e.id, title: e.title, startAt: e.startAt.toISOString(), endAt: e.endAt.toISOString(), domainId: e.domainId, color: e.color })),
+                  ...caldiyMiniEvents,
+                ]}
+              />
             </Card>
           </div>
         </Section>
@@ -301,8 +334,35 @@ function QuickLink({ href, title, body }: { href: string; title: string; body: s
   )
 }
 
-function getGreeting(): string {
-  const h = new Date().getHours()
+function WeeklyReminder({ serif, reminder }: { serif: string; reminder: { theme: string; focus: string; domain: string } }) {
+  return (
+    <div
+      style={{
+        marginTop: 12,
+        background: 'var(--color-surface, #FFFFFF)',
+        border: '1px solid var(--color-border, #E7DFD2)',
+        borderLeft: '3px solid var(--color-accent, #B08637)',
+        borderRadius: 14,
+        padding: '14px 18px',
+        display: 'flex',
+        alignItems: 'flex-start',
+        gap: 12,
+      }}
+    >
+      <div style={{ fontSize: 20, lineHeight: 1.2, flexShrink: 0 }} aria-hidden>{reminder.domain}</div>
+      <div style={{ minWidth: 0 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-accent, #B08637)', marginBottom: 3 }}>
+          This week · {reminder.theme}
+        </div>
+        <div style={{ fontFamily: serif, fontSize: 15.5, color: 'var(--color-ink, #221F1A)', lineHeight: 1.45 }}>
+          {reminder.focus}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function getGreeting(h: number): string {
   if (h < 5) return 'Still up'
   if (h < 12) return 'Good morning'
   if (h < 17) return 'Good afternoon'
