@@ -65,6 +65,20 @@ const clerk = clerkMiddleware(async (auth, req) => {
 // `malformed_request_parameters`. Force the canonical host BEFORE Clerk reads it (this rewrites the
 // request the app sees — it does NOT issue a redirect, so it can't loop).
 export default function middleware(req: NextRequest, event: NextFetchEvent) {
+  const { pathname } = req.nextUrl
+
+  // OS-1253 regression fix-forward (OS-3450): handle /en /zh /register at the
+  // edge BEFORE Clerk runs. Page-level `redirect()` in these routes is
+  // intercepted by Next.js build-time error handling and returned as
+  // `__next_error__` without a Location header. Issuing a real
+  // 307+Location at the edge is the only way to get a clean redirect.
+  if (pathname === '/en' || pathname === '/zh') {
+    return applyCSP(NextResponse.redirect(new URL('/', req.url), 307))
+  }
+  if (pathname === '/register') {
+    return applyCSP(NextResponse.redirect(new URL('/signup', req.url), 307))
+  }
+
   try {
     const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || ''
     if (host.endsWith('.up.railway.app')) {
