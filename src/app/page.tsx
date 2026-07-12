@@ -234,42 +234,23 @@ export default function Home() {
               timing, then operates your goals and calendar around it — guided
               by an AI assistant that actually does the work.
             </p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-              <a
-                href="/signup"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  padding: '0.9rem 1.75rem',
-                  background: GOLD,
-                  color: '#FFFFFF',
-                  fontWeight: 600,
-                  fontSize: '1rem',
-                  borderRadius: '10px',
-                  textDecoration: 'none',
-                  boxShadow: '0 6px 20px rgba(176, 134, 55, 0.28)',
-                }}
-              >
-                Get started
-              </a>
-              <a
-                href="/reveal"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  padding: '0.9rem 1.75rem',
-                  background: 'transparent',
-                  color: INK,
-                  fontWeight: 600,
-                  fontSize: '1rem',
-                  borderRadius: '10px',
-                  border: `1px solid ${HAIRLINE}`,
-                  textDecoration: 'none',
-                }}
-              >
-                Take the quiz →
-              </a>
-            </div>
+            <a
+              href="/signup"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '0.9rem 1.75rem',
+                background: GOLD,
+                color: '#FFFFFF',
+                fontWeight: 600,
+                fontSize: '1rem',
+                borderRadius: '10px',
+                textDecoration: 'none',
+                boxShadow: '0 6px 20px rgba(176, 134, 55, 0.28)',
+              }}
+            >
+              Get started
+            </a>
           </div>
 
           <div
