@@ -1,18 +1,22 @@
 /**
  * GET   /api/goals/[id]  → goal detail + projects + tasks + activity
- * PATCH /api/goals/[id]  → update progress, status
+ * PATCH /api/goals/[id]  → update progress, status, name, definition, horizon, targetDate
  * DELETE /api/goals/[id] → archive
  */
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
 import { requireAuth } from '@/lib/auth/require-auth'
 import { z } from 'zod'
+import { HORIZONS } from '@/lib/horizons'
 
 const UpdateSchema = z.object({
   progress: z.number().min(0).max(1).optional(),
   status: z.enum(['active', 'paused', 'completed', 'archived']).optional(),
   name: z.string().min(1).max(200).optional(),
   definition: z.string().optional(),
+  horizon: z.enum(HORIZONS).optional(),
+  // ISO date or datetime; null clears the target date.
+  targetDate: z.string().datetime().or(z.string().regex(/^\d{4}-\d{2}-\d{2}$/)).nullable().optional(),
 })
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
@@ -62,9 +66,15 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   const goal = await prisma.goal.findFirst({ where: { id: params.id, userId: auth.userId } })
   if (!goal) return NextResponse.json({ error: 'Not found' }, { status: 404 })
 
+  const { targetDate, ...rest } = parsed.data
+  const data: Record<string, unknown> = { ...rest, updatedAt: new Date() }
+  if (targetDate !== undefined) {
+    data.targetDate = targetDate === null ? null : new Date(targetDate)
+  }
+
   const updated = await prisma.goal.update({
     where: { id: params.id },
-    data: { ...parsed.data, updatedAt: new Date() },
+    data,
   })
 
   await prisma.activityLog.create({

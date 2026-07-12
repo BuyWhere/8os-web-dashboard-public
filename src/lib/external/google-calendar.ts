@@ -26,12 +26,21 @@ import { prisma } from '@/lib/db/prisma'
 import { encrypt, decrypt } from '@/lib/encryption'
 
 export const GOOGLE_CALENDAR_PROVIDER = 'google_calendar'
-export const GOOGLE_CALENDAR_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly'
+// Read scope kept for reference; the two-way build requests the read/write
+// `calendar.events` scope (superset of readonly for event data) so 8os can also
+// create/update/delete events in the connected calendar. Existing readonly
+// grants keep working for read-only sync — the write helpers below simply
+// return `{ ok:false, reason:'insufficient_scope' }` on a 403 and never throw.
+export const GOOGLE_CALENDAR_READ_SCOPE = 'https://www.googleapis.com/auth/calendar.readonly'
+export const GOOGLE_CALENDAR_WRITE_SCOPE = 'https://www.googleapis.com/auth/calendar.events'
+// Requested scope for new connections (read+write on events). Space-delimited.
+export const GOOGLE_CALENDAR_SCOPE = GOOGLE_CALENDAR_WRITE_SCOPE
 
 const AUTH_URL = 'https://accounts.google.com/o/oauth2/v2/auth'
 const TOKEN_URL = 'https://oauth2.googleapis.com/token'
 const REVOKE_URL = 'https://oauth2.googleapis.com/revoke'
-const EVENTS_URL = 'https://www.googleapis.com/calendar/v3/calendars/primary/events'
+const CALENDARS_BASE = 'https://www.googleapis.com/calendar/v3/calendars'
+const EVENTS_URL = `${CALENDARS_BASE}/primary/events`
 
 const PAST_WINDOW_DAYS = 60
 const FUTURE_WINDOW_DAYS = 30
@@ -368,4 +377,194 @@ export async function getExternalBusyWindows(
     take: 2000,
   })
   return rows.map((r) => ({ startAt: r.startsAt, endAt: r.endsAt }))
+}
+
+// ─── Two-way write path (BUILD; dormant until creds) ─────────────────────────
+//
+// When a Google source is connected, native 8os events can be mirrored INTO the
+// user's Google Calendar. Every entry point below is gated on
+// isGoogleCalendarConfigured() + the presence of a live (non-revoked) source
+// with a usable token, and returns a plain result object — it NEVER throws into
+// the calendar CRUD routes. If unconfigured/unconnected it returns
+// { ok:false, skipped:true } so the local write is authoritative and the API
+// route succeeds regardless.
+//
+// Loop-avoidance: the id Google returns is stored on CalendarEvent.googleEventId
+// (+ googleCalendarId). The read-sync (syncSource) writes only into
+// external_events, which are a read-only overlay and are matched against native
+// googleEventId at the presentation layer (page.tsx) so a pushed event is never
+// shown twice. Deletes/updates from 8os target that stored id directly.
+
+export type GoogleWriteResult =
+  | { ok: true; googleEventId: string; googleCalendarId: string }
+  | { ok: false; skipped: true; reason: string }
+  | { ok: false; skipped: false; reason: string }
+
+export interface NativeEventShape {
+  title: string
+  description?: string | null
+  location?: string | null
+  startAt: Date
+  endAt: Date
+  allDay?: boolean
+}
+
+/**
+ * Resolve a usable (refreshed) access token for a user's live Google source.
+ * Returns null (never throws) when unconfigured, no source, dev-seeded, revoked,
+ * or the token cannot be refreshed — every write helper degrades to a no-op.
+ */
+async function getWritableGoogleContext(
+  userId: string,
+): Promise<{ accessToken: string; sourceId: string } | null> {
+  if (!isGoogleCalendarConfigured()) return null
+  const source = await prisma.externalSignalSource.findFirst({
+    where: { userId, provider: GOOGLE_CALENDAR_PROVIDER, status: { not: 'revoked' } },
+    orderBy: { createdAt: 'desc' },
+  })
+  if (!source) return null
+
+  let tokens: StoredTokens
+  try {
+    tokens = JSON.parse(decrypt(source.encryptedTokens)) as StoredTokens
+  } catch {
+    return null
+  }
+  if (tokens.dev) return null // dev-seeded: no upstream calendar
+
+  let accessToken = tokens.access_token
+  const expiring = !tokens.expires_at || tokens.expires_at < Date.now() + 60_000
+  if (!accessToken || expiring) {
+    try {
+      tokens = await refreshAccessToken(tokens)
+      accessToken = tokens.access_token
+      await prisma.externalSignalSource.update({
+        where: { id: source.id },
+        data: { encryptedTokens: encrypt(JSON.stringify(tokens)) },
+      })
+    } catch {
+      return null
+    }
+  }
+  if (!accessToken) return null
+  return { accessToken, sourceId: source.id }
+}
+
+/** Build the Google event resource body from a native 8os event. */
+function toGoogleEventBody(ev: NativeEventShape): Record<string, unknown> {
+  const body: Record<string, unknown> = {
+    summary: ev.title,
+    description: ev.description ?? undefined,
+    location: ev.location ?? undefined,
+  }
+  if (ev.allDay) {
+    // All-day: date-only, exclusive end (Google convention → +1 day).
+    const startDate = ev.startAt.toISOString().slice(0, 10)
+    const endExclusive = new Date(ev.endAt.getTime())
+    endExclusive.setUTCDate(endExclusive.getUTCDate() + 1)
+    body.start = { date: startDate }
+    body.end = { date: endExclusive.toISOString().slice(0, 10) }
+  } else {
+    body.start = { dateTime: ev.startAt.toISOString() }
+    body.end = { dateTime: ev.endAt.toISOString() }
+  }
+  return body
+}
+
+/** Create the mirror of a native event in Google Calendar. */
+export async function pushEventToGoogle(
+  userId: string,
+  ev: NativeEventShape,
+  calendarId = 'primary',
+): Promise<GoogleWriteResult> {
+  const ctx = await getWritableGoogleContext(userId)
+  if (!ctx) return { ok: false, skipped: true, reason: 'google_not_connected' }
+  try {
+    const res = await fetch(`${CALENDARS_BASE}/${encodeURIComponent(calendarId)}/events`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${ctx.accessToken}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(toGoogleEventBody(ev)),
+    })
+    if (!res.ok) {
+      const text = await res.text().catch(() => '')
+      return { ok: false, skipped: false, reason: `google_create_${res.status}:${text.slice(0, 200)}` }
+    }
+    const json = (await res.json()) as { id?: string }
+    if (!json.id) return { ok: false, skipped: false, reason: 'google_create_no_id' }
+    return { ok: true, googleEventId: json.id, googleCalendarId: calendarId }
+  } catch (err) {
+    return { ok: false, skipped: false, reason: err instanceof Error ? err.message : String(err) }
+  }
+}
+
+/** Update the mirror of a native event in Google Calendar (PATCH). */
+export async function updateGoogleEvent(
+  userId: string,
+  googleEventId: string,
+  ev: NativeEventShape,
+  calendarId = 'primary',
+): Promise<GoogleWriteResult> {
+  const ctx = await getWritableGoogleContext(userId)
+  if (!ctx) return { ok: false, skipped: true, reason: 'google_not_connected' }
+  try {
+    const res = await fetch(
+      `${CALENDARS_BASE}/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(googleEventId)}`,
+      {
+        method: 'PATCH',
+        headers: { Authorization: `Bearer ${ctx.accessToken}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(toGoogleEventBody(ev)),
+      },
+    )
+    if (res.status === 404 || res.status === 410) {
+      // Vanished upstream — recreate so 8os stays the source of truth.
+      return await pushEventToGoogle(userId, ev, calendarId)
+    }
+    if (!res.ok) {
+      const text = await res.text().catch(() => '')
+      return { ok: false, skipped: false, reason: `google_update_${res.status}:${text.slice(0, 200)}` }
+    }
+    return { ok: true, googleEventId, googleCalendarId: calendarId }
+  } catch (err) {
+    return { ok: false, skipped: false, reason: err instanceof Error ? err.message : String(err) }
+  }
+}
+
+/** Delete the mirror of a native event from Google Calendar. */
+export async function deleteGoogleEvent(
+  userId: string,
+  googleEventId: string,
+  calendarId = 'primary',
+): Promise<GoogleWriteResult> {
+  const ctx = await getWritableGoogleContext(userId)
+  if (!ctx) return { ok: false, skipped: true, reason: 'google_not_connected' }
+  try {
+    const res = await fetch(
+      `${CALENDARS_BASE}/${encodeURIComponent(calendarId)}/events/${encodeURIComponent(googleEventId)}`,
+      { method: 'DELETE', headers: { Authorization: `Bearer ${ctx.accessToken}` } },
+    )
+    // 404/410 = already gone upstream — treat as success (idempotent delete).
+    if (res.ok || res.status === 404 || res.status === 410 || res.status === 204) {
+      return { ok: true, googleEventId, googleCalendarId: calendarId }
+    }
+    const text = await res.text().catch(() => '')
+    return { ok: false, skipped: false, reason: `google_delete_${res.status}:${text.slice(0, 200)}` }
+  } catch (err) {
+    return { ok: false, skipped: false, reason: err instanceof Error ? err.message : String(err) }
+  }
+}
+
+/** True when the user has a live, writable Google source (no network call). */
+export async function hasWritableGoogleSource(userId: string): Promise<boolean> {
+  if (!isGoogleCalendarConfigured()) return false
+  const source = await prisma.externalSignalSource.findFirst({
+    where: { userId, provider: GOOGLE_CALENDAR_PROVIDER, status: { not: 'revoked' } },
+    select: { id: true, encryptedTokens: true },
+  })
+  if (!source) return false
+  try {
+    const t = JSON.parse(decrypt(source.encryptedTokens)) as StoredTokens
+    return !t.dev
+  } catch {
+    return false
+  }
 }

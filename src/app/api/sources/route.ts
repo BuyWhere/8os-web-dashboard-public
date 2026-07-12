@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
 import { requireAuth } from '@/lib/auth/require-auth'
 import { isGoogleCalendarConfigured } from '@/lib/external/google-calendar'
+import { PROVIDER_CATALOG } from '@/lib/external/providers'
 
 export async function GET(req: NextRequest) {
   const auth = await requireAuth(req)
@@ -31,8 +32,18 @@ export async function GET(req: NextRequest) {
     : []
   const countBySource = new Map(counts.map((c) => [c.sourceId, c._count._all]))
 
+  // Provider catalog: Google is active; Outlook/365 + Apple/CalDAV are declared
+  // "coming soon" behind the same ExternalSignalSource plug-in (see
+  // lib/external/providers.ts). googleConfigured drives Google's connect button.
+  const catalog = PROVIDER_CATALOG.map((p) =>
+    p.provider === 'google_calendar'
+      ? { ...p, configured: isGoogleCalendarConfigured() }
+      : { ...p, configured: false },
+  )
+
   return NextResponse.json({
     googleConfigured: isGoogleCalendarConfigured(),
+    catalog,
     sources: sources.map((s) => ({
       id: s.id,
       provider: s.provider,

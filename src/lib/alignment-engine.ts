@@ -62,6 +62,7 @@ interface GoalLite {
   name: string
   definition: string
   domainId: string
+  horizon?: string
 }
 
 interface CandidateItem {
@@ -228,7 +229,7 @@ export async function runAttribution(
 
   const goals: GoalLite[] = await prisma.goal.findMany({
     where: { userId, status: 'active' },
-    select: { id: true, name: true, definition: true, domainId: true },
+    select: { id: true, name: true, definition: true, domainId: true, horizon: true },
     orderBy: { createdAt: 'asc' },
     take: 30,
   })

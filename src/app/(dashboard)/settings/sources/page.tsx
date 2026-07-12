@@ -28,8 +28,19 @@ interface SourceRow {
   eventCount: number
 }
 
+interface CatalogEntry {
+  provider: string
+  label: string
+  status: 'active' | 'coming_soon'
+  connectPath: string | null
+  blurb: string
+  icon: string
+  configured: boolean
+}
+
 interface SourcesResponse {
   googleConfigured: boolean
+  catalog?: CatalogEntry[]
   sources: SourceRow[]
 }
 
@@ -176,7 +187,7 @@ export default function SourcesSettingsPage() {
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, fontWeight: 700 }}>Google Calendar</div>
               <div style={{ color: '#6B6257', fontSize: 13, marginTop: 2 }}>
-                Your meetings become alignment signal automatically, and the scheduler stops proposing times you&apos;re busy.
+                Two-way sync: your meetings become alignment signal and busy time, and events you create in 8os appear in your Google Calendar.
               </div>
             </div>
             {loading ? (
@@ -251,8 +262,24 @@ export default function SourcesSettingsPage() {
           )}
         </div>
 
+        {/* Other calendars — scaffolded behind the same plug-in (coming soon) */}
+        {(data?.catalog ?? []).filter((p) => p.status === 'coming_soon').map((p) => (
+          <div key={p.provider} style={{ ...card, opacity: 0.75 }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              <span style={{ fontSize: 18 }}>{p.icon}</span>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 15, fontWeight: 700 }}>{p.label}</div>
+                <div style={{ color: '#6B6257', fontSize: 13, marginTop: 2 }}>{p.blurb}</div>
+              </div>
+              <span style={{ background: '#F7F3EC', border: '1px solid #E7DFD2', color: '#8A8175', borderRadius: 8, fontSize: 11, fontWeight: 700, padding: '4px 10px' }}>
+                COMING SOON
+              </span>
+            </div>
+          </div>
+        ))}
+
         <div style={{ maxWidth: 640, color: '#8A8175', fontSize: 12, lineHeight: 1.6 }}>
-          External events are a read-only overlay: they count as busy time for auto-scheduling and feed your alignment verdicts, but they never modify your native 8os calendar.
+          External events count as busy time for auto-scheduling and feed your alignment verdicts. Google Calendar is two-way; other providers are read-only until their connectors ship.
         </div>
       </main>
     </div>

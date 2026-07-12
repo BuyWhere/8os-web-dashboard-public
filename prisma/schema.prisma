@@ -335,6 +335,10 @@ model Goal {
   parentId      String?   @map("parent_id")
   ownerAgentId  String?   @map("owner_agent_id")
 
+  // Time-horizon goals (added via 20260712114743_goal_horizons migration)
+  horizon       String    @default("yearly")
+  targetDate    DateTime? @map("target_date") @db.Date
+
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt      @map("updated_at")
 
@@ -427,6 +431,14 @@ model CalendarEvent {
   allDay      Boolean   @default(false)
   domainId    String?
   color       String?
+  // Calendar v2 (additive; see migrations/*_calendar_v2). camelCase columns.
+  goalId             String?   // optional link to a Goal (name/domain read-only)
+  location           String?
+  googleEventId      String?   // mirrored event id in Google Calendar (2-way map)
+  googleCalendarId   String?   // which Google calendar (defaults primary on push)
+  recurrenceRule     String    @default("none") // none|daily|weekly|biweekly|monthly
+  recurrenceUntil    DateTime?
+  recurrenceParentId String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -435,6 +447,8 @@ model CalendarEvent {
 
   @@index([userId])
   @@index([startAt])
+  @@index([userId, googleEventId])
+  @@index([goalId])
   @@map("calendar_events")
 }
 

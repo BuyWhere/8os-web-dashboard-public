@@ -574,3 +574,17 @@ ALTER TABLE "insight_feedback" ADD CONSTRAINT "insight_feedback_userId_fkey" FOR
 ALTER TABLE "user_settings" ADD COLUMN IF NOT EXISTS "theme" TEXT NOT NULL DEFAULT 'system';
 ALTER TABLE "user_settings" ADD COLUMN IF NOT EXISTS "firstDayOfWeek" INTEGER NOT NULL DEFAULT 1;
 ALTER TABLE "user_profiles" ADD COLUMN IF NOT EXISTS "timezone" TEXT;
+
+-- wave-2 (2026-07-12): goal horizons + calendar v2 (additive, idempotent)
+ALTER TABLE goals ADD COLUMN IF NOT EXISTS horizon text NOT NULL DEFAULT 'yearly';
+ALTER TABLE goals ADD COLUMN IF NOT EXISTS target_date date;
+CREATE INDEX IF NOT EXISTS goals_user_horizon_idx ON goals ("userId", horizon);
+ALTER TABLE "calendar_events" ADD COLUMN IF NOT EXISTS "goalId" TEXT;
+ALTER TABLE "calendar_events" ADD COLUMN IF NOT EXISTS "location" TEXT;
+ALTER TABLE "calendar_events" ADD COLUMN IF NOT EXISTS "googleEventId" TEXT;
+ALTER TABLE "calendar_events" ADD COLUMN IF NOT EXISTS "googleCalendarId" TEXT;
+ALTER TABLE "calendar_events" ADD COLUMN IF NOT EXISTS "recurrenceRule" TEXT NOT NULL DEFAULT 'none';
+ALTER TABLE "calendar_events" ADD COLUMN IF NOT EXISTS "recurrenceUntil" TIMESTAMP(3);
+ALTER TABLE "calendar_events" ADD COLUMN IF NOT EXISTS "recurrenceParentId" TEXT;
+CREATE INDEX IF NOT EXISTS "calendar_events_googleEventId_idx" ON "calendar_events" ("userId", "googleEventId");
+CREATE INDEX IF NOT EXISTS "calendar_events_goalId_idx" ON "calendar_events" ("goalId");
