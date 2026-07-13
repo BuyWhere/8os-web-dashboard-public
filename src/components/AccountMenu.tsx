@@ -26,7 +26,7 @@ const MENU_LINKS: { href: string; label: string; desc: string }[] = [
   { href: '/settings/billing', label: 'Billing', desc: 'Plan & subscription' },
   { href: '/settings/preferences', label: 'Preferences', desc: 'Theme, week start, timezone' },
   { href: '/settings/notifications', label: 'Notifications', desc: 'Briefs & quiet hours' },
-  { href: '/settings/sources', label: 'Sources', desc: 'Connected calendars' },
+  { href: '/settings/sources', label: 'Calendar & Sources', desc: 'Connect Google Calendar & sources' },
 ]
 
 const THEME_OPTIONS: { value: ThemeChoice; label: string }[] = [

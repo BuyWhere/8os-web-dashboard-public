@@ -116,8 +116,12 @@ export function Header() {
 
           {/* Account menu — the single account surface. The profile avatar
               opens AccountMenu (Profile / Billing / Preferences / Notifications
-              / Sources / theme / Sign out), replacing Clerk's <UserButton>. */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem' }}>
+              / Sources / theme / Sign out), replacing Clerk's <UserButton>.
+              marginLeft:auto pins this group to the RIGHT edge of the header on
+              desktop. Without it, the hamburger is display:none on desktop, so
+              this becomes the sole space-between child and gets pinned LEFT —
+              which made AccountMenu's right:0 dropdown open off-screen-left. */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem', marginLeft: 'auto' }}>
             <SignedIn>
               <AccountMenu />
             </SignedIn>

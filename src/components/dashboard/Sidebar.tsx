@@ -57,12 +57,10 @@ const NAV_GROUPS: NavGroup[] = [
       { href: '/dashboard/archetype', label: 'Archetype', icon: <IconDiamond /> },
     ],
   },
-  {
-    label: 'Account',
-    items: [
-      { href: '/settings/profile', label: 'Settings', icon: <IconGear /> },
-    ],
-  },
+  // NOTE: the old "Account → Settings" group was removed on purpose. Account
+  // areas (Profile, Billing, Preferences, Notifications, Sources) now live ONLY
+  // under the profile-avatar dropdown (AccountMenu) — the single account hub —
+  // so there is no duplicate sidebar entry point.
 ]
 
 const DOMAIN_COLORS: Record<string, string> = {
@@ -290,4 +288,4 @@ function IconRepeat() { return <I><path d="M4 8a6 6 0 0 1 10-3l2 2" /><path d="M
 function IconSpark() { return <I><path d="M12 3l2 6 6 2-6 2-2 6-2-6-6-2 6-2z" /></I> }
 function IconCompass() { return <I><circle cx="12" cy="12" r="9" /><path d="M15.5 8.5l-2 5-5 2 2-5z" /></I> }
 function IconDiamond() { return <I><path d="M12 2l8 8-8 12L4 10z" /></I> }
-function IconGear() { return <I><circle cx="12" cy="12" r="3.2" /><path d="M12 2v3M12 19v3M4.2 4.2l2.1 2.1M17.7 17.7l2.1 2.1M2 12h3M19 12h3M4.2 19.8l2.1-2.1M17.7 6.3l2.1-2.1" /></I> }
+// IconGear removed with the "Account → Settings" sidebar group (see NAV_GROUPS).

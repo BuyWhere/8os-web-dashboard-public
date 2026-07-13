@@ -181,6 +181,37 @@ export function CalendarView({ events, goals, unscheduledTasks, energyMap }: Pro
   const [editing, setEditing] = useState<EditingEvent | null>(null)
   const firstDay = 1 // Monday-first (matches the app's default first-day-of-week)
 
+  // ── Google Calendar connection status (Bug fix: give the Calendar page a way
+  //    to actually connect a calendar). We ask /api/sources whether the user has
+  //    an active Google source and whether the Google OAuth client is even
+  //    configured. Until we know, `sourceState` is null and we render nothing
+  //    (no layout flash / no false "connect" prompt).
+  const [sourceState, setSourceState] = useState<{
+    connected: boolean
+    googleConfigured: boolean
+  } | null>(null)
+
+  useEffect(() => {
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await fetch('/api/sources', { cache: 'no-store' })
+        if (!res.ok) return
+        const data = await res.json()
+        if (cancelled) return
+        const connected = Array.isArray(data.sources)
+          && data.sources.some(
+            (s: { provider?: string; status?: string }) =>
+              s.provider === 'google_calendar' && s.status === 'active',
+          )
+        setSourceState({ connected, googleConfigured: !!data.googleConfigured })
+      } catch {
+        /* network hiccup — leave banner hidden rather than show a wrong state */
+      }
+    })()
+    return () => { cancelled = true }
+  }, [])
+
   const energy = energyMap ?? DEFAULT_ENERGY
   const weekDays = useMemo(() => getWeekDays(currentDate, firstDay), [currentDate])
   const monthDays = useMemo(() => getMonthDays(currentDate.getFullYear(), currentDate.getMonth(), firstDay), [currentDate])
@@ -291,6 +322,79 @@ export function CalendarView({ events, goals, unscheduledTasks, energyMap }: Pro
             </div>
           </div>
         </div>
+
+        {/* Connect-a-calendar affordance. When no active Google source is
+            connected, show a clear prompt that starts the connect flow (or
+            points to /settings/sources if the OAuth client isn't configured
+            yet). When a source IS connected, show a compact "connected · Manage"
+            line instead so the calendar page always has a visible entry point. */}
+        {sourceState && !sourceState.connected && (
+          <div
+            style={{
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              gap: 12, flexWrap: 'wrap',
+              padding: '12px 24px', flexShrink: 0,
+              borderBottom: '1px solid var(--color-border)',
+              background: 'var(--color-bg-card)',
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
+              <span style={{ fontSize: 18, lineHeight: 1 }} aria-hidden="true">📅</span>
+              <div style={{ minWidth: 0 }}>
+                <div style={{ fontSize: 13.5, fontWeight: 600, color: 'var(--color-text-primary)' }}>
+                  Connect your Google Calendar
+                </div>
+                <div style={{ fontSize: 12, color: 'var(--color-text-muted)' }}>
+                  See your existing events here and keep 8os in sync.
+                </div>
+              </div>
+            </div>
+            {sourceState.googleConfigured ? (
+              <a
+                href="/api/sources/google/connect"
+                style={{
+                  flexShrink: 0,
+                  padding: '8px 14px', borderRadius: 8,
+                  background: 'var(--color-accent)', color: '#fff',
+                  fontSize: 13, fontWeight: 600, textDecoration: 'none',
+                }}
+              >
+                Connect Google Calendar
+              </a>
+            ) : (
+              <a
+                href="/settings/sources"
+                style={{
+                  flexShrink: 0,
+                  padding: '8px 14px', borderRadius: 8,
+                  border: '1px solid var(--color-border)',
+                  background: 'var(--color-bg-primary)',
+                  color: 'var(--color-text-primary)',
+                  fontSize: 13, fontWeight: 600, textDecoration: 'none',
+                }}
+              >
+                Set up in Sources
+              </a>
+            )}
+          </div>
+        )}
+        {sourceState && sourceState.connected && (
+          <div
+            style={{
+              display: 'flex', alignItems: 'center', gap: 8,
+              padding: '8px 24px', flexShrink: 0,
+              borderBottom: '1px solid var(--color-border)',
+              fontSize: 12.5, color: 'var(--color-text-muted)',
+            }}
+          >
+            <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#4F7A52', flexShrink: 0 }} aria-hidden="true" />
+            <span>Google Calendar connected</span>
+            <span aria-hidden="true">·</span>
+            <a href="/settings/sources" style={{ color: 'var(--color-accent)', fontWeight: 600, textDecoration: 'none' }}>
+              Manage
+            </a>
+          </div>
+        )}
 
         {/* Grid */}
         <div style={{ flex: 1, overflow: 'auto' }}>
