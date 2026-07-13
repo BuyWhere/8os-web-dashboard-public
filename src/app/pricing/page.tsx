@@ -291,8 +291,8 @@ const tierNoteStyle: React.CSSProperties = { padding: '0.85rem 1rem', borderRadi
 const tierNoteTextStyle: React.CSSProperties = { margin: 0, fontSize: '0.82rem', lineHeight: 1.6, color: 'rgba(248,250,252,0.6)', fontStyle: 'italic' };
 
 const featureListStyle: React.CSSProperties = { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 };
-const featureItemStyle = (included: boolean): React.CSSProperties => ({ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.85rem', lineHeight: 1.5, color: included ? 'rgba(248,250,252,0.8)' : 'rgba(248,250,252,0.3)' });
-const featureCheckStyle = (included: boolean): React.CSSProperties => ({ flexShrink: 0, fontSize: '0.8rem', fontWeight: 700, color: included ? '#4ade80' : 'rgba(248,250,252,0.2)', marginTop: '0.1rem' });
+const featureItemStyle = (included: boolean): React.CSSProperties => ({ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.85rem', lineHeight: 1.5, color: included ? 'rgba(248,250,252,0.8)' : 'rgba(255,255,255,0.55)' });
+const featureCheckStyle = (included: boolean): React.CSSProperties => ({ flexShrink: 0, fontSize: '0.8rem', fontWeight: 700, color: included ? '#4ade80' : 'rgba(255,255,255,0.55)', marginTop: '0.1rem' });
 
 const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' };
 const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'rgba(248,250,252,0.35)', fontWeight: 600 };
