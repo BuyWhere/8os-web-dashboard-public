@@ -1,4 +1,5 @@
 import type { Metadata } from 'next'
+import { ClerkProvider } from '@clerk/nextjs'
 import { Suspense } from 'react'
 import { PostHogProvider } from '@/components/PostHogProvider'
 import { MetaPixel } from '@/components/MetaPixel'
@@ -17,8 +18,8 @@ export const metadata: Metadata = {
     canonical: '/',
     // Note: i18n routes (/en, /zh) removed from hreflang on 2026-06-15.
     // The 8os.ai launch is English-only. We do not advertise non-existent
-    // language alternates to Google. To re-enable when real translations
-    // ship, add the routes back and restore the languages map.
+    // language alternates to Google. To re-enable when real translations ship,
+    // add the routes back and restore the languages map.
   },
   openGraph: {
     type: 'website',
@@ -93,29 +94,36 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
-        />
-      </head>
-      <body suppressHydrationWarning>
-        {/* Meta Pixel — fires PageView on every route change. Bails out when
-            NEXT_PUBLIC_META_PIXEL_ID is unset (local dev, pre-pixel deploys).
-            See src/components/MetaPixel.tsx. */}
-        <MetaPixel />
-        <a href="#main-content" className="skip-link">
-          Skip to content
-        </a>
-        <Header />
-        <div id="main-content" tabIndex={-1}>
-          <PostHogProvider>
-            {children}
-          </PostHogProvider>
-        </div>
-        <Footer />
-      </body>
-    </html>
+    <ClerkProvider
+      signInUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL ?? '/login'}
+      signUpUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL ?? '/signup'}
+      signInFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL ?? '/dashboard'}
+      signUpFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL ?? '/onboarding'}
+    >
+      <html lang="en" suppressHydrationWarning>
+        <head>
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+          />
+        </head>
+        <body suppressHydrationWarning>
+          {/* Meta Pixel — fires PageView on every route change. Bails out when
+              NEXT_PUBLIC_META_PIXEL_ID is unset (local dev, pre-pixel deploys).
+              See src/components/MetaPixel.tsx. */}
+          <MetaPixel />
+          <a href="#main-content" className="skip-link">
+            Skip to content
+          </a>
+          <Header />
+          <div id="main-content" tabIndex={-1}>
+            <PostHogProvider>
+              {children}
+            </PostHogProvider>
+          </div>
+          <Footer />
+        </body>
+      </html>
+    </ClerkProvider>
   )
 }
