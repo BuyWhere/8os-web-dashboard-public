@@ -78,6 +78,10 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
   if (pathname === '/register') {
     return applyCSP(NextResponse.redirect(new URL('/signup', req.url), 307))
   }
+  // OS-2618: redirect legacy /signin to /login
+  if (pathname === '/signin') {
+    return applyCSP(NextResponse.redirect(new URL('/login', req.url), 307))
+  }
 
   try {
     const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || ''
