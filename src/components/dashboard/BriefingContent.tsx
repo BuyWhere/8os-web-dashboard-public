@@ -148,14 +148,14 @@ export function BriefingContent() {
     }
   }, [requestKey])
 
+  // Before the client fetch resolves, render a stable placeholder rather than
+  // `new Date()` — a fresh Date formatted without a fixed timeZone diverges
+  // between the SSR render (server zone) and hydration (browser zone), which
+  // is a classic React hydration mismatch (#418/#425). The real, server-
+  // computed `todayDate` string arrives with the payload and is deterministic.
   const todayDate = useMemo(() => {
     if (state.status === 'ready') return state.data.todayDate
-    return new Date().toLocaleDateString('en-US', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric',
-    })
+    return 'Today'
   }, [state])
 
   if (state.status === 'loading') {
@@ -216,11 +216,6 @@ export function BriefingContent() {
           <p style={{ color: '#221F1A', fontSize: 14, lineHeight: 1.7, margin: 0 }}>
             {data.insight.content}
           </p>
-          {data.insight.isFallback && (
-            <div style={{ color: '#8A8175', fontSize: 11, marginTop: 10 }}>
-              ⚡ AI insight unavailable today — using a curated fallback.
-            </div>
-          )}
         </SectionCard>
 
         <SectionCard>

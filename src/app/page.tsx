@@ -43,7 +43,7 @@ const INK = '#221F1A'
 const GRAY = '#6B6257'
 const CREAM = '#F7F3EC'
 const SURFACE = '#FFFFFF'
-const GOLD = '#B08637'
+const GOLD = '#8A6728' // OS-2712: darkened for WCAG AA (4.69:1 gold-on-cream, 5.18:1 white-on-gold)
 const HAIRLINE = '#E7DFD2'
 const OXBLOOD = '#7A3B2E'
 const MAXW = 1120
@@ -629,7 +629,7 @@ function SectionHead({
           fontWeight: 600,
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          color: '#B08637',
+          color: '#8A6728', // OS-2712: WCAG AA
           marginBottom: '0.9rem',
         }}
       >
@@ -695,7 +695,7 @@ function FooterCol({
 export function Mark({ size = 24 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true">
-      <circle cx="16" cy="10.5" r="6" stroke="#B08637" strokeWidth="2" />
+      <circle cx="16" cy="10.5" r="6" stroke="#8A6728" strokeWidth="2" />
       <circle cx="16" cy="21.5" r="6.5" stroke="#221F1A" strokeWidth="2" />
       <path d="M16 6.5 L16 14.5 M12.5 10.5 L19.5 10.5" stroke="#7A3B2E" strokeWidth="1.6" strokeLinecap="round" />
     </svg>

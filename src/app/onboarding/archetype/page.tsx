@@ -527,7 +527,7 @@ export default function ArchetypePage() {
         </button>
 
         <p style={{ textAlign: 'center', color: MUTED, fontSize: '0.78rem', marginTop: '0.75rem' }}>
-          Next: choose the areas of life your OS will focus on
+          Next: set your goals
         </p>
       </div>
     </div>

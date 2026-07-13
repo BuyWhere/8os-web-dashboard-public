@@ -115,7 +115,10 @@ export default function PreferencesPage() {
   const [firstDay, setFirstDay] = useState<0 | 1>(1)
   const [timezone, setTimezone] = useState<string>('')
   const [tzOptions, setTzOptions] = useState<string[]>([])
-  const [detected] = useState<string>(() => detectedTimezone())
+  // Detected on the CLIENT only. Initialising via useState during SSR would
+  // capture the server's zone (UTC) and hydration would keep that stale value;
+  // we set it in the load effect below so users see their real browser zone.
+  const [detected, setDetected] = useState<string>('')
   const [loading, setLoading] = useState(true)
   const [msg, setMsg] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -139,21 +142,26 @@ export default function PreferencesPage() {
   useEffect(() => {
     const zones = knownTimezones()
     setTzOptions(zones)
+    // Detect the real browser timezone now that we are on the client.
+    const det = detectedTimezone()
+    setDetected(det)
     ;(async () => {
       try {
         const res = await fetch('/api/user/preferences')
         if (!res.ok) throw new Error(`Load failed (${res.status})`)
         const data: PrefsResponse = await res.json()
         setFirstDay(data.firstDayOfWeek === 0 ? 0 : 1)
-        if (data.timezone) {
-          setTimezone(data.timezone)
+        // Treat a missing OR UTC-default stored value as "unset": a fresh user
+        // should see their real browser zone, not the UTC fallback.
+        const stored = data.timezone && data.timezone !== "UTC" ? data.timezone : null
+        if (stored) {
+          setTimezone(stored)
         } else {
-          // Auto-capture the detected timezone when none is stored yet, so
-          // "today" math + the greeting stop using server time. Only persists
-          // if a UserProfile row exists (hasProfile); otherwise just reflect it.
-          const det = detectedTimezone()
+          // Auto-capture the detected timezone, so "today" math + the greeting
+          // stop using server time. Only persists if a UserProfile row exists
+          // (hasProfile); otherwise just reflect it in the UI.
           setTimezone(det)
-          if (data.hasProfile) {
+          if (data.hasProfile && det && det !== "UTC") {
             void fetch('/api/user/preferences', {
               method: 'PATCH',
               headers: { 'Content-Type': 'application/json' },
@@ -226,8 +234,13 @@ export default function PreferencesPage() {
           <section style={card}>
             <h2 style={h2}>Timezone</h2>
             <p style={sub}>
-              Your timezone drives daily briefs, “today”, and greetings. We detected{' '}
-              <strong style={{ color: 'var(--color-text-primary)' }}>{detected}</strong>.
+              Your timezone drives daily briefs, “today”, and greetings.
+              {detected && (
+                <>
+                  {' '}We detected{' '}
+                  <strong style={{ color: 'var(--color-text-primary)' }}>{detected}</strong>.
+                </>
+              )}
             </p>
             <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
               {tzOptions.length > 0 ? (

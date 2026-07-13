@@ -194,13 +194,12 @@ export function InsightDisplayCard({
               Daily insight for {archetypeName}
             </h2>
             <p style={{ margin: '6px 0 0', color: 'var(--skin-color-text-secondary)', fontSize: 13 }}>
-              {new Date(date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+              {formatInsightDate(date)}
             </p>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, flexWrap: 'wrap' }}>
             <Badge label={priorityStyle.label} color={priorityStyle.color} background={priorityStyle.background} />
-            {isFallback && <Badge label="Template fallback" color="#fdba74" background="rgba(124, 45, 18, 0.42)" />}
             {cached && <Badge label="Cached" color="#93c5fd" background="rgba(30, 58, 138, 0.36)" />}
           </div>
         </div>
@@ -334,4 +333,26 @@ function FeedbackButton({
       {label}
     </button>
   )
+}
+
+/**
+ * Deterministic date label for the insight card.
+ *
+ * `date` is a plain calendar day string (YYYY-MM-DD). Passing it to
+ * `new Date(date)` parses it as UTC-midnight; formatting WITHOUT a fixed
+ * `timeZone` then uses the runtime's local zone — which is the server's zone
+ * during SSR and the browser's zone on hydration. When those differ the
+ * rendered weekday/day text diverges, producing React hydration errors
+ * (#418/#425 text-content mismatch) on the dashboard + briefing.
+ *
+ * Pinning `timeZone: 'UTC'` (matching how the string was parsed) makes the
+ * server and client emit byte-identical text, eliminating the mismatch.
+ */
+function formatInsightDate(date: string): string {
+  return new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  })
 }

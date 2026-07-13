@@ -310,7 +310,7 @@ const thPriceStyle: React.CSSProperties = { fontWeight: 400, fontSize: '0.75rem'
 const trEvenStyle: React.CSSProperties = { background: 'rgba(255,255,255,0.02)' };
 const tdStyle: React.CSSProperties = { padding: '0.75rem 1rem', color: 'rgba(248,250,252,0.7)', borderBottom: '1px solid rgba(255,255,255,0.05)' };
 const checkStyle: React.CSSProperties = { color: '#4ade80', fontWeight: 700, fontSize: '1rem' };
-const crossStyle: React.CSSProperties = { color: 'rgba(248,250,252,0.2)', fontSize: '0.9rem' };
+const crossStyle: React.CSSProperties = { color: 'rgba(248,250,252,0.55)', fontSize: '0.9rem' };
 const partialStyle: React.CSSProperties = { color: '#a78bfa', fontSize: '0.82rem', fontWeight: 600 };
 
 const faqStyle: React.CSSProperties = { padding: '2rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)', marginBottom: '3rem' };

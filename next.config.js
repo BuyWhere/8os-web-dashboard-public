@@ -24,6 +24,12 @@ const nextConfig = {
   async redirects() {
     return [
       { source: '/coming-soon', destination: '/signup', permanent: false },
+      // OS-2618: legacy Clerk auth paths → canonical routes. Belt-and-suspenders
+      // alongside the middleware redirect (next.config runs at the edge before
+      // Clerk, so /signin never 404s even if middleware matcher misses it).
+      { source: '/signin', destination: '/login', permanent: false },
+      { source: '/sign-in', destination: '/login', permanent: false },
+      { source: '/sign-up', destination: '/signup', permanent: false },
     ]
   },
 }

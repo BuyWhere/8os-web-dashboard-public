@@ -2,7 +2,7 @@
 
 import { useState, useEffect, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
-import { UserProfile as ClerkUserProfile } from '@clerk/nextjs'
+import { UserProfile as ClerkUserProfile, useUser } from '@clerk/nextjs'
 import { GoogleAuthButton } from '@/components/auth/GoogleAuthButton'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { SettingsTabs } from '@/components/SettingsTabs'
@@ -32,6 +32,7 @@ interface Session {
 
 export default function ProfileSettingsPage() {
   const router = useRouter()
+  const { user: clerkUser } = useUser()
   const [user, setUser] = useState<UserProfile | null>(null)
   const [sessions, setSessions] = useState<Session[]>([])
   const [loading, setLoading] = useState(true)
@@ -164,6 +165,23 @@ export default function ProfileSettingsPage() {
     setTimeout(() => router.push('/login'), 2000)
   }
 
+  // Prefer Clerk as the source of truth for email verification: the DB
+  // 'emailVerified' column can be stale/legacy for Clerk-verified signups.
+  // Match the profile email against the Clerk user's email addresses and read
+  // its verification.status; fall back to the DB flag when Clerk is unloaded.
+  const clerkEmailVerified = (() => {
+    const emails = clerkUser?.emailAddresses ?? []
+    if (emails.length === 0) return null
+    const match =
+      (user?.email
+        ? emails.find((e) => e.emailAddress?.toLowerCase() === user.email!.toLowerCase())
+        : undefined) ??
+      clerkUser?.primaryEmailAddress ??
+      emails[0]
+    return match?.verification?.status === 'verified'
+  })()
+  const emailVerified = clerkEmailVerified ?? user?.emailVerified ?? false
+
   return (
     <div style={styles.shell}>
       <Sidebar goals={[]} />
@@ -196,7 +214,7 @@ export default function ProfileSettingsPage() {
           <h2 style={styles.sectionTitle}>Account details</h2>
           <div style={styles.row}>
             <span style={styles.label}>Email</span>
-            <span style={styles.value}>{user.email ?? '—'} {user.emailVerified ? '✓' : '(unverified)'}</span>
+            <span style={styles.value}>{user.email ?? '—'} {emailVerified ? '✓' : '(unverified)'}</span>
           </div>
           <div style={styles.row}>
             <span style={styles.label}>Phone</span>

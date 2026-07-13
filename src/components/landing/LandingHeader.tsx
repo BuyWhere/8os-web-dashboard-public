@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 const INK = '#221F1A'
 const GRAY = '#6B6257'
-const GOLD = '#B08637'
+const GOLD = '#8A6728' // OS-2712: darkened for WCAG AA (white-on-gold 5.18:1; gold text 4.69:1 on cream)
 const OXBLOOD = '#7A3B2E'
 const HAIRLINE = '#E7DFD2'
 

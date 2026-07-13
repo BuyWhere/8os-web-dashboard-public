@@ -18,6 +18,7 @@
  */
 
 import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
 
 type EnergyLevel = 'green' | 'yellow' | 'red'
 type RecurrenceRule = 'none' | 'daily' | 'weekly' | 'biweekly' | 'monthly'
@@ -171,15 +172,76 @@ function baseId(id: string): string {
   return i === -1 ? id : id.slice(0, i)
 }
 
+/**
+ * Build a client CalendarEvent for an optimistic insert after a create/edit.
+ * Prefers the saved record returned by the API (authoritative id/fields) and
+ * falls back to the in-panel form values. Native, editable, non-external — the
+ * subsequent router.refresh() reconciles anything derived server-side (Google
+ * push-back id, recurrence expansion, resolved title/domain).
+ */
+function normalizeSaved(
+  data: Record<string, unknown> | null,
+  form: EditingEvent,
+): CalendarEvent {
+  const rec = data && typeof data === 'object' ? data : {}
+  const asStr = (v: unknown, fallback: string) => (typeof v === 'string' ? v : fallback)
+  const asIso = (v: unknown, fallback: string) => {
+    if (typeof v === 'string') { const d = new Date(v); if (!isNaN(d.getTime())) return d.toISOString() }
+    return fallback
+  }
+  return {
+    id: asStr(rec.id, form.id ?? `local-${Date.now()}`),
+    title: asStr(rec.title, form.title.trim() || 'New event'),
+    description: asStr(rec.description, form.description),
+    startAt: asIso(rec.startAt, form.startAt),
+    endAt: asIso(rec.endAt, form.endAt),
+    allDay: typeof rec.allDay === 'boolean' ? rec.allDay : form.allDay,
+    domainId: typeof rec.domainId === 'string' ? rec.domainId : null,
+    color: typeof rec.color === 'string' ? rec.color : form.color,
+    location: typeof rec.location === 'string' ? rec.location : (form.location || null),
+    goalId: typeof rec.goalId === 'string' ? rec.goalId : form.goalId,
+    recurrenceRule: (asStr(rec.recurrenceRule, form.recurrenceRule) as RecurrenceRule),
+    recurrenceUntil: typeof rec.recurrenceUntil === 'string' ? rec.recurrenceUntil : form.recurrenceUntil,
+    googleEventId: typeof rec.googleEventId === 'string' ? rec.googleEventId : null,
+    external: false,
+    readOnly: false,
+    task: null,
+  }
+}
+
 // ─── Root ────────────────────────────────────────────────────────────────────
 
-export function CalendarView({ events, goals, unscheduledTasks, energyMap }: Props) {
+export function CalendarView({ events: serverEvents, goals, unscheduledTasks, energyMap }: Props) {
+  const router = useRouter()
   const [view, setView] = useState<CalView>('week')
   const [currentDate, setCurrentDate] = useState(new Date())
   const [scheduling, setScheduling] = useState<string | null>(null)
+  const [schedulingAll, setSchedulingAll] = useState(false)
   const [schedulingResult, setSchedulingResult] = useState<string | null>(null)
   const [editing, setEditing] = useState<EditingEvent | null>(null)
   const firstDay = 1 // Monday-first (matches the app's default first-day-of-week)
+
+  // ── Bug fix (week-view stale-render): the calendar renders from a *client*
+  //    events state seeded from the server snapshot. Every view (day/week/month)
+  //    reads this same array, so an optimistic insert/update/delete after a
+  //    mutation re-renders ALL views immediately — no manual navigation/refresh.
+  //    We still call router.refresh() to reconcile with the server (recurrence
+  //    expansion, Google push-back, resolved title/domain), and when the fresh
+  //    server snapshot arrives we adopt it as the new baseline.
+  const [events, setEvents] = useState<CalendarEvent[]>(serverEvents)
+  useEffect(() => { setEvents(serverEvents) }, [serverEvents])
+
+  // Optimistically add/replace/remove an event in the shared state, then ask
+  // the server to reconcile. Keyed on base id so an edit replaces its instance.
+  const applyLocal = useCallback((next: CalendarEvent | null, removeId?: string) => {
+    setEvents((cur) => {
+      if (removeId) return cur.filter((e) => baseId(e.id) !== baseId(removeId))
+      if (!next) return cur
+      const withoutOld = cur.filter((e) => baseId(e.id) !== baseId(next.id))
+      return [...withoutOld, next]
+    })
+    router.refresh()
+  }, [router])
 
   // ── Google Calendar connection status (Bug fix: give the Calendar page a way
   //    to actually connect a calendar). We ask /api/sources whether the user has
@@ -237,10 +299,42 @@ export function CalendarView({ events, goals, unscheduledTasks, energyMap }: Pro
       const data = await res.json()
       if (res.ok) {
         setSchedulingResult(`Scheduled: ${new Date(data.slot.startAt).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })}`)
-        setTimeout(() => window.location.reload(), 1200)
+        // Soft-reconcile so the new event and the shrunken unscheduled list
+        // re-render across every view without a hard page reload.
+        setTimeout(() => router.refresh(), 800)
       } else setSchedulingResult(data.error ?? 'Could not find a slot')
     } catch { setSchedulingResult('Scheduling failed') }
     finally { setScheduling(null) }
+  }
+
+  // Bug fix: replace ~10 identical unlabeled "⚡ Auto-schedule" buttons with one
+  // primary "Auto-schedule all" action (plus a compact per-task button under
+  // each named task). Schedules each task sequentially; stops on the first that
+  // can't be placed and reports how many landed, then soft-reconciles once.
+  async function autoScheduleAll() {
+    if (schedulingAll) return
+    setSchedulingAll(true); setSchedulingResult(null)
+    let ok = 0
+    let firstError: string | null = null
+    for (const t of unscheduledTasks) {
+      setScheduling(t.id)
+      try {
+        const res = await fetch('/api/schedule', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ taskId: t.id }),
+        })
+        const data = await res.json().catch(() => ({}))
+        if (res.ok) ok++
+        else if (!firstError) firstError = data.error ?? 'Could not find a slot'
+      } catch { if (!firstError) firstError = 'Scheduling failed' }
+    }
+    setScheduling(null); setSchedulingAll(false)
+    setSchedulingResult(
+      ok > 0
+        ? `Scheduled ${ok} task${ok === 1 ? '' : 's'}${firstError ? ` · ${firstError}` : ''}`
+        : (firstError ?? 'Nothing scheduled'),
+    )
+    setTimeout(() => router.refresh(), 800)
   }
 
   // Open the detail panel to CREATE at a given start (snapped) for `mins`.
@@ -269,15 +363,21 @@ export function CalendarView({ events, goals, unscheduledTasks, energyMap }: Pro
   }
 
   // Persist a move/resize immediately (drag interactions). Recurring & external
-  // events aren't dragged (guarded at the drag layer).
+  // events aren't dragged (guarded at the drag layer). Optimistically move the
+  // event in the shared state so the grid re-renders at the new time at once.
   const patchTimes = useCallback(async (id: string, start: Date, end: Date) => {
+    setEvents((cur) => cur.map((e) => (
+      baseId(e.id) === baseId(id)
+        ? { ...e, startAt: start.toISOString(), endAt: end.toISOString() }
+        : e
+    )))
     try {
       await fetch(`/api/calendar/events/${baseId(id)}`, {
         method: 'PATCH', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ startAt: start.toISOString(), endAt: end.toISOString() }),
       })
-      window.location.reload()
-    } catch { console.error('move/resize failed') }
+      router.refresh()
+    } catch { console.error('move/resize failed'); router.refresh() }
   }, [])
 
   const headerTitle = view === 'month'
@@ -418,6 +518,22 @@ export function CalendarView({ events, goals, unscheduledTasks, energyMap }: Pro
           <div style={{ fontSize: 11, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12 }}>
             Unscheduled ({unscheduledTasks.length})
           </div>
+          {/* Single primary action instead of one shouting button per task. */}
+          {unscheduledTasks.length > 1 && (
+            <button
+              onClick={autoScheduleAll}
+              disabled={schedulingAll}
+              style={{
+                width: '100%', padding: '7px 0', borderRadius: 6, marginBottom: 10,
+                background: schedulingAll ? 'var(--color-bg-primary)' : 'var(--color-accent)',
+                border: 'none',
+                color: schedulingAll ? 'var(--color-text-muted)' : '#fff',
+                fontSize: 12, fontWeight: 600, cursor: schedulingAll ? 'default' : 'pointer', fontFamily: 'inherit',
+              }}
+            >
+              {schedulingAll ? 'Scheduling all…' : `⚡ Auto-schedule all (${unscheduledTasks.length})`}
+            </button>
+          )}
           {schedulingResult && (
             <div style={{ background: '#EEF3EC', border: '1px solid #4F7A5233', borderRadius: 6, padding: '6px 10px', fontSize: 11, color: '#4F7A52', marginBottom: 10 }}>
               {schedulingResult}
@@ -431,18 +547,22 @@ export function CalendarView({ events, goals, unscheduledTasks, energyMap }: Pro
                 <span style={{ fontSize: 10, color: t.priority === 'high' ? '#ef4444' : t.priority === 'medium' ? '#f59e0b' : '#22c55e' }}>{t.priority}</span>
                 {t.domainId && <span style={{ fontSize: 10, color: DOMAIN_COLORS[t.domainId] }}>{t.domainId}</span>}
               </div>
+              {/* Compact per-task action — sits under the task name, so it's
+                  clearly "schedule THIS task" rather than a wall of identical
+                  unlabeled buttons. */}
               <button
                 onClick={() => autoSchedule(t.id)}
-                disabled={scheduling === t.id}
+                disabled={scheduling === t.id || schedulingAll}
+                title={`Auto-schedule “${t.name}”`}
                 style={{
                   width: '100%', padding: '4px 0', borderRadius: 5,
-                  background: scheduling === t.id ? 'var(--color-bg-primary)' : '#B0863733',
+                  background: (scheduling === t.id || schedulingAll) ? 'var(--color-bg-primary)' : 'transparent',
                   border: '1px solid #B0863744',
-                  color: scheduling === t.id ? 'var(--color-text-muted)' : 'var(--color-accent)',
-                  fontSize: 11, cursor: scheduling === t.id ? 'default' : 'pointer', fontFamily: 'inherit',
+                  color: (scheduling === t.id || schedulingAll) ? 'var(--color-text-muted)' : 'var(--color-accent)',
+                  fontSize: 11, cursor: (scheduling === t.id || schedulingAll) ? 'default' : 'pointer', fontFamily: 'inherit',
                 }}
               >
-                {scheduling === t.id ? 'Scheduling…' : '⚡ Auto-schedule'}
+                {scheduling === t.id ? 'Scheduling…' : '⚡ Schedule'}
               </button>
             </div>
           ))}
@@ -456,6 +576,8 @@ export function CalendarView({ events, goals, unscheduledTasks, energyMap }: Pro
           goals={goals}
           goalById={goalById}
           onClose={() => setEditing(null)}
+          onSaved={(ev) => applyLocal(ev)}
+          onDeleted={(id) => applyLocal(null, id)}
         />
       )}
     </div>
@@ -489,11 +611,13 @@ interface EditingEvent {
   external?: boolean
 }
 
-function EventDetailPanel({ editing, goals, goalById, onClose }: {
+function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDeleted }: {
   editing: EditingEvent
   goals: GoalOption[]
   goalById: Map<string, GoalOption>
   onClose: () => void
+  onSaved: (ev: CalendarEvent) => void
+  onDeleted: (id: string) => void
 }) {
   const [form, setForm] = useState<EditingEvent>(editing)
   const [saving, setSaving] = useState(false)
@@ -530,7 +654,18 @@ function EventDetailPanel({ editing, goals, goalById, onClose }: {
         ? await fetch('/api/calendar/events', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
         : await fetch(`/api/calendar/events/${form.id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       if (!res.ok) { setErr('Could not save — try again.'); setSaving(false); return }
-      window.location.reload()
+      // Optimistically reflect the saved event in every view immediately (the
+      // week grid reads the same state), then reconcile with the server. Fall
+      // back to the form values if the response body isn't the event.
+      let saved: CalendarEvent
+      try {
+        const data = await res.json()
+        saved = normalizeSaved(data, form)
+      } catch {
+        saved = normalizeSaved(null, form)
+      }
+      onSaved(saved)
+      onClose()
     } catch { setErr('Could not save — try again.'); setSaving(false) }
   }
 
@@ -538,10 +673,12 @@ function EventDetailPanel({ editing, goals, goalById, onClose }: {
     if (!form.id) return
     if (!window.confirm('Delete this event?')) return
     setSaving(true)
+    const removedId = form.id
     try {
       const res = await fetch(`/api/calendar/events/${form.id}`, { method: 'DELETE' })
       if (!res.ok) { setErr('Delete failed — try again.'); setSaving(false); return }
-      window.location.reload()
+      onDeleted(removedId)
+      onClose()
     } catch { setErr('Delete failed — try again.'); setSaving(false) }
   }
 

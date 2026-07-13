@@ -3,6 +3,7 @@
  * Server component: fetches real data, renders responsive grid.
  */
 import { getServerAppUserId } from '@/lib/auth/server-user'
+import { currentUser } from '@clerk/nextjs/server'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { jwtVerify, importSPKI } from 'jose'
@@ -121,7 +122,16 @@ export default async function DashboardPage() {
 
 
   const greeting = getGreeting(userLocalHour(timezone, now))
-  const userName = user?.email?.split('@')[0] ?? 'there'
+  // First name for the greeting: prefer the Clerk profile firstName (the name
+  // captured at sign-up / onboarding), then any leading token of the Clerk
+  // full name, and finally the email local-part — so a real name shows, never
+  // a generic label. Clerk is the source of truth for names (2026-07-10).
+  const clerkUser = await currentUser().catch(() => null)
+  const userName = resolveFirstName(
+    clerkUser?.firstName,
+    clerkUser?.fullName,
+    user?.email ?? clerkUser?.emailAddresses?.[0]?.emailAddress ?? null,
+  )
   const archetypeName = archetype?.archetypeName ?? 'Explorer'
   const insightResult = await getDailyInsight(userId, userProfile?.birthTimezone ?? 'UTC')
   const insightFeedback = await prisma.dailyInsight.findUnique({
@@ -360,6 +370,28 @@ function WeeklyReminder({ serif, reminder }: { serif: string; reminder: { theme:
       </div>
     </div>
   )
+}
+
+/**
+ * Resolve a display first name for the greeting.
+ * Order: Clerk firstName → first token of Clerk fullName → email local-part.
+ * Falls back to 'there' only when nothing usable exists.
+ */
+function resolveFirstName(
+  firstName: string | null | undefined,
+  fullName: string | null | undefined,
+  email: string | null | undefined,
+): string {
+  const first = firstName?.trim()
+  if (first) return first
+
+  const fromFull = fullName?.trim().split(/\s+/)[0]
+  if (fromFull) return fromFull
+
+  const local = email?.split('@')[0]?.trim()
+  if (local) return local
+
+  return 'there'
 }
 
 function getGreeting(h: number): string {

@@ -66,7 +66,7 @@ export default function GoalsPage() {
           marginBottom: '1rem',
           color: INK,
         }}>
-          What areas of your life<br />are you focused on?
+          What areas of your life <br />are you focused on?
         </h1>
         <p style={{ color: WARM_GRAY, fontSize: '1rem', lineHeight: 1.6, maxWidth: 460, margin: '0 auto' }}>
           Pick 1–5 domains that matter most right now. Your OS builds goals, projects, and daily
