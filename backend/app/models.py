@@ -12,7 +12,7 @@ def _uuid_str() -> str:
 
 
 class User(Base):
-    __tablename__ = "users"
+    __tablename__ = "app8os_users"  # renamed 2026-07-13: this DB is SHARED with cal.com whose `users` (integer ids) blocked our create_all (referral_codes FK DatatypeMismatch -> startup crash)
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid_str)
     email: Mapped[str] = mapped_column(String(320), unique=True, index=True)
@@ -48,7 +48,7 @@ class ReferralCode(Base):
 
     id: Mapped[str] = mapped_column(String(36), primary_key=True, default=_uuid_str)
     code: Mapped[str] = mapped_column(String(32), unique=True, index=True)
-    user_id: Mapped[str] = mapped_column(String(36), ForeignKey("users.id", ondelete="CASCADE"))
+    user_id: Mapped[str] = mapped_column(String(36), ForeignKey("app8os_users.id", ondelete="CASCADE"))
     uses: Mapped[int] = mapped_column(Integer, default=0, nullable=False)
     created_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), nullable=False
