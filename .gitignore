@@ -58,3 +58,4 @@ venv/
 .turbo/
 *.sqlite
 tsconfig.tsbuildinfo
+node_modules
