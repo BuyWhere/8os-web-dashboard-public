@@ -94,7 +94,7 @@ export default async function FamousProfilePage({ params }: Props) {
   return (
     <div style={pageStyle}>
       <div style={innerStyle}>
-        <Link href="/famous" style={backLinkStyle}>← Back to Famous Archetypes</Link>
+        <Link href="/archetypes/famous" style={backLinkStyle}>← Back to Famous Archetypes</Link>
         
         <header style={headerStyle}>
           <div style={avatarStyle}>{profile.name.charAt(0)}</div>
