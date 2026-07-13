@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
 import { SidebarNav } from '@/components/SidebarNav';
+import { ContactForm } from '@/components/ContactForm';
 
 export const metadata: Metadata = {
   title: 'Contact — 8os',
@@ -9,7 +10,8 @@ export const metadata: Metadata = {
 
 const SECTIONS = [
   { id: 'contact-header', label: 'Contact' },
-  { id: 'contact-options', label: 'Contact Options' },
+  { id: 'contact-form', label: 'Send a Message' },
+  { id: 'contact-options', label: 'Email Options' },
 ];
 
 export default function ContactPage() {
@@ -38,7 +40,20 @@ export default function ContactPage() {
             </p>
           </section>
 
+          <section id="contact-form" style={{ marginBottom: '3rem' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem' }}>
+              Send a message
+            </h2>
+            <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1.25rem', lineHeight: 1.5 }}>
+              Drop your details below and we&apos;ll reply within 1–2 business days. Or email us directly using the addresses below.
+            </p>
+            <ContactForm />
+          </section>
+
           <section id="contact-options">
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.25rem' }}>
+              Or email us directly
+            </h2>
             <div style={{ display: 'grid', gap: '1.5rem' }}>
               {[
                 {
