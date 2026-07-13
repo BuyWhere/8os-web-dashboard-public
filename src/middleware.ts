@@ -82,6 +82,12 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
   if (pathname === '/signin') {
     return applyCSP(NextResponse.redirect(new URL('/login', req.url), 307))
   }
+  // OS-3550: legacy/dead /famous prefetch target should canonicalize to
+  // the actual famous archetypes index, including RSC probes like
+  // /famous?_rsc=... that QA checks directly.
+  if (pathname === '/famous') {
+    return applyCSP(NextResponse.redirect(new URL('/archetypes/famous', req.url), 307))
+  }
 
   try {
     const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || ''
