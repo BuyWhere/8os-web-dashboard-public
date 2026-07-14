@@ -531,7 +531,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
         </div>
       </div>
 
-      {/* Unscheduled tasks sidebar */}
+      {/* Unscheduled tasks sidebar — bottom padding accounts for the floating Coach pill (52px tall + 24px from bottom) */}
       {unscheduledTasks.length > 0 && (
         <div style={{ width: isMobile ? '100%' : 220, borderLeft: isMobile ? 'none' : '1px solid var(--color-border)', borderTop: isMobile ? '1px solid var(--color-border)' : 'none', background: 'var(--color-bg-primary)', padding: '16px 14px 84px', overflowY: 'auto', flexShrink: 0, maxHeight: isMobile ? '46vh' : undefined }}>
           <div style={{ fontSize: 11, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12 }}>
@@ -1030,11 +1030,11 @@ function EventBlock({ e, ghost, onClick, onDragStart, onResizeStart, dense, col 
       }}
       title={`${e.title}${e.location ? ' · ' + e.location : ''}`}
     >
-      <div style={{ fontSize: 11, fontWeight: 600, color, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+      <div style={{ fontSize: 11, fontWeight: 600, color: '#1a1a1a', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
         {e.recurrenceRule !== 'none' && '↻ '}{e.title}
       </div>
       {height > 34 && (
-        <div style={{ fontSize: 10, color: color + 'cc' }}>{fmtTime(new Date(e.startAt))} - {fmtTime(new Date(e.endAt))}</div>
+        <div style={{ fontSize: 10, color: '#4a4a4a' }}>{fmtTime(new Date(e.startAt))} - {fmtTime(new Date(e.endAt))}</div>
       )}
       {draggable && (
         <div onMouseDown={(ev) => onResizeStart(ev, e)} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 7, cursor: 'ns-resize' }} title="Drag to resize">
