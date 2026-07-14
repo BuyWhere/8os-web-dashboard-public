@@ -1,4 +1,4 @@
-import { SignIn } from "@clerk/nextjs"
+import { LoginClerkErrorBridge } from "@/components/auth/LoginClerkErrorBridge"
 
 // Clerk components read request context; render at request time (never prerender).
 export const dynamic = "force-dynamic"
@@ -31,8 +31,7 @@ export default function LoginPage() {
         background: BG,
       }}
     >
-      <SignIn
-        routing="hash"
+      <LoginClerkErrorBridge
         signUpUrl="/signup"
         forceRedirectUrl="/dashboard"
         appearance={{
