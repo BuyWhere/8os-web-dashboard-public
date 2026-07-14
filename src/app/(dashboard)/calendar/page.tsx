@@ -23,7 +23,7 @@ async function getUserId(): Promise<string> {
   return await getServerAppUserId('/calendar')
 }
 
-type RecurrenceRule = 'none' | 'daily' | 'weekly' | 'biweekly' | 'monthly'
+type RecurrenceRule = 'none' | 'daily' | 'weekly' | 'biweekly' | 'monthly' | `days:${string}`
 
 interface ExpandedEvent {
   id: string
@@ -61,13 +61,36 @@ function expandRecurrence(
   rangeStart: Date,
   rangeEnd: Date,
 ): Array<{ startAt: Date; endAt: Date; instanceKey: string }> {
-  const rule = (ev.recurrenceRule ?? 'none') as RecurrenceRule
+  const rule = ev.recurrenceRule ?? 'none'
   const durationMs = ev.endAt.getTime() - ev.startAt.getTime()
   if (rule === 'none') {
     return [{ startAt: ev.startAt, endAt: ev.endAt, instanceKey: ev.id }]
   }
   const hardEnd = ev.recurrenceUntil && ev.recurrenceUntil < rangeEnd ? ev.recurrenceUntil : rangeEnd
   const out: Array<{ startAt: Date; endAt: Date; instanceKey: string }> = []
+
+  // Custom weekdays ("days:0,3,5", 0=Sun..6=Sat): step day-by-day, emit on any
+  // selected weekday. Fast-forward to the visible range first so a far-past
+  // master doesn't burn the iteration cap.
+  if (rule.startsWith('days:')) {
+    const wanted = new Set(rule.slice(5).split(',').filter(Boolean).map(Number))
+    if (wanted.size === 0) return [{ startAt: ev.startAt, endAt: ev.endAt, instanceKey: ev.id }]
+    const cursor = new Date(ev.startAt)
+    if (cursor < rangeStart) {
+      const behind = Math.floor((rangeStart.getTime() - cursor.getTime()) / 86400000) - 1
+      if (behind > 0) cursor.setDate(cursor.getDate() + behind)
+    }
+    for (let i = 0; i < 220; i++) {
+      if (cursor > hardEnd) break
+      if (wanted.has(cursor.getDay())) {
+        const end = new Date(cursor.getTime() + durationMs)
+        if (end >= rangeStart) out.push({ startAt: new Date(cursor), endAt: end, instanceKey: `${ev.id}:${cursor.toISOString().slice(0, 10)}` })
+      }
+      cursor.setDate(cursor.getDate() + 1)
+    }
+    return out
+  }
+
   const cursor = new Date(ev.startAt)
   const MAX = 400 // safety cap
   for (let i = 0; i < MAX; i++) {

@@ -16,7 +16,9 @@ import { updateGoogleEvent, deleteGoogleEvent } from '@/lib/external/google-cale
 import { updateMicrosoftEvent, deleteMicrosoftEvent, MICROSOFT_CALENDAR_PROVIDER } from '@/lib/external/microsoft-calendar'
 import { z } from 'zod'
 
+// Fixed cadences, or custom weekdays "days:0,3,5" (0=Sun..6=Sat).
 const RECURRENCE = z.enum(['none', 'daily', 'weekly', 'biweekly', 'monthly'])
+  .or(z.string().regex(/^days:[0-6](,[0-6]){0,6}$/))
 
 const UpdateEventSchema = z.object({
   startAt: z.string().datetime().optional(),
