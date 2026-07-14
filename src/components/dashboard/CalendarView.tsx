@@ -733,18 +733,71 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
               <label htmlFor="allday" style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>All day</label>
             </div>
 
-            <div style={{ display: 'flex', gap: 10 }}>
-              <Field label="Starts" style={{ flex: 1 }}>
-                <input type={form.allDay ? 'date' : 'datetime-local'}
-                  value={form.allDay ? toLocalInput(form.startAt).slice(0, 10) : toLocalInput(form.startAt)}
-                  onChange={(e) => set('startAt', (form.allDay ? new Date(e.target.value + 'T00:00') : fromLocalInput(e.target.value)).toISOString())}
-                  style={inputStyle} />
+            {/* Split date/time pickers — accessible, consistent across browsers. */}
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+              {/* Starts */}
+              <Field label="Starts">
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <input
+                    type="date"
+                    value={toLocalInput(form.startAt).slice(0, 10)}
+                    onChange={(e) => {
+                      const [y, m, d] = e.target.value.split('-').map(Number)
+                      const cur = new Date(toLocalInput(form.startAt))
+                      const ny = new Date(y, m - 1, d, cur.getHours(), cur.getMinutes())
+                      set('startAt', ny.toISOString())
+                    }}
+                    style={inputStyle}
+                    aria-label="Start date"
+                  />
+                  {!form.allDay && (
+                    <input
+                      type="time"
+                      value={toLocalInput(form.startAt).slice(11, 16)}
+                      onChange={(e) => {
+                        const [hh, mm] = e.target.value.split(':').map(Number)
+                        const cur = new Date(form.startAt)
+                        const ny = new Date(cur)
+                        ny.setHours(hh, mm, 0, 0)
+                        set('startAt', ny.toISOString())
+                      }}
+                      style={{ ...inputStyle, width: 90, flexShrink: 0 }}
+                      aria-label="Start time"
+                    />
+                  )}
+                </div>
               </Field>
-              <Field label="Ends" style={{ flex: 1 }}>
-                <input type={form.allDay ? 'date' : 'datetime-local'}
-                  value={form.allDay ? toLocalInput(form.endAt).slice(0, 10) : toLocalInput(form.endAt)}
-                  onChange={(e) => set('endAt', (form.allDay ? new Date(e.target.value + 'T23:59') : fromLocalInput(e.target.value)).toISOString())}
-                  style={inputStyle} />
+              {/* Ends */}
+              <Field label="Ends">
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <input
+                    type="date"
+                    value={toLocalInput(form.endAt).slice(0, 10)}
+                    onChange={(e) => {
+                      const [y, m, d] = e.target.value.split('-').map(Number)
+                      const cur = new Date(toLocalInput(form.endAt))
+                      const ny = new Date(y, m - 1, d, cur.getHours(), cur.getMinutes())
+                      set('endAt', ny.toISOString())
+                    }}
+                    style={inputStyle}
+                    aria-label="End date"
+                  />
+                  {!form.allDay && (
+                    <input
+                      type="time"
+                      value={toLocalInput(form.endAt).slice(11, 16)}
+                      onChange={(e) => {
+                        const [hh, mm] = e.target.value.split(':').map(Number)
+                        const cur = new Date(form.endAt)
+                        const ny = new Date(cur)
+                        ny.setHours(hh, mm, 0, 0)
+                        set('endAt', ny.toISOString())
+                      }}
+                      style={{ ...inputStyle, width: 90, flexShrink: 0 }}
+                      aria-label="End time"
+                    />
+                  )}
+                </div>
               </Field>
             </div>
 
