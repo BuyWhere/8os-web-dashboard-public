@@ -50,6 +50,15 @@ const card: React.CSSProperties = {
   borderRadius: 12, padding: 20, marginBottom: 16,
 }
 
+// OS-3707 — WCAG-compliant muted text on this page. Defaults (--color-text-muted
+// #8A8175 on white = 3.13:1; --color-text-secondary #6B6257 on cream = 5.13:1) are
+// OK on cream but fail on white cards. VidMee flagged them on /settings/sources.
+// We override locally to darken; --color-text-secondary on cards stays within AA
+// (5.56:1) but we standardize to the QA-recommended 7.46:1 / 9.43:1 pair.
+const textSecondaryOnWhite = '#595959'  // 7.46:1 on #FFFFFF — AAA
+const textSecondaryOnCream = '#4a4a4a'  // 9.43:1 on #F7F3EC — AAA
+// All Sources-page muted/secondary text uses these darker colors per QA direction.
+
 const PROVIDER_LABEL: Record<string, string> = { google_calendar: 'Google Calendar', microsoft_calendar: 'Outlook Calendar' }
 
 function statusBadge(status: string) {
@@ -154,9 +163,9 @@ export default function SourcesSettingsPage() {
 
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
         <div style={{ marginBottom: 24, maxWidth: 640 }}>
-          <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+          <Link href="/dashboard" style={{ color: textSecondaryOnCream, fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>Sources</h1>
-          <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 14 }}>
+          <p style={{ margin: '4px 0 0', color: textSecondaryOnCream, fontSize: 14 }}>
             Let real life flow into 8os, no manual entry
           </p>
         </div>
@@ -167,7 +176,7 @@ export default function SourcesSettingsPage() {
           </div>
         )}
         {notice && (
-          <div style={{ maxWidth: 640, background: '#F4EFE2', border: '1px solid #E0D3B4', borderRadius: 8, color: 'var(--color-text-secondary)', padding: '10px 14px', fontSize: 13, marginBottom: 16 }}>
+          <div style={{ maxWidth: 640, background: '#F4EFE2', border: '1px solid #E0D3B4', borderRadius: 8, color: textSecondaryOnCream, padding: '10px 14px', fontSize: 13, marginBottom: 16 }}>
             {notice}
           </div>
         )}
@@ -175,7 +184,7 @@ export default function SourcesSettingsPage() {
         {/* Consent copy, exactly what is read, where processed, retention (E-14) */}
         <div style={card}>
           <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 8 }}>What 8os reads, and what it never touches</div>
-          <ul style={{ margin: 0, paddingLeft: 18, color: 'var(--color-text-secondary)', fontSize: 13, lineHeight: 1.7 }}>
+          <ul style={{ margin: 0, paddingLeft: 18, color: textSecondaryOnWhite, fontSize: 13, lineHeight: 1.7 }}>
             <li><b style={{ color: 'var(--color-text-primary)' }}>Read:</b> event titles, start/end times, and attendee names/emails from your primary calendar. Nothing else, no event descriptions or attachments, no emails, no documents.</li>
             <li><b style={{ color: 'var(--color-text-primary)' }}>Access is read-only.</b> 8os never creates, edits or deletes events in your Google Calendar.</li>
             <li><b style={{ color: 'var(--color-text-primary)' }}>Processed by:</b> Flow AI on 8os&apos;s own account, solely to attribute your attention to your goals. Your calendar data is never used to train models and never sold or shared.</li>
@@ -189,14 +198,14 @@ export default function SourcesSettingsPage() {
             <span style={{ fontSize: 18 }}>▦</span>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, fontWeight: 700 }}>Google Calendar</div>
-              <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginTop: 2 }}>
+              <div style={{ color: textSecondaryOnWhite, fontSize: 13, marginTop: 2 }}>
                 Two-way sync: your meetings become alignment signal and busy time, and events you create in 8os appear in your Google Calendar.
               </div>
             </div>
             {loading ? (
-              <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>…</span>
+              <span style={{ color: textSecondaryOnWhite, fontSize: 12 }}>…</span>
             ) : !data?.googleConfigured && !hasActiveGoogle ? (
-              <span style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)', borderRadius: 8, fontSize: 11, fontWeight: 700, padding: '4px 10px' }}>
+              <span style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', color: textSecondaryOnCream, borderRadius: 8, fontSize: 11, fontWeight: 700, padding: '4px 10px' }}>
                 NOT CONFIGURED YET
               </span>
             ) : null}
@@ -213,7 +222,7 @@ export default function SourcesSettingsPage() {
                     Connect Google Calendar
                   </a>
                 ) : (
-                  <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>
+                  <div style={{ color: textSecondaryOnWhite, fontSize: 13 }}>
                     Google Calendar isn&apos;t configured on this deployment yet, the connect button appears here the moment it is.
                   </div>
                 )
@@ -223,7 +232,7 @@ export default function SourcesSettingsPage() {
                 <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 10, borderTop: '1px solid var(--color-border)', paddingTop: 12, marginTop: 12 }}>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 13, fontWeight: 600 }}>{PROVIDER_LABEL[s.provider] ?? s.provider}</div>
-                    <div style={{ color: 'var(--color-text-secondary)', fontSize: 12, marginTop: 2 }}>
+                    <div style={{ color: textSecondaryOnWhite, fontSize: 12, marginTop: 2 }}>
                       {s.eventCount} event{s.eventCount === 1 ? '' : 's'} synced
                       {s.lastSyncedAt ? ` · last sync ${new Date(s.lastSyncedAt).toLocaleString()}` : ' · not synced yet'}
                     </div>
@@ -258,7 +267,7 @@ export default function SourcesSettingsPage() {
                   >
                     {busy === 'sync' ? 'Syncing…' : 'Sync now'}
                   </button>
-                  <span style={{ color: 'var(--color-text-muted)', fontSize: 12, marginLeft: 10 }}>Automatic background sync lands with the agent heartbeat.</span>
+                  <span style={{ color: textSecondaryOnWhite, fontSize: 12, marginLeft: 10 }}>Automatic background sync lands with the agent heartbeat.</span>
                 </div>
               )}
             </div>
@@ -271,14 +280,14 @@ export default function SourcesSettingsPage() {
             <span style={{ fontSize: 18 }}>◱</span>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, fontWeight: 700 }}>Outlook Calendar</div>
-              <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginTop: 2 }}>
+              <div style={{ color: textSecondaryOnWhite, fontSize: 13, marginTop: 2 }}>
                 Two-way sync with Microsoft 365 / Outlook.com, the same read + write connector as Google.
               </div>
             </div>
             {loading ? (
-              <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>…</span>
+              <span style={{ color: textSecondaryOnWhite, fontSize: 12 }}>…</span>
             ) : !data?.microsoftConfigured && !hasActiveMicrosoft ? (
-              <span style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)', borderRadius: 8, fontSize: 11, fontWeight: 700, padding: '4px 10px' }}>
+              <span style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', color: textSecondaryOnCream, borderRadius: 8, fontSize: 11, fontWeight: 700, padding: '4px 10px' }}>
                 NOT CONFIGURED YET
               </span>
             ) : null}
@@ -291,7 +300,7 @@ export default function SourcesSettingsPage() {
                     Connect Outlook
                   </a>
                 ) : (
-                  <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>
+                  <div style={{ color: textSecondaryOnWhite, fontSize: 13 }}>
                     Outlook isn&apos;t configured on this deployment yet, the connect button appears here the moment the Microsoft app credentials are set.
                   </div>
                 )
@@ -300,7 +309,7 @@ export default function SourcesSettingsPage() {
                 <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 10, borderTop: '1px solid var(--color-border)', paddingTop: 12, marginTop: 12 }}>
                   <div style={{ flex: 1 }}>
                     <div style={{ fontSize: 13, fontWeight: 600 }}>{PROVIDER_LABEL[s.provider] ?? s.provider}</div>
-                    <div style={{ color: 'var(--color-text-secondary)', fontSize: 12, marginTop: 2 }}>
+                    <div style={{ color: textSecondaryOnWhite, fontSize: 12, marginTop: 2 }}>
                       {s.eventCount} event{s.eventCount === 1 ? '' : 's'} synced
                       {s.lastSyncedAt ? ` · last sync ${new Date(s.lastSyncedAt).toLocaleString()}` : ' · not synced yet'}
                     </div>
@@ -324,16 +333,16 @@ export default function SourcesSettingsPage() {
               <span style={{ fontSize: 18 }}>{p.icon}</span>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 15, fontWeight: 700 }}>{p.label}</div>
-                <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginTop: 2 }}>{p.blurb}</div>
+                <div style={{ color: textSecondaryOnWhite, fontSize: 13, marginTop: 2 }}>{p.blurb}</div>
               </div>
-              <span style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', color: 'var(--color-text-muted)', borderRadius: 8, fontSize: 11, fontWeight: 700, padding: '4px 10px' }}>
+              <span style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', color: textSecondaryOnCream, borderRadius: 8, fontSize: 11, fontWeight: 700, padding: '4px 10px' }}>
                 COMING SOON
               </span>
             </div>
           </div>
         ))}
 
-        <div style={{ maxWidth: 640, color: 'var(--color-text-muted)', fontSize: 12, lineHeight: 1.6 }}>
+        <div style={{ maxWidth: 640, color: textSecondaryOnCream, fontSize: 12, lineHeight: 1.6 }}>
           External events count as busy time for auto-scheduling and feed your alignment verdicts. Google Calendar is two-way; other providers are read-only until their connectors ship.
         </div>
       </main>
