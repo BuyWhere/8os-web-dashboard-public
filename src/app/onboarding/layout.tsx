@@ -10,9 +10,27 @@
  * step pageviews are tracked from the moment a user completes signup.
  * The _initialized guard in PostHogProvider prevents double-init if both
  * layouts mount in the same session.
+ *
+ * Also redirects already-onboarded users to dashboard.
  */
+import { redirect } from 'next/navigation'
 import { PostHogProvider } from '@/components/PostHogProvider'
+import { currentUser } from '@clerk/nextjs/server'
+import { prisma } from '@/lib/db/prisma'
 import { Inter } from 'next/font/google'
+
+async function checkOnboardingStatus() {
+  const clerkUser = await currentUser()
+  if (clerkUser) {
+    const dbUser = await prisma.user.findUnique({
+      where: { id: clerkUser.id },
+      select: { onboardingDone: true },
+    })
+    if (dbUser?.onboardingDone) {
+      redirect('/dashboard')
+    }
+  }
+}
 
 const fraunces = Inter({
   subsets: ['latin'],
@@ -28,7 +46,9 @@ const inter = Inter({
   display: 'swap',
 })
 
-export default function OnboardingLayout({ children }: { children: React.ReactNode }) {
+export default async function OnboardingLayout({ children }: { children: React.ReactNode }) {
+  await checkOnboardingStatus()
+
   return (
     <PostHogProvider>
       <div
