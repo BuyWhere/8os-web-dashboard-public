@@ -25,11 +25,11 @@ interface StarvingGoal {
 }
 
 const card: React.CSSProperties = {
-  background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 16, padding: 20, marginBottom: 16,
+  background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 16, padding: 20, marginBottom: 16,
 }
 const btn: React.CSSProperties = {
-  border: '1px solid #E7DFD2', borderRadius: 10, padding: '7px 12px', fontSize: 13,
-  fontWeight: 600, cursor: 'pointer', background: '#F7F3EC', color: '#221F1A',
+  border: '1px solid var(--color-border)', borderRadius: 10, padding: '7px 12px', fontSize: 13,
+  fontWeight: 600, cursor: 'pointer', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)',
 }
 
 export function GoalHygieneCard() {
@@ -69,16 +69,16 @@ export function GoalHygieneCard() {
 
   return (
     <div style={card}>
-      <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 4, color: '#221F1A' }}>Goal hygiene</h2>
-      <p style={{ color: '#6B6257', fontSize: 13, marginBottom: 14 }}>
+      <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 4, color: 'var(--color-text-primary)' }}>Goal hygiene</h2>
+      <p style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginBottom: 14 }}>
         These top-priority goals have gone hungry. Choosing to retire one is a win of focus, not a failure.
       </p>
       {goals.map((g) => (
-        <div key={g.goalId} style={{ borderTop: '1px solid #E7DFD2', paddingTop: 12, marginTop: 12 }}>
-          <div style={{ fontSize: 14, fontWeight: 600, color: '#221F1A' }}>
-            {g.name} <span style={{ color: '#8A8175', fontWeight: 400 }}>· #{g.rank} priority</span>
+        <div key={g.goalId} style={{ borderTop: '1px solid var(--color-border)', paddingTop: 12, marginTop: 12 }}>
+          <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--color-text-primary)' }}>
+            {g.name} <span style={{ color: 'var(--color-text-muted)', fontWeight: 400 }}>· #{g.rank} priority</span>
           </div>
-          <div style={{ color: '#6B6257', fontSize: 12, margin: '4px 0 10px' }}>
+          <div style={{ color: 'var(--color-text-secondary)', fontSize: 12, margin: '4px 0 10px' }}>
             Under {Math.round(g.avgShare * 100)}% attention for {g.windowDays} straight days.
           </div>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
@@ -88,12 +88,12 @@ export function GoalHygieneCard() {
             <button style={btn} disabled={!!busy} onClick={() => act(g.goalId, 'shrink')}>
               {busy === `${g.goalId}:shrink` ? '…' : 'Shrink'}
             </button>
-            <button style={{ ...btn, borderColor: '#D8B7A6', color: '#7A3B2E' }} disabled={!!busy} onClick={() => act(g.goalId, 'retire')}>
+            <button style={{ ...btn, borderColor: '#D8B7A6', color: 'var(--color-accent-2)' }} disabled={!!busy} onClick={() => act(g.goalId, 'retire')}>
               {busy === `${g.goalId}:retire` ? '…' : 'Retire (a win of focus)'}
             </button>
           </div>
           {note[g.goalId] && (
-            <div style={{ marginTop: 10, background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 8, padding: 10, fontSize: 13, color: '#221F1A' }}>
+            <div style={{ marginTop: 10, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 8, padding: 10, fontSize: 13, color: 'var(--color-text-primary)' }}>
               Suggested smaller version: {note[g.goalId]}
             </div>
           )}

@@ -56,7 +56,7 @@ export function EnergyTimeline({ hourMap, currentHour, tasks = [] }: Props) {
                     width: 5,
                     height: 5,
                     borderRadius: '50%',
-                    background: '#fff',
+                    background: 'var(--color-bg-card)',
                   }}
                 />
               ) : null}

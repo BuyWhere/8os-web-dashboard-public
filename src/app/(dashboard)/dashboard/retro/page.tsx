@@ -76,7 +76,7 @@ function Callout({ color, title, children }: { color: string; title: string; chi
   return (
     <div style={{ padding: '14px 16px', borderRadius: 10, background: `${color}10`, border: `1px solid ${color}44` }}>
       <div style={{ fontSize: 11, letterSpacing: '1.5px', textTransform: 'uppercase', color, marginBottom: 6 }}>{title}</div>
-      <div style={{ fontSize: 13, color: '#221F1A', lineHeight: 1.55 }}>{children}</div>
+      <div style={{ fontSize: 13, color: 'var(--color-text-primary)', lineHeight: 1.55 }}>{children}</div>
     </div>
   )
 }
@@ -167,7 +167,7 @@ export default function RetroPage() {
   }
 
   const shell = (content: React.ReactNode) => (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <Sidebar goals={sidebarGoals} />
       <main style={{ flex: 1, padding: '24px 32px', maxWidth: 860 }}>{content}</main>
       <QuickAdd />
@@ -177,8 +177,8 @@ export default function RetroPage() {
   if (state === 'loading') {
     return shell(
       <div style={{ paddingTop: 80, textAlign: 'center' }}>
-        <h1 style={{ fontSize: 22, color: '#221F1A', marginBottom: 10, fontFamily: 'var(--font-serif), Georgia, serif' }}>Your last 30 days</h1>
-        <div style={{ color: '#6B6257', fontSize: 13, lineHeight: 1.6 }}>
+        <h1 style={{ fontSize: 22, color: 'var(--color-text-primary)', marginBottom: 10, fontFamily: 'var(--font-serif), Georgia, serif' }}>Your last 30 days</h1>
+        <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, lineHeight: 1.6 }}>
           Reading your attention ledger… the first run classifies your last 30 days of
           calendar, tasks and notes, so it can take a little while. Worth it.
         </div>
@@ -189,10 +189,10 @@ export default function RetroPage() {
   if (state === 'error' || !verdict) {
     return shell(
       <div style={{ paddingTop: 80 }}>
-        <h1 style={{ fontSize: 22, color: '#221F1A', marginBottom: 10, fontFamily: 'var(--font-serif), Georgia, serif' }}>Your last 30 days</h1>
-        <div style={{ color: '#6B6257', fontSize: 13, lineHeight: 1.6 }}>
+        <h1 style={{ fontSize: 22, color: 'var(--color-text-primary)', marginBottom: 10, fontFamily: 'var(--font-serif), Georgia, serif' }}>Your last 30 days</h1>
+        <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, lineHeight: 1.6 }}>
           The retro view is unavailable right now — refresh to try again. The rest of your
-          dashboard is unaffected. <Link href="/dashboard" style={{ color: '#B08637' }}>Back to dashboard</Link>
+          dashboard is unaffected. <Link href="/dashboard" style={{ color: 'var(--color-accent)' }}>Back to dashboard</Link>
         </div>
       </div>,
     )
@@ -204,25 +204,25 @@ export default function RetroPage() {
   return shell(
     <div data-testid="retro-page">
       <div style={{ marginBottom: 18 }}>
-        <h1 style={{ fontSize: 24, color: '#221F1A', margin: '0 0 6px', letterSpacing: '-0.02em', fontFamily: 'var(--font-serif), Georgia, serif' }}>Your last 30 days</h1>
-        <p data-testid="retro-headline" style={{ margin: 0, fontSize: 14, color: '#6B6257', lineHeight: 1.6 }}>{verdict.headline}</p>
+        <h1 style={{ fontSize: 24, color: 'var(--color-text-primary)', margin: '0 0 6px', letterSpacing: '-0.02em', fontFamily: 'var(--font-serif), Georgia, serif' }}>Your last 30 days</h1>
+        <p data-testid="retro-headline" style={{ margin: 0, fontSize: 14, color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>{verdict.headline}</p>
       </div>
 
       {!verdict.hasData && (
-        <div style={{ padding: '16px 18px', borderRadius: 12, background: '#FFFFFF', border: '1px solid #E7DFD2', color: '#6B6257', fontSize: 13, lineHeight: 1.6 }}>
+        <div style={{ padding: '16px 18px', borderRadius: 12, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)', fontSize: 13, lineHeight: 1.6 }}>
           There is nothing to look back on yet — connect a calendar, finish a task or journal a
           line and this page turns into your attention verdict.{' '}
-          <Link href="/settings/sources" style={{ color: '#B08637' }}>Connect a source →</Link>
+          <Link href="/settings/sources" style={{ color: 'var(--color-accent)' }}>Connect a source →</Link>
         </div>
       )}
 
       {verdict.hasData && (
         <>
           {/* Share-vs-priority bars (AlignmentPanel visual grammar) */}
-          <div style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 20, marginBottom: 16 }}>
+          <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20, marginBottom: 16 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 12 }}>
-              <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: '#221F1A', fontFamily: 'var(--font-serif), Georgia, serif' }}>Where your attention went</h2>
-              <span style={{ fontSize: 11, color: '#6B6257' }}>share vs stated priority · {fmtMinutes(verdict.totals.trackedMinutes)} tracked</span>
+              <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: 'var(--color-text-primary)', fontFamily: 'var(--font-serif), Georgia, serif' }}>Where your attention went</h2>
+              <span style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>share vs stated priority · {fmtMinutes(verdict.totals.trackedMinutes)} tracked</span>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {goals.map((g) => {
@@ -230,16 +230,16 @@ export default function RetroPage() {
                 return (
                   <div key={g.goalId} data-testid="retro-goal-row">
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, minWidth: 0 }}>
-                      <span style={{ fontSize: 11, color: '#8A8175', width: 22, flexShrink: 0 }}>#{g.rank}</span>
+                      <span style={{ fontSize: 11, color: 'var(--color-text-muted)', width: 22, flexShrink: 0 }}>#{g.rank}</span>
                       <span style={{ color: m.color, fontSize: 13, fontWeight: 700, width: 14, flexShrink: 0 }}>{m.arrow}</span>
-                      <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: '#221F1A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                      <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: 'var(--color-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                         {DOMAIN_ICONS[g.domain] ?? ''} {g.name}
                       </span>
-                      <span style={{ flexShrink: 0, fontSize: 11, color: '#6B6257', fontVariantNumeric: 'tabular-nums' }}>
-                        {g.sharePct}% <span style={{ color: '#8A8175' }}>/ {g.expectedSharePct}% expected</span>
+                      <span style={{ flexShrink: 0, fontSize: 11, color: 'var(--color-text-secondary)', fontVariantNumeric: 'tabular-nums' }}>
+                        {g.sharePct}% <span style={{ color: 'var(--color-text-muted)' }}>/ {g.expectedSharePct}% expected</span>
                       </span>
                     </div>
-                    <div style={{ position: 'relative', height: 7, borderRadius: 4, background: '#F7F3EC', overflow: 'hidden' }}>
+                    <div style={{ position: 'relative', height: 7, borderRadius: 4, background: 'var(--color-bg-primary)', overflow: 'hidden' }}>
                       <div style={{ width: `${Math.min(100, (g.sharePct / maxPct) * 100)}%`, height: '100%', borderRadius: 4, background: m.color, opacity: 0.85 }} />
                       <div style={{ position: 'absolute', top: 0, bottom: 0, left: `${Math.min(99, (g.expectedSharePct / maxPct) * 100)}%`, width: 2, background: '#221F1A', opacity: 0.7 }} />
                     </div>
@@ -249,13 +249,13 @@ export default function RetroPage() {
               {/* Unaligned bucket */}
               <div data-testid="retro-unaligned">
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-                  <span style={{ fontSize: 11, color: '#8A8175', width: 22, flexShrink: 0 }}>·</span>
+                  <span style={{ fontSize: 11, color: 'var(--color-text-muted)', width: 22, flexShrink: 0 }}>·</span>
                   <span style={{ width: 14, flexShrink: 0 }} />
-                  <span style={{ flex: 1, fontSize: 12, color: '#6B6257' }}>Unaligned (not pointed at any goal)</span>
-                  <span style={{ fontSize: 11, color: '#6B6257', fontVariantNumeric: 'tabular-nums' }}>{verdict.unalignedSharePct}%</span>
+                  <span style={{ flex: 1, fontSize: 12, color: 'var(--color-text-secondary)' }}>Unaligned (not pointed at any goal)</span>
+                  <span style={{ fontSize: 11, color: 'var(--color-text-secondary)', fontVariantNumeric: 'tabular-nums' }}>{verdict.unalignedSharePct}%</span>
                 </div>
-                <div style={{ height: 7, borderRadius: 4, background: '#F7F3EC', overflow: 'hidden' }}>
-                  <div style={{ width: `${Math.min(100, (verdict.unalignedSharePct / maxPct) * 100)}%`, height: '100%', borderRadius: 4, background: '#8A8175', opacity: 0.7 }} />
+                <div style={{ height: 7, borderRadius: 4, background: 'var(--color-bg-primary)', overflow: 'hidden' }}>
+                  <div style={{ width: `${Math.min(100, (verdict.unalignedSharePct / maxPct) * 100)}%`, height: '100%', borderRadius: 4, background: 'var(--color-text-muted)', opacity: 0.7 }} />
                 </div>
               </div>
             </div>
@@ -273,7 +273,7 @@ export default function RetroPage() {
             )}
             {verdict.topUnalignedSink && (
               <div data-testid="retro-sink">
-                <Callout color="#8A8175" title="Top unaligned sink">
+                <Callout color="var(--color-text-muted)" title="Top unaligned sink">
                   <strong>“{verdict.topUnalignedSink.title}”</strong> absorbed{' '}
                   {fmtMinutes(verdict.topUnalignedSink.minutes)} across {verdict.topUnalignedSink.occurrences}{' '}
                   {verdict.topUnalignedSink.occurrences === 1 ? 'block' : 'blocks'} —{' '}
@@ -283,7 +283,7 @@ export default function RetroPage() {
             )}
             {verdict.redirection && (
               <div data-testid="retro-redirection">
-                <Callout color="#B08637" title="One redirection">
+                <Callout color="var(--color-accent)" title="One redirection">
                   <div style={{ marginBottom: verdict.redirectionProposal ? 10 : 0 }}>↪ {verdict.redirection}</div>
                   {verdict.redirectionProposal && (
                     <ProposalCard
@@ -297,32 +297,32 @@ export default function RetroPage() {
           </div>
 
           {/* Passive coverage */}
-          <p data-testid="retro-passive" style={{ fontSize: 12, color: '#6B6257', margin: '0 0 20px', lineHeight: 1.6 }}>
+          <p data-testid="retro-passive" style={{ fontSize: 12, color: 'var(--color-text-secondary)', margin: '0 0 20px', lineHeight: 1.6 }}>
             {verdict.passiveCoveragePct > 0
-              ? <>{verdict.passiveCoveragePct}% of these minutes were tracked <strong style={{ color: '#221F1A' }}>passively</strong> from your connected calendar — no manual logging.</>
-              : <>None of this came from a connected calendar yet — <Link href="/settings/sources" style={{ color: '#B08637' }}>connect one</Link> and the picture fills itself in.</>}
+              ? <>{verdict.passiveCoveragePct}% of these minutes were tracked <strong style={{ color: 'var(--color-text-primary)' }}>passively</strong> from your connected calendar — no manual logging.</>
+              : <>None of this came from a connected calendar yet — <Link href="/settings/sources" style={{ color: 'var(--color-accent)' }}>connect one</Link> and the picture fills itself in.</>}
           </p>
 
           {/* Share card */}
-          <div data-testid="retro-share-card" style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 20 }}>
-            <h2 style={{ margin: '0 0 6px', fontSize: 14, fontWeight: 700, color: '#221F1A', fontFamily: 'var(--font-serif), Georgia, serif' }}>Share your verdict</h2>
-            <p style={{ margin: '0 0 12px', fontSize: 12, color: '#6B6257', lineHeight: 1.6 }}>
+          <div data-testid="retro-share-card" style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20 }}>
+            <h2 style={{ margin: '0 0 6px', fontSize: 14, fontWeight: 700, color: 'var(--color-text-primary)', fontFamily: 'var(--font-serif), Georgia, serif' }}>Share your verdict</h2>
+            <p style={{ margin: '0 0 12px', fontSize: 12, color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
               A card with your goal names and percentages — nothing else leaves your account.
             </p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={shareUrl(verdict)}
               alt="Your last 30 days — shareable verdict card"
-              style={{ width: '100%', maxWidth: 560, borderRadius: 10, border: '1px solid #E7DFD2', display: 'block', marginBottom: 12 }}
+              style={{ width: '100%', maxWidth: 560, borderRadius: 10, border: '1px solid var(--color-border)', display: 'block', marginBottom: 12 }}
             />
             <button
               data-testid="retro-copy-link"
               onClick={() => void copyShareLink()}
-              style={{ padding: '9px 18px', background: '#B08637', color: '#FFFFFF', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
+              style={{ padding: '9px 18px', background: 'var(--color-accent)', color: '#FFFFFF', border: 'none', borderRadius: 8, fontSize: 13, fontWeight: 600, cursor: 'pointer' }}
             >
               Copy share link
             </button>
-            {copied && <p style={{ margin: '10px 0 0', fontSize: 11, color: '#B08637', wordBreak: 'break-all' }}>{copied}</p>}
+            {copied && <p style={{ margin: '10px 0 0', fontSize: 11, color: 'var(--color-accent)', wordBreak: 'break-all' }}>{copied}</p>}
           </div>
         </>
       )}

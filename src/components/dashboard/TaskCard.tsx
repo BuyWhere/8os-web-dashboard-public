@@ -90,7 +90,7 @@ export function TaskCard({ task, compact = false, onChanged }: Props) {
         padding: '10px 12px',
         borderRadius: 'var(--skin-radius-card, 10px)',
         background: 'var(--skin-card-bg, #FFFFFF)',
-        border: '1px solid var(--skin-color-border, #E7DFD2)',
+        border: '1px solid var(--skin-color-border, var(--color-border))',
         opacity: done ? 0.6 : 1,
       }}
     >
@@ -102,7 +102,7 @@ export function TaskCard({ task, compact = false, onChanged }: Props) {
           width: 20,
           height: 20,
           borderRadius: 6,
-          border: `1px solid ${done ? ENERGY_COLORS.green : '#E7DFD2'}`,
+          border: `1px solid ${done ? ENERGY_COLORS.green : 'var(--color-border)'}`,
           background: done ? ENERGY_COLORS.green : 'transparent',
           color: '#fff',
           fontSize: 13,
@@ -119,7 +119,7 @@ export function TaskCard({ task, compact = false, onChanged }: Props) {
         <div
           style={{
             fontSize: 14,
-            color: done ? 'var(--skin-color-text-muted, #8A8175)' : 'var(--skin-color-text, #221F1A)',
+            color: done ? 'var(--skin-color-text-muted, var(--color-text-muted))' : 'var(--skin-color-text, #221F1A)',
             textDecoration: done ? 'line-through' : 'none',
             overflow: 'hidden',
             textOverflow: 'ellipsis',
@@ -148,12 +148,12 @@ export function TaskCard({ task, compact = false, onChanged }: Props) {
             <span style={{ width: 6, height: 6, borderRadius: '50%', background: ENERGY_COLORS[task.energyRequired] }} />
             {ENERGY_LABELS[task.energyRequired]}
           </span>
-          <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, #8A8175)' }}>
+          <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>
             {task.scheduledAt ? `${fmtTime(task.scheduledAt)} · ` : ''}
             {fmtDuration(task.duration)}
           </span>
           {task.projectName ? (
-            <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, #8A8175)' }}>{task.projectName}</span>
+            <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>{task.projectName}</span>
           ) : null}
         </div>
 
@@ -174,7 +174,7 @@ export function TaskCard({ task, compact = false, onChanged }: Props) {
 
       <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexShrink: 0 }}>
         <span
-          style={{ width: 8, height: 8, borderRadius: '50%', background: PRIORITY_COLORS[task.priority] ?? '#8A8175' }}
+          style={{ width: 8, height: 8, borderRadius: '50%', background: PRIORITY_COLORS[task.priority] ?? 'var(--color-text-muted)' }}
           title={`Priority: ${task.priority}`}
         />
         {!compact && !done ? (
@@ -199,9 +199,9 @@ function CardButton({ label, disabled, onClick }: { label: string; disabled: boo
       disabled={disabled}
       style={{
         background: 'transparent',
-        border: '1px solid var(--skin-button-secondary-border, #E7DFD2)',
+        border: '1px solid var(--skin-button-secondary-border, var(--color-border))',
         borderRadius: 'var(--skin-radius-button, 6px)',
-        color: 'var(--skin-button-secondary-text, #6B6257)',
+        color: 'var(--skin-button-secondary-text, var(--color-text-secondary))',
         padding: '4px 8px',
         fontSize: 11,
         fontWeight: 600,
@@ -278,10 +278,10 @@ function ActionPanel({
 }
 
 const inputStyle: React.CSSProperties = {
-  background: '#FFFFFF',
-  border: '1px solid #E7DFD2',
+  background: 'var(--color-bg-card)',
+  border: '1px solid var(--color-border)',
   borderRadius: 6,
-  color: '#221F1A',
+  color: 'var(--color-text-primary)',
   padding: '5px 8px',
   fontSize: 12,
 }
@@ -302,9 +302,9 @@ function MiniBtn({
       onClick={onClick}
       disabled={disabled}
       style={{
-        background: primary ? 'var(--skin-button-primary-bg, #B08637)' : 'transparent',
-        color: primary ? 'var(--skin-button-primary-text, #fff)' : 'var(--skin-color-text-secondary, #6B6257)',
-        border: `1px solid ${primary ? 'transparent' : 'var(--skin-button-secondary-border, #E7DFD2)'}`,
+        background: primary ? 'var(--skin-button-primary-bg, var(--color-accent))' : 'transparent',
+        color: primary ? 'var(--skin-button-primary-text, #fff)' : 'var(--skin-color-text-secondary, var(--color-text-secondary))',
+        border: `1px solid ${primary ? 'transparent' : 'var(--skin-button-secondary-border, var(--color-border))'}`,
         borderRadius: 'var(--skin-radius-button, 6px)',
         padding: '5px 10px',
         fontSize: 12,

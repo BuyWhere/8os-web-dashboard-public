@@ -20,7 +20,7 @@ async function getUserId(): Promise<string> {
 }
 
 const DOMAIN_COLORS: Record<string, string> = {
-  career: '#3F6C8E', wealth: '#B08637', health: '#4F7A52',
+  career: '#3F6C8E', wealth: 'var(--color-accent)', health: '#4F7A52',
   relationships: '#B5652F', learning: '#3E8494', legacy: '#7E5A94',
 }
 const DOMAIN_ICONS: Record<string, string> = {
@@ -28,7 +28,7 @@ const DOMAIN_ICONS: Record<string, string> = {
 }
 
 const REMINDER_COLORS: Record<string, string> = {
-  overdue: '#B5652F', 'due-soon': '#B08637', 'on-track': '#4F7A52', 'break-down': '#7E5A94',
+  overdue: '#B5652F', 'due-soon': 'var(--color-accent)', 'on-track': '#4F7A52', 'break-down': '#7E5A94',
 }
 
 export default async function GoalsPage() {

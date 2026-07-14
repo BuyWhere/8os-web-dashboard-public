@@ -11,7 +11,7 @@ export default function TermsPage() {
     <main style={{
       minHeight: '100vh',
       background: '#0a0a0a',
-      color: '#ededed',
+      color: 'var(--color-border)',
       padding: '4rem 2rem',
     }}>
       <div style={{ maxWidth: '720px', margin: '0 auto' }}>
@@ -26,7 +26,7 @@ export default function TermsPage() {
 
         <div style={{ lineHeight: 1.8, color: '#ccc' }}>
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               1. Acceptance of Terms
             </h2>
             <p>
@@ -36,7 +36,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               2. Description of Service
             </h2>
             <p>
@@ -47,7 +47,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               3. User Accounts
             </h2>
             <p style={{ marginBottom: '1rem' }}>You are responsible for:</p>
@@ -60,7 +60,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               4. Acceptable Use
             </h2>
             <p style={{ marginBottom: '1rem' }}>You agree not to:</p>
@@ -73,7 +73,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               5. Intellectual Property
             </h2>
             <p>
@@ -84,7 +84,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               6. Disclaimers and Limitation of Liability
             </h2>
             <p style={{ marginBottom: '1rem' }}>
@@ -99,7 +99,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               7. Termination
             </h2>
             <p>
@@ -109,7 +109,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               8. Changes to Terms
             </h2>
             <p>
@@ -119,7 +119,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               9. Contact
             </h2>
             <p>

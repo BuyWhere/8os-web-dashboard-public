@@ -12,6 +12,7 @@
   --color-text-muted: #8A8175;
   --color-accent: #B08637;       /* gold */
   --color-accent-2: #7A3B2E;     /* oxblood (rare emphasis) */
+  --color-accent-soft: #F2E9D6;  /* gold tint — active nav / badges */
   --header-height: 68px;
 
   /* ── Warm-editorial defaults for the archetype skin tokens ──────────
@@ -91,6 +92,7 @@
   --color-text-muted: #8A8175;
   --color-accent: #C79A48;       /* gold, brightened for dark */
   --color-accent-2: #C06B54;     /* oxblood, lifted for contrast */
+  --color-accent-soft: #3A3125;  /* warm dark tint — active nav / badges */
 
   /* Archetype-skin base tokens (dark defaults; skins re-tint accents only) */
   --skin-color-primary: #C79A48;

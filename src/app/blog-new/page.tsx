@@ -13,14 +13,14 @@ export default function BlogPage() {
   const posts = getAllBlogPosts()
 
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: '#e2e8f0' }}>
+    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Header */}
         <div style={{ marginBottom: '48px' }}>
-          <h1 style={{ fontSize: '42px', fontWeight: 700, color: '#f1f5f9', marginBottom: '12px' }}>
+          <h1 style={{ fontSize: '42px', fontWeight: 700, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
             8os.ai Blog
           </h1>
-          <p style={{ fontSize: '18px', color: '#64748b', maxWidth: '560px' }}>
+          <p style={{ fontSize: '18px', color: 'var(--color-text-secondary)', maxWidth: '560px' }}>
             BaZi, the Five Elements, productivity archetypes, and how to build a personal operating
             system that actually works.
           </p>
@@ -58,7 +58,7 @@ export default function BlogPage() {
                     display: 'flex',
                     gap: '12px',
                     marginBottom: '14px',
-                    color: '#64748b',
+                    color: 'var(--color-text-secondary)',
                     fontSize: '13px',
                   }}
                 >
@@ -72,7 +72,7 @@ export default function BlogPage() {
                   style={{
                     fontSize: '18px',
                     fontWeight: 600,
-                    color: '#f1f5f9',
+                    color: 'var(--color-bg-secondary)',
                     lineHeight: 1.35,
                     marginBottom: '12px',
                     flexGrow: 1,
@@ -85,7 +85,7 @@ export default function BlogPage() {
                 <p
                   style={{
                     fontSize: '14px',
-                    color: '#94a3b8',
+                    color: 'var(--color-text-muted)',
                     lineHeight: 1.65,
                     marginBottom: '20px',
                   }}
@@ -119,10 +119,10 @@ export default function BlogPage() {
             border: '1px solid #1e1b4b',
           }}
         >
-          <h3 style={{ fontSize: '22px', fontWeight: 600, color: '#f1f5f9', marginBottom: '12px' }}>
+          <h3 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
             Ready to discover your archetype?
           </h3>
-          <p style={{ color: '#94a3b8', marginBottom: '24px' }}>
+          <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px' }}>
             90 seconds. No birth time required. Get your personal operating system free.
           </p>
           <Link

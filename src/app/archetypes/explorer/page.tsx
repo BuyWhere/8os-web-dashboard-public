@@ -10,7 +10,7 @@ const archetypes = [
   {
     name: 'Strategic Commander',
     element: 'Metal',
-    color: '#94a3b8',
+    color: 'var(--color-text-muted)',
     traits: ['Decisive', 'Structured', 'Goal-driven', 'Analytical'],
     desc: 'You see the battlefield before others do. You plan, execute, and deliver with precision.',
     peak: 'Early morning and late evening',
@@ -54,7 +54,7 @@ export default function ArchetypeExplorerPage() {
     <main style={{
       minHeight: '100vh',
       background: '#0a0a0a',
-      color: '#ededed',
+      color: 'var(--color-border)',
       padding: '4rem 2rem',
     }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
@@ -100,7 +100,7 @@ export default function ArchetypeExplorerPage() {
             }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: '#ededed', margin: 0 }}>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-border)', margin: 0 }}>
                     {a.name}
                   </h2>
                   <span style={{

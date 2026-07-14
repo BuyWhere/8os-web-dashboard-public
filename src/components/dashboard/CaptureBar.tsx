@@ -92,7 +92,7 @@ export default function CaptureBar() {
             marginBottom: 10,
             padding: '10px 14px',
             borderRadius: 12,
-            background: '#FFFFFF',
+            background: 'var(--color-bg-card)',
             border: `1px solid ${error ? '#B5502F' : (result?.color ?? '#4F7A52') + '88'}`,
             boxShadow: '0 10px 40px rgba(0,0,0,0.5)',
             display: 'flex',
@@ -119,12 +119,12 @@ export default function CaptureBar() {
               >
                 {result?.kind === 'goal' ? '◎ Goal' : '✓ Task'}
               </span>
-              <span style={{ color: '#221F1A', fontSize: 13, flex: 1 }}>{result?.confirmation}</span>
+              <span style={{ color: 'var(--color-text-primary)', fontSize: 13, flex: 1 }}>{result?.confirmation}</span>
             </>
           )}
           <button
             onClick={() => { setResult(null); setError(null) }}
-            style={{ background: 'none', border: 'none', color: '#8A8175', cursor: 'pointer', fontSize: 16, lineHeight: 1 }}
+            style={{ background: 'none', border: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', fontSize: 16, lineHeight: 1 }}
             aria-label="Dismiss"
           >
             ×
@@ -144,11 +144,11 @@ export default function CaptureBar() {
           borderRadius: 14,
           background: 'rgba(255,255,255,0.96)',
           backdropFilter: 'blur(8px)',
-          border: '1px solid #E7DFD2',
+          border: '1px solid var(--color-border)',
           boxShadow: '0 12px 48px rgba(0,0,0,0.55)',
         }}
       >
-        <span style={{ fontSize: 16, color: '#B08637', flexShrink: 0 }}>✦</span>
+        <span style={{ fontSize: 16, color: 'var(--color-accent)', flexShrink: 0 }}>✦</span>
         <input
           ref={inputRef}
           value={input}
@@ -160,7 +160,7 @@ export default function CaptureBar() {
             background: 'transparent',
             border: 'none',
             outline: 'none',
-            color: '#221F1A',
+            color: 'var(--color-text-primary)',
             fontSize: 14,
             fontFamily: 'inherit',
           }}
@@ -175,9 +175,9 @@ export default function CaptureBar() {
             border: 'none',
             cursor: loading || !input.trim() ? 'default' : 'pointer',
             background: loading || !input.trim()
-              ? '#E7DFD2'
-              : 'linear-gradient(135deg, #B08637, #98722C)',
-            color: loading || !input.trim() ? '#8A8175' : '#FFFFFF',
+              ? 'var(--color-border)'
+              : 'linear-gradient(135deg, var(--color-accent), var(--color-accent))',
+            color: loading || !input.trim() ? 'var(--color-text-muted)' : '#FFFFFF',
             fontSize: 13,
             fontWeight: 600,
             transition: 'all 0.15s',

@@ -111,35 +111,35 @@ export default function MemoryPage() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+      <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
         <Sidebar goals={[]} />
         <main style={{ flex: 1, padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ color: '#6B6257' }}>Recalling what 8os knows…</div>
+          <div style={{ color: 'var(--color-text-secondary)' }}>Recalling what 8os knows…</div>
         </main>
       </div>
     )
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <Sidebar goals={[]} />
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
         <div style={{ marginBottom: 20, maxWidth: 760 }}>
-          <Link href="/dashboard" style={{ color: '#8A8175', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+          <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>What 8os knows about you</h1>
-          <p style={{ margin: '4px 0 0', color: '#6B6257', fontSize: 14 }}>
+          <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 14 }}>
             Durable facts 8os has learned — distilled from your journal and conversations, plus anything you add.
             Edit, pin the important ones, or delete anything wrong. Deleting removes it and stops 8os re-learning it.
           </p>
         </div>
 
         {/* Add a memory manually */}
-        <div style={{ maxWidth: 760, background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 14, marginBottom: 20 }}>
+        <div style={{ maxWidth: 760, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 14, marginBottom: 20 }}>
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
             <select
               value={newKind}
               onChange={(e) => setNewKind(e.target.value as Kind)}
-              style={{ background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 8, color: '#221F1A', fontSize: 13, padding: '8px 10px' }}
+              style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 8, color: 'var(--color-text-primary)', fontSize: 13, padding: '8px 10px' }}
             >
               {KIND_ORDER.map((k) => <option key={k} value={k}>{KIND_LABEL[k].replace(/s$/, '')}</option>)}
             </select>
@@ -148,12 +148,12 @@ export default function MemoryPage() {
               onChange={(e) => setNewContent(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') add() }}
               placeholder="Add something 8os should remember…"
-              style={{ flex: 1, minWidth: 220, background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 8, color: '#221F1A', fontSize: 13, padding: '8px 10px' }}
+              style={{ flex: 1, minWidth: 220, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 8, color: 'var(--color-text-primary)', fontSize: 13, padding: '8px 10px' }}
             />
             <button
               onClick={add}
               disabled={adding || newContent.trim().length < 2}
-              style={{ background: '#B08637', border: 'none', borderRadius: 8, color: '#FFFFFF', fontSize: 13, fontWeight: 700, padding: '8px 16px', cursor: 'pointer', opacity: adding || newContent.trim().length < 2 ? 0.5 : 1 }}
+              style={{ background: 'var(--color-accent)', border: 'none', borderRadius: 8, color: '#FFFFFF', fontSize: 13, fontWeight: 700, padding: '8px 16px', cursor: 'pointer', opacity: adding || newContent.trim().length < 2 ? 0.5 : 1 }}
             >
               {adding ? 'Adding…' : 'Add'}
             </button>
@@ -167,7 +167,7 @@ export default function MemoryPage() {
         )}
 
         {!error && items.length === 0 && (
-          <div style={{ maxWidth: 760, background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 28, color: '#6B6257', fontSize: 14 }}>
+          <div style={{ maxWidth: 760, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 28, color: 'var(--color-text-secondary)', fontSize: 14 }}>
             8os hasn&apos;t learned anything durable yet. As you journal and chat, it will distill stable facts here each night — or add one above.
           </div>
         )}
@@ -177,20 +177,20 @@ export default function MemoryPage() {
             <section key={kind}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                 <span style={{ width: 8, height: 8, borderRadius: '50%', background: KIND_COLOR[kind] }} />
-                <h2 style={{ margin: 0, fontSize: 13, fontWeight: 700, color: '#6B6257', textTransform: 'uppercase', letterSpacing: 0.5 }}>{KIND_LABEL[kind]}</h2>
-                <span style={{ color: '#8A8175', fontSize: 12 }}>{rows.length}</span>
+                <h2 style={{ margin: 0, fontSize: 13, fontWeight: 700, color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: 0.5 }}>{KIND_LABEL[kind]}</h2>
+                <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>{rows.length}</span>
               </div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {rows.map((m) => {
                   const isEditing = editing[m.id] !== undefined
                   return (
-                    <div key={m.id} data-testid="memory-item" style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderLeft: `2px solid ${m.pinned ? KIND_COLOR[kind] : '#E7DFD2'}`, borderRadius: 10, padding: '12px 14px' }}>
+                    <div key={m.id} data-testid="memory-item" style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderLeft: `2px solid ${m.pinned ? KIND_COLOR[kind] : 'var(--color-border)'}`, borderRadius: 10, padding: '12px 14px' }}>
                       {isEditing ? (
                         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                           <input
                             value={editing[m.id]}
                             onChange={(e) => setEditing((s) => ({ ...s, [m.id]: e.target.value }))}
-                            style={{ flex: 1, minWidth: 200, background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 8, color: '#221F1A', fontSize: 13, padding: '6px 10px' }}
+                            style={{ flex: 1, minWidth: 200, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 8, color: 'var(--color-text-primary)', fontSize: 13, padding: '6px 10px' }}
                           />
                           <button
                             onClick={async () => { await patch(m.id, { content: editing[m.id] }); setEditing((s) => { const c = { ...s }; delete c[m.id]; return c }) }}
@@ -199,7 +199,7 @@ export default function MemoryPage() {
                           >Save</button>
                           <button
                             onClick={() => setEditing((s) => { const c = { ...s }; delete c[m.id]; return c })}
-                            style={{ background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 8, color: '#6B6257', fontSize: 12, padding: '6px 12px', cursor: 'pointer' }}
+                            style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 8, color: 'var(--color-text-secondary)', fontSize: 12, padding: '6px 12px', cursor: 'pointer' }}
                           >Cancel</button>
                         </div>
                       ) : (
@@ -207,7 +207,7 @@ export default function MemoryPage() {
                           <div style={{ flex: 1, fontSize: 14 }}>
                             {m.pinned && <span title="Pinned" style={{ marginRight: 6 }}>📌</span>}
                             {m.content}
-                            <span style={{ marginLeft: 8, color: '#8A8175', fontSize: 11 }}>
+                            <span style={{ marginLeft: 8, color: 'var(--color-text-muted)', fontSize: 11 }}>
                               salience {m.salience}{m.sourceKind ? ` · ${m.sourceKind}` : ''}
                             </span>
                           </div>
@@ -231,6 +231,6 @@ export default function MemoryPage() {
 }
 
 const btn: React.CSSProperties = {
-  background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 8, color: '#6B6257',
+  background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 8, color: 'var(--color-text-secondary)',
   fontSize: 12, padding: '5px 10px', cursor: 'pointer', whiteSpace: 'nowrap',
 }

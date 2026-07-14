@@ -226,10 +226,10 @@ export default function ReviewPage() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+      <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
         <Sidebar goals={[]} />
         <main style={{ flex: 1, padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ color: '#8A8175' }}>Loading your week…</div>
+          <div style={{ color: 'var(--color-text-muted)' }}>Loading your week…</div>
         </main>
         <QuickAdd />
       </div>
@@ -245,14 +245,14 @@ export default function ReviewPage() {
   const focusCandidates = rev?.carryOver ?? []
 
   return (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <Sidebar goals={sidebarGoals} />
 
       <main style={{ flex: 1, padding: '24px 24px', overflowY: 'auto', maxWidth: '100%', overflowX: 'hidden' }}>
         <div style={{ marginBottom: 24 }}>
-          <Link href="/dashboard" style={{ color: '#8A8175', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+          <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>Weekly Review &amp; Preview</h1>
-          <p style={{ margin: '4px 0 0', color: '#6B6257', fontSize: 13 }}>
+          <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 13 }}>
             Look back at the last 7 days · plan the next 7 with your month theme
           </p>
         </div>
@@ -267,40 +267,40 @@ export default function ReviewPage() {
 
           {/* ─────────────── REVIEW (last 7 days) ─────────────── */}
           <section style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ margin: '0 0 4px', fontSize: 15, fontWeight: 700, color: '#221F1A', fontFamily: 'var(--font-serif), Georgia, serif' }}>Review · last 7 days</h2>
-              <p style={{ margin: '0 0 16px', color: '#8A8175', fontSize: 12 }}>{weekLabel}</p>
+            <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20 }}>
+              <h2 style={{ margin: '0 0 4px', fontSize: 15, fontWeight: 700, color: 'var(--color-text-primary)', fontFamily: 'var(--font-serif), Georgia, serif' }}>Review · last 7 days</h2>
+              <p style={{ margin: '0 0 16px', color: 'var(--color-text-muted)', fontSize: 12 }}>{weekLabel}</p>
 
               {/* Completed vs planned */}
               <div style={{ display: 'flex', gap: 16, marginBottom: 16 }}>
-                <div style={{ flex: 1, background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 10, padding: '14px 16px' }}>
+                <div style={{ flex: 1, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 10, padding: '14px 16px' }}>
                   <div style={{ fontSize: 26, fontWeight: 700, color: '#4F7A52' }}>{rev?.completedCount ?? 0}</div>
-                  <div style={{ fontSize: 11, color: '#6B6257', marginTop: 2 }}>completed</div>
+                  <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginTop: 2 }}>completed</div>
                 </div>
-                <div style={{ flex: 1, background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 10, padding: '14px 16px' }}>
-                  <div style={{ fontSize: 26, fontWeight: 700, color: '#221F1A' }}>{rev?.plannedCount ?? 0}</div>
-                  <div style={{ fontSize: 11, color: '#6B6257', marginTop: 2 }}>planned</div>
+                <div style={{ flex: 1, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 10, padding: '14px 16px' }}>
+                  <div style={{ fontSize: 26, fontWeight: 700, color: 'var(--color-text-primary)' }}>{rev?.plannedCount ?? 0}</div>
+                  <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginTop: 2 }}>planned</div>
                 </div>
-                <div style={{ flex: 1, background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 10, padding: '14px 16px' }}>
-                  <div style={{ fontSize: 26, fontWeight: 700, color: '#B08637' }}>{rate != null ? `${rate}%` : '—'}</div>
-                  <div style={{ fontSize: 11, color: '#6B6257', marginTop: 2 }}>completion</div>
+                <div style={{ flex: 1, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 10, padding: '14px 16px' }}>
+                  <div style={{ fontSize: 26, fontWeight: 700, color: 'var(--color-accent)' }}>{rate != null ? `${rate}%` : '—'}</div>
+                  <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginTop: 2 }}>completion</div>
                 </div>
               </div>
 
               {/* Carry-over */}
               <div>
-                <h3 style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 700, color: '#221F1A' }}>
-                  Carry-over <span style={{ color: '#8A8175', fontWeight: 400 }}>({rev?.carryOverCount ?? 0} unfinished)</span>
+                <h3 style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 700, color: 'var(--color-text-primary)' }}>
+                  Carry-over <span style={{ color: 'var(--color-text-muted)', fontWeight: 400 }}>({rev?.carryOverCount ?? 0} unfinished)</span>
                 </h3>
                 {(!rev || rev.carryOver.length === 0) ? (
-                  <div style={{ color: '#8A8175', fontSize: 13, padding: '8px 0' }}>Nothing carried over — clean week.</div>
+                  <div style={{ color: 'var(--color-text-muted)', fontSize: 13, padding: '8px 0' }}>Nothing carried over — clean week.</div>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {rev.carryOver.slice(0, 12).map((t) => (
-                      <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 8, background: '#F7F3EC', border: '1px solid #E7DFD2' }}>
-                        <span style={{ width: 7, height: 7, borderRadius: '50%', flexShrink: 0, background: PRIORITY_COLORS[t.priority] ?? '#8A8175' }} />
-                        <div style={{ flex: 1, minWidth: 0, fontSize: 13, color: '#221F1A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.name}</div>
-                        {t.domain && <span style={{ fontSize: 11, color: '#6B6257' }}>{DOMAIN_ICONS[t.domain] ?? ''}</span>}
+                      <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '8px 10px', borderRadius: 8, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)' }}>
+                        <span style={{ width: 7, height: 7, borderRadius: '50%', flexShrink: 0, background: PRIORITY_COLORS[t.priority] ?? 'var(--color-text-muted)' }} />
+                        <div style={{ flex: 1, minWidth: 0, fontSize: 13, color: 'var(--color-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.name}</div>
+                        {t.domain && <span style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>{DOMAIN_ICONS[t.domain] ?? ''}</span>}
                       </div>
                     ))}
                   </div>
@@ -309,23 +309,23 @@ export default function ReviewPage() {
             </div>
 
             {/* Goal progress deltas */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 20 }}>
-              <h3 style={{ margin: '0 0 12px', fontSize: 13, fontWeight: 700, color: '#221F1A' }}>Goal progress this week</h3>
+            <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20 }}>
+              <h3 style={{ margin: '0 0 12px', fontSize: 13, fontWeight: 700, color: 'var(--color-text-primary)' }}>Goal progress this week</h3>
               {(!rev || rev.goalDeltas.length === 0) ? (
-                <div style={{ color: '#8A8175', fontSize: 13 }}>No active goals yet.</div>
+                <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>No active goals yet.</div>
               ) : (
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
                   {rev.goalDeltas.map((g) => (
                     <div key={g.goalId}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 5 }}>
                         <span style={{ width: 8, height: 8, borderRadius: '50%', flexShrink: 0, background: DOMAIN_COLORS[g.domain] ?? '#666' }} />
-                        <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: '#221F1A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{g.name}</span>
-                        <span style={{ fontSize: 11, color: g.completedThisWeek > 0 ? '#4F7A52' : '#8A8175' }}>
+                        <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: 'var(--color-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{g.name}</span>
+                        <span style={{ fontSize: 11, color: g.completedThisWeek > 0 ? '#4F7A52' : 'var(--color-text-muted)' }}>
                           {g.completedThisWeek > 0 ? `+${g.completedThisWeek} done` : 'no change'}
                         </span>
-                        <span style={{ fontSize: 11, color: '#6B6257' }}>{Math.round(g.progress * 100)}%</span>
+                        <span style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>{Math.round(g.progress * 100)}%</span>
                       </div>
-                      <div style={{ height: 5, borderRadius: 3, background: '#E7DFD2', overflow: 'hidden' }}>
+                      <div style={{ height: 5, borderRadius: 3, background: 'var(--color-border)', overflow: 'hidden' }}>
                         <div style={{ width: `${Math.round(g.progress * 100)}%`, height: '100%', background: DOMAIN_COLORS[g.domain] ?? '#666' }} />
                       </div>
                     </div>
@@ -337,58 +337,58 @@ export default function ReviewPage() {
             {/* Alignment (OS-2542): the weekly verdict + per-goal momentum.
                 Best-effort — the section is simply absent if the API errors. */}
             {alignment && (
-              <div data-testid="review-alignment-section" style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 20 }}>
-                <h3 style={{ margin: '0 0 8px', fontSize: 13, fontWeight: 700, color: '#221F1A' }}>Alignment</h3>
-                <p style={{ margin: '0 0 4px', fontSize: 13, color: '#221F1A', lineHeight: 1.55 }}>{alignment.headline}</p>
+              <div data-testid="review-alignment-section" style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20 }}>
+                <h3 style={{ margin: '0 0 8px', fontSize: 13, fontWeight: 700, color: 'var(--color-text-primary)' }}>Alignment</h3>
+                <p style={{ margin: '0 0 4px', fontSize: 13, color: 'var(--color-text-primary)', lineHeight: 1.55 }}>{alignment.headline}</p>
                 {alignment.topRedirection && (
-                  <p style={{ margin: '0 0 14px', fontSize: 12, color: '#B08637', lineHeight: 1.5 }}>↪ {alignment.topRedirection}</p>
+                  <p style={{ margin: '0 0 14px', fontSize: 12, color: 'var(--color-accent)', lineHeight: 1.5 }}>↪ {alignment.topRedirection}</p>
                 )}
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 7 }}>
                   {[...alignment.perGoal].sort((a, b) => a.rank - b.rank).map((g) => {
                     const m = MOMENTUM_META[g.momentum] ?? MOMENTUM_META.flat
                     return (
                       <div key={g.goalId} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                        <span style={{ fontSize: 11, color: '#8A8175', width: 20, flexShrink: 0 }}>#{g.rank}</span>
+                        <span style={{ fontSize: 11, color: 'var(--color-text-muted)', width: 20, flexShrink: 0 }}>#{g.rank}</span>
                         <span style={{ color: m.color, fontSize: 13, fontWeight: 700, width: 14, flexShrink: 0 }} title={`momentum: ${g.momentum}`}>{m.arrow}</span>
-                        <span style={{ width: 8, height: 8, borderRadius: '50%', flexShrink: 0, background: DOMAIN_COLORS[g.domain] ?? '#8A8175' }} />
-                        <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: '#221F1A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{g.name}</span>
+                        <span style={{ width: 8, height: 8, borderRadius: '50%', flexShrink: 0, background: DOMAIN_COLORS[g.domain] ?? 'var(--color-text-muted)' }} />
+                        <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: 'var(--color-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{g.name}</span>
                         {g.inSeason === true && (
                           <span style={{ flexShrink: 0, fontSize: 10, padding: '1px 7px', borderRadius: 10, background: '#EAF1EA', border: '1px solid #4F7A5244', color: '#4F7A52' }}>in season</span>
                         )}
                         <span style={{ fontSize: 11, color: m.color, flexShrink: 0 }}>{g.momentum}</span>
-                        <span style={{ fontSize: 11, color: '#6B6257', flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}>
+                        <span style={{ fontSize: 11, color: 'var(--color-text-secondary)', flexShrink: 0, fontVariantNumeric: 'tabular-nums' }}>
                           {Math.round(g.share * 100)}% / {Math.round(g.expectedShare * 100)}%
                         </span>
                       </div>
                     )
                   })}
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 2, paddingTop: 8, borderTop: '1px solid #E7DFD2' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 2, paddingTop: 8, borderTop: '1px solid var(--color-border)' }}>
                     <span style={{ width: 20, flexShrink: 0 }} />
                     <span style={{ width: 14, flexShrink: 0 }} />
-                    <span style={{ flex: 1, fontSize: 12, color: '#6B6257' }}>Unaligned attention</span>
-                    <span style={{ fontSize: 11, color: '#6B6257', fontVariantNumeric: 'tabular-nums' }}>{Math.round(alignment.unalignedShare * 100)}%</span>
+                    <span style={{ flex: 1, fontSize: 12, color: 'var(--color-text-secondary)' }}>Unaligned attention</span>
+                    <span style={{ fontSize: 11, color: 'var(--color-text-secondary)', fontVariantNumeric: 'tabular-nums' }}>{Math.round(alignment.unalignedShare * 100)}%</span>
                   </div>
                 </div>
               </div>
             )}
 
             {/* Reflection — saved to the journal (kind=weekly_reflection) */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 20 }}>
-              <h3 style={{ margin: '0 0 8px', fontSize: 13, fontWeight: 700, color: '#221F1A' }}>Reflection</h3>
-              <p style={{ margin: '0 0 10px', color: '#6B6257', fontSize: 13 }}>{data?.reflection.prompt}</p>
+            <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20 }}>
+              <h3 style={{ margin: '0 0 8px', fontSize: 13, fontWeight: 700, color: 'var(--color-text-primary)' }}>Reflection</h3>
+              <p style={{ margin: '0 0 10px', color: 'var(--color-text-secondary)', fontSize: 13 }}>{data?.reflection.prompt}</p>
               <textarea
                 value={reflection}
                 onChange={(e) => setReflection(e.target.value)}
                 placeholder="Write your reflection…"
                 rows={4}
-                style={{ width: '100%', boxSizing: 'border-box', background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 8, color: '#221F1A', fontSize: 13, padding: '10px 12px', resize: 'vertical', fontFamily: 'inherit' }}
+                style={{ width: '100%', boxSizing: 'border-box', background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 8, color: 'var(--color-text-primary)', fontSize: 13, padding: '10px 12px', resize: 'vertical', fontFamily: 'inherit' }}
               />
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 10, flexWrap: 'wrap' }}>
                 <button
                   onClick={saveReflection}
                   disabled={!reflection.trim() || reflectionSaving}
                   style={{
-                    background: '#B08637', border: 'none', borderRadius: 8, color: '#FFFFFF',
+                    background: 'var(--color-accent)', border: 'none', borderRadius: 8, color: '#FFFFFF',
                     padding: '9px 16px', fontSize: 12, fontWeight: 600,
                     cursor: !reflection.trim() || reflectionSaving ? 'default' : 'pointer',
                     opacity: !reflection.trim() || reflectionSaving ? 0.6 : 1,
@@ -396,21 +396,21 @@ export default function ReviewPage() {
                 >
                   {reflectionSaving ? 'Saving…' : 'Save reflection'}
                 </button>
-                {reflectionMsg && <span style={{ fontSize: 12, color: '#B08637' }}>{reflectionMsg}</span>}
+                {reflectionMsg && <span style={{ fontSize: 12, color: 'var(--color-accent)' }}>{reflectionMsg}</span>}
               </div>
 
               {pastReflections.length > 0 && (
-                <div style={{ marginTop: 16, borderTop: '1px solid #E7DFD2', paddingTop: 12 }}>
-                  <div style={{ fontSize: 11, color: '#8A8175', marginBottom: 8 }}>
-                    Recent weekly reflections · <Link href="/dashboard/journal" style={{ color: '#B08637', textDecoration: 'none' }}>open journal →</Link>
+                <div style={{ marginTop: 16, borderTop: '1px solid var(--color-border)', paddingTop: 12 }}>
+                  <div style={{ fontSize: 11, color: 'var(--color-text-muted)', marginBottom: 8 }}>
+                    Recent weekly reflections · <Link href="/dashboard/journal" style={{ color: 'var(--color-accent)', textDecoration: 'none' }}>open journal →</Link>
                   </div>
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {pastReflections.map((r) => (
-                      <div key={r.id} style={{ padding: '8px 10px', borderRadius: 8, background: '#F7F3EC', border: '1px solid #E7DFD2' }}>
-                        <div style={{ fontSize: 10, color: '#8A8175', marginBottom: 3 }}>
+                      <div key={r.id} style={{ padding: '8px 10px', borderRadius: 8, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)' }}>
+                        <div style={{ fontSize: 10, color: 'var(--color-text-muted)', marginBottom: 3 }}>
                           {new Date(r.entryDate).toLocaleDateString('en-US', { timeZone: 'UTC', month: 'short', day: 'numeric' })}
                         </div>
-                        <div style={{ fontSize: 12, color: '#6B6257', lineHeight: 1.5 }}>
+                        <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
                           {r.content.length > 180 ? `${r.content.slice(0, 180)}…` : r.content}
                         </div>
                       </div>
@@ -423,28 +423,28 @@ export default function ReviewPage() {
 
           {/* ─────────────── PREVIEW (next 7 days) ─────────────── */}
           <section style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            <div style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 20 }}>
-              <h2 style={{ margin: '0 0 12px', fontSize: 15, fontWeight: 700, color: '#221F1A', fontFamily: 'var(--font-serif), Georgia, serif' }}>Preview · next 7 days</h2>
+            <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20 }}>
+              <h2 style={{ margin: '0 0 12px', fontSize: 15, fontWeight: 700, color: 'var(--color-text-primary)', fontFamily: 'var(--font-serif), Georgia, serif' }}>Preview · next 7 days</h2>
 
               {!prev?.available ? (
-                <div style={{ color: '#6B6257', fontSize: 13 }}>{prev?.reason ?? 'Phase preview unavailable.'}</div>
+                <div style={{ color: 'var(--color-text-secondary)', fontSize: 13 }}>{prev?.reason ?? 'Phase preview unavailable.'}</div>
               ) : (
                 <>
                   {/* Month-pillar-framed week line */}
-                  <div style={{ background: 'linear-gradient(135deg, #F7F3EC 0%, #FFFFFF 100%)', border: `1px solid ${(VERDICT_COLORS[prev.monthVerdict ?? 'neutral'])}44`, borderRadius: 10, padding: '14px 16px', marginBottom: 14 }}>
+                  <div style={{ background: 'linear-gradient(135deg, var(--color-bg-primary) 0%, #FFFFFF 100%)', border: `1px solid ${(VERDICT_COLORS[prev.monthVerdict ?? 'neutral'])}44`, borderRadius: 10, padding: '14px 16px', marginBottom: 14 }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                       <span style={{ fontSize: 14, fontWeight: 700, color: VERDICT_COLORS[prev.monthVerdict ?? 'neutral'] }}>{prev.weekFrame}</span>
-                      {prev.monthPillar && <span style={{ fontSize: 12, color: '#6B6257' }}>· month pillar {prev.monthPillar}</span>}
+                      {prev.monthPillar && <span style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>· month pillar {prev.monthPillar}</span>}
                     </div>
-                    <p style={{ margin: 0, fontSize: 13, color: '#221F1A', lineHeight: 1.5 }}>{prev.monthGuidance}</p>
-                    <p style={{ margin: '8px 0 0', fontSize: 12, color: '#6B6257', lineHeight: 1.5 }}>{prev.weekGuidance}</p>
-                    <p style={{ margin: '8px 0 0', fontSize: 10, color: '#8A8175' }}>{prev.weekBasis}</p>
+                    <p style={{ margin: 0, fontSize: 13, color: 'var(--color-text-primary)', lineHeight: 1.5 }}>{prev.monthGuidance}</p>
+                    <p style={{ margin: '8px 0 0', fontSize: 12, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>{prev.weekGuidance}</p>
+                    <p style={{ margin: '8px 0 0', fontSize: 10, color: 'var(--color-text-muted)' }}>{prev.weekBasis}</p>
                   </div>
 
                   {/* Favorable elements */}
                   {prev.favorable && prev.favorable.length > 0 && (
                     <div style={{ marginBottom: 14 }}>
-                      <span style={{ fontSize: 11, color: '#6B6257' }}>Favorable elements now: </span>
+                      <span style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>Favorable elements now: </span>
                       {prev.favorable.map((el) => (
                         <span key={el} style={{ display: 'inline-block', marginRight: 6, padding: '2px 8px', borderRadius: 12, background: '#EAF1EA', border: '1px solid #4F7A5244', color: '#4F7A52', fontSize: 11 }}>{el}</span>
                       ))}
@@ -452,21 +452,21 @@ export default function ReviewPage() {
                   )}
 
                   {/* Goals in favorable domains */}
-                  <h3 style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 700, color: '#221F1A' }}>Goals favored this week</h3>
+                  <h3 style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 700, color: 'var(--color-text-primary)' }}>Goals favored this week</h3>
                   {(prev.favorableGoals && prev.favorableGoals.length > 0) ? (
                     <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                       {prev.favorableGoals.map((g) => (
-                        <div key={g.goalId} style={{ padding: '10px 12px', borderRadius: 8, background: '#F7F3EC', border: '1px solid #E7DFD2' }}>
+                        <div key={g.goalId} style={{ padding: '10px 12px', borderRadius: 8, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)' }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 3 }}>
-                            <span style={{ width: 8, height: 8, borderRadius: '50%', flexShrink: 0, background: DOMAIN_COLORS[g.domain] ?? '#8A8175' }} />
-                            <span style={{ fontSize: 13, color: '#221F1A', fontWeight: 600 }}>{g.name}</span>
+                            <span style={{ width: 8, height: 8, borderRadius: '50%', flexShrink: 0, background: DOMAIN_COLORS[g.domain] ?? 'var(--color-text-muted)' }} />
+                            <span style={{ fontSize: 13, color: 'var(--color-text-primary)', fontWeight: 600 }}>{g.name}</span>
                           </div>
-                          {g.tagline && <p style={{ margin: 0, fontSize: 12, color: '#6B6257', lineHeight: 1.45 }}>{g.tagline}</p>}
+                          {g.tagline && <p style={{ margin: 0, fontSize: 12, color: 'var(--color-text-secondary)', lineHeight: 1.45 }}>{g.tagline}</p>}
                         </div>
                       ))}
                     </div>
                   ) : (
-                    <div style={{ color: '#8A8175', fontSize: 13 }}>
+                    <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>
                       No active goals sit in a currently-favorable domain. Use a steady-effort goal as this week's focus.
                     </div>
                   )}
@@ -475,19 +475,19 @@ export default function ReviewPage() {
             </div>
 
             {/* Set this week's focus */}
-            <div style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 20 }}>
-              <h3 style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 700, color: '#221F1A' }}>Set this week&apos;s focus</h3>
-              <p style={{ margin: '0 0 12px', color: '#6B6257', fontSize: 12 }}>
+            <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20 }}>
+              <h3 style={{ margin: '0 0 10px', fontSize: 13, fontWeight: 700, color: 'var(--color-text-primary)' }}>Set this week&apos;s focus</h3>
+              <p style={{ margin: '0 0 12px', color: 'var(--color-text-secondary)', fontSize: 12 }}>
                 Pick a carry-over task to schedule into the coming week.
               </p>
               {focusCandidates.length === 0 ? (
-                <div style={{ color: '#8A8175', fontSize: 13 }}>No carry-over tasks to focus — you&apos;re clear. Add one with ⌘K.</div>
+                <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>No carry-over tasks to focus — you&apos;re clear. Add one with ⌘K.</div>
               ) : (
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   <select
                     value={focusTaskId}
                     onChange={(e) => setFocusTaskId(e.target.value)}
-                    style={{ flex: 1, minWidth: 180, background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 8, color: '#221F1A', fontSize: 13, padding: '9px 12px' }}
+                    style={{ flex: 1, minWidth: 180, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 8, color: 'var(--color-text-primary)', fontSize: 13, padding: '9px 12px' }}
                   >
                     <option value="">Choose a task…</option>
                     {focusCandidates.map((t) => (
@@ -497,13 +497,13 @@ export default function ReviewPage() {
                   <button
                     onClick={setFocus}
                     disabled={!focusTaskId || focusBusy}
-                    style={{ background: '#B08637', border: 'none', borderRadius: 8, color: '#FFFFFF', padding: '9px 16px', fontSize: 13, fontWeight: 600, cursor: !focusTaskId || focusBusy ? 'default' : 'pointer', opacity: !focusTaskId || focusBusy ? 0.6 : 1 }}
+                    style={{ background: 'var(--color-accent)', border: 'none', borderRadius: 8, color: '#FFFFFF', padding: '9px 16px', fontSize: 13, fontWeight: 600, cursor: !focusTaskId || focusBusy ? 'default' : 'pointer', opacity: !focusTaskId || focusBusy ? 0.6 : 1 }}
                   >
                     {focusBusy ? '…' : '✦ Set focus'}
                   </button>
                 </div>
               )}
-              {focusMsg && <p style={{ margin: '10px 0 0', fontSize: 12, color: '#B08637' }}>{focusMsg}</p>}
+              {focusMsg && <p style={{ margin: '10px 0 0', fontSize: 12, color: 'var(--color-accent)' }}>{focusMsg}</p>}
             </div>
           </section>
         </div>

@@ -98,7 +98,7 @@ function Card({ children, gapPx }: { children: React.ReactNode; gapPx: number })
       data-testid="alignment-panel"
       style={{
         background: 'var(--skin-card-bg, #FFFFFF)',
-        border: '1px solid var(--skin-card-border, #E7DFD2)',
+        border: '1px solid var(--skin-card-border, var(--color-border))',
         borderRadius: 'var(--skin-radius-card, 12px)',
         padding: 20,
         marginBottom: gapPx,
@@ -258,7 +258,7 @@ export function AlignmentPanel({ gapPx = 20 }: { gapPx?: number }) {
         <h2 style={{ margin: '0 0 8px', fontSize: 14, fontWeight: 'var(--skin-typo-heading-weight, 700)' as never, color: 'var(--skin-color-text, #221F1A)' }}>
           Alignment
         </h2>
-        <div style={{ color: 'var(--skin-color-text-muted, #8A8175)', fontSize: 13 }}>Reading your attention ledger…</div>
+        <div style={{ color: 'var(--skin-color-text-muted, var(--color-text-muted))', fontSize: 13 }}>Reading your attention ledger…</div>
       </Card>
     )
   }
@@ -269,7 +269,7 @@ export function AlignmentPanel({ gapPx = 20 }: { gapPx?: number }) {
         <h2 style={{ margin: '0 0 8px', fontSize: 14, fontWeight: 'var(--skin-typo-heading-weight, 700)' as never, color: 'var(--skin-color-text, #221F1A)' }}>
           Alignment
         </h2>
-        <div style={{ color: 'var(--skin-color-text-muted, #8A8175)', fontSize: 13 }}>
+        <div style={{ color: 'var(--skin-color-text-muted, var(--color-text-muted))', fontSize: 13 }}>
           The alignment view is unavailable right now — the rest of your dashboard is unaffected. It retries the next time you load this page.
         </div>
       </Card>
@@ -286,14 +286,14 @@ export function AlignmentPanel({ gapPx = 20 }: { gapPx?: number }) {
         <h2 style={{ margin: 0, fontSize: 14, fontWeight: 'var(--skin-typo-heading-weight, 700)' as never, color: 'var(--skin-color-text, #221F1A)' }}>
           Alignment · last {data.windowDays ?? 7} days
         </h2>
-        <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, #8A8175)' }}>attention vs stated priorities</span>
+        <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>attention vs stated priorities</span>
       </div>
 
       {/* Verdict headline + redirection nudge */}
       <p data-testid="alignment-headline" style={{ margin: '0 0 4px', fontSize: 13, color: 'var(--skin-color-text, #221F1A)', lineHeight: 1.55 }}>
         {weekly.headline}
       </p>
-      <p data-testid="alignment-redirection" style={{ margin: '0 0 16px', fontSize: 12, color: 'var(--skin-color-accent, #B08637)', lineHeight: 1.5 }}>
+      <p data-testid="alignment-redirection" style={{ margin: '0 0 16px', fontSize: 12, color: 'var(--skin-color-accent, var(--color-accent))', lineHeight: 1.5 }}>
         ↪ {weekly.topRedirection}
       </p>
 
@@ -311,7 +311,7 @@ export function AlignmentPanel({ gapPx = 20 }: { gapPx?: number }) {
           return (
             <div key={g.goalId} data-testid="alignment-goal-row">
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, minWidth: 0 }}>
-                <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, #8A8175)', width: 22, flexShrink: 0 }}>#{g.rank}</span>
+                <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, var(--color-text-muted))', width: 22, flexShrink: 0 }}>#{g.rank}</span>
                 <span title={`momentum: ${m.label}`} style={{ color: m.color, fontSize: 13, fontWeight: 700, width: 14, flexShrink: 0 }}>{m.arrow}</span>
                 <span style={{ flex: 1, minWidth: 0, fontSize: 13, color: 'var(--skin-color-text, #221F1A)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {DOMAIN_ICONS[g.domain] ?? ''} {g.name}
@@ -322,30 +322,30 @@ export function AlignmentPanel({ gapPx = 20 }: { gapPx?: number }) {
                   </span>
                 )}
                 {g.inSeason === false && (
-                  <span style={{ flexShrink: 0, fontSize: 10, padding: '1px 7px', borderRadius: 10, background: 'var(--skin-color-badge-bg, #F7F3EC)', color: 'var(--skin-color-text-muted, #8A8175)' }}>
+                  <span style={{ flexShrink: 0, fontSize: 10, padding: '1px 7px', borderRadius: 10, background: 'var(--skin-color-badge-bg, var(--color-bg-primary))', color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>
                     off season
                   </span>
                 )}
-                <span style={{ flexShrink: 0, fontSize: 11, color: 'var(--skin-color-text-muted, #8A8175)', fontVariantNumeric: 'tabular-nums' }}>
-                  {pct(g.share)} <span style={{ color: 'var(--skin-color-text-muted, #8A8175)' }}>/ {pct(g.expectedShare)} expected</span>
+                <span style={{ flexShrink: 0, fontSize: 11, color: 'var(--skin-color-text-muted, var(--color-text-muted))', fontVariantNumeric: 'tabular-nums' }}>
+                  {pct(g.share)} <span style={{ color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>/ {pct(g.expectedShare)} expected</span>
                 </span>
                 <span style={{ display: 'inline-flex', gap: 2, flexShrink: 0 }}>
                   <button
                     aria-label={`Move ${g.name} up in priority`}
                     onClick={() => move(g.goalId, -1)}
                     disabled={ranking || i === 0}
-                    style={{ background: 'var(--skin-color-badge-bg, #F7F3EC)', border: '1px solid var(--skin-card-border, #E7DFD2)', borderRadius: 5, color: i === 0 ? '#8A8175' : 'var(--skin-color-text, #221F1A)', fontSize: 10, width: 20, height: 18, lineHeight: '14px', padding: 0, cursor: ranking || i === 0 ? 'default' : 'pointer' }}
+                    style={{ background: 'var(--skin-color-badge-bg, var(--color-bg-primary))', border: '1px solid var(--skin-card-border, var(--color-border))', borderRadius: 5, color: i === 0 ? 'var(--color-text-muted)' : 'var(--skin-color-text, #221F1A)', fontSize: 10, width: 20, height: 18, lineHeight: '14px', padding: 0, cursor: ranking || i === 0 ? 'default' : 'pointer' }}
                   >▲</button>
                   <button
                     aria-label={`Move ${g.name} down in priority`}
                     onClick={() => move(g.goalId, 1)}
                     disabled={ranking || i === goals.length - 1}
-                    style={{ background: 'var(--skin-color-badge-bg, #F7F3EC)', border: '1px solid var(--skin-card-border, #E7DFD2)', borderRadius: 5, color: i === goals.length - 1 ? '#8A8175' : 'var(--skin-color-text, #221F1A)', fontSize: 10, width: 20, height: 18, lineHeight: '14px', padding: 0, cursor: ranking || i === goals.length - 1 ? 'default' : 'pointer' }}
+                    style={{ background: 'var(--skin-color-badge-bg, var(--color-bg-primary))', border: '1px solid var(--skin-card-border, var(--color-border))', borderRadius: 5, color: i === goals.length - 1 ? 'var(--color-text-muted)' : 'var(--skin-color-text, #221F1A)', fontSize: 10, width: 20, height: 18, lineHeight: '14px', padding: 0, cursor: ranking || i === goals.length - 1 ? 'default' : 'pointer' }}
                   >▼</button>
                 </span>
               </div>
               {/* actual-share bar with an expected-share marker */}
-              <div style={{ position: 'relative', height: 7, borderRadius: 4, background: 'var(--skin-color-badge-bg, #F7F3EC)', overflow: 'hidden' }}>
+              <div style={{ position: 'relative', height: 7, borderRadius: 4, background: 'var(--skin-color-badge-bg, var(--color-bg-primary))', overflow: 'hidden' }}>
                 <div style={{ width: `${Math.min(100, (g.share / maxShare) * 100)}%`, height: '100%', borderRadius: 4, background: m.color, opacity: 0.85 }} />
                 <div
                   title={`expected ${pct(g.expectedShare)}`}
@@ -359,26 +359,26 @@ export function AlignmentPanel({ gapPx = 20 }: { gapPx?: number }) {
         {/* Unaligned bucket */}
         <div data-testid="alignment-unaligned">
           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
-            <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, #8A8175)', width: 22, flexShrink: 0 }}>·</span>
+            <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, var(--color-text-muted))', width: 22, flexShrink: 0 }}>·</span>
             <span style={{ width: 14, flexShrink: 0 }} />
-            <span style={{ flex: 1, fontSize: 12, color: 'var(--skin-color-text-muted, #8A8175)' }}>Unaligned (not pointed at any goal)</span>
-            <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, #8A8175)', fontVariantNumeric: 'tabular-nums' }}>{pct(weekly.unalignedShare)}</span>
+            <span style={{ flex: 1, fontSize: 12, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>Unaligned (not pointed at any goal)</span>
+            <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, var(--color-text-muted))', fontVariantNumeric: 'tabular-nums' }}>{pct(weekly.unalignedShare)}</span>
             <span style={{ width: 42, flexShrink: 0 }} />
           </div>
-          <div style={{ height: 7, borderRadius: 4, background: 'var(--skin-color-badge-bg, #F7F3EC)', overflow: 'hidden' }}>
-            <div style={{ width: `${Math.min(100, (weekly.unalignedShare / maxShare) * 100)}%`, height: '100%', borderRadius: 4, background: '#8A8175', opacity: 0.7 }} />
+          <div style={{ height: 7, borderRadius: 4, background: 'var(--skin-color-badge-bg, var(--color-bg-primary))', overflow: 'hidden' }}>
+            <div style={{ width: `${Math.min(100, (weekly.unalignedShare / maxShare) * 100)}%`, height: '100%', borderRadius: 4, background: 'var(--color-text-muted)', opacity: 0.7 }} />
           </div>
         </div>
       </div>
 
-      {rankMsg && <p style={{ margin: '10px 0 0', fontSize: 11, color: 'var(--skin-color-accent, #B08637)' }}>{rankMsg}</p>}
+      {rankMsg && <p style={{ margin: '10px 0 0', fontSize: 11, color: 'var(--skin-color-accent, var(--color-accent))' }}>{rankMsg}</p>}
 
       {/* Receipts expander */}
-      <div style={{ marginTop: 14, borderTop: '1px solid var(--skin-card-border, #E7DFD2)', paddingTop: 10 }}>
+      <div style={{ marginTop: 14, borderTop: '1px solid var(--skin-card-border, var(--color-border))', paddingTop: 10 }}>
         <button
           onClick={toggleReceipts}
           data-testid="alignment-receipts-toggle"
-          style={{ background: 'none', border: 'none', padding: 0, color: 'var(--skin-color-primary, #B08637)', fontSize: 12, cursor: 'pointer' }}
+          style={{ background: 'none', border: 'none', padding: 0, color: 'var(--skin-color-primary, var(--color-accent))', fontSize: 12, cursor: 'pointer' }}
         >
           {receiptsOpen ? '▾ Hide receipts' : '▸ Show receipts (why the engine thinks so)'}
         </button>
@@ -409,59 +409,59 @@ export function AlignmentPanel({ gapPx = 20 }: { gapPx?: number }) {
               : weekly.receipts
           return (
             <div style={{ marginTop: 10, display: 'flex', flexDirection: 'column', gap: 6 }}>
-              {debugLoading && <div style={{ fontSize: 12, color: 'var(--skin-color-text-muted, #8A8175)' }}>Loading evidence…</div>}
+              {debugLoading && <div style={{ fontSize: 12, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>Loading evidence…</div>}
               {!debugLoading && items.length === 0 && (
-                <div style={{ fontSize: 12, color: 'var(--skin-color-text-muted, #8A8175)' }}>No classified evidence in the window yet.</div>
+                <div style={{ fontSize: 12, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>No classified evidence in the window yet.</div>
               )}
               {!debugLoading && items.slice(0, 12).map((r, i) => {
                 const isEditing = !!r.attributionId && correctingId === r.attributionId
                 return (
-                  <div key={`r-${r.attributionId ?? i}`} data-testid="alignment-receipt" style={{ padding: '7px 10px', borderRadius: 8, background: 'var(--skin-color-badge-bg, #F7F3EC)', border: '1px solid var(--skin-card-border, #E7DFD2)' }}>
+                  <div key={`r-${r.attributionId ?? i}`} data-testid="alignment-receipt" style={{ padding: '7px 10px', borderRadius: 8, background: 'var(--skin-color-badge-bg, var(--color-bg-primary))', border: '1px solid var(--skin-card-border, var(--color-border))' }}>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                      <div style={{ flex: 1, fontSize: 10, color: 'var(--skin-color-text-muted, #8A8175)', marginBottom: 2 }}>
-                        {r.sourceDate} · {r.sourceType}{r.minutes > 0 ? ` · ${r.minutes}min` : ''} · <span style={{ color: r.goal ? '#4F7A52' : '#6B6257' }}>{r.goal ? `→ ${r.goal} (${r.weight})` : `unaligned (${r.weight})`}</span>
-                        {typeof r.confidence === 'number' ? <span style={{ color: 'var(--skin-color-text-muted, #8A8175)' }}> · {Math.round(r.confidence * 100)}% conf</span> : null}
-                        {r.userOverride ? <span style={{ color: '#B08637' }}> · you</span> : null}
+                      <div style={{ flex: 1, fontSize: 10, color: 'var(--skin-color-text-muted, var(--color-text-muted))', marginBottom: 2 }}>
+                        {r.sourceDate} · {r.sourceType}{r.minutes > 0 ? ` · ${r.minutes}min` : ''} · <span style={{ color: r.goal ? '#4F7A52' : 'var(--color-text-secondary)' }}>{r.goal ? `→ ${r.goal} (${r.weight})` : `unaligned (${r.weight})`}</span>
+                        {typeof r.confidence === 'number' ? <span style={{ color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}> · {Math.round(r.confidence * 100)}% conf</span> : null}
+                        {r.userOverride ? <span style={{ color: 'var(--color-accent)' }}> · you</span> : null}
                       </div>
                       {r.attributionId && !isEditing && (
                         <button
                           data-testid="alignment-receipt-reassign"
                           onClick={() => { setCorrectMsg(null); setCorrectingId(r.attributionId as string) }}
                           disabled={correctionBusy}
-                          style={{ background: 'none', border: 'none', padding: 0, color: 'var(--skin-color-primary, #B08637)', fontSize: 10, cursor: 'pointer', flexShrink: 0 }}
+                          style={{ background: 'none', border: 'none', padding: 0, color: 'var(--skin-color-primary, var(--color-accent))', fontSize: 10, cursor: 'pointer', flexShrink: 0 }}
                         >reassign</button>
                       )}
                     </div>
                     <div style={{ fontSize: 12, color: 'var(--skin-color-text, #221F1A)', lineHeight: 1.45 }}>{r.rationale}</div>
                     {isEditing && (
                       <div data-testid="alignment-reassign-sheet" style={{ marginTop: 8, display: 'flex', flexWrap: 'wrap', gap: 6, alignItems: 'center' }}>
-                        <span style={{ fontSize: 10, color: 'var(--skin-color-text-muted, #8A8175)' }}>Reassign to:</span>
+                        <span style={{ fontSize: 10, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>Reassign to:</span>
                         {goals.map((g) => (
                           <button
                             key={g.goalId}
                             onClick={() => correct(r.attributionId as string, g.goalId)}
                             disabled={correctionBusy || r.goalId === g.goalId}
-                            style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, cursor: correctionBusy ? 'default' : 'pointer', background: r.goalId === g.goalId ? '#E9F0E5' : 'var(--skin-color-badge-bg, #F7F3EC)', border: '1px solid var(--skin-card-border, #E7DFD2)', color: 'var(--skin-color-text, #221F1A)' }}
+                            style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, cursor: correctionBusy ? 'default' : 'pointer', background: r.goalId === g.goalId ? '#E9F0E5' : 'var(--skin-color-badge-bg, var(--color-bg-primary))', border: '1px solid var(--skin-card-border, var(--color-border))', color: 'var(--skin-color-text, #221F1A)' }}
                           >{g.name}</button>
                         ))}
                         <button
                           onClick={() => correct(r.attributionId as string, null)}
                           disabled={correctionBusy || !r.goalId}
-                          style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, cursor: correctionBusy ? 'default' : 'pointer', background: 'var(--skin-color-badge-bg, #F7F3EC)', border: '1px solid var(--skin-card-border, #E7DFD2)', color: '#6B6257' }}
+                          style={{ fontSize: 10, padding: '2px 8px', borderRadius: 10, cursor: correctionBusy ? 'default' : 'pointer', background: 'var(--skin-color-badge-bg, var(--color-bg-primary))', border: '1px solid var(--skin-card-border, var(--color-border))', color: 'var(--color-text-secondary)' }}
                         >unaligned</button>
                         <button
                           onClick={() => setCorrectingId(null)}
                           disabled={correctionBusy}
-                          style={{ fontSize: 10, padding: '2px 6px', background: 'none', border: 'none', color: 'var(--skin-color-text-muted, #8A8175)', cursor: 'pointer' }}
+                          style={{ fontSize: 10, padding: '2px 6px', background: 'none', border: 'none', color: 'var(--skin-color-text-muted, var(--color-text-muted))', cursor: 'pointer' }}
                         >cancel</button>
                       </div>
                     )}
                   </div>
                 )
               })}
-              {correctMsg && <div style={{ fontSize: 10, color: 'var(--skin-color-accent, #B08637)' }}>{correctMsg}</div>}
+              {correctMsg && <div style={{ fontSize: 10, color: 'var(--skin-color-accent, var(--color-accent))' }}>{correctMsg}</div>}
               {!debugLoading && items.length > 12 && (
-                <div style={{ fontSize: 10, color: 'var(--skin-color-text-muted, #8A8175)' }}>
+                <div style={{ fontSize: 10, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>
                   {items.length} classified items in the window (showing 12).
                 </div>
               )}

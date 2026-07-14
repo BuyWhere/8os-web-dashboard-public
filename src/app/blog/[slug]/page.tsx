@@ -49,7 +49,7 @@ export default function BlogPostPage({ params }: Props) {
   if (!post) notFound()
 
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: '#e2e8f0' }}>
+    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Breadcrumb */}
         <nav style={{ marginBottom: '32px' }}>
@@ -62,7 +62,7 @@ export default function BlogPostPage({ params }: Props) {
         </nav>
 
         {/* Meta */}
-        <div style={{ display: 'flex', gap: '16px', marginBottom: '20px', color: '#64748b', fontSize: '14px' }}>
+        <div style={{ display: 'flex', gap: '16px', marginBottom: '20px', color: 'var(--color-text-secondary)', fontSize: '14px' }}>
           <time dateTime={post.isoDate}>{post.date}</time>
           <span>{post.readTime}</span>
         </div>
@@ -72,7 +72,7 @@ export default function BlogPostPage({ params }: Props) {
           style={{
             fontSize: '40px',
             fontWeight: 700,
-            color: '#f1f5f9',
+            color: 'var(--color-bg-secondary)',
             lineHeight: 1.2,
             marginBottom: '20px',
           }}
@@ -84,7 +84,7 @@ export default function BlogPostPage({ params }: Props) {
         <p
           style={{
             fontSize: '18px',
-            color: '#94a3b8',
+            color: 'var(--color-text-muted)',
             lineHeight: 1.7,
             marginBottom: '12px',
           }}
@@ -96,7 +96,7 @@ export default function BlogPostPage({ params }: Props) {
         <p
           style={{
             fontSize: '16px',
-            color: '#64748b',
+            color: 'var(--color-text-secondary)',
             fontStyle: 'italic',
             lineHeight: 1.6,
             marginBottom: '48px',
@@ -137,14 +137,14 @@ export default function BlogPostPage({ params }: Props) {
                   style={{
                     fontSize: '24px',
                     fontWeight: 600,
-                    color: '#f1f5f9',
+                    color: 'var(--color-bg-secondary)',
                     marginBottom: '16px',
                   }}
                 >
                   {section.heading}
                 </h2>
                 {section.paragraphs.map((p, j) => (
-                  <p key={j} style={{ color: '#94a3b8', lineHeight: 1.8, marginBottom: '12px' }}>
+                  <p key={j} style={{ color: 'var(--color-text-muted)', lineHeight: 1.8, marginBottom: '12px' }}>
                     {p}
                   </p>
                 ))}
@@ -159,7 +159,7 @@ export default function BlogPostPage({ params }: Props) {
               borderRadius: '12px',
               padding: '32px',
               textAlign: 'center',
-              color: '#64748b',
+              color: 'var(--color-text-secondary)',
             }}
           >
             <p style={{ fontSize: '16px', marginBottom: '8px' }}>Full article coming soon.</p>
@@ -180,10 +180,10 @@ export default function BlogPostPage({ params }: Props) {
             textAlign: 'center',
           }}
         >
-          <h3 style={{ fontSize: '22px', fontWeight: 600, color: '#f1f5f9', marginBottom: '12px' }}>
+          <h3 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
             Discover Your BaZi Archetype
           </h3>
-          <p style={{ color: '#94a3b8', marginBottom: '24px', fontSize: '15px' }}>
+          <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px', fontSize: '15px' }}>
             90 seconds. No birth time required. Get your personal operating system.
           </p>
           <Link

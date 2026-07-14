@@ -8,13 +8,13 @@ import type { Project, DomainId } from '@/lib/types'
 import { OnboardingProgress } from '@/components/onboarding/OnboardingProgress'
 
 // ─── Warm-editorial tokens ──────────────────────────────────────────────────
-const CREAM = '#F7F3EC'
-const WHITE = '#FFFFFF'
-const INK = '#221F1A'
-const WARM_GRAY = '#6B6257'
-const MUTED = '#8A8175'
-const GOLD = '#B08637'
-const HAIRLINE = '#E7DFD2'
+const CREAM = 'var(--color-bg-primary)'
+const WHITE = 'var(--color-bg-card)'
+const INK = 'var(--color-text-primary)'
+const WARM_GRAY = 'var(--color-text-secondary)'
+const MUTED = 'var(--color-text-muted)'
+const GOLD = 'var(--color-accent)'
+const HAIRLINE = 'var(--color-border)'
 const SERIF = 'var(--font-serif), Georgia, serif'
 
 export default function ProjectsPage() {
@@ -405,7 +405,7 @@ export default function ProjectsPage() {
             style={{
               padding: '0.85rem',
               background: 'transparent',
-              border: `1px dashed #D9CFBE`,
+              border: `1px dashed var(--color-border-strong)`,
               borderRadius: '12px',
               color: WARM_GRAY,
               fontSize: '0.875rem',

@@ -47,7 +47,7 @@ export function ArchetypeSkeleton() {
         <SkeletonBlock width={140} height={18} style={{ marginBottom: 20 }} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14 }}>
           {Array.from({ length: 3 }).map((_, index) => (
-            <div key={index} style={{ background: '#F7F3EC', borderRadius: 10, padding: '14px 16px' }}>
+            <div key={index} style={{ background: 'var(--color-bg-primary)', borderRadius: 10, padding: '14px 16px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
                 <SkeletonBlock width={84} height={12} />
                 <SkeletonBlock width={72} height={12} />
@@ -223,12 +223,12 @@ export function ArchetypeContent() {
                 { key: 'goalDriven', label: 'Goal-Driven', opposite: 'Process-Driven', value: personalityVector.goalDriven ?? 0.5 },
                 { key: 'futureFocused', label: 'Future-Focused', opposite: 'Present-Focused', value: personalityVector.futureFocused ?? 0.5 },
               ].map(({ key, label, opposite, value }) => (
-                <div key={key} style={{ background: '#F7F3EC', borderRadius: 10, padding: '14px 16px' }}>
+                <div key={key} style={{ background: 'var(--color-bg-primary)', borderRadius: 10, padding: '14px 16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
                     <span style={{ fontSize: 12, color: 'var(--skin-color-text-muted)' }}>{opposite}</span>
                     <span style={{ fontSize: 12, color: 'var(--skin-color-text-muted)' }}>{label}</span>
                   </div>
-                  <div style={{ height: 6, background: '#E7DFD2', borderRadius: 3, overflow: 'hidden' }}>
+                  <div style={{ height: 6, background: 'var(--color-border)', borderRadius: 3, overflow: 'hidden' }}>
                     <div style={{ height: '100%', width: `${value * 100}%`, background: 'var(--skin-color-primary)', borderRadius: 3 }} />
                   </div>
                   <div style={{ textAlign: 'right', fontSize: 11, color: 'var(--skin-color-text-muted)', marginTop: 4 }}>

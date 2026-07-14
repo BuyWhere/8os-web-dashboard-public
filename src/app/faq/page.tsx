@@ -117,7 +117,7 @@ const jsonLd = {
 
 export default function FAQPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: '#e2e8f0' }}>
+    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -126,10 +126,10 @@ export default function FAQPage() {
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Header */}
         <div style={{ marginBottom: '48px' }}>
-          <h1 style={{ fontSize: '40px', fontWeight: 700, color: '#f1f5f9', marginBottom: '12px' }}>
+          <h1 style={{ fontSize: '40px', fontWeight: 700, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
             Frequently Asked Questions
           </h1>
-          <p style={{ fontSize: '18px', color: '#64748b' }}>
+          <p style={{ fontSize: '18px', color: 'var(--color-text-secondary)' }}>
             Everything you need to know about 8os.ai, BaZi, and your archetype.
           </p>
         </div>
@@ -166,7 +166,7 @@ export default function FAQPage() {
                       padding: '20px 24px',
                       fontSize: '16px',
                       fontWeight: 500,
-                      color: '#f1f5f9',
+                      color: 'var(--color-bg-secondary)',
                       cursor: 'pointer',
                       listStyle: 'none',
                       display: 'flex',
@@ -180,7 +180,7 @@ export default function FAQPage() {
                   <div
                     style={{
                       padding: '0 24px 20px',
-                      color: '#94a3b8',
+                      color: 'var(--color-text-muted)',
                       lineHeight: 1.75,
                       fontSize: '15px',
                       borderTop: '1px solid #1e1e2e',
@@ -206,10 +206,10 @@ export default function FAQPage() {
             padding: '40px',
           }}
         >
-          <h3 style={{ fontSize: '20px', fontWeight: 600, color: '#f1f5f9', marginBottom: '12px' }}>
+          <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
             Still have questions?
           </h3>
-          <p style={{ color: '#94a3b8', marginBottom: '24px' }}>
+          <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px' }}>
             The fastest way to understand 8os is to try it. Discover your archetype free in 90 seconds.
           </p>
           <Link

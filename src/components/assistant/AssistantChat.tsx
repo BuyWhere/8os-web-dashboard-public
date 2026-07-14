@@ -18,15 +18,15 @@
 import { useState, useRef, useEffect, useCallback } from 'react'
 
 // ── Warm editorial palette ───────────────────────────────────────────────
-const INK = '#221F1A'
-const GRAY = '#6B6257'
-const MUTED = '#8A8175'
-const CREAM = '#F7F3EC'
-const CREAM_ALT = '#FBF7F0'
-const SURFACE = '#FFFFFF'
-const GOLD = '#B08637'
-const GOLD_DARK = '#98722C'
-const HAIRLINE = '#E7DFD2'
+const INK = 'var(--color-text-primary)'
+const GRAY = 'var(--color-text-secondary)'
+const MUTED = 'var(--color-text-muted)'
+const CREAM = 'var(--color-bg-primary)'
+const CREAM_ALT = 'var(--color-bg-secondary)'
+const SURFACE = 'var(--color-bg-card)'
+const GOLD = 'var(--color-accent)'
+const GOLD_DARK = 'var(--color-accent)'
+const HAIRLINE = 'var(--color-border)'
 const GREEN = '#4F7A52'
 
 // ── SVG Icons ────────────────────────────────────────────────────────────
@@ -379,7 +379,7 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
         {([['chat', 'Chat'], ['capture', 'Quick capture']] as const).map(([m, label]) => (
           <button key={m} onClick={() => { setMode(m); setCaptureNote(null) }}
             style={{ padding: '5px 12px', borderRadius: 999, fontSize: 12.5, fontWeight: 600, cursor: 'pointer',
-              background: mode === m ? '#F2E9D6' : 'transparent', color: mode === m ? '#7A5A1E' : GRAY,
+              background: mode === m ? 'var(--color-accent-soft)' : 'transparent', color: mode === m ? 'var(--color-accent-2)' : GRAY,
               border: `1px solid ${mode === m ? '#E7DAC0' : HAIRLINE}`, transition: 'all 0.12s' }}>
             {m === 'capture' && <span style={{ marginRight: 5 }}><BoltIcon size={11} /></span>}{label}
           </button>
@@ -439,8 +439,8 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
       )}
 
       {isExecutingTool && (
-        <div style={{ padding: '8px 16px', background: '#F2E9D6', borderTop: `1px solid ${HAIRLINE}` }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5, color: '#7A5A1E' }}>
+        <div style={{ padding: '8px 16px', background: 'var(--color-accent-soft)', borderTop: `1px solid ${HAIRLINE}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 11.5, color: 'var(--color-accent-2)' }}>
             <WrenchIcon size={12} /><span>Working on it...</span>
           </div>
         </div>
@@ -452,8 +452,8 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
           {micSupported && (
             <button onClick={toggleMic} title={isRecording ? 'Stop recording' : 'Record voice'} aria-label={isRecording ? 'Stop recording' : 'Record voice'}
               style={{ flexShrink: 0, width: 40, height: 40, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
-                background: isRecording ? '#7A3B2E' : CREAM, color: isRecording ? '#fff' : GOLD,
-                border: `1px solid ${isRecording ? '#7A3B2E' : HAIRLINE}`, transition: 'all 0.12s' }}
+                background: isRecording ? 'var(--color-accent-2)' : CREAM, color: isRecording ? '#fff' : GOLD,
+                border: `1px solid ${isRecording ? 'var(--color-accent-2)' : HAIRLINE}`, transition: 'all 0.12s' }}
               className={isRecording ? 'animate-pulse' : ''}>
               <MicIcon size={16} />
             </button>

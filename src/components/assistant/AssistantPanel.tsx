@@ -21,8 +21,8 @@ import AssistantChat from './AssistantChat'
 
 const fraunces = Fraunces({ subsets: ['latin'], weight: ['600'], variable: '--font-serif-coach', display: 'swap' })
 
-const GOLD = '#B08637'
-const GOLD_DARK = '#98722C'
+const GOLD = 'var(--color-accent)'
+const GOLD_DARK = 'var(--color-accent)'
 
 const CoachIcon = ({ size = 18 }: { size?: number }) => (
   <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
@@ -116,8 +116,8 @@ export default function AssistantPanel() {
             bottom: isLarge ? 24 : 92,
             width: isLarge ? 'min(760px, calc(100vw - 48px))' : 'min(380px, calc(100vw - 32px))',
             height: isLarge ? 'min(860px, calc(100vh - 48px))' : 'min(580px, calc(100vh - 132px))',
-            background: '#FFFFFF',
-            border: '1px solid #E7DFD2',
+            background: 'var(--color-bg-card)',
+            border: '1px solid var(--color-border)',
             borderRadius: 18,
             boxShadow: '0 24px 60px rgba(34, 31, 26, 0.22), 0 4px 12px rgba(34, 31, 26, 0.08)',
             overflow: 'hidden',

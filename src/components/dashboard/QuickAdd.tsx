@@ -84,9 +84,9 @@ export function QuickAdd({ onTaskAdded }: Props) {
 
   const chipStyle = (active: boolean, color?: string): React.CSSProperties => ({
     padding: '3px 10px', borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: 'pointer',
-    background: active ? (color ?? '#B08637') + '22' : '#F7F3EC',
-    border: `1px solid ${active ? (color ?? '#B08637') + '55' : '#E7DFD2'}`,
-    color: active ? (color ?? '#B08637') : '#8A8175',
+    background: active ? (color ?? 'var(--color-accent)') + '22' : 'var(--color-bg-primary)',
+    border: `1px solid ${active ? (color ?? 'var(--color-accent)') + '55' : 'var(--color-border)'}`,
+    color: active ? (color ?? 'var(--color-accent)') : 'var(--color-text-muted)',
     transition: 'all 0.15s',
   })
 
@@ -125,7 +125,7 @@ export function QuickAdd({ onTaskAdded }: Props) {
           onClick={(e) => { if (e.target === e.currentTarget) setOpen(false) }}
         >
           <div style={{
-            background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 16,
+            background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 16,
             width: '100%', maxWidth: 540, padding: '20px 24px', boxShadow: '0 24px 60px rgba(34, 31, 26, 0.18)',
           }}>
             <form onSubmit={handleSubmit}>
@@ -138,16 +138,16 @@ export function QuickAdd({ onTaskAdded }: Props) {
                   placeholder='Try "Gym at 7pm" or "I feel stressed"'
                   style={{
                     flex: 1, background: 'transparent', border: 'none', outline: 'none',
-                    color: '#221F1A', fontSize: 16, fontFamily: 'inherit',
+                    color: 'var(--color-text-primary)', fontSize: 16, fontFamily: 'inherit',
                   }}
                   disabled={loading}
                 />
-                {loading && <span style={{ color: '#6B6257', fontSize: 13 }}>...</span>}
+                {loading && <span style={{ color: 'var(--color-text-secondary)', fontSize: 13 }}>...</span>}
               </div>
             </form>
 
             {result && (
-              <div style={{ marginTop: 16, padding: '12px 16px', borderRadius: 10, background: '#F7F3EC', border: '1px solid #E7DFD2' }}>
+              <div style={{ marginTop: 16, padding: '12px 16px', borderRadius: 10, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)' }}>
                 {result.type === 'task' && (
                   <div>
                     <div style={{ color: '#4F7A52', fontWeight: 600, marginBottom: 8 }}>✓ {result.message}</div>
@@ -171,7 +171,7 @@ export function QuickAdd({ onTaskAdded }: Props) {
 
                       {/* Duration */}
                       <span
-                        style={chipStyle(!!editableParsed?.durationMinutes, '#B08637')}
+                        style={chipStyle(!!editableParsed?.durationMinutes, 'var(--color-accent)')}
                         title="Duration"
                       >
                         {editableParsed?.durationMinutes ?? 30}m
@@ -185,7 +185,7 @@ export function QuickAdd({ onTaskAdded }: Props) {
                       )}
                     </div>
 
-                    <div style={{ fontSize: 11, color: '#8A8175' }}>Click chips to edit · Double-click input to re-parse</div>
+                    <div style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>Click chips to edit · Double-click input to re-parse</div>
                   </div>
                 )}
                 {result.type === 'drift' && (
@@ -194,13 +194,13 @@ export function QuickAdd({ onTaskAdded }: Props) {
                     {result.suggestions && (
                       <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
                         {result.suggestions.map((s, i) => (
-                          <li key={i} style={{ color: '#6B6257', fontSize: 13, marginBottom: 4, paddingLeft: 12 }}>→ {s}</li>
+                          <li key={i} style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginBottom: 4, paddingLeft: 12 }}>→ {s}</li>
                         ))}
                       </ul>
                     )}
                     <button
                       onClick={() => setOpen(false)}
-                      style={{ marginTop: 12, padding: '6px 16px', borderRadius: 6, background: '#B08637', border: '1px solid #B08637', color: '#FFFFFF', cursor: 'pointer', fontSize: 13 }}
+                      style={{ marginTop: 12, padding: '6px 16px', borderRadius: 6, background: 'var(--color-accent)', border: '1px solid var(--color-accent)', color: '#FFFFFF', cursor: 'pointer', fontSize: 13 }}
                     >
                       Got it
                     </button>
@@ -215,15 +215,15 @@ export function QuickAdd({ onTaskAdded }: Props) {
                   key={ex}
                   onClick={() => setInput(ex)}
                   style={{
-                    padding: '3px 10px', borderRadius: 6, background: '#F7F3EC', border: '1px solid #E7DFD2',
-                    color: '#8A8175', fontSize: 11, cursor: 'pointer', fontFamily: 'inherit',
+                    padding: '3px 10px', borderRadius: 6, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)',
+                    color: 'var(--color-text-muted)', fontSize: 11, cursor: 'pointer', fontFamily: 'inherit',
                   }}
                 >
                   {ex}
                 </button>
               ))}
             </div>
-            <div style={{ marginTop: 10, color: '#8A8175', fontSize: 11 }}>Press ⌘K to open · Esc to close</div>
+            <div style={{ marginTop: 10, color: 'var(--color-text-muted)', fontSize: 11 }}>Press ⌘K to open · Esc to close</div>
           </div>
         </div>
       )}

@@ -103,7 +103,7 @@ const articleStyle: React.CSSProperties = {
   margin: '0 auto',
   padding: '4rem 2rem',
   background: '#060608',
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
   minHeight: '100vh',
 };
 
@@ -152,7 +152,7 @@ const h2Style: React.CSSProperties = {
   margin: '2.5rem 0 1rem',
   fontSize: '1.5rem',
   letterSpacing: '-0.02em',
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
 };
 
 const h3Style: React.CSSProperties = {

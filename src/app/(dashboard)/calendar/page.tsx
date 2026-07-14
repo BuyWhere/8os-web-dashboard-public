@@ -180,7 +180,7 @@ export default async function CalendarPage() {
       endAt: x.endsAt.toISOString(),
       allDay: false,
       domainId: null,
-      color: '#8A8175',
+      color: 'var(--color-text-muted)',
       location: null,
       goalId: null,
       recurrenceRule: 'none',

@@ -3,11 +3,11 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-const INK = '#221F1A'
-const GRAY = '#6B6257'
+const INK = 'var(--color-text-primary)'
+const GRAY = 'var(--color-text-secondary)'
 const GOLD = '#8A6728' // OS-2712: darkened for WCAG AA (white-on-gold 5.18:1; gold text 4.69:1 on cream)
-const OXBLOOD = '#7A3B2E'
-const HAIRLINE = '#E7DFD2'
+const OXBLOOD = 'var(--color-accent-2)'
+const HAIRLINE = 'var(--color-border)'
 
 const NAV = [
   { href: '#features', label: 'Features' },
@@ -165,7 +165,7 @@ export default function LandingHeader() {
           className="lh-mobile-menu"
           style={{
             borderTop: `1px solid ${HAIRLINE}`,
-            background: '#F7F3EC',
+            background: 'var(--color-bg-primary)',
             padding: '1rem 1.5rem 1.5rem',
           }}
         >

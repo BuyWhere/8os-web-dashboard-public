@@ -92,14 +92,14 @@ const typeConfig: Record<ChangeType, { label: string; color: string; dot: string
 
 export default function ChangelogPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: '#e2e8f0' }}>
+    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Header */}
         <div style={{ marginBottom: '56px' }}>
-          <h1 style={{ fontSize: '42px', fontWeight: 700, color: '#f1f5f9', marginBottom: '12px' }}>
+          <h1 style={{ fontSize: '42px', fontWeight: 700, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
             Changelog
           </h1>
-          <p style={{ fontSize: '18px', color: '#64748b' }}>
+          <p style={{ fontSize: '18px', color: 'var(--color-text-secondary)' }}>
             New features, improvements, and fixes — in order of what shipped.
           </p>
 
@@ -108,7 +108,7 @@ export default function ChangelogPage() {
             {Object.entries(typeConfig).map(([key, val]) => (
               <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: val.dot }} />
-                <span style={{ fontSize: '13px', color: '#94a3b8' }}>{val.label}</span>
+                <span style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>{val.label}</span>
               </div>
             ))}
           </div>
@@ -149,7 +149,7 @@ export default function ChangelogPage() {
                 {/* Version header */}
                 <div style={{ marginBottom: '20px' }}>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: '14px', marginBottom: '4px' }}>
-                    <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#f1f5f9' }}>{v.version}</h2>
+                    <h2 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-bg-secondary)' }}>{v.version}</h2>
                     <span style={{ fontSize: '14px', fontWeight: 500, color: '#a5b4fc' }}>{v.label}</span>
                   </div>
                   <time
@@ -208,7 +208,7 @@ export default function ChangelogPage() {
                             >
                               {cfg.label}
                             </span>
-                            <span style={{ color: '#94a3b8', fontSize: '14px', lineHeight: 1.6 }}>
+                            <span style={{ color: 'var(--color-text-muted)', fontSize: '14px', lineHeight: 1.6 }}>
                               {change.text}
                             </span>
                           </div>

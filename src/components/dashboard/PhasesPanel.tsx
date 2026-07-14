@@ -11,7 +11,7 @@ import type { PhaseLayer, Verdict, Confidence } from '@/lib/bazi-phases'
 const VERDICT_COLOR: Record<Verdict, string> = {
   favorable: '#22c55e',
   unfavorable: '#f59e0b',
-  neutral: '#64748b',
+  neutral: 'var(--color-text-secondary)',
 }
 const VERDICT_LABEL: Record<Verdict, string> = {
   favorable: 'Favorable',

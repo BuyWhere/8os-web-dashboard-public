@@ -29,7 +29,7 @@ interface LinkResponse {
 }
 
 const card: React.CSSProperties = {
-  maxWidth: 640, background: '#FFFFFF', border: '1px solid #E7DFD2',
+  maxWidth: 640, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)',
   borderRadius: 12, padding: 20, marginBottom: 16,
 }
 
@@ -71,14 +71,14 @@ export default function ChannelsSettingsPage() {
   const tg = status?.telegram
 
   return (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <Sidebar goals={[]} />
 
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
         <div style={{ marginBottom: 24, maxWidth: 640 }}>
-          <Link href="/dashboard" style={{ color: '#8A8175', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+          <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>Channels</h1>
-          <p style={{ margin: '4px 0 0', color: '#6B6257', fontSize: 14 }}>
+          <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 14 }}>
             Where 8os reaches you — briefs, nudges and one-tap actions
           </p>
         </div>
@@ -95,8 +95,8 @@ export default function ChannelsSettingsPage() {
             <span style={{ fontSize: 18 }}>✉</span>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, fontWeight: 700 }}>Web inbox</div>
-              <div style={{ color: '#6B6257', fontSize: 13, marginTop: 2 }}>
-                Every message lands in your <Link href="/dashboard/inbox" style={{ color: '#B08637' }}>in-app inbox</Link> — the channel of record.
+              <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginTop: 2 }}>
+                Every message lands in your <Link href="/dashboard/inbox" style={{ color: 'var(--color-accent)' }}>in-app inbox</Link> — the channel of record.
               </div>
             </div>
             <span style={{ background: '#EAF1EA', border: '1px solid #4F7A5244', color: '#4F7A52', borderRadius: 8, fontSize: 11, fontWeight: 700, padding: '4px 10px' }}>
@@ -111,18 +111,18 @@ export default function ChannelsSettingsPage() {
             <span style={{ fontSize: 18 }}>✈</span>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, fontWeight: 700 }}>Telegram</div>
-              <div style={{ color: '#6B6257', fontSize: 13, marginTop: 2 }}>
+              <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginTop: 2 }}>
                 Get briefs in Telegram, capture tasks by texting the bot, act with one tap.
               </div>
             </div>
             {loading ? (
-              <span style={{ color: '#8A8175', fontSize: 12 }}>…</span>
+              <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>…</span>
             ) : tg?.linked ? (
               <span style={{ background: '#EAF1EA', border: '1px solid #4F7A5244', color: '#4F7A52', borderRadius: 8, fontSize: 11, fontWeight: 700, padding: '4px 10px' }}>
                 LINKED ✓
               </span>
             ) : (
-              <span style={{ background: '#F7F3EC', border: '1px solid #E7DFD2', color: '#6B6257', borderRadius: 8, fontSize: 11, fontWeight: 700, padding: '4px 10px' }}>
+              <span style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)', borderRadius: 8, fontSize: 11, fontWeight: 700, padding: '4px 10px' }}>
                 NOT LINKED
               </span>
             )}
@@ -131,13 +131,13 @@ export default function ChannelsSettingsPage() {
           {!loading && !tg?.linked && (
             <div style={{ marginTop: 14 }}>
               {tg && !tg.botUsername ? (
-                <div style={{ color: '#6B6257', fontSize: 13 }}>Telegram not configured yet.</div>
+                <div style={{ color: 'var(--color-text-secondary)', fontSize: 13 }}>Telegram not configured yet.</div>
               ) : (
                 <>
                   <button
                     onClick={linkTelegram}
                     disabled={linking}
-                    style={{ background: '#B08637', border: 'none', borderRadius: 8, color: '#FFFFFF', fontSize: 13, fontWeight: 600, padding: '9px 16px', cursor: 'pointer', opacity: linking ? 0.6 : 1 }}
+                    style={{ background: 'var(--color-accent)', border: 'none', borderRadius: 8, color: '#FFFFFF', fontSize: 13, fontWeight: 600, padding: '9px 16px', cursor: 'pointer', opacity: linking ? 0.6 : 1 }}
                   >
                     {linking ? 'Generating link…' : 'Link Telegram'}
                   </button>
@@ -150,18 +150,18 @@ export default function ChannelsSettingsPage() {
               )}
 
               {linkRes && (
-                <div style={{ marginTop: 12, background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 8, padding: '12px 14px', fontSize: 13 }}>
+                <div style={{ marginTop: 12, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 8, padding: '12px 14px', fontSize: 13 }}>
                   {linkRes.configured && linkRes.deepLink ? (
                     <>
-                      <div style={{ color: '#6B6257', marginBottom: 8 }}>
+                      <div style={{ color: 'var(--color-text-secondary)', marginBottom: 8 }}>
                         Open this link in Telegram and press <b>Start</b> (expires in 10 minutes):
                       </div>
-                      <a href={linkRes.deepLink} target="_blank" rel="noopener noreferrer" style={{ color: '#B08637', wordBreak: 'break-all' }}>
+                      <a href={linkRes.deepLink} target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-accent)', wordBreak: 'break-all' }}>
                         {linkRes.deepLink}
                       </a>
                     </>
                   ) : (
-                    <div style={{ color: '#6B6257' }}>{linkRes.message ?? 'Telegram not configured yet'}</div>
+                    <div style={{ color: 'var(--color-text-secondary)' }}>{linkRes.message ?? 'Telegram not configured yet'}</div>
                   )}
                 </div>
               )}
@@ -169,13 +169,13 @@ export default function ChannelsSettingsPage() {
           )}
 
           {!loading && tg?.linked && (
-            <div style={{ color: '#6B6257', fontSize: 13, marginTop: 12 }}>
+            <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginTop: 12 }}>
               Bot: @{tg.botUsername ?? '—'} · send it any to-do as plain text, or /brief, /shutdown, /align.
             </div>
           )}
         </div>
 
-        <div style={{ maxWidth: 640, color: '#8A8175', fontSize: 12 }}>
+        <div style={{ maxWidth: 640, color: 'var(--color-text-muted)', fontSize: 12 }}>
           WhatsApp is on the roadmap — it plugs into the same delivery layer with zero changes to your setup.
         </div>
       </main>

@@ -8,14 +8,14 @@ import type { ArchetypeDefinition } from '@/lib/archetype'
 import { OnboardingProgress } from '@/components/onboarding/OnboardingProgress'
 
 // ─── Warm-editorial tokens ──────────────────────────────────────────────────
-const CREAM = '#F7F3EC'
-const WHITE = '#FFFFFF'
-const INK = '#221F1A'
-const WARM_GRAY = '#6B6257'
-const MUTED = '#8A8175'
-const GOLD = '#B08637'
-const HAIRLINE = '#E7DFD2'
-const TRACK = '#EAE1D2'
+const CREAM = 'var(--color-bg-primary)'
+const WHITE = 'var(--color-bg-card)'
+const INK = 'var(--color-text-primary)'
+const WARM_GRAY = 'var(--color-text-secondary)'
+const MUTED = 'var(--color-text-muted)'
+const GOLD = 'var(--color-accent)'
+const HAIRLINE = 'var(--color-border)'
+const TRACK = 'var(--color-border)'
 const SERIF = 'var(--font-serif), Georgia, serif'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -56,7 +56,7 @@ interface ArchetypeData {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const ELEMENT_COLORS: Record<string, string> = {
-  wood: '#4F7A52', fire: '#B5502F', earth: '#B08637', metal: '#8A8175', water: '#3E6B8C',
+  wood: '#4F7A52', fire: '#B5502F', earth: 'var(--color-accent)', metal: 'var(--color-text-muted)', water: '#3E6B8C',
 }
 const ELEMENT_ICONS: Record<string, string> = {
   wood: '🌱', fire: '🔥', earth: '🌍', metal: '⚙️', water: '🌊',

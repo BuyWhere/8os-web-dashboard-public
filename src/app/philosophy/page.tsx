@@ -164,7 +164,7 @@ const AGENCY_POINTS = [
 
 const pageStyle: React.CSSProperties = {
   background: '#060608',
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
   minHeight: '100vh',
 };
 
@@ -214,7 +214,7 @@ const thesisTitleStyle: React.CSSProperties = {
   margin: 0,
   fontSize: 'clamp(1.5rem, 3vw, 2rem)',
   letterSpacing: '-0.03em',
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
 };
 
 const thesisLeadStyle: React.CSSProperties = {
@@ -238,7 +238,7 @@ const quoteStyle: React.CSSProperties = {
   fontSize: '1.05rem',
   lineHeight: 1.65,
   fontStyle: 'italic',
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
   background: 'rgba(124, 58, 237, 0.06)',
   borderRadius: '0 12px 12px 0',
 };
@@ -303,7 +303,7 @@ const langRoleStyle: React.CSSProperties = {
   fontSize: '1.4rem',
   fontWeight: 800,
   letterSpacing: '-0.03em',
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
 };
 
 const langDescStyle: React.CSSProperties = {
@@ -331,7 +331,7 @@ const agencyLabelStyle: React.CSSProperties = {
   margin: '0 0 0.4rem',
   fontSize: '0.88rem',
   fontWeight: 700,
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
 };
 
 const agencyBodyStyle: React.CSSProperties = {

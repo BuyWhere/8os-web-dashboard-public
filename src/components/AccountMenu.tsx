@@ -32,7 +32,7 @@ const MENU_LINKS: { href: string; label: string; desc: string }[] = [
 const THEME_OPTIONS: { value: ThemeChoice; label: string }[] = [
   { value: 'light', label: 'Light' },
   { value: 'dark', label: 'Dark' },
-  { value: 'system', label: 'Auto' },
+  { value: 'auto', label: 'Auto' },
 ]
 
 export function AccountMenu() {

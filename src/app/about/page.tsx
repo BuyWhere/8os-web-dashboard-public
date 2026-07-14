@@ -103,7 +103,7 @@ const BELIEFS = [
 
 const pageStyle: React.CSSProperties = {
   background: '#060608',
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
   minHeight: '100vh',
 };
 
@@ -165,7 +165,7 @@ const highlightStyle: React.CSSProperties = {
   fontSize: '1.15rem',
   fontStyle: 'italic',
   fontWeight: 600,
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
   background: 'rgba(124, 58, 237, 0.08)',
   borderRadius: '0 12px 12px 0',
 };

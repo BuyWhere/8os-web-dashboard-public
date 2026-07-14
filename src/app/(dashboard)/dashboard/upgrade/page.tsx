@@ -42,7 +42,7 @@ function useCheckout() {
 }
 
 const card: React.CSSProperties = {
-  border: '1px solid var(--skin-color-border, #E7DFD2)',
+  border: '1px solid var(--skin-color-border, var(--color-border))',
   borderRadius: 16,
   padding: '28px 24px',
   background: 'var(--skin-color-surface, #FFFFFF)',
@@ -58,20 +58,20 @@ const primaryBtn: React.CSSProperties = {
   fontWeight: 700,
   fontSize: 15,
   cursor: 'pointer',
-  background: 'var(--skin-color-accent, #B08637)',
+  background: 'var(--skin-color-accent, var(--color-accent))',
   color: '#fff',
 }
 
 const ghostBtn: React.CSSProperties = {
   ...primaryBtn,
   background: 'transparent',
-  color: 'var(--skin-color-accent, #B08637)',
-  border: '1px solid var(--skin-color-accent, #B08637)',
+  color: 'var(--skin-color-accent, var(--color-accent))',
+  border: '1px solid var(--skin-color-accent, var(--color-accent))',
 }
 
 function Check({ children }: { children: React.ReactNode }) {
   return (
-    <li style={{ display: 'flex', gap: 8, alignItems: 'flex-start', fontSize: 14, color: '#6B6257', listStyle: 'none' }}>
+    <li style={{ display: 'flex', gap: 8, alignItems: 'flex-start', fontSize: 14, color: 'var(--color-text-secondary)', listStyle: 'none' }}>
       <span style={{ color: '#4F7A52', fontWeight: 700 }}>✓</span>
       <span>{children}</span>
     </li>
@@ -90,11 +90,11 @@ export default function UpgradePage() {
   return (
     <main style={{ maxWidth: 1080, margin: '0 auto', padding: '48px 24px 80px' }}>
       <div style={{ textAlign: 'center', marginBottom: 32 }}>
-        <p style={{ letterSpacing: 2, textTransform: 'uppercase', fontSize: 12, color: '#6B6257', margin: 0 }}>
+        <p style={{ letterSpacing: 2, textTransform: 'uppercase', fontSize: 12, color: 'var(--color-text-secondary)', margin: 0 }}>
           Upgrade
         </p>
         <h1 style={{ fontSize: 32, fontWeight: 800, margin: '8px 0 6px', fontFamily: 'var(--font-serif), Georgia, serif' }}>Unlock your full Live OS</h1>
-        <p style={{ color: '#6B6257', margin: 0 }}>
+        <p style={{ color: 'var(--color-text-secondary)', margin: 0 }}>
           Start free. Go Pro when your goals need the full engine — or get your one-time deep report.
         </p>
       </div>
@@ -130,10 +130,10 @@ export default function UpgradePage() {
         <div style={card}>
           <div>
             <h2 style={{ margin: 0, fontSize: 20 }}>Free</h2>
-            <p style={{ margin: '4px 0 0', color: '#6B6257', fontSize: 13 }}>The gateway</p>
+            <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 13 }}>The gateway</p>
           </div>
           <div style={{ fontSize: 34, fontWeight: 800 }}>
-            $0<span style={{ fontSize: 14, fontWeight: 400, color: '#6B6257' }}> /forever</span>
+            $0<span style={{ fontSize: 14, fontWeight: 400, color: 'var(--color-text-secondary)' }}> /forever</span>
           </div>
           <ul style={{ margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
             <Check>Your archetype &amp; birth chart</Check>
@@ -146,17 +146,17 @@ export default function UpgradePage() {
         </div>
 
         {/* Pro */}
-        <div style={{ ...card, borderColor: 'var(--skin-color-accent, #B08637)', boxShadow: '0 0 0 1px var(--skin-color-accent, #B08637)' }}>
+        <div style={{ ...card, borderColor: 'var(--skin-color-accent, var(--color-accent))', boxShadow: '0 0 0 1px var(--skin-color-accent, var(--color-accent))' }}>
           <div>
-            <div style={{ display: 'inline-block', fontSize: 11, fontWeight: 700, color: '#fff', background: 'var(--skin-color-accent, #B08637)', borderRadius: 999, padding: '2px 10px', marginBottom: 8 }}>
+            <div style={{ display: 'inline-block', fontSize: 11, fontWeight: 700, color: '#fff', background: 'var(--skin-color-accent, var(--color-accent))', borderRadius: 999, padding: '2px 10px', marginBottom: 8 }}>
               Most popular
             </div>
             <h2 style={{ margin: 0, fontSize: 20 }}>Pro</h2>
-            <p style={{ margin: '4px 0 0', color: '#6B6257', fontSize: 13 }}>The full live OS</p>
+            <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 13 }}>The full live OS</p>
           </div>
           <div style={{ fontSize: 34, fontWeight: 800 }}>
             {yearly ? '$119' : '$16'}
-            <span style={{ fontSize: 14, fontWeight: 400, color: '#6B6257' }}> {yearly ? '/year' : '/month'}</span>
+            <span style={{ fontSize: 14, fontWeight: 400, color: 'var(--color-text-secondary)' }}> {yearly ? '/year' : '/month'}</span>
           </div>
           <ul style={{ margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
             <Check>AI journaling &amp; reflection</Check>
@@ -178,10 +178,10 @@ export default function UpgradePage() {
         <div style={card}>
           <div>
             <h2 style={{ margin: 0, fontSize: 20 }}>Full BaZi Life Report</h2>
-            <p style={{ margin: '4px 0 0', color: '#6B6257', fontSize: 13 }}>One-time deep dive</p>
+            <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 13 }}>One-time deep dive</p>
           </div>
           <div style={{ fontSize: 34, fontWeight: 800 }}>
-            $59<span style={{ fontSize: 14, fontWeight: 400, color: '#6B6257' }}> once</span>
+            $59<span style={{ fontSize: 14, fontWeight: 400, color: 'var(--color-text-secondary)' }}> once</span>
           </div>
           <ul style={{ margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>
             <Check>Complete BaZi natal analysis</Check>
@@ -199,7 +199,7 @@ export default function UpgradePage() {
         </div>
       </div>
 
-      <p style={{ textAlign: 'center', color: '#8A8175', fontSize: 12, marginTop: 28 }}>
+      <p style={{ textAlign: 'center', color: 'var(--color-text-muted)', fontSize: 12, marginTop: 28 }}>
         Secure checkout by Stripe. Cancel anytime.
       </p>
     </main>

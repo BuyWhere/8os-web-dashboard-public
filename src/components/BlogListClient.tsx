@@ -109,7 +109,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
               style={{
                 fontSize: '24px',
                 fontWeight: 700,
-                color: '#f1f5f9',
+                color: 'var(--color-bg-secondary)',
                 lineHeight: 1.3,
                 marginBottom: '12px',
               }}
@@ -119,14 +119,14 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
             <p
               style={{
                 fontSize: '15px',
-                color: '#94a3b8',
+                color: 'var(--color-text-muted)',
                 lineHeight: 1.6,
                 marginBottom: '16px',
               }}
             >
               {featured.excerpt}
             </p>
-            <div style={{ display: 'flex', gap: '12px', color: '#64748b', fontSize: '13px' }}>
+            <div style={{ display: 'flex', gap: '12px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
               <time dateTime={featured.isoDate}>{featured.date}</time>
               <span>·</span>
               <span>{featured.readTime}</span>
@@ -151,7 +151,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
           }}
           style={{
             background: !activeCategory ? '#7c3aed' : '#1a1a2e',
-            color: !activeCategory ? '#fff' : '#94a3b8',
+            color: !activeCategory ? '#fff' : 'var(--color-text-muted)',
             border: `1px solid ${!activeCategory ? '#7c3aed' : '#2a2a3e'}`,
             borderRadius: '8px',
             padding: '8px 16px',
@@ -175,7 +175,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
               }}
               style={{
                 background: isActive ? config.bg : '#1a1a2e',
-                color: isActive ? config.color : '#94a3b8',
+                color: isActive ? config.color : 'var(--color-text-muted)',
                 border: `1px solid ${isActive ? config.color + '40' : '#2a2a3e'}`,
                 borderRadius: '8px',
                 padding: '8px 16px',
@@ -239,18 +239,18 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                   <span style={{ color: '#4a4a5a', fontSize: '12px' }}>·</span>
                   <time
                     dateTime={post.isoDate}
-                    style={{ color: '#64748b', fontSize: '12px' }}
+                    style={{ color: 'var(--color-text-secondary)', fontSize: '12px' }}
                   >
                     {post.date}
                   </time>
                   <span style={{ color: '#4a4a5a', fontSize: '12px' }}>·</span>
-                  <span style={{ color: '#64748b', fontSize: '12px' }}>{post.readTime}</span>
+                  <span style={{ color: 'var(--color-text-secondary)', fontSize: '12px' }}>{post.readTime}</span>
                 </div>
                 <h2
                   style={{
                     fontSize: '17px',
                     fontWeight: 600,
-                    color: '#f1f5f9',
+                    color: 'var(--color-bg-secondary)',
                     lineHeight: 1.35,
                     marginBottom: '8px',
                     margin: '0 0 8px 0',
@@ -261,7 +261,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                 <p
                   style={{
                     fontSize: '14px',
-                    color: '#94a3b8',
+                    color: 'var(--color-text-muted)',
                     lineHeight: 1.6,
                     margin: 0,
                   }}
@@ -310,7 +310,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
           style={{
             textAlign: 'center',
             padding: '48px 24px',
-            color: '#64748b',
+            color: 'var(--color-text-secondary)',
           }}
         >
           <p style={{ fontSize: '16px' }}>No articles in this category yet.</p>

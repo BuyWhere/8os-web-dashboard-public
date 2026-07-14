@@ -266,7 +266,7 @@ export default function PricingPage() {
   );
 }
 
-const pageStyle: React.CSSProperties = { background: '#060608', color: '#f8fafc', minHeight: '100vh' };
+const pageStyle: React.CSSProperties = { background: '#060608', color: 'var(--color-bg-secondary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '5rem 2rem', minWidth: 0 };
 const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '4rem' };
 const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#a78bfa' };
@@ -297,7 +297,7 @@ const featureCheckStyle = (included: boolean): React.CSSProperties => ({ flexShr
 const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' };
 const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'rgba(248,250,252,0.35)', fontWeight: 600 };
 const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'rgba(248,250,252,0.5)' };
-const tierCtaStyle: React.CSSProperties = { display: 'block', textAlign: 'center', padding: '0.8rem', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: '#f8fafc', fontWeight: 700, textDecoration: 'none', fontSize: '0.9rem' };
+const tierCtaStyle: React.CSSProperties = { display: 'block', textAlign: 'center', padding: '0.8rem', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--color-bg-secondary)', fontWeight: 700, textDecoration: 'none', fontSize: '0.9rem' };
 const tierCtaHighlightedStyle: React.CSSProperties = { background: 'linear-gradient(135deg, #7c3aed 0%, #9333ea 100%)', border: 'none', boxShadow: '0 6px 20px rgba(124,58,237,0.4)' };
 
 const tableSection: React.CSSProperties = { marginBottom: '4rem' };

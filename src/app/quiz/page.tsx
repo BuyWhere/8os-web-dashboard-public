@@ -36,7 +36,7 @@ const archetypes = [
   {
     name: 'Strategic Commander',
     element: 'Metal',
-    color: '#94a3b8',
+    color: 'var(--color-text-muted)',
     bg: '#1a1f2e',
     description: 'Decisive, systems-oriented, high standards. Transforms complexity into clarity.',
     icon: '⚙️',
@@ -114,7 +114,7 @@ const miniQA = [
 
 export default function QuizPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: '#e2e8f0' }}>
+    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
       {/* Hero */}
       <div
         style={{
@@ -143,14 +143,14 @@ export default function QuizPage() {
             style={{
               fontSize: '46px',
               fontWeight: 700,
-              color: '#f1f5f9',
+              color: 'var(--color-bg-secondary)',
               lineHeight: 1.15,
               marginBottom: '20px',
             }}
           >
             Discover Your BaZi Archetype
           </h1>
-          <p style={{ fontSize: '18px', color: '#94a3b8', lineHeight: 1.65, marginBottom: '36px' }}>
+          <p style={{ fontSize: '18px', color: 'var(--color-text-muted)', lineHeight: 1.65, marginBottom: '36px' }}>
             Five elements. Five operating systems. The quiz reveals which one is yours — and gives
             you a complete system for goals, productivity, and timing.
           </p>
@@ -177,7 +177,7 @@ export default function QuizPage() {
             style={{
               fontSize: '28px',
               fontWeight: 600,
-              color: '#f1f5f9',
+              color: 'var(--color-bg-secondary)',
               textAlign: 'center',
               marginBottom: '40px',
             }}
@@ -219,10 +219,10 @@ export default function QuizPage() {
                 >
                   {step.number}
                 </div>
-                <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#f1f5f9', marginBottom: '8px' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '8px' }}>
                   {step.title}
                 </h3>
-                <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.6 }}>
+                <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
                   {step.description}
                 </p>
               </div>
@@ -236,7 +236,7 @@ export default function QuizPage() {
             style={{
               fontSize: '28px',
               fontWeight: 600,
-              color: '#f1f5f9',
+              color: 'var(--color-bg-secondary)',
               textAlign: 'center',
               marginBottom: '8px',
             }}
@@ -246,7 +246,7 @@ export default function QuizPage() {
           <p
             style={{
               fontSize: '16px',
-              color: '#64748b',
+              color: 'var(--color-text-secondary)',
               textAlign: 'center',
               marginBottom: '36px',
             }}
@@ -270,7 +270,7 @@ export default function QuizPage() {
                 <div style={{ fontSize: '32px', flexShrink: 0 }}>{a.icon}</div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                    <h3 style={{ fontSize: '17px', fontWeight: 600, color: '#f1f5f9' }}>{a.name}</h3>
+                    <h3 style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-bg-secondary)' }}>{a.name}</h3>
                     <span
                       style={{
                         background: `${a.color}20`,
@@ -284,7 +284,7 @@ export default function QuizPage() {
                       {a.element}
                     </span>
                   </div>
-                  <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.5 }}>
+                  <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
                     {a.description}
                   </p>
                 </div>
@@ -299,7 +299,7 @@ export default function QuizPage() {
             style={{
               fontSize: '24px',
               fontWeight: 600,
-              color: '#f1f5f9',
+              color: 'var(--color-bg-secondary)',
               marginBottom: '24px',
             }}
           >
@@ -320,7 +320,7 @@ export default function QuizPage() {
                     padding: '18px 24px',
                     fontSize: '15px',
                     fontWeight: 500,
-                    color: '#f1f5f9',
+                    color: 'var(--color-bg-secondary)',
                     cursor: 'pointer',
                     listStyle: 'none',
                   }}
@@ -330,7 +330,7 @@ export default function QuizPage() {
                 <div
                   style={{
                     padding: '0 24px 16px',
-                    color: '#94a3b8',
+                    color: 'var(--color-text-muted)',
                     fontSize: '14px',
                     lineHeight: 1.7,
                     borderTop: '1px solid #1e1e2e',
@@ -373,7 +373,7 @@ export default function QuizPage() {
               Take the quiz →
             </a>
           </div>
-          <p style={{ color: '#64748b', fontSize: '13px', marginTop: '12px' }}>
+          <p style={{ color: 'var(--color-text-secondary)', fontSize: '13px', marginTop: '12px' }}>
             Free · No credit card · No birth time needed
           </p>
         </div>

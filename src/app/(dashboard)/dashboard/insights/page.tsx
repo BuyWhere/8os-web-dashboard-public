@@ -21,7 +21,7 @@ function pct(x: number | null): string {
   return x === null ? '—' : `${(x * 100).toFixed(1)}%`
 }
 
-const wrap: React.CSSProperties = { maxWidth: 960, margin: '0 auto', padding: '40px 24px 80px', color: '#ededed' }
+const wrap: React.CSSProperties = { maxWidth: 960, margin: '0 auto', padding: '40px 24px 80px', color: 'var(--color-border)' }
 const card: React.CSSProperties = { background: '#111', border: '1px solid #222', borderRadius: 12, padding: '18px 20px', marginBottom: 16 }
 const label: React.CSSProperties = { fontSize: 12, letterSpacing: 1, textTransform: 'uppercase', color: '#888', margin: '0 0 6px' }
 const big: React.CSSProperties = { fontSize: 30, fontWeight: 700, margin: 0 }

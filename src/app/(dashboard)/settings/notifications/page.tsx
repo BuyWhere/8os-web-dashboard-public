@@ -31,16 +31,16 @@ interface PrefsResponse {
 }
 
 const card: React.CSSProperties = {
-  maxWidth: 640, background: '#FFFFFF', border: '1px solid #E7DFD2',
+  maxWidth: 640, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)',
   borderRadius: 12, padding: 20, marginBottom: 16,
 }
-const label: React.CSSProperties = { display: 'block', fontSize: 13, color: '#6B6257', marginBottom: 6 }
+const label: React.CSSProperties = { display: 'block', fontSize: 13, color: 'var(--color-text-secondary)', marginBottom: 6 }
 const input: React.CSSProperties = {
-  background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 8,
-  color: '#221F1A', padding: '8px 10px', fontSize: 14, width: 120,
+  background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 8,
+  color: 'var(--color-text-primary)', padding: '8px 10px', fontSize: 14, width: 120,
 }
 const btn: React.CSSProperties = {
-  background: '#B08637', color: '#FFFFFF', border: 'none', borderRadius: 8,
+  background: 'var(--color-accent)', color: '#FFFFFF', border: 'none', borderRadius: 8,
   padding: '9px 16px', fontSize: 14, fontWeight: 600, cursor: 'pointer',
 }
 const hours = Array.from({ length: 24 }, (_, i) => i)
@@ -127,15 +127,15 @@ export default function NotificationsSettingsPage() {
   }, [data])
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: '#F7F3EC' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--color-bg-primary)' }}>
       <Sidebar />
-      <main style={{ flex: 1, padding: '32px 40px', color: '#221F1A' }}>
+      <main style={{ flex: 1, padding: '32px 40px', color: 'var(--color-text-primary)' }}>
         <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 6, fontFamily: 'var(--font-serif), Georgia, serif' }}>Notifications</h1>
-        <p style={{ color: '#6B6257', fontSize: 14, marginBottom: 24 }}>
+        <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, marginBottom: 24 }}>
           8os only reaches out proactively within these rules. Reactive replies (when you message it) are never governed.
         </p>
 
-        {loading && <p style={{ color: '#6B6257' }}>Loading…</p>}
+        {loading && <p style={{ color: 'var(--color-text-secondary)' }}>Loading…</p>}
         {error && <p style={{ color: '#B5502F' }}>{error}</p>}
 
         {data && (
@@ -181,19 +181,19 @@ export default function NotificationsSettingsPage() {
                     onChange={(e) => patch({ dailyCap: Number(e.target.value) })} />
                 </div>
               </div>
-              <p style={{ color: '#6B6257', fontSize: 12 }}>
+              <p style={{ color: 'var(--color-text-secondary)', fontSize: 12 }}>
                 No proactive messages are sent inside quiet hours (your local time), and never more than the cap per day.
               </p>
             </div>
 
             <div style={card}>
               <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>Quiet week</h2>
-              <p style={{ color: '#6B6257', fontSize: 13, marginBottom: 12 }}>
+              <p style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginBottom: 12 }}>
                 {data.snoozed
                   ? `Snoozed until ${new Date(data.snoozeUntil as string).toLocaleString()}. No proactive messages until then.`
                   : 'Traveling or need a break? Pause all proactive messages for 7 days.'}
               </p>
-              <button style={{ ...btn, background: data.snoozed ? '#F7F3EC' : '#B08637', color: data.snoozed ? '#6B6257' : '#FFFFFF' }}
+              <button style={{ ...btn, background: data.snoozed ? 'var(--color-bg-primary)' : 'var(--color-accent)', color: data.snoozed ? 'var(--color-text-secondary)' : '#FFFFFF' }}
                 disabled={saving}
                 onClick={() => save({ snooze: !data.snoozed })}>
                 {data.snoozed ? 'Resume now' : 'Snooze for a week'}
@@ -202,7 +202,7 @@ export default function NotificationsSettingsPage() {
 
             <div style={card}>
               <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>Weekly review</h2>
-              <p style={{ color: '#6B6257', fontSize: 13, marginBottom: 12 }}>
+              <p style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginBottom: 12 }}>
                 Your Sunday-evening review of the week + the week ahead, framed by your solar month.
               </p>
               <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'flex-end' }}>
@@ -219,7 +219,7 @@ export default function NotificationsSettingsPage() {
 
             <div style={card}>
               <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>Focus Mode</h2>
-              <p style={{ color: '#6B6257', fontSize: 13, marginBottom: 12 }}>
+              <p style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginBottom: 12 }}>
                 Focus Mode keeps you to 3 active goals at a time — a focus philosophy, not a paywall.
                 Turn it off to hold more active goals at once.
               </p>

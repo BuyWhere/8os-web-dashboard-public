@@ -49,11 +49,11 @@ const boilerplate = `8os.ai is a personal operating system built on BaZi (Chines
 
 export default function PressPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: '#e2e8f0' }}>
+    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Header */}
         <div style={{ marginBottom: '56px' }}>
-          <h1 style={{ fontSize: '42px', fontWeight: 700, color: '#f1f5f9', marginBottom: '16px' }}>
+          <h1 style={{ fontSize: '42px', fontWeight: 700, color: 'var(--color-bg-secondary)', marginBottom: '16px' }}>
             Press
           </h1>
           <div
@@ -74,7 +74,7 @@ export default function PressPage() {
 
         {/* Story Angles */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 600, color: '#f1f5f9', marginBottom: '24px' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '24px' }}>
             Story Angles
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -88,10 +88,10 @@ export default function PressPage() {
                   padding: '24px',
                 }}
               >
-                <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#f1f5f9', marginBottom: '10px' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '10px' }}>
                   {i + 1}. {angle.title}
                 </h3>
-                <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: 1.7 }}>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', lineHeight: 1.7 }}>
                   {angle.description}
                 </p>
               </div>
@@ -101,7 +101,7 @@ export default function PressPage() {
 
         {/* Key Facts */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 600, color: '#f1f5f9', marginBottom: '24px' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '24px' }}>
             Key Facts
           </h2>
           <div
@@ -123,8 +123,8 @@ export default function PressPage() {
                   alignItems: 'center',
                 }}
               >
-                <span style={{ color: '#64748b', fontSize: '14px', fontWeight: 500 }}>{fact.label}</span>
-                <span style={{ color: '#f1f5f9', fontSize: '14px', fontWeight: 600 }}>{fact.value}</span>
+                <span style={{ color: 'var(--color-text-secondary)', fontSize: '14px', fontWeight: 500 }}>{fact.label}</span>
+                <span style={{ color: 'var(--color-bg-secondary)', fontSize: '14px', fontWeight: 600 }}>{fact.value}</span>
               </div>
             ))}
           </div>
@@ -132,7 +132,7 @@ export default function PressPage() {
 
         {/* Boilerplate */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 600, color: '#f1f5f9', marginBottom: '16px' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '16px' }}>
             About 8os.ai (Boilerplate)
           </h2>
           <div
@@ -143,13 +143,13 @@ export default function PressPage() {
               padding: '24px',
             }}
           >
-            <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: 1.8 }}>{boilerplate}</p>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: '15px', lineHeight: 1.8 }}>{boilerplate}</p>
           </div>
         </section>
 
         {/* Contact */}
         <section>
-          <h2 style={{ fontSize: '22px', fontWeight: 600, color: '#f1f5f9', marginBottom: '16px' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '16px' }}>
             Media Contact
           </h2>
           <div
@@ -160,7 +160,7 @@ export default function PressPage() {
               padding: '24px',
             }}
           >
-            <p style={{ color: '#94a3b8', fontSize: '14px', marginBottom: '12px' }}>
+            <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', marginBottom: '12px' }}>
               For press inquiries, interview requests, and fact-checking:
             </p>
             <a

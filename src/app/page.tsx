@@ -39,13 +39,13 @@ export const metadata: Metadata = {
 }
 
 // Palette — warm light / editorial
-const INK = '#221F1A'
-const GRAY = '#6B6257'
-const CREAM = '#F7F3EC'
-const SURFACE = '#FFFFFF'
+const INK = 'var(--color-text-primary)'
+const GRAY = 'var(--color-text-secondary)'
+const CREAM = 'var(--color-bg-primary)'
+const SURFACE = 'var(--color-bg-card)'
 const GOLD = '#8A6728' // OS-2712: darkened for WCAG AA (4.69:1 gold-on-cream, 5.18:1 white-on-gold)
-const HAIRLINE = '#E7DFD2'
-const OXBLOOD = '#7A3B2E'
+const HAIRLINE = 'var(--color-border)'
+const OXBLOOD = 'var(--color-accent-2)'
 const MAXW = 1120
 
 // ── Small SVG chart motif — a simple four-pillar BaZi glyph, tasteful ──
@@ -643,7 +643,7 @@ function SectionHead({
           lineHeight: 1.1,
           letterSpacing: '-0.01em',
           margin: 0,
-          color: '#221F1A',
+          color: 'var(--color-text-primary)',
         }}
       >
         {title}
@@ -669,7 +669,7 @@ function FooterCol({
           fontWeight: 700,
           letterSpacing: '0.08em',
           textTransform: 'uppercase',
-          color: '#6B6257',
+          color: 'var(--color-text-secondary)',
           marginBottom: '1rem',
         }}
       >
@@ -680,7 +680,7 @@ function FooterCol({
           <li key={l.href}>
             <a
               href={l.href}
-              style={{ fontSize: '0.9375rem', color: '#221F1A', textDecoration: 'none' }}
+              style={{ fontSize: '0.9375rem', color: 'var(--color-text-primary)', textDecoration: 'none' }}
             >
               {l.label}
             </a>
@@ -697,7 +697,7 @@ export function Mark({ size = 24 }: { size?: number }) {
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true">
       <circle cx="16" cy="10.5" r="6" stroke="#8A6728" strokeWidth="2" />
       <circle cx="16" cy="21.5" r="6.5" stroke="#221F1A" strokeWidth="2" />
-      <path d="M16 6.5 L16 14.5 M12.5 10.5 L19.5 10.5" stroke="#7A3B2E" strokeWidth="1.6" strokeLinecap="round" />
+      <path d="M16 6.5 L16 14.5 M12.5 10.5 L19.5 10.5" stroke="var(--color-accent-2)" strokeWidth="1.6" strokeLinecap="round" />
     </svg>
   )
 }

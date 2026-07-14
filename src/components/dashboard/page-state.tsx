@@ -19,7 +19,7 @@ export function SkeletonBlock({
         width,
         height,
         borderRadius: radius,
-        background: 'linear-gradient(90deg, #F7F3EC 0%, #EFE8DC 50%, #F7F3EC 100%)',
+        background: 'linear-gradient(90deg, var(--color-bg-primary) 0%, #EFE8DC 50%, var(--color-bg-primary) 100%)',
         backgroundSize: '200% 100%',
         animation: 'dashboardSkeletonPulse 1.6s ease-in-out infinite',
         ...style,
@@ -30,7 +30,7 @@ export function SkeletonBlock({
 
 export function SectionCard({
   children,
-  accent = '#E7DFD2',
+  accent = 'var(--color-border)',
   style,
 }: {
   children: ReactNode
@@ -40,7 +40,7 @@ export function SectionCard({
   return (
     <div
       style={{
-        background: '#FFFFFF',
+        background: 'var(--color-bg-card)',
         border: `1px solid ${accent}`,
         borderRadius: 14,
         padding: 24,
@@ -61,9 +61,9 @@ export function LoadingMessage({ children }: { children: ReactNode }) {
         gap: 10,
         padding: '10px 14px',
         borderRadius: 999,
-        border: '1px solid #E7DFD2',
-        background: '#F7F3EC',
-        color: '#B08637',
+        border: '1px solid var(--color-border)',
+        background: 'var(--color-bg-primary)',
+        color: 'var(--color-accent)',
         fontSize: 13,
       }}
     >
@@ -72,7 +72,7 @@ export function LoadingMessage({ children }: { children: ReactNode }) {
           width: 8,
           height: 8,
           borderRadius: '50%',
-          background: '#B08637',
+          background: 'var(--color-accent)',
           boxShadow: '0 0 0 0 rgba(176, 134, 55, 0.45)',
           animation: 'dashboardStatusPulse 1.4s ease-in-out infinite',
         }}
@@ -97,13 +97,13 @@ export function ErrorCard({
     <SectionCard accent="#E7C7B8" style={{ textAlign: 'center', padding: 36 }}>
       <div style={{ fontSize: 32, marginBottom: 12 }}>⚠️</div>
       <h2 style={{ margin: '0 0 8px', fontSize: 18 }}>{title}</h2>
-      <p style={{ margin: '0 auto 20px', color: '#8A8175', fontSize: 14, maxWidth: 480, lineHeight: 1.6 }}>
+      <p style={{ margin: '0 auto 20px', color: 'var(--color-text-muted)', fontSize: 14, maxWidth: 480, lineHeight: 1.6 }}>
         {message}
       </p>
       <button
         onClick={onAction}
         style={{
-          background: '#B08637',
+          background: 'var(--color-accent)',
           color: '#FFFFFF',
           border: 'none',
           borderRadius: 8,

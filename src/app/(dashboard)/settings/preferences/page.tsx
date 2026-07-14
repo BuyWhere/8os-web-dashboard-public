@@ -99,7 +99,7 @@ const btn: React.CSSProperties = {
 const THEME_OPTS: { value: ThemeChoice; label: string }[] = [
   { value: 'light', label: 'Light' },
   { value: 'dark', label: 'Dark' },
-  { value: 'system', label: 'Auto' },
+  { value: 'auto', label: 'Auto' },
 ]
 
 function detectedTimezone(): string {
@@ -190,7 +190,7 @@ export default function PreferencesPage() {
           {/* Theme */}
           <section style={card}>
             <h2 style={h2}>Appearance</h2>
-            <p style={sub}>Choose a light or dark theme, or follow your system setting.</p>
+            <p style={sub}>Choose light, dark, or Auto — which follows your local time: light by day, dark after dark.</p>
             <div style={seg}>
               {THEME_OPTS.map((o) => (
                 <button

@@ -19,7 +19,7 @@ import { Sidebar } from '@/components/dashboard/Sidebar'
 import { QuickAdd } from '@/components/dashboard/QuickAdd'
 
 const MODE_COLOR: Record<string, string> = {
-  push: '#22c55e', consolidate: '#f59e0b', steady: '#64748b',
+  push: '#22c55e', consolidate: '#f59e0b', steady: 'var(--color-text-secondary)',
 }
 const MODE_LABEL: Record<string, string> = {
   push: 'Push', consolidate: 'Consolidate', steady: 'Steady',
@@ -132,7 +132,7 @@ export default function QuarterPage() {
       <main style={{ flex: 1, padding: '24px 24px', overflowY: 'auto', maxWidth: '100%', overflowX: 'hidden' }}>
         <div style={{ marginBottom: 20 }}>
           <Link href="/dashboard" style={{ color: 'var(--skin-color-text-muted, #555)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
-          <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: 'var(--skin-color-text, #ededed)' }}>Quarter · 12-week horizon</h1>
+          <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: 'var(--skin-color-text, var(--color-border))' }}>Quarter · 12-week horizon</h1>
           <p style={{ margin: '4px 0 0', color: 'var(--skin-color-text-muted, #666)', fontSize: 13 }}>
             Pace your goals to favorable months — the next 3 solar months (流月) and what each is best for.
           </p>
@@ -148,7 +148,7 @@ export default function QuarterPage() {
           <>
             {/* favorable elements summary */}
             <div style={{ background: 'var(--skin-card-bg, #0d0d0d)', border: '1px solid var(--skin-card-border, #1a1a1a)', borderRadius: 'var(--skin-radius-card, 12px)', padding: '14px 18px', marginBottom: 20, fontSize: 12, color: 'var(--skin-color-text-secondary, #aaa)' }}>
-              <strong style={{ color: 'var(--skin-color-text, #ededed)' }}>{data.dayMaster} {cap(data.dayElement)} · {data.strength}</strong>
+              <strong style={{ color: 'var(--skin-color-text, var(--color-border))' }}>{data.dayMaster} {cap(data.dayElement)} · {data.strength}</strong>
               {' '}— favorable: <span style={{ color: '#22c55e' }}>{(data.favorable || []).map(cap).join(', ') || '—'}</span>
               {' · '}headwind: <span style={{ color: '#f59e0b' }}>{(data.unfavorable || []).map(cap).join(', ') || '—'}</span>
               <div style={{ marginTop: 6, color: 'var(--skin-color-text-muted, #777)', fontStyle: 'italic' }}>{data.favorableBasis}</div>
@@ -158,12 +158,12 @@ export default function QuarterPage() {
             <div style={{ display: 'grid', gridTemplateColumns: `repeat(${Math.max(1, (data.months || []).length)}, minmax(0, 1fr))`, gap: 16, alignItems: 'start' }}>
               {(data.months || []).map((mo) => {
                 const monthGoals = goalsByMonth[mo.index] ?? []
-                const color = MODE_COLOR[mo.mode] ?? '#64748b'
+                const color = MODE_COLOR[mo.mode] ?? 'var(--color-text-secondary)'
                 return (
                   <section key={mo.index} style={{ background: 'var(--skin-card-bg, #0d0d0d)', border: '1px solid var(--skin-card-border, #1a1a1a)', borderTop: `3px solid ${color}`, borderRadius: 'var(--skin-radius-card, 12px)', padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                        <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: 'var(--skin-color-text, #ededed)' }}>{mo.label}</h2>
+                        <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: 'var(--skin-color-text, var(--color-border))' }}>{mo.label}</h2>
                         <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5, color }}>{MODE_LABEL[mo.mode]}</span>
                       </div>
                       <div style={{ fontSize: 11, color: 'var(--skin-color-text-muted, #777)', marginTop: 2 }}>
@@ -187,7 +187,7 @@ export default function QuarterPage() {
                           <div key={g.goalId} style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
                             <span style={{ fontSize: 14 }}>{DOMAIN_ICONS[g.domain] ?? '◎'}</span>
                             <div style={{ flex: 1, minWidth: 0 }}>
-                              <Link href={`/goals/${g.goalId}`} style={{ color: 'var(--skin-color-text, #ededed)', fontSize: 12.5, textDecoration: 'none', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{g.name}</Link>
+                              <Link href={`/goals/${g.goalId}`} style={{ color: 'var(--skin-color-text, var(--color-border))', fontSize: 12.5, textDecoration: 'none', display: 'block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{g.name}</Link>
                               <div style={{ fontSize: 10, color: DOMAIN_COLORS[g.domain] ?? '#888' }}>
                                 {cap(g.domain)} · {g.tenGod} ({cap(g.domainElement)})
                                 {g.favorableMonthIndexes.includes(mo.index) ? ' · favorable' : ' · earliest open'}

@@ -43,7 +43,7 @@ const DOMAIN_ICONS: Record<string, string> = {
   career: '💼', wealth: '💰', health: '💪', relationships: '❤️', learning: '📚', legacy: '🌟',
 }
 const VERDICT_COLOR: Record<string, string> = {
-  favorable: '#22c55e', unfavorable: '#f59e0b', neutral: '#64748b',
+  favorable: '#22c55e', unfavorable: '#f59e0b', neutral: 'var(--color-text-secondary)',
 }
 
 function cap(s: string) { return s.charAt(0).toUpperCase() + s.slice(1) }
@@ -114,7 +114,7 @@ export function DailyBig3({ onChanged }: { onChanged?: () => void }) {
     <section
       style={{
         background: 'var(--skin-card-bg, #FFFFFF)',
-        border: '1px solid var(--skin-card-border, #E7DFD2)',
+        border: '1px solid var(--skin-card-border, var(--color-border))',
         borderRadius: 'var(--skin-radius-card, 12px)',
         padding: 20, marginBottom: 20,
       }}
@@ -123,7 +123,7 @@ export function DailyBig3({ onChanged }: { onChanged?: () => void }) {
         <h2 style={{ margin: 0, fontSize: 15, fontWeight: 'var(--skin-typo-heading-weight, 700)', color: 'var(--skin-color-text, #221F1A)' }}>
           Your Daily Big 3
         </h2>
-        <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, #8A8175)' }}>
+        <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>
           favorable: {data.favorableDomains.length ? data.favorableDomains.map(cap).join(', ') : '—'}
           {data.favorableElements.length ? ` · ${data.favorableElements.join(', ')}` : ''}
         </span>
@@ -136,19 +136,19 @@ export function DailyBig3({ onChanged }: { onChanged?: () => void }) {
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
         {picks.map((p, i) => {
-          const color = p.favorVerdict ? VERDICT_COLOR[p.favorVerdict] : '#8A8175'
+          const color = p.favorVerdict ? VERDICT_COLOR[p.favorVerdict] : 'var(--color-text-muted)'
           return (
             <div key={p.id} style={{
               display: 'flex', alignItems: 'center', gap: 12, padding: '10px 12px',
-              borderRadius: 10, background: 'var(--skin-color-surface, #F7F3EC)',
-              border: '1px solid var(--skin-card-border, #E7DFD2)', borderLeft: `3px solid ${color}`,
+              borderRadius: 10, background: 'var(--skin-color-surface, var(--color-bg-primary))',
+              border: '1px solid var(--skin-card-border, var(--color-border))', borderLeft: `3px solid ${color}`,
             }}>
-              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--skin-color-text-muted, #8A8175)', width: 16, flexShrink: 0 }}>{i + 1}</span>
+              <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--skin-color-text-muted, var(--color-text-muted))', width: 16, flexShrink: 0 }}>{i + 1}</span>
               <div style={{ flex: 1, minWidth: 0 }}>
                 <div style={{ fontSize: 14, color: 'var(--skin-color-text, #221F1A)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                   {p.name}
                 </div>
-                <div style={{ fontSize: 11, color: 'var(--skin-color-text-muted, #8A8175)', marginTop: 2 }}>
+                <div style={{ fontSize: 11, color: 'var(--skin-color-text-muted, var(--color-text-muted))', marginTop: 2 }}>
                   {p.domainId ? `${DOMAIN_ICONS[p.domainId] ?? ''} ${cap(p.domainId)}` : 'no domain'}
                   {p.favorVerdict === 'favorable' ? ` · favorable${p.domainElement ? ` (${p.domainElement})` : ''}` : ''}
                   {p.scheduledAt ? ' · on today' : ` · ${p.duration}m`}
@@ -160,8 +160,8 @@ export function DailyBig3({ onChanged }: { onChanged?: () => void }) {
                   disabled={busy}
                   aria-label="Swap this suggestion"
                   style={{
-                    background: 'transparent', border: '1px solid var(--skin-card-border, #E7DFD2)', borderRadius: 6,
-                    color: 'var(--skin-color-text-muted, #8A8175)', padding: '4px 9px', fontSize: 11, fontWeight: 600,
+                    background: 'transparent', border: '1px solid var(--skin-card-border, var(--color-border))', borderRadius: 6,
+                    color: 'var(--skin-color-text-muted, var(--color-text-muted))', padding: '4px 9px', fontSize: 11, fontWeight: 600,
                     cursor: busy ? 'default' : 'pointer', flexShrink: 0,
                   }}
                 >
@@ -175,7 +175,7 @@ export function DailyBig3({ onChanged }: { onChanged?: () => void }) {
 
       {/* soft day tint — gentle orientation, NOT a rule */}
       {data.dayTint.line && (
-        <div style={{ marginTop: 12, fontSize: 11.5, color: 'var(--skin-color-text-muted, #8A8175)', fontStyle: 'italic', lineHeight: 1.45, display: 'flex', gap: 6 }}>
+        <div style={{ marginTop: 12, fontSize: 11.5, color: 'var(--skin-color-text-muted, var(--color-text-muted))', fontStyle: 'italic', lineHeight: 1.45, display: 'flex', gap: 6 }}>
           <span style={{ color: VERDICT_COLOR[data.dayTint.verdict], fontStyle: 'normal' }}>◐</span>
           <span>{data.dayTint.line} <span style={{ opacity: 0.7 }}>(a gentle tint, not a rule)</span></span>
         </div>
@@ -188,7 +188,7 @@ export function DailyBig3({ onChanged }: { onChanged?: () => void }) {
           onClick={accept}
           disabled={busy || accepted}
           style={{
-            background: accepted ? 'transparent' : 'var(--skin-color-primary, #B08637)',
+            background: accepted ? 'transparent' : 'var(--skin-color-primary, var(--color-accent))',
             border: accepted ? '1px solid #4F7A52' : 'none', borderRadius: 8,
             color: accepted ? '#4F7A52' : '#fff', padding: '9px 16px', fontSize: 13, fontWeight: 600,
             cursor: busy || accepted ? 'default' : 'pointer', opacity: busy ? 0.6 : 1,
@@ -197,7 +197,7 @@ export function DailyBig3({ onChanged }: { onChanged?: () => void }) {
           {accepted ? '✓ Set as today’s focus' : busy ? 'Scheduling…' : '✦ Accept & schedule into today'}
         </button>
         {!accepted && (
-          <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, #8A8175)' }}>
+          <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>
             Swap any one before you commit.
           </span>
         )}

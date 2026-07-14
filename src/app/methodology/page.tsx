@@ -198,7 +198,7 @@ export default function MethodologyPage() {
   );
 }
 
-const pageStyle: React.CSSProperties = { background: '#060608', color: '#f8fafc', minHeight: '100vh' };
+const pageStyle: React.CSSProperties = { background: '#060608', color: 'var(--color-bg-secondary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '1000px', margin: '0 auto', padding: '5rem 2rem' };
 const headerStyle: React.CSSProperties = { marginBottom: '4rem' };
 const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#a78bfa' };
@@ -210,7 +210,7 @@ const bodyStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: '1rem', l
 const dividerStyle: React.CSSProperties = { height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '3rem 0' };
 
 const flowchartStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', padding: '2rem', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px' };
-const flowNodeStyle = (bg: string): React.CSSProperties => ({ padding: '0.75rem 1.5rem', borderRadius: '10px', background: bg, color: '#f8fafc', fontWeight: 600, fontSize: '0.9rem', textAlign: 'center', maxWidth: '340px', width: '100%' });
+const flowNodeStyle = (bg: string): React.CSSProperties => ({ padding: '0.75rem 1.5rem', borderRadius: '10px', background: bg, color: 'var(--color-bg-secondary)', fontWeight: 600, fontSize: '0.9rem', textAlign: 'center', maxWidth: '340px', width: '100%' });
 const flowRowStyle: React.CSSProperties = { display: 'flex', gap: '2rem', justifyContent: 'center', width: '100%' };
 const flowBranchStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' };
 const flowArrowStyle: React.CSSProperties = { width: '2px', height: '24px', background: 'rgba(255,255,255,0.2)' };

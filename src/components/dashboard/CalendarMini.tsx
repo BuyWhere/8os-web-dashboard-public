@@ -119,13 +119,13 @@ export function CalendarMini({ events, timezone, weekStartsOn = 1 }: Props) {
                 padding: 0, cursor: 'pointer', font: 'inherit',
               }}
             >
-              <div style={{ color: '#8A8175', fontSize: 10, marginBottom: 4 }}>{DAYS[d.dow]}</div>
+              <div style={{ color: 'var(--color-text-muted)', fontSize: 10, marginBottom: 4 }}>{DAYS[d.dow]}</div>
               <div style={{
                 width: 30, height: 30, borderRadius: '50%', margin: '0 auto',
-                background: isToday ? 'var(--color-accent, #B08637)' : 'transparent',
-                border: isSelected && !isToday ? '2px solid var(--color-accent, #B08637)' : isToday ? 'none' : '1px solid #E7DFD2',
+                background: isToday ? 'var(--color-accent, var(--color-accent))' : 'transparent',
+                border: isSelected && !isToday ? '2px solid var(--color-accent, var(--color-accent))' : isToday ? 'none' : '1px solid var(--color-border)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 12, color: isToday ? '#fff' : isSelected ? 'var(--color-accent, #B08637)' : '#6B6257',
+                fontSize: 12, color: isToday ? '#fff' : isSelected ? 'var(--color-accent, var(--color-accent))' : 'var(--color-text-secondary)',
                 fontWeight: isToday || isSelected ? 700 : 400,
               }}>
                 {d.dayNum}
@@ -137,12 +137,12 @@ export function CalendarMini({ events, timezone, weekStartsOn = 1 }: Props) {
                     title={e.title}
                     style={{
                       width: 20, height: 4, borderRadius: 2,
-                      background: e.color ?? (e.domainId ? DOMAIN_COLORS[e.domainId] : '#B08637') ?? '#B08637',
+                      background: e.color ?? (e.domainId ? DOMAIN_COLORS[e.domainId] : 'var(--color-accent)') ?? 'var(--color-accent)',
                     }}
                   />
                 ))}
                 {dayEvents.length > 3 && (
-                  <div style={{ fontSize: 9, color: '#8A8175' }}>+{dayEvents.length - 3}</div>
+                  <div style={{ fontSize: 9, color: 'var(--color-text-muted)' }}>+{dayEvents.length - 3}</div>
                 )}
               </div>
             </button>
@@ -151,16 +151,16 @@ export function CalendarMini({ events, timezone, weekStartsOn = 1 }: Props) {
       </div>
 
       {/* Selected-day items — was a blank box; now the day's key calendar items. */}
-      <div style={{ marginTop: 16, borderTop: '1px solid #E7DFD2', paddingTop: 12 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: '#8A8175', marginBottom: 10 }}>
+      <div style={{ marginTop: 16, borderTop: '1px solid var(--color-border)', paddingTop: 12 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-text-muted)', marginBottom: 10 }}>
           {selected === today.key ? 'Today' : selectedLabel}
         </div>
         {selectedEvents.length === 0 ? (
-          <div style={{ color: '#8A8175', fontSize: 13, padding: '6px 0' }}>Nothing scheduled.</div>
+          <div style={{ color: 'var(--color-text-muted)', fontSize: 13, padding: '6px 0' }}>Nothing scheduled.</div>
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {selectedEvents.map((e) => {
-              const dot = e.color ?? (e.domainId ? DOMAIN_COLORS[e.domainId] : null) ?? '#B08637'
+              const dot = e.color ?? (e.domainId ? DOMAIN_COLORS[e.domainId] : null) ?? 'var(--color-accent)'
               const domainLabel = e.domainId ? (DOMAIN_LABELS[e.domainId] ?? e.domainId) : null
               return (
                 <div key={e.id} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
@@ -169,7 +169,7 @@ export function CalendarMini({ events, timezone, weekStartsOn = 1 }: Props) {
                     <div style={{ fontSize: 13.5, color: 'var(--color-ink, #221F1A)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {e.title}
                     </div>
-                    <div style={{ fontSize: 11.5, color: '#8A8175', marginTop: 1 }}>
+                    <div style={{ fontSize: 11.5, color: 'var(--color-text-muted)', marginTop: 1 }}>
                       {fmtTime(e.startAt, timezone)}
                       {domainLabel ? ` · ${domainLabel}` : ''}
                     </div>

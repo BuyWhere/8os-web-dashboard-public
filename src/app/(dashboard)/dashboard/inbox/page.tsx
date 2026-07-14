@@ -137,31 +137,31 @@ export default function InboxPage() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+      <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
         <Sidebar goals={[]} />
         <main style={{ flex: 1, padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ color: '#6B6257' }}>Opening your inbox…</div>
+          <div style={{ color: 'var(--color-text-secondary)' }}>Opening your inbox…</div>
         </main>
       </div>
     )
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <Sidebar goals={[]} />
 
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
         <div style={{ marginBottom: 24, maxWidth: 720, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 12 }}>
           <div>
-            <Link href="/dashboard" style={{ color: '#8A8175', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+            <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
             <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>
               Inbox{unreadCount > 0 && (
-                <span style={{ marginLeft: 10, verticalAlign: 'middle', background: '#B08637', color: '#fff', borderRadius: 10, fontSize: 11, fontWeight: 700, padding: '2px 8px' }}>
+                <span style={{ marginLeft: 10, verticalAlign: 'middle', background: 'var(--color-accent)', color: '#fff', borderRadius: 10, fontSize: 11, fontWeight: 700, padding: '2px 8px' }}>
                   {unreadCount} unread
                 </span>
               )}
             </h1>
-            <p style={{ margin: '4px 0 0', color: '#6B6257', fontSize: 14 }}>
+            <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 14 }}>
               Briefs, nudges and channel messages — the web inbox is always on
             </p>
           </div>
@@ -169,7 +169,7 @@ export default function InboxPage() {
             <button
               onClick={() => markRead('all')}
               disabled={marking}
-              style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 8, color: '#6B6257', fontSize: 12, padding: '8px 12px', cursor: 'pointer', whiteSpace: 'nowrap' }}
+              style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 8, color: 'var(--color-text-secondary)', fontSize: 12, padding: '8px 12px', cursor: 'pointer', whiteSpace: 'nowrap' }}
             >
               Mark all read
             </button>
@@ -183,9 +183,9 @@ export default function InboxPage() {
         )}
 
         {!error && messages.length === 0 && (
-          <div style={{ maxWidth: 720, background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 28, color: '#6B6257', fontSize: 14 }}>
+          <div style={{ maxWidth: 720, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 28, color: 'var(--color-text-secondary)', fontSize: 14 }}>
             Nothing here yet. Daily briefs and nudges will land in this inbox — and in Telegram once you
-            {' '}<Link href="/settings/channels" style={{ color: '#B08637' }}>link a channel</Link>.
+            {' '}<Link href="/settings/channels" style={{ color: 'var(--color-accent)' }}>link a channel</Link>.
           </div>
         )}
 
@@ -204,8 +204,8 @@ export default function InboxPage() {
               }}
               style={{
                 background: 'var(--color-surface, #FFFFFF)',
-                border: '1px solid var(--color-border, #E7DFD2)',
-                borderLeft: m.read ? '2px solid var(--color-border, #E7DFD2)' : '2px solid var(--color-accent, #B08637)',
+                border: '1px solid var(--color-border, var(--color-border))',
+                borderLeft: m.read ? '2px solid var(--color-border, var(--color-border))' : '2px solid var(--color-accent, var(--color-accent))',
                 borderRadius: 12,
                 padding: '14px 16px',
                 cursor: 'pointer',
@@ -213,15 +213,15 @@ export default function InboxPage() {
               }}
             >
               <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                {!m.read && <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--color-accent, #B08637)', flexShrink: 0, alignSelf: 'center' }} />}
+                {!m.read && <span style={{ width: 7, height: 7, borderRadius: '50%', background: 'var(--color-accent, var(--color-accent))', flexShrink: 0, alignSelf: 'center' }} />}
                 <div style={{ fontSize: 14, fontWeight: m.read ? 500 : 700, flex: 1 }}>
                   {m.title || 'Message'}
                 </div>
-                <div style={{ color: '#8A8175', fontSize: 11, whiteSpace: 'nowrap' }}>{fmtWhen(m.createdAt)}</div>
+                <div style={{ color: 'var(--color-text-muted)', fontSize: 11, whiteSpace: 'nowrap' }}>{fmtWhen(m.createdAt)}</div>
                 <span
                   aria-hidden
                   style={{
-                    color: '#8A8175', fontSize: 12, flexShrink: 0, marginLeft: 2,
+                    color: 'var(--color-text-muted)', fontSize: 12, flexShrink: 0, marginLeft: 2,
                     transform: isOpen ? 'rotate(90deg)' : 'none', transition: 'transform 0.15s ease',
                   }}
                 >
@@ -230,7 +230,7 @@ export default function InboxPage() {
               </div>
               <div
                 style={{
-                  color: '#6B6257', fontSize: 13, marginTop: 6, whiteSpace: 'pre-wrap',
+                  color: 'var(--color-text-secondary)', fontSize: 13, marginTop: 6, whiteSpace: 'pre-wrap',
                   ...(isOpen
                     ? { maxHeight: 360, overflowY: 'auto' as const }
                     : {
@@ -244,7 +244,7 @@ export default function InboxPage() {
                 {m.body}
               </div>
               {!isOpen && m.body.length > 120 && (
-                <div style={{ color: 'var(--color-accent, #B08637)', fontSize: 12, fontWeight: 600, marginTop: 4 }}>
+                <div style={{ color: 'var(--color-accent, var(--color-accent))', fontSize: 12, fontWeight: 600, marginTop: 4 }}>
                   Read more
                 </div>
               )}
@@ -267,8 +267,8 @@ export default function InboxPage() {
                           disabled={st === 'busy' || st === 'done'}
                           onClick={() => acceptRedirection(a.id, proposalId)}
                           style={{
-                            background: st === 'done' ? '#4F7A5218' : '#B08637',
-                            border: '1px solid ' + (st === 'done' ? '#4F7A5244' : '#B08637'),
+                            background: st === 'done' ? '#4F7A5218' : 'var(--color-accent)',
+                            border: '1px solid ' + (st === 'done' ? '#4F7A5244' : 'var(--color-accent)'),
                             borderRadius: 8,
                             color: st === 'done' ? '#4F7A52' : '#fff',
                             fontSize: 12,
@@ -287,7 +287,7 @@ export default function InboxPage() {
                       const commitmentId = cm[1]
                       const verb = cm[2]
                       const st = actionState[a.id]
-                      const doneColor = verb === 'done' ? '#4F7A52' : verb === 'drop' ? '#6B6257' : '#B08637'
+                      const doneColor = verb === 'done' ? '#4F7A52' : verb === 'drop' ? 'var(--color-text-secondary)' : 'var(--color-accent)'
                       return (
                         <button
                           key={a.id}
@@ -313,7 +313,7 @@ export default function InboxPage() {
                       <span
                         key={a.id}
                         title="One-tap actions arrive in Phase C"
-                        style={{ background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 8, color: '#B08637', fontSize: 12, padding: '6px 12px' }}
+                        style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 8, color: 'var(--color-accent)', fontSize: 12, padding: '6px 12px' }}
                       >
                         {a.label}
                       </span>

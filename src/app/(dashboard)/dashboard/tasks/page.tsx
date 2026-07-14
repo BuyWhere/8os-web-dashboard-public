@@ -139,10 +139,10 @@ export default function TasksPage() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+      <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
         <Sidebar goals={[]} />
         <main style={{ flex: 1, padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ color: '#6B6257' }}>Loading tasks...</div>
+          <div style={{ color: 'var(--color-text-secondary)' }}>Loading tasks...</div>
         </main>
         <QuickAdd />
       </div>
@@ -150,15 +150,15 @@ export default function TasksPage() {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <Sidebar goals={goals} />
 
       <main style={{ flex: 1, padding: '24px 24px', overflowY: 'auto', maxWidth: '100%', overflowX: 'hidden' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
           <div>
-            <Link href="/dashboard" style={{ color: '#8A8175', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+            <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
             <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>Tasks</h1>
-            <p style={{ margin: '4px 0 0', color: '#6B6257', fontSize: 13 }}>
+            <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 13 }}>
               {filteredTasks.filter(t => t.status === 'todo' || t.status === 'in_progress').length} active
             </p>
           </div>
@@ -169,8 +169,8 @@ export default function TasksPage() {
               value={filterStatus}
               onChange={e => setFilterStatus(e.target.value as FilterStatus)}
               style={{
-                background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 6,
-                color: '#221F1A', padding: '6px 10px', fontSize: 12, cursor: 'pointer',
+                background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 6,
+                color: 'var(--color-text-primary)', padding: '6px 10px', fontSize: 12, cursor: 'pointer',
               }}
             >
               <option value="all">All Status</option>
@@ -183,8 +183,8 @@ export default function TasksPage() {
               value={filterPriority}
               onChange={e => setFilterPriority(e.target.value as FilterPriority)}
               style={{
-                background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 6,
-                color: '#221F1A', padding: '6px 10px', fontSize: 12, cursor: 'pointer',
+                background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 6,
+                color: 'var(--color-text-primary)', padding: '6px 10px', fontSize: 12, cursor: 'pointer',
               }}
             >
               <option value="all">All Priority</option>
@@ -198,8 +198,8 @@ export default function TasksPage() {
                 value={filterDomain}
                 onChange={e => setFilterDomain(e.target.value)}
                 style={{
-                  background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 6,
-                  color: '#221F1A', padding: '6px 10px', fontSize: 12, cursor: 'pointer',
+                  background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 6,
+                  color: 'var(--color-text-primary)', padding: '6px 10px', fontSize: 12, cursor: 'pointer',
                 }}
               >
                 <option value="all">All Domains</option>
@@ -212,9 +212,9 @@ export default function TasksPage() {
         </div>
 
         {tasks.length === 0 ? (
-          <div style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 14, padding: 40, textAlign: 'center' }}>
+          <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 14, padding: 40, textAlign: 'center' }}>
             <div style={{ fontSize: 32, marginBottom: 12 }}>✦</div>
-            <div style={{ color: '#6B6257', marginBottom: 16 }}>No tasks yet. Press ⌘K to add your first task.</div>
+            <div style={{ color: 'var(--color-text-secondary)', marginBottom: 16 }}>No tasks yet. Press ⌘K to add your first task.</div>
           </div>
         ) : (
           /* Responsive: 2 cols on wide, 1 col on mobile */
@@ -256,22 +256,22 @@ function renderTaskGroup(
 ) {
   return (
     <div style={{ marginBottom: 24 }}>
-      <h3 style={{ margin: '0 0 12px', fontSize: 13, fontWeight: 600, color: '#8A8175', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+      <h3 style={{ margin: '0 0 12px', fontSize: 13, fontWeight: 600, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
         {title} ({taskList.length})
       </h3>
       {taskList.length === 0 ? (
-        <div style={{ color: '#8A8175', fontSize: 13, padding: '12px 0' }}>{emptyMessage}</div>
+        <div style={{ color: 'var(--color-text-muted)', fontSize: 13, padding: '12px 0' }}>{emptyMessage}</div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           {taskList.map(t => (
             <div key={t.id} style={{
               display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px',
-              borderRadius: 10, background: '#FFFFFF', border: '1px solid #E7DFD2',
+              borderRadius: 10, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)',
               opacity: t.status === 'done' ? 0.6 : 1,
               transition: 'border-color 0.15s',
             }}
-              onMouseEnter={e => (e.currentTarget.style.borderColor = '#B08637')}
-              onMouseLeave={e => (e.currentTarget.style.borderColor = '#E7DFD2')}
+              onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--color-accent)')}
+              onMouseLeave={e => (e.currentTarget.style.borderColor = 'var(--color-border)')}
             >
               {/* Checkbox */}
               <button
@@ -280,7 +280,7 @@ function renderTaskGroup(
                 style={{
                   width: 18, height: 18, borderRadius: 4, flexShrink: 0, cursor: 'pointer',
                   background: t.status === 'done' ? '#4F7A52' : 'transparent',
-                  border: t.status === 'done' ? 'none' : `2px solid ${PRIORITY_COLORS[t.priority] ?? '#8A8175'}`,
+                  border: t.status === 'done' ? 'none' : `2px solid ${PRIORITY_COLORS[t.priority] ?? 'var(--color-text-muted)'}`,
                   display: 'flex', alignItems: 'center', justifyContent: 'center',
                   transition: 'all 0.15s',
                 }}
@@ -291,7 +291,7 @@ function renderTaskGroup(
               {/* Priority dot */}
               <div style={{
                 width: 6, height: 6, borderRadius: '50%', flexShrink: 0,
-                background: t.status === 'done' ? '#4F7A52' : (PRIORITY_COLORS[t.priority] ?? '#8A8175'),
+                background: t.status === 'done' ? '#4F7A52' : (PRIORITY_COLORS[t.priority] ?? 'var(--color-text-muted)'),
               }} />
 
               {/* Task info */}
@@ -307,8 +307,8 @@ function renderTaskGroup(
                       if (e.key === 'Escape') { setEditingId(null) }
                     }}
                     style={{
-                      width: '100%', background: '#F7F3EC', border: '1px solid #B08637',
-                      borderRadius: 4, padding: '2px 6px', color: '#221F1A', fontSize: 13,
+                      width: '100%', background: 'var(--color-bg-primary)', border: '1px solid var(--color-accent)',
+                      borderRadius: 4, padding: '2px 6px', color: 'var(--color-text-primary)', fontSize: 13,
                       outline: 'none',
                     }}
                   />
@@ -316,7 +316,7 @@ function renderTaskGroup(
                   <div
                     onDoubleClick={() => startEdit(t)}
                     style={{
-                      fontSize: 13, color: t.status === 'done' ? '#8A8175' : '#221F1A',
+                      fontSize: 13, color: t.status === 'done' ? 'var(--color-text-muted)' : '#221F1A',
                       textDecoration: t.status === 'done' ? 'line-through' : 'none',
                       overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                       cursor: 'text',
@@ -326,28 +326,28 @@ function renderTaskGroup(
                     {t.name}
                   </div>
                 )}
-                <div style={{ display: 'flex', gap: 8, marginTop: 2, fontSize: 11, color: '#8A8175', flexWrap: 'wrap' }}>
+                <div style={{ display: 'flex', gap: 8, marginTop: 2, fontSize: 11, color: 'var(--color-text-muted)', flexWrap: 'wrap' }}>
                   {t.scheduledAt && (
                     <span>{new Date(t.scheduledAt).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })} {new Date(t.scheduledAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}</span>
                   )}
                   <span>{t.duration}m</span>
-                  {t.project && <span style={{ color: '#B08637' }}>{t.project.name}</span>}
+                  {t.project && <span style={{ color: 'var(--color-accent)' }}>{t.project.name}</span>}
                 </div>
               </div>
 
               {/* Domain indicator */}
               {t.domainId && (
                 <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
-                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: DOMAIN_COLORS[t.domainId] ?? '#8A8175' }} />
-                  <span style={{ fontSize: 10, color: '#8A8175' }}>{DOMAIN_ICONS[t.domainId]}</span>
+                  <div style={{ width: 6, height: 6, borderRadius: '50%', background: DOMAIN_COLORS[t.domainId] ?? 'var(--color-text-muted)' }} />
+                  <span style={{ fontSize: 10, color: 'var(--color-text-muted)' }}>{DOMAIN_ICONS[t.domainId]}</span>
                 </div>
               )}
 
               {/* Status badge */}
               <span style={{
                 padding: '2px 8px', borderRadius: 4, fontSize: 10, fontWeight: 600,
-                background: t.status === 'done' ? '#4F7A5222' : t.status === 'in_progress' ? '#B0863722' : '#F7F3EC',
-                color: t.status === 'done' ? '#4F7A52' : t.status === 'in_progress' ? '#B08637' : '#8A8175',
+                background: t.status === 'done' ? '#4F7A5222' : t.status === 'in_progress' ? 'var(--color-accent)22' : 'var(--color-bg-primary)',
+                color: t.status === 'done' ? '#4F7A52' : t.status === 'in_progress' ? 'var(--color-accent)' : 'var(--color-text-muted)',
                 flexShrink: 0,
               }}>
                 {STATUS_LABELS[t.status]}

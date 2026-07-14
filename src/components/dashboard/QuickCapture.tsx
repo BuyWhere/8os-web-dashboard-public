@@ -64,7 +64,7 @@ export function QuickCapture({ onCaptured }: Props) {
         gap: 8,
         padding: '10px 14px',
         background: 'var(--skin-card-bg, #FFFFFF)',
-        border: '1px solid var(--skin-color-border, #E7DFD2)',
+        border: '1px solid var(--skin-color-border, var(--color-border))',
         borderRadius: 'var(--skin-radius-card, 12px)',
       }}
     >
@@ -108,7 +108,7 @@ export function QuickCapture({ onCaptured }: Props) {
         type="submit"
         disabled={busy || !name.trim()}
         style={{
-          background: 'var(--skin-button-primary-bg, #B08637)',
+          background: 'var(--skin-button-primary-bg, var(--color-accent))',
           color: 'var(--skin-button-primary-text, #fff)',
           border: 'none',
           borderRadius: 'var(--skin-radius-button, 6px)',

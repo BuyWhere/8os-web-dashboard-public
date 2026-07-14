@@ -162,7 +162,7 @@ export default async function DashboardPage() {
     : `${todayTasks.length} scheduled ${todayTasks.length === 1 ? 'task' : 'tasks'} today · ${completedThisWeek} done this week.`
 
   return (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <PostHogIdentify userId={userId} accountId={userId} archetypeName={archetypeName} />
       <Sidebar goals={goals} initialCollapsed={settings?.sidebarCollapsed ?? false} />
 
@@ -170,16 +170,16 @@ export default async function DashboardPage() {
 
         {/* ── Greeting + today's pillar ─────────────────────────────── */}
         <header style={{ marginBottom: 28 }}>
-          <div style={{ fontSize: 13, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: '#B08637', marginBottom: 8 }}>
+          <div style={{ fontSize: 13, fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', color: 'var(--color-accent)', marginBottom: 8 }}>
             {todayLabel}
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 16 }}>
             <div>
-              <h1 style={{ margin: 0, fontFamily: serif, fontSize: 34, fontWeight: 500, letterSpacing: '-0.02em', lineHeight: 1.1, color: '#221F1A' }}>
+              <h1 style={{ margin: 0, fontFamily: serif, fontSize: 34, fontWeight: 500, letterSpacing: '-0.02em', lineHeight: 1.1, color: 'var(--color-text-primary)' }}>
                 {greeting}, {userName}.
               </h1>
-              <p style={{ margin: '10px 0 0', color: '#6B6257', fontSize: 15.5, maxWidth: 560, lineHeight: 1.55 }}>
-                {archetype ? <span style={{ color: '#221F1A', fontWeight: 600 }}>{archetypeName}</span> : null}
+              <p style={{ margin: '10px 0 0', color: 'var(--color-text-secondary)', fontSize: 15.5, maxWidth: 560, lineHeight: 1.55 }}>
+                {archetype ? <span style={{ color: 'var(--color-text-primary)', fontWeight: 600 }}>{archetypeName}</span> : null}
                 {archetype ? ' · ' : ''}{briefLine}
               </p>
             </div>
@@ -213,17 +213,17 @@ export default async function DashboardPage() {
             <Card>
               <DailyBig3 />
               {todayTasks.length > 0 && (
-                <div style={{ marginTop: 16, borderTop: '1px solid #E7DFD2', paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
-                  <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: '#8A8175' }}>Scheduled today</div>
+                <div style={{ marginTop: 16, borderTop: '1px solid var(--color-border)', paddingTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
+                  <div style={{ fontSize: 12, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-text-muted)' }}>Scheduled today</div>
                   {todayTasks.slice(0, 5).map((t) => {
                     const energy = t.scheduledAt ? (energyMap[t.scheduledAt.getHours()] ?? 'red') : 'red'
-                    const energyColor = energy === 'green' ? '#4F7A52' : energy === 'yellow' ? '#B08637' : '#7A3B2E'
+                    const energyColor = energy === 'green' ? '#4F7A52' : energy === 'yellow' ? 'var(--color-accent)' : 'var(--color-accent-2)'
                     return (
-                      <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 10, background: '#F7F3EC', border: '1px solid #E7DFD2', opacity: t.status === 'done' ? 0.55 : 1 }}>
+                      <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 12px', borderRadius: 10, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', opacity: t.status === 'done' ? 0.55 : 1 }}>
                         <div style={{ width: 7, height: 7, borderRadius: '50%', background: energyColor, flexShrink: 0 }} />
-                        <div style={{ flex: 1, fontSize: 13.5, color: '#221F1A', textDecoration: t.status === 'done' ? 'line-through' : 'none' }}>{t.name}</div>
+                        <div style={{ flex: 1, fontSize: 13.5, color: 'var(--color-text-primary)', textDecoration: t.status === 'done' ? 'line-through' : 'none' }}>{t.name}</div>
                         {t.scheduledAt && (
-                          <div style={{ fontSize: 11.5, color: '#8A8175' }}>
+                          <div style={{ fontSize: 11.5, color: 'var(--color-text-muted)' }}>
                             {new Date(t.scheduledAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} · {t.duration}m
                           </div>
                         )}
@@ -256,15 +256,15 @@ export default async function DashboardPage() {
           <GoalHygieneCard />
           <Card>
             {goals.length === 0 ? (
-              <div style={{ color: '#6B6257', fontSize: 14, textAlign: 'center', padding: '24px 0' }}>
-                No active goals yet. <Link href="/onboarding/goals" style={{ color: '#B08637', fontWeight: 600 }}>Add one →</Link>
+              <div style={{ color: 'var(--color-text-secondary)', fontSize: 14, textAlign: 'center', padding: '24px 0' }}>
+                No active goals yet. <Link href="/onboarding/goals" style={{ color: 'var(--color-accent)', fontWeight: 600 }}>Add one →</Link>
               </div>
             ) : (
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 22 }}>
                 {goals.map((g) => (
                   <Link key={g.id} href={`/goals/${g.id}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-                    <ProgressRing progress={g.progress} size={64} color={DOMAIN_COLORS[g.domainId] ?? '#B08637'} label={`${Math.round(g.progress * 100)}%`} />
-                    <div style={{ fontSize: 11.5, color: '#6B6257', textAlign: 'center', maxWidth: 72, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                    <ProgressRing progress={g.progress} size={64} color={DOMAIN_COLORS[g.domainId] ?? 'var(--color-accent)'} label={`${Math.round(g.progress * 100)}%`} />
+                    <div style={{ fontSize: 11.5, color: 'var(--color-text-secondary)', textAlign: 'center', maxWidth: 72, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {g.name}
                     </div>
                   </Link>
@@ -295,16 +295,16 @@ export default async function DashboardPage() {
 // ── Warm editorial layout primitives ──────────────────────────────────────
 function StatChip({ value, label }: { value: string; label: string }) {
   return (
-    <div style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: '10px 14px', textAlign: 'center', minWidth: 78 }}>
-      <div style={{ fontSize: 22, fontWeight: 700, color: '#221F1A', lineHeight: 1 }}>{value}</div>
-      <div style={{ fontSize: 10.5, color: '#8A8175', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</div>
+    <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: '10px 14px', textAlign: 'center', minWidth: 78 }}>
+      <div style={{ fontSize: 22, fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1 }}>{value}</div>
+      <div style={{ fontSize: 10.5, color: 'var(--color-text-muted)', marginTop: 4, textTransform: 'uppercase', letterSpacing: '0.05em' }}>{label}</div>
     </div>
   )
 }
 
 function Card({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 16, padding: 22 }}>
+    <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 16, padding: 22 }}>
       {children}
     </div>
   )
@@ -313,8 +313,8 @@ function Card({ children }: { children: React.ReactNode }) {
 function CardHead({ serif, title, href, cta }: { serif: string; title: string; href?: string; cta?: string }) {
   return (
     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
-      <h3 style={{ margin: 0, fontFamily: serif, fontSize: 17, fontWeight: 600, color: '#221F1A' }}>{title}</h3>
-      {href && cta && <Link href={href} style={{ color: '#B08637', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>{cta} →</Link>}
+      <h3 style={{ margin: 0, fontFamily: serif, fontSize: 17, fontWeight: 600, color: 'var(--color-text-primary)' }}>{title}</h3>
+      {href && cta && <Link href={href} style={{ color: 'var(--color-accent)', fontSize: 13, fontWeight: 600, textDecoration: 'none' }}>{cta} →</Link>}
     </div>
   )
 }
@@ -324,10 +324,10 @@ function Section({ serif, title, subtitle, href, cta, children }: { serif: strin
     <section style={{ marginBottom: 34 }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 14, gap: 12, flexWrap: 'wrap' }}>
         <div>
-          <h2 style={{ margin: 0, fontFamily: serif, fontSize: 22, fontWeight: 500, letterSpacing: '-0.01em', color: '#221F1A' }}>{title}</h2>
-          {subtitle && <p style={{ margin: '4px 0 0', color: '#6B6257', fontSize: 14 }}>{subtitle}</p>}
+          <h2 style={{ margin: 0, fontFamily: serif, fontSize: 22, fontWeight: 500, letterSpacing: '-0.01em', color: 'var(--color-text-primary)' }}>{title}</h2>
+          {subtitle && <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 14 }}>{subtitle}</p>}
         </div>
-        {href && cta && <Link href={href} style={{ color: '#B08637', fontSize: 13.5, fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>{cta} →</Link>}
+        {href && cta && <Link href={href} style={{ color: 'var(--color-accent)', fontSize: 13.5, fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap' }}>{cta} →</Link>}
       </div>
       {children}
     </section>
@@ -336,10 +336,10 @@ function Section({ serif, title, subtitle, href, cta, children }: { serif: strin
 
 function QuickLink({ href, title, body }: { href: string; title: string; body: string }) {
   return (
-    <Link href={href} style={{ textDecoration: 'none', display: 'block', background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 14, padding: '16px 18px' }}>
-      <div style={{ width: 28, height: 2, background: '#B08637', marginBottom: 12 }} />
-      <div style={{ fontSize: 15.5, fontWeight: 600, color: '#221F1A', marginBottom: 4 }}>{title}</div>
-      <div style={{ fontSize: 13, color: '#6B6257', lineHeight: 1.5 }}>{body}</div>
+    <Link href={href} style={{ textDecoration: 'none', display: 'block', background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 14, padding: '16px 18px' }}>
+      <div style={{ width: 28, height: 2, background: 'var(--color-accent)', marginBottom: 12 }} />
+      <div style={{ fontSize: 15.5, fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: 4 }}>{title}</div>
+      <div style={{ fontSize: 13, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>{body}</div>
     </Link>
   )
 }
@@ -350,8 +350,8 @@ function WeeklyReminder({ serif, reminder }: { serif: string; reminder: { theme:
       style={{
         marginTop: 12,
         background: 'var(--color-surface, #FFFFFF)',
-        border: '1px solid var(--color-border, #E7DFD2)',
-        borderLeft: '3px solid var(--color-accent, #B08637)',
+        border: '1px solid var(--color-border, var(--color-border))',
+        borderLeft: '3px solid var(--color-accent, var(--color-accent))',
         borderRadius: 14,
         padding: '14px 18px',
         display: 'flex',
@@ -361,7 +361,7 @@ function WeeklyReminder({ serif, reminder }: { serif: string; reminder: { theme:
     >
       <div style={{ fontSize: 20, lineHeight: 1.2, flexShrink: 0 }} aria-hidden>{reminder.domain}</div>
       <div style={{ minWidth: 0 }}>
-        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-accent, #B08637)', marginBottom: 3 }}>
+        <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-accent, var(--color-accent))', marginBottom: 3 }}>
           This week · {reminder.theme}
         </div>
         <div style={{ fontFamily: serif, fontSize: 15.5, color: 'var(--color-ink, #221F1A)', lineHeight: 1.45 }}>

@@ -149,14 +149,14 @@ export function ProposalCard({
   if (done === 'declined') {
     return (
       <div data-testid="proposal-card-declined" style={wrap()}>
-        <span style={{ fontSize: 13, color: 'var(--skin-color-text-muted, #6B6257)' }}>Dismissed — noted.</span>
+        <span style={{ fontSize: 13, color: 'var(--skin-color-text-muted, var(--color-text-secondary))' }}>Dismissed — noted.</span>
       </div>
     )
   }
 
   return (
     <div data-testid="proposal-card" style={wrap()}>
-      <div style={{ fontSize: 11, letterSpacing: '1px', textTransform: 'uppercase', color: '#B08637', marginBottom: 6 }}>
+      <div style={{ fontSize: 11, letterSpacing: '1px', textTransform: 'uppercase', color: 'var(--color-accent)', marginBottom: 6 }}>
         One-tap redirection
       </div>
       {!compact && (
@@ -167,7 +167,7 @@ export function ProposalCard({
       <div data-testid="proposal-slot" style={{ fontSize: 13, color: 'var(--skin-color-text, #221F1A)', marginBottom: 12 }}>
         <strong>{proposal.goalName}</strong>
         {' · '}
-        <span style={{ color: '#B08637', fontVariantNumeric: 'tabular-nums' }}>
+        <span style={{ color: 'var(--color-accent)', fontVariantNumeric: 'tabular-nums' }}>
           {formatSlot(proposal.proposedSlotStart, proposal.proposedSlotEnd)}
         </span>
       </div>
@@ -193,7 +193,7 @@ export function ProposalCard({
         </div>
       ) : (
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
-          <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, #6B6257)' }}>Why?</span>
+          <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, var(--color-text-secondary))' }}>Why?</span>
           {DECLINE_OPTIONS.map((o) => (
             <button
               key={o.reason}
@@ -219,15 +219,15 @@ export function ProposalCard({
 function wrap(): React.CSSProperties {
   return {
     background: 'var(--skin-color-badge-bg, #FFFFFF)',
-    border: '1px solid #E7DFD2',
+    border: '1px solid var(--color-border)',
     borderRadius: 'var(--skin-radius-card, 10px)',
     padding: '12px 14px',
   }
 }
 function primaryBtn(loading: boolean): React.CSSProperties {
   return {
-    background: '#B08637',
-    border: '1px solid #B08637',
+    background: 'var(--color-accent)',
+    border: '1px solid var(--color-accent)',
     borderRadius: 'var(--skin-radius-button, 8px)',
     color: '#fff',
     fontSize: 12,
@@ -240,9 +240,9 @@ function primaryBtn(loading: boolean): React.CSSProperties {
 function secondaryBtn(): React.CSSProperties {
   return {
     background: 'transparent',
-    border: '1px solid var(--skin-button-secondary-border, #E7DFD2)',
+    border: '1px solid var(--skin-button-secondary-border, var(--color-border))',
     borderRadius: 'var(--skin-radius-button, 8px)',
-    color: 'var(--skin-button-secondary-text, #B08637)',
+    color: 'var(--skin-button-secondary-text, var(--color-accent))',
     fontSize: 12,
     fontWeight: 600,
     padding: '7px 12px',
@@ -253,7 +253,7 @@ function ghostBtn(): React.CSSProperties {
   return {
     background: 'transparent',
     border: 'none',
-    color: 'var(--skin-color-text-muted, #8A8175)',
+    color: 'var(--skin-color-text-muted, var(--color-text-muted))',
     fontSize: 11,
     padding: '7px 6px',
     cursor: 'pointer',

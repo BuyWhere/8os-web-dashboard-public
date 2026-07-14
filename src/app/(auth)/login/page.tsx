@@ -26,10 +26,10 @@ export default function LoginPage() {
         appearance={{
           variables: {
             colorBackground: "#111111",
-            colorText: "#ededed",
-            colorPrimary: "#ededed",
+            colorText: "var(--color-border)",
+            colorPrimary: "var(--color-border)",
             colorInputBackground: "#0a0a0a",
-            colorInputText: "#ededed",
+            colorInputText: "var(--color-border)",
             borderRadius: "12px",
           },
         }}

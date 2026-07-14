@@ -26,6 +26,7 @@ import {
   type ThemeChoice,
   type ResolvedTheme,
   THEME_STORAGE_KEY,
+  DEFAULT_THEME_CHOICE,
   isThemeChoice,
   resolveTheme,
 } from '@/lib/theme'
@@ -44,12 +45,12 @@ function prefersDark(): boolean {
 }
 
 function readStoredChoice(): ThemeChoice {
-  if (typeof window === 'undefined') return 'system'
+  if (typeof window === 'undefined') return DEFAULT_THEME_CHOICE
   try {
     const v = localStorage.getItem(THEME_STORAGE_KEY)
-    return isThemeChoice(v) ? v : 'system'
+    return isThemeChoice(v) ? v : DEFAULT_THEME_CHOICE
   } catch {
-    return 'system'
+    return DEFAULT_THEME_CHOICE
   }
 }
 
@@ -62,8 +63,11 @@ function apply(resolved: ResolvedTheme) {
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // Start from 'system' for SSR-stable markup; the boot script already set the
   // real value on <html>, and the mount effect below reconciles React state.
-  const [choice, setChoice] = useState<ThemeChoice>('system')
+  const [choice, setChoice] = useState<ThemeChoice>(DEFAULT_THEME_CHOICE)
   const [systemDark, setSystemDark] = useState<boolean>(false)
+  // `tick` re-resolves the time-of-day for choice === 'auto'. It starts at 0
+  // (SSR-stable) and advances on a timer once mounted.
+  const [tick, setTick] = useState<number>(0)
 
   // On mount: pick up the persisted choice + current OS preference.
   useEffect(() => {
@@ -80,7 +84,19 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return () => mq.removeEventListener?.('change', onChange)
   }, [])
 
-  const resolved = useMemo(() => resolveTheme(choice, systemDark), [choice, systemDark])
+  // For 'auto', re-check the clock every minute so the theme flips at the
+  // day/night boundary (06:00 / 18:00 local) without a reload. Cheap.
+  useEffect(() => {
+    if (choice !== 'auto') return
+    const id = setInterval(() => setTick((t) => t + 1), 60_000)
+    return () => clearInterval(id)
+  }, [choice])
+
+  const resolved = useMemo(
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    () => resolveTheme(choice, systemDark, new Date()),
+    [choice, systemDark, tick],
+  )
 
   // Keep <html> in sync with the resolved theme.
   useEffect(() => {
@@ -115,7 +131,7 @@ export function useTheme(): ThemeContextValue {
   if (!ctx) {
     // Safe fallback so a stray consumer never crashes the tree.
     return {
-      choice: 'system',
+      choice: DEFAULT_THEME_CHOICE,
       resolved: 'light',
       setTheme: () => {},
     }

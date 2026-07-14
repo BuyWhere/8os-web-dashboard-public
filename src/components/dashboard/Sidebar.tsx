@@ -10,15 +10,15 @@ import { useSidebarDrawer, closeSidebarDrawer } from '@/lib/ui/sidebarDrawer'
 const fraunces = Fraunces({ subsets: ['latin'], weight: ['600'], variable: '--font-serif-side', display: 'swap' })
 
 // ── Warm editorial palette ────────────────────────────────────────────────
-const INK = '#221F1A'
-const GRAY = '#6B6257'
-const MUTED = '#9A9082'
-const CREAM = '#F7F3EC'
-const SURFACE = '#FFFFFF'
-const GOLD = '#B08637'
-const OXBLOOD = '#7A3B2E'
-const HAIRLINE = '#E7DFD2'
-const ACTIVE_BG = '#F2E9D6'
+const INK = 'var(--color-text-primary)'
+const GRAY = 'var(--color-text-secondary)'
+const MUTED = 'var(--color-text-muted)'
+const CREAM = 'var(--color-bg-primary)'
+const SURFACE = 'var(--color-bg-card)'
+const GOLD = 'var(--color-accent)'
+const OXBLOOD = 'var(--color-accent-2)'
+const HAIRLINE = 'var(--color-border)'
+const ACTIVE_BG = 'var(--color-accent-soft)'
 
 // ── Nav grouped into a sensible information architecture ──────────────────
 // Every existing destination is preserved, just grouped + labeled.
@@ -64,7 +64,7 @@ const NAV_GROUPS: NavGroup[] = [
 ]
 
 const DOMAIN_COLORS: Record<string, string> = {
-  career: '#3F6C8E', wealth: '#B08637', health: '#4F7A52',
+  career: '#3F6C8E', wealth: 'var(--color-accent)', health: '#4F7A52',
   relationships: '#B5652F', learning: '#3E8494', legacy: '#7E5A94',
 }
 

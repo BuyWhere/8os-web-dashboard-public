@@ -30,7 +30,7 @@ export function CapacityMeter({ capacity }: Props) {
         <span
           style={{
             fontSize: 12,
-            color: over ? ENERGY_COLORS.red : 'var(--skin-color-text-muted, #8A8175)',
+            color: over ? ENERGY_COLORS.red : 'var(--skin-color-text-muted, var(--color-text-muted))',
             fontWeight: 600,
           }}
         >
@@ -39,7 +39,7 @@ export function CapacityMeter({ capacity }: Props) {
       </div>
 
       {/* Overall bar */}
-      <div style={{ height: 8, borderRadius: 4, background: '#F7F3EC', overflow: 'hidden' }}>
+      <div style={{ height: 8, borderRadius: 4, background: 'var(--color-bg-primary)', overflow: 'hidden' }}>
         <div
           style={{
             width: `${totalPct}%`,
@@ -62,7 +62,7 @@ export function CapacityMeter({ capacity }: Props) {
               <span style={{ fontSize: 10, fontWeight: 700, width: 48, color: ENERGY_COLORS[tier] }}>
                 {ENERGY_LABELS[tier]}
               </span>
-              <div style={{ flex: 1, height: 6, borderRadius: 3, background: '#F7F3EC', overflow: 'hidden' }}>
+              <div style={{ flex: 1, height: 6, borderRadius: 3, background: 'var(--color-bg-primary)', overflow: 'hidden' }}>
                 <div
                   style={{
                     width: `${pct}%`,
@@ -72,7 +72,7 @@ export function CapacityMeter({ capacity }: Props) {
                   }}
                 />
               </div>
-              <span style={{ fontSize: 10, color: 'var(--skin-color-text-muted, #8A8175)', width: 64, textAlign: 'right' }}>
+              <span style={{ fontSize: 10, color: 'var(--skin-color-text-muted, var(--color-text-muted))', width: 64, textAlign: 'right' }}>
                 {fmtDuration(scheduled)}
               </span>
             </div>

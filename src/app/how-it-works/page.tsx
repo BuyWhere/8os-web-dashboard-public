@@ -202,7 +202,7 @@ export default function HowItWorksPage() {
                   <tr key={i} style={i % 2 === 0 ? trEvenStyle : {}}>
                     <td style={tdStyle}>{situation}</td>
                     <td style={{ ...tdStyle, color: 'rgba(248,250,252,0.45)' }}>{traditional}</td>
-                    <td style={{ ...tdStyle, color: '#f8fafc', fontStyle: 'italic' }}>{with8os}</td>
+                    <td style={{ ...tdStyle, color: 'var(--color-bg-secondary)', fontStyle: 'italic' }}>{with8os}</td>
                   </tr>
                 ))}
               </tbody>
@@ -238,7 +238,7 @@ const GOAL_EXAMPLES = [
   { category: 'Creativity', examples: ['Write a book', 'Learn an instrument', 'Start a podcast'] },
 ];
 
-const pageStyle: React.CSSProperties = { background: '#060608', color: '#f8fafc', minHeight: '100vh' };
+const pageStyle: React.CSSProperties = { background: '#060608', color: 'var(--color-bg-secondary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '900px', margin: '0 auto', padding: '5rem 2rem' };
 const headerStyle: React.CSSProperties = { marginBottom: '4rem' };
 const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#a78bfa' };
@@ -274,7 +274,7 @@ const dashMockTitleStyle: React.CSSProperties = { marginLeft: '0.4rem', fontSize
 const dashMockBodyStyle: React.CSSProperties = { padding: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.65rem' };
 const dashRowStyle: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '1rem' };
 const dashLabelStyle: React.CSSProperties = { fontSize: '0.8rem', color: 'rgba(248,250,252,0.4)' };
-const dashValueStyle: React.CSSProperties = { fontSize: '0.85rem', fontWeight: 600, color: '#f8fafc' };
+const dashValueStyle: React.CSSProperties = { fontSize: '0.85rem', fontWeight: 600, color: 'var(--color-bg-secondary)' };
 const dashDivStyle: React.CSSProperties = { height: '1px', background: 'rgba(255,255,255,0.07)' };
 const dashInsightStyle: React.CSSProperties = { margin: 0, fontSize: '0.82rem', lineHeight: 1.6, color: 'rgba(248,250,252,0.6)', fontStyle: 'italic' };
 const dashNudgeStyle: React.CSSProperties = { margin: 0, fontSize: '0.8rem', color: '#4ade80', fontWeight: 600 };

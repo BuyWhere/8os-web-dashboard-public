@@ -133,10 +133,10 @@ export default function ShutdownPage() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+      <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
         <Sidebar goals={[]} />
         <main style={{ flex: 1, padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ color: '#8A8175' }}>Closing out your day…</div>
+          <div style={{ color: 'var(--color-text-muted)' }}>Closing out your day…</div>
         </main>
         <QuickAdd />
       </div>
@@ -148,14 +148,14 @@ export default function ShutdownPage() {
   const dateLabel = new Date().toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })
 
   return (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <Sidebar goals={sidebarGoals} />
 
       <main style={{ flex: 1, padding: '24px 24px', overflowY: 'auto', maxWidth: '100%', overflowX: 'hidden' }}>
         <div style={{ marginBottom: 20 }}>
-          <Link href="/dashboard/today" style={{ color: '#8A8175', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Today</Link>
+          <Link href="/dashboard/today" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Today</Link>
           <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>Shut down the day</h1>
-          <p style={{ margin: '4px 0 0', color: '#6B6257', fontSize: 13 }}>
+          <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 13 }}>
             {dateLabel} · {data?.doneCount ?? 0} done · {data?.incompleteCount ?? 0} still open
           </p>
         </div>
@@ -169,12 +169,12 @@ export default function ShutdownPage() {
         {/* Archetype-voiced close line */}
         {data?.close?.line && (
           <div style={{
-            background: 'linear-gradient(135deg, #F7F3EC 0%, #FFFFFF 100%)',
-            border: '1px solid #E7DFD2', borderRadius: 12, padding: '16px 18px', marginBottom: 20,
+            background: 'linear-gradient(135deg, var(--color-bg-primary) 0%, #FFFFFF 100%)',
+            border: '1px solid var(--color-border)', borderRadius: 12, padding: '16px 18px', marginBottom: 20,
           }}>
-            <p style={{ margin: 0, fontSize: 14, color: '#221F1A', lineHeight: 1.55 }}>{data.close.line}</p>
+            <p style={{ margin: 0, fontSize: 14, color: 'var(--color-text-primary)', lineHeight: 1.55 }}>{data.close.line}</p>
             {data.close.dayVerdict && (
-              <p style={{ margin: '8px 0 0', fontSize: 10, color: '#8A8175' }}>
+              <p style={{ margin: '8px 0 0', fontSize: 10, color: 'var(--color-text-muted)' }}>
                 Tinted by today&apos;s daily transit (日) — the lightest BaZi signal, a tint not a rule.
               </p>
             )}
@@ -184,20 +184,20 @@ export default function ShutdownPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: 20, alignItems: 'start' }}>
 
           {/* ─────────────── DONE today ─────────────── */}
-          <section style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 20 }}>
-            <h2 style={{ margin: '0 0 14px', fontSize: 14, fontWeight: 700, color: '#221F1A', fontFamily: 'var(--font-serif), Georgia, serif' }}>
+          <section style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20 }}>
+            <h2 style={{ margin: '0 0 14px', fontSize: 14, fontWeight: 700, color: 'var(--color-text-primary)', fontFamily: 'var(--font-serif), Georgia, serif' }}>
               Done today <span style={{ color: '#4F7A52', fontWeight: 400 }}>({data?.doneCount ?? 0})</span>
             </h2>
             {done.length === 0 ? (
-              <div style={{ color: '#8A8175', fontSize: 13, padding: '8px 0' }}>Nothing checked off yet today.</div>
+              <div style={{ color: 'var(--color-text-muted)', fontSize: 13, padding: '8px 0' }}>Nothing checked off yet today.</div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {done.map((t) => (
-                  <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 11px', borderRadius: 8, background: '#F7F3EC', border: '1px solid #E7DFD2', opacity: 0.85 }}>
+                  <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 11px', borderRadius: 8, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', opacity: 0.85 }}>
                     <span style={{ width: 18, height: 18, borderRadius: '50%', flexShrink: 0, background: '#4F7A52', color: '#fff', fontSize: 11, lineHeight: '18px', textAlign: 'center' }}>✓</span>
-                    <div style={{ flex: 1, minWidth: 0, fontSize: 13, color: '#8A8175', textDecoration: 'line-through', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.name}</div>
-                    {t.completedAt && <span style={{ fontSize: 11, color: '#8A8175' }}>{fmtTime(t.completedAt)}</span>}
-                    {t.domain && <span style={{ fontSize: 11, color: '#6B6257' }}>{DOMAIN_ICONS[t.domain] ?? ''}</span>}
+                    <div style={{ flex: 1, minWidth: 0, fontSize: 13, color: 'var(--color-text-muted)', textDecoration: 'line-through', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.name}</div>
+                    {t.completedAt && <span style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{fmtTime(t.completedAt)}</span>}
+                    {t.domain && <span style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>{DOMAIN_ICONS[t.domain] ?? ''}</span>}
                   </div>
                 ))}
               </div>
@@ -205,9 +205,9 @@ export default function ShutdownPage() {
           </section>
 
           {/* ─────────────── INCOMPLETE today ─────────────── */}
-          <section style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 20 }}>
+          <section style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20 }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 10, marginBottom: 14 }}>
-              <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: '#221F1A', fontFamily: 'var(--font-serif), Georgia, serif' }}>
+              <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: 'var(--color-text-primary)', fontFamily: 'var(--font-serif), Georgia, serif' }}>
                 Still open <span style={{ color: '#f59e0b', fontWeight: 400 }}>({data?.incompleteCount ?? 0})</span>
               </h2>
               {incomplete.length > 0 && (
@@ -215,7 +215,7 @@ export default function ShutdownPage() {
                   onClick={carryToTomorrow}
                   disabled={carrying}
                   style={{
-                    background: '#B08637', border: 'none', borderRadius: 8, color: '#FFFFFF',
+                    background: 'var(--color-accent)', border: 'none', borderRadius: 8, color: '#FFFFFF',
                     padding: '8px 13px', fontSize: 12, fontWeight: 600,
                     cursor: carrying ? 'default' : 'pointer', opacity: carrying ? 0.6 : 1, flexShrink: 0, whiteSpace: 'nowrap',
                   }}
@@ -225,37 +225,37 @@ export default function ShutdownPage() {
               )}
             </div>
             {incomplete.length === 0 ? (
-              <div style={{ color: '#8A8175', fontSize: 13, padding: '8px 0' }}>
+              <div style={{ color: 'var(--color-text-muted)', fontSize: 13, padding: '8px 0' }}>
                 Nothing left open — every task scheduled for today is done. Clean shutdown.
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {incomplete.map((t) => (
-                  <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 11px', borderRadius: 8, background: '#F7F3EC', border: '1px solid #E7DFD2' }}>
-                    <span style={{ width: 7, height: 7, borderRadius: '50%', flexShrink: 0, background: PRIORITY_COLORS[t.priority] ?? '#8A8175' }} />
-                    <div style={{ flex: 1, minWidth: 0, fontSize: 13, color: '#221F1A', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.name}</div>
-                    {t.scheduledAt && <span style={{ fontSize: 11, color: '#8A8175' }}>{fmtTime(t.scheduledAt)}</span>}
-                    {t.domain && <span style={{ fontSize: 11, color: '#6B6257' }}>{DOMAIN_ICONS[t.domain] ?? ''}</span>}
+                  <div key={t.id} style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '9px 11px', borderRadius: 8, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)' }}>
+                    <span style={{ width: 7, height: 7, borderRadius: '50%', flexShrink: 0, background: PRIORITY_COLORS[t.priority] ?? 'var(--color-text-muted)' }} />
+                    <div style={{ flex: 1, minWidth: 0, fontSize: 13, color: 'var(--color-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{t.name}</div>
+                    {t.scheduledAt && <span style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>{fmtTime(t.scheduledAt)}</span>}
+                    {t.domain && <span style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>{DOMAIN_ICONS[t.domain] ?? ''}</span>}
                   </div>
                 ))}
               </div>
             )}
-            {carryMsg && <p style={{ margin: '12px 0 0', fontSize: 12, color: '#B08637' }}>{carryMsg}</p>}
+            {carryMsg && <p style={{ margin: '12px 0 0', fontSize: 12, color: 'var(--color-accent)' }}>{carryMsg}</p>}
           </section>
         </div>
 
         {/* Reflection prompt (NOT persisted) */}
-        <div style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 12, padding: 20, marginTop: 20 }}>
-          <h3 style={{ margin: '0 0 8px', fontSize: 13, fontWeight: 700, color: '#221F1A' }}>Reflection</h3>
-          <p style={{ margin: '0 0 10px', color: '#6B6257', fontSize: 13 }}>{data?.reflection.prompt}</p>
+        <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20, marginTop: 20 }}>
+          <h3 style={{ margin: '0 0 8px', fontSize: 13, fontWeight: 700, color: 'var(--color-text-primary)' }}>Reflection</h3>
+          <p style={{ margin: '0 0 10px', color: 'var(--color-text-secondary)', fontSize: 13 }}>{data?.reflection.prompt}</p>
           <textarea
             value={reflection}
             onChange={(e) => setReflection(e.target.value)}
             placeholder="Write your reflection…"
             rows={3}
-            style={{ width: '100%', boxSizing: 'border-box', background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 8, color: '#221F1A', fontSize: 13, padding: '10px 12px', resize: 'vertical', fontFamily: 'inherit' }}
+            style={{ width: '100%', boxSizing: 'border-box', background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 8, color: 'var(--color-text-primary)', fontSize: 13, padding: '10px 12px', resize: 'vertical', fontFamily: 'inherit' }}
           />
-          <p style={{ margin: '8px 0 0', color: '#8A8175', fontSize: 11 }}>
+          <p style={{ margin: '8px 0 0', color: 'var(--color-text-muted)', fontSize: 11 }}>
             Note: reflections are not saved yet — there&apos;s no journal model in the database, so this prompt is for in-session thinking only.
           </p>
         </div>

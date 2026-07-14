@@ -32,7 +32,7 @@ function Bars({ points }: { points: HistoryPoint[] }) {
           <div key={p.localDate} title={`${p.localDate} · mood ${p.mood ?? '—'} · energy ${p.energy ?? '—'}`}
             style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 2, flex: 1, minWidth: 6 }}>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 40 }}>
-              <div style={{ flex: 1, height: `${(m / 5) * 100}%`, minHeight: m ? 3 : 0, background: 'var(--skin-color-accent, #B08637)', borderRadius: 2, opacity: 0.9 }} />
+              <div style={{ flex: 1, height: `${(m / 5) * 100}%`, minHeight: m ? 3 : 0, background: 'var(--skin-color-accent, var(--color-accent))', borderRadius: 2, opacity: 0.9 }} />
               <div style={{ flex: 1, height: `${(e / 5) * 100}%`, minHeight: e ? 3 : 0, background: 'var(--skin-color-primary, #4F7A52)', borderRadius: 2, opacity: 0.75 }} />
             </div>
           </div>
@@ -81,14 +81,14 @@ export function MoodStrip({ gapPx = 20 }: { gapPx?: number }) {
   if (!hasData && insights.length === 0) {
     return (
       <div data-testid="mood-strip" style={{
-        background: 'var(--skin-card-bg, #FFFFFF)', border: '1px solid var(--skin-card-border, #E7DFD2)',
+        background: 'var(--skin-card-bg, #FFFFFF)', border: '1px solid var(--skin-card-border, var(--color-border))',
         borderRadius: 'var(--skin-radius-card, 12px)', padding: '14px 20px', marginBottom: gapPx,
       }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10 }}>
-          <span style={{ fontSize: 13, color: 'var(--skin-color-text-muted, #8A8175)' }}>
+          <span style={{ fontSize: 13, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>
             No mood logged yet. Two taps at shutdown starts the loop.
           </span>
-          <Link href="/dashboard/shutdown" style={{ fontSize: 12, color: 'var(--skin-color-accent, #B08637)', textDecoration: 'none', whiteSpace: 'nowrap' }}>
+          <Link href="/dashboard/shutdown" style={{ fontSize: 12, color: 'var(--skin-color-accent, var(--color-accent))', textDecoration: 'none', whiteSpace: 'nowrap' }}>
             Shut down →
           </Link>
         </div>
@@ -98,7 +98,7 @@ export function MoodStrip({ gapPx = 20 }: { gapPx?: number }) {
 
   return (
     <div data-testid="mood-strip" style={{
-      background: 'var(--skin-card-bg, #FFFFFF)', border: '1px solid var(--skin-card-border, #E7DFD2)',
+      background: 'var(--skin-card-bg, #FFFFFF)', border: '1px solid var(--skin-card-border, var(--color-border))',
       borderRadius: 'var(--skin-radius-card, 12px)', padding: 20, marginBottom: gapPx,
     }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -106,12 +106,12 @@ export function MoodStrip({ gapPx = 20 }: { gapPx?: number }) {
           Mood &amp; energy
         </h2>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-          <span style={{ fontSize: 10, color: 'var(--skin-color-text-muted, #8A8175)' }}>
-            <span style={{ color: 'var(--skin-color-accent, #B08637)' }}>■</span> mood{' '}
+          <span style={{ fontSize: 10, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>
+            <span style={{ color: 'var(--skin-color-accent, var(--color-accent))' }}>■</span> mood{' '}
             <span style={{ color: 'var(--skin-color-primary, #4F7A52)' }}>■</span> energy
           </span>
           {loggedToday === false && (
-            <Link href="/dashboard/shutdown" style={{ fontSize: 12, color: 'var(--skin-color-accent, #B08637)', textDecoration: 'none' }}>
+            <Link href="/dashboard/shutdown" style={{ fontSize: 12, color: 'var(--skin-color-accent, var(--color-accent))', textDecoration: 'none' }}>
               Log today →
             </Link>
           )}
@@ -121,14 +121,14 @@ export function MoodStrip({ gapPx = 20 }: { gapPx?: number }) {
       {hasData && <Bars points={history} />}
 
       {insights.length > 0 && (
-        <div data-testid="mood-insight" style={{ marginTop: 14, paddingTop: 12, borderTop: '1px solid var(--skin-card-border, #E7DFD2)', display: 'flex', flexDirection: 'column', gap: 8 }}>
+        <div data-testid="mood-insight" style={{ marginTop: 14, paddingTop: 12, borderTop: '1px solid var(--skin-card-border, var(--color-border))', display: 'flex', flexDirection: 'column', gap: 8 }}>
           {insights.map((ins, idx) => (
             <p key={idx} style={{ margin: 0, fontSize: 13, color: 'var(--skin-color-text-secondary, #221F1A)', lineHeight: 1.5 }}>
               <span style={{ marginRight: 6 }}>{DOMAIN_ICONS[ins.domain] ?? '•'}</span>
               {ins.text}
             </p>
           ))}
-          <p style={{ margin: '2px 0 0', fontSize: 10, color: 'var(--skin-color-text-muted, #8A8175)' }}>
+          <p style={{ margin: '2px 0 0', fontSize: 10, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>
             An observation from your own logs — a pattern, not a prescription.
           </p>
         </div>

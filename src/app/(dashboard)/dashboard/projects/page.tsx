@@ -160,7 +160,7 @@ export default function ProjectsPage() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+      <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
         <Sidebar goals={[]} />
         <main style={{ flex: 1, padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ color: '#666' }}>Loading projects...</div>
@@ -171,7 +171,7 @@ export default function ProjectsPage() {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <Sidebar goals={goals} />
 
       <main style={{ flex: 1, padding: '24px 24px', overflowY: 'auto' }}>
@@ -203,7 +203,7 @@ export default function ProjectsPage() {
                   {/* Goal Header */}
                   <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
                     <span style={{ fontSize: 16 }}>{DOMAIN_ICONS[group.domainId]}</span>
-                    <Link href={`/goals/${goalId}`} style={{ fontWeight: 600, fontSize: 15, color: '#ededed', textDecoration: 'none' }}>
+                    <Link href={`/goals/${goalId}`} style={{ fontWeight: 600, fontSize: 15, color: 'var(--color-border)', textDecoration: 'none' }}>
                       {group.goalName}
                     </Link>
                     <span style={{ fontSize: 11, color: '#555' }}>
@@ -249,7 +249,7 @@ export default function ProjectsPage() {
                                   }}
                                   style={{
                                     width: '100%', background: '#1a1a1a', border: '1px solid #6366f1',
-                                    borderRadius: 4, padding: '2px 6px', color: '#ededed', fontSize: 13,
+                                    borderRadius: 4, padding: '2px 6px', color: 'var(--color-border)', fontSize: 13,
                                     outline: 'none', boxSizing: 'border-box',
                                   }}
                                 />
@@ -257,7 +257,7 @@ export default function ProjectsPage() {
                                 <div
                                   onDoubleClick={() => startEdit(p)}
                                   style={{
-                                    fontWeight: 600, fontSize: 13, color: '#ededed',
+                                    fontWeight: 600, fontSize: 13, color: 'var(--color-border)',
                                     overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                                     cursor: 'text',
                                   }}

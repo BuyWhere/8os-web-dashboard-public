@@ -140,14 +140,14 @@ export default function VisionBoardPage() {
   if (byCat.has('__none__')) groups.push({ key: '__none__', label: 'Uncategorized', items: byCat.get('__none__')! })
 
   return (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <Sidebar goals={goals} />
 
       <main style={{ flex: 1, padding: '24px 24px', overflowY: 'auto', maxWidth: '100%', overflowX: 'hidden' }}>
         <div style={{ marginBottom: 20 }}>
-          <Link href="/dashboard" style={{ color: '#8A8175', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+          <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>Vision Board</h1>
-          <p style={{ margin: '4px 0 0', color: '#6B6257', fontSize: 13 }}>
+          <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 13 }}>
             A living picture of the future you&apos;re building toward.
             {items.length > 0 && ` ${items.length} item${items.length === 1 ? '' : 's'}.`}
           </p>
@@ -156,7 +156,7 @@ export default function VisionBoardPage() {
         {/* Composer */}
         <form
           onSubmit={addItem}
-          style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 14, padding: 16, marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 10 }}
+          style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 14, padding: 16, marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 10 }}
         >
           <input
             value={title}
@@ -212,30 +212,30 @@ export default function VisionBoardPage() {
         </form>
 
         {loading ? (
-          <div style={{ color: '#6B6257' }}>Loading your vision board…</div>
+          <div style={{ color: 'var(--color-text-secondary)' }}>Loading your vision board…</div>
         ) : items.length === 0 ? (
-          <div style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 14, padding: 40, textAlign: 'center' }}>
+          <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 14, padding: 40, textAlign: 'center' }}>
             <div style={{ fontSize: 32, marginBottom: 12 }}>❖</div>
-            <div style={{ color: '#6B6257' }}>Your vision board is empty. Add the futures you&apos;re working toward above — or ask the assistant to add one for you.</div>
+            <div style={{ color: 'var(--color-text-secondary)' }}>Your vision board is empty. Add the futures you&apos;re working toward above — or ask the assistant to add one for you.</div>
           </div>
         ) : (
           groups.map((group) => (
             <section key={group.key} style={{ marginBottom: 28 }}>
-              <h3 style={{ margin: '0 0 12px', fontSize: 12, fontWeight: 700, color: '#6B6257', textTransform: 'uppercase', letterSpacing: 0.6 }}>
+              <h3 style={{ margin: '0 0 12px', fontSize: 12, fontWeight: 700, color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: 0.6 }}>
                 {group.label} ({group.items.length})
               </h3>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))', gap: 16 }}>
                 {group.items.map((item) => (
                   <div
                     key={item.id}
-                    style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 14, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
+                    style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 14, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}
                   >
                     {item.imageUrl && (
                       // eslint-disable-next-line @next/next/no-img-element
                       <img
                         src={item.imageUrl}
                         alt={item.title}
-                        style={{ width: '100%', height: 150, objectFit: 'cover', display: 'block', background: '#F7F3EC' }}
+                        style={{ width: '100%', height: 150, objectFit: 'cover', display: 'block', background: 'var(--color-bg-primary)' }}
                         onError={(e) => { (e.currentTarget as HTMLImageElement).style.display = 'none' }}
                       />
                     )}
@@ -261,11 +261,11 @@ export default function VisionBoardPage() {
                         </>
                       ) : (
                         <>
-                          <div style={{ fontSize: 15, fontWeight: 600, color: '#221F1A' }}>{item.title}</div>
-                          {item.note && <div style={{ fontSize: 13, color: '#6B6257', lineHeight: 1.4, whiteSpace: 'pre-wrap' }}>{item.note}</div>}
+                          <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--color-text-primary)' }}>{item.title}</div>
+                          {item.note && <div style={{ fontSize: 13, color: 'var(--color-text-secondary)', lineHeight: 1.4, whiteSpace: 'pre-wrap' }}>{item.note}</div>}
                           <div style={{ display: 'flex', gap: 8, marginTop: 'auto', paddingTop: 8, flexWrap: 'wrap', alignItems: 'center' }}>
                             {item.goalId && goalName(item.goalId) && (
-                              <Link href={`/goals/${item.goalId}`} style={{ fontSize: 11, color: ACCENT, textDecoration: 'none', background: '#F7F3EC', padding: '2px 8px', borderRadius: 6 }}>
+                              <Link href={`/goals/${item.goalId}`} style={{ fontSize: 11, color: ACCENT, textDecoration: 'none', background: 'var(--color-bg-primary)', padding: '2px 8px', borderRadius: 6 }}>
                                 ◎ {goalName(item.goalId)}
                               </Link>
                             )}
@@ -293,12 +293,12 @@ export default function VisionBoardPage() {
 }
 
 const inputStyle: React.CSSProperties = {
-  width: '100%', background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 8,
-  color: '#221F1A', padding: '8px 12px', fontSize: 13, outline: 'none',
+  width: '100%', background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 8,
+  color: 'var(--color-text-primary)', padding: '8px 12px', fontSize: 13, outline: 'none',
   fontFamily: 'inherit', boxSizing: 'border-box',
 }
 
 const smallBtn: React.CSSProperties = {
-  background: '#F7F3EC', border: '1px solid #E7DFD2', borderRadius: 6,
-  color: '#6B6257', padding: '4px 10px', fontSize: 12, cursor: 'pointer',
+  background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 6,
+  color: 'var(--color-text-secondary)', padding: '4px 10px', fontSize: 12, cursor: 'pointer',
 }

@@ -72,7 +72,7 @@ export default function TodayPage() {
             {/* Header: date + current energy */}
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: 12 }}>
               <div>
-                <h1 style={{ margin: 0, fontSize: 22, fontWeight: 'var(--skin-typo-heading-weight, 700)', color: 'var(--skin-color-text, #ededed)' }}>
+                <h1 style={{ margin: 0, fontSize: 22, fontWeight: 'var(--skin-typo-heading-weight, 700)', color: 'var(--skin-color-text, var(--color-border))' }}>
                   Today
                 </h1>
                 <div style={{ fontSize: 12, color: 'var(--skin-color-text-muted, #888)', marginTop: 4 }}>
@@ -100,7 +100,7 @@ export default function TodayPage() {
             <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) 320px', gap: 20, alignItems: 'start' }}>
               {/* Left column: today's tasks */}
               <section style={cardStyle}>
-                <h2 style={{ margin: '0 0 16px', fontSize: 14, fontWeight: 700, color: 'var(--skin-color-text, #ededed)' }}>
+                <h2 style={{ margin: '0 0 16px', fontSize: 14, fontWeight: 700, color: 'var(--skin-color-text, var(--color-border))' }}>
                   Scheduled today
                 </h2>
                 {data.todayTasks.length === 0 ? (
@@ -119,7 +119,7 @@ export default function TodayPage() {
               {/* Right column: energy + capacity */}
               <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
                 <section style={cardStyle}>
-                  <h2 style={{ margin: '0 0 16px', fontSize: 14, fontWeight: 700, color: 'var(--skin-color-text, #ededed)' }}>
+                  <h2 style={{ margin: '0 0 16px', fontSize: 14, fontWeight: 700, color: 'var(--skin-color-text, var(--color-border))' }}>
                     Energy timeline
                   </h2>
                   <EnergyTimeline hourMap={data.hourMap} currentHour={data.currentHour} tasks={data.todayTasks} />
@@ -133,7 +133,7 @@ export default function TodayPage() {
             {/* Inbox — matched vs deferred */}
             <section style={cardStyle}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-                <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: 'var(--skin-color-text, #ededed)' }}>
+                <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: 'var(--skin-color-text, var(--color-border))' }}>
                   Inbox
                 </h2>
                 <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, #888)' }}>

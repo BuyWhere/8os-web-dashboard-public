@@ -263,7 +263,7 @@ export default function FamousArchetypesPage() {
   );
 }
 
-const pageStyle: React.CSSProperties = { background: '#060608', color: '#f8fafc', minHeight: '100vh' };
+const pageStyle: React.CSSProperties = { background: '#060608', color: 'var(--color-bg-secondary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '1100px', margin: '0 auto', padding: '4rem 1.5rem' };
 const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '4rem' };
 const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#a78bfa' };

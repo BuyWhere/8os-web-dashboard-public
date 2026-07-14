@@ -146,7 +146,7 @@ export default async function FamousProfilePage({ params }: Props) {
   );
 }
 
-const pageStyle: React.CSSProperties = { background: '#060608', color: '#f8fafc', minHeight: '100vh' };
+const pageStyle: React.CSSProperties = { background: '#060608', color: 'var(--color-bg-secondary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '700px', margin: '0 auto', padding: '3rem 1.5rem' };
 const backLinkStyle: React.CSSProperties = { display: 'inline-block', marginBottom: '2rem', color: 'rgba(248,250,252,0.6)', textDecoration: 'none', fontSize: '0.9rem' };
 const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '3rem' };

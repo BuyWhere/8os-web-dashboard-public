@@ -187,7 +187,7 @@ const SIGNS = [
 ];
 
 const ELEMENT_COLORS: Record<string, string> = {
-  Metal: '#94a3b8',
+  Metal: 'var(--color-text-muted)',
   Water: '#38bdf8',
   Wood: '#22c55e',
   Fire: '#f97316',
@@ -203,7 +203,7 @@ function getElementColor(element: string): string {
 
 export default function SignsPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: '#e2e8f0' }}>
+    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Breadcrumb */}
         <nav style={{ marginBottom: '32px' }}>
@@ -213,14 +213,14 @@ export default function SignsPage() {
         </nav>
 
         {/* Header */}
-        <h1 style={{ fontSize: '40px', fontWeight: 700, color: '#f1f5f9', lineHeight: 1.2, marginBottom: '16px' }}>
+        <h1 style={{ fontSize: '40px', fontWeight: 700, color: 'var(--color-bg-secondary)', lineHeight: 1.2, marginBottom: '16px' }}>
           Your BaZi Element by Zodiac Sign
         </h1>
-        <p style={{ fontSize: '18px', color: '#94a3b8', lineHeight: 1.7, marginBottom: '12px', maxWidth: '680px' }}>
+        <p style={{ fontSize: '18px', color: 'var(--color-text-muted)', lineHeight: 1.7, marginBottom: '12px', maxWidth: '680px' }}>
           Western astrology gives you a sign. BaZi gives you an element. Combined, they reveal your exact operating
           system — how you think, work, make decisions, and pursue goals.
         </p>
-        <p style={{ fontSize: '16px', color: '#64748b', lineHeight: 1.6, marginBottom: '48px', maxWidth: '680px' }}>
+        <p style={{ fontSize: '16px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '48px', maxWidth: '680px' }}>
           Each zodiac sign can express multiple BaZi elements depending on the year and month of birth. Find your sign
           below and explore the profiles that match your combination.
         </p>
@@ -241,13 +241,13 @@ export default function SignsPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                 <span style={{ fontSize: '32px' }}>{s.emoji}</span>
                 <div>
-                  <h2 style={{ fontSize: '20px', fontWeight: 600, color: '#f1f5f9', margin: 0 }}>{s.sign}</h2>
-                  <p style={{ fontSize: '13px', color: '#64748b', margin: 0 }}>{s.dates}</p>
+                  <h2 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--color-bg-secondary)', margin: 0 }}>{s.sign}</h2>
+                  <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', margin: 0 }}>{s.dates}</p>
                 </div>
               </div>
 
               {/* Description */}
-              <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.6, marginBottom: '20px' }}>
+              <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.6, marginBottom: '20px' }}>
                 {s.description}
               </p>
 
@@ -271,7 +271,7 @@ export default function SignsPage() {
                         transition: 'border-color 0.2s',
                       }}
                     >
-                      <span style={{ fontSize: '14px', color: '#e2e8f0', fontWeight: 500 }}>{p.element}</span>
+                      <span style={{ fontSize: '14px', color: 'var(--color-border)', fontWeight: 500 }}>{p.element}</span>
                       <span
                         style={{
                           fontSize: '12px',
@@ -310,10 +310,10 @@ export default function SignsPage() {
             textAlign: 'center',
           }}
         >
-          <h3 style={{ fontSize: '22px', fontWeight: 600, color: '#f1f5f9', marginBottom: '12px' }}>
+          <h3 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
             Not Sure Which Profile Is Yours?
           </h3>
-          <p style={{ color: '#94a3b8', marginBottom: '24px', fontSize: '15px' }}>
+          <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px', fontSize: '15px' }}>
             Take the 90-second quiz. We identify your dominant element from your birth date and a few quick questions —
             no birth time required.
           </p>

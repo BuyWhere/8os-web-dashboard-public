@@ -142,14 +142,14 @@ const sections = [
 
 export default function SecurityPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: '#e2e8f0' }}>
+    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Header */}
         <div style={{ marginBottom: '56px' }}>
-          <h1 style={{ fontSize: '42px', fontWeight: 700, color: '#f1f5f9', marginBottom: '12px' }}>
+          <h1 style={{ fontSize: '42px', fontWeight: 700, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
             Security
           </h1>
-          <p style={{ fontSize: '18px', color: '#64748b', lineHeight: 1.65 }}>
+          <p style={{ fontSize: '18px', color: 'var(--color-text-secondary)', lineHeight: 1.65 }}>
             How 8os.ai protects your data — from encryption and infrastructure to authentication and
             privacy controls.
           </p>
@@ -180,10 +180,10 @@ export default function SecurityPage() {
                       padding: '18px 20px',
                     }}
                   >
-                    <h3 style={{ fontSize: '15px', fontWeight: 600, color: '#f1f5f9', marginBottom: '6px' }}>
+                    <h3 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '6px' }}>
                       {item.title}
                     </h3>
-                    <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: 1.7 }}>
+                    <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', lineHeight: 1.7 }}>
                       {item.description}
                     </p>
                   </div>
@@ -203,16 +203,16 @@ export default function SecurityPage() {
             padding: '32px',
           }}
         >
-          <h2 style={{ fontSize: '20px', fontWeight: 600, color: '#f1f5f9', marginBottom: '12px' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
             Vulnerability Reporting
           </h2>
-          <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: 1.75, marginBottom: '16px' }}>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', lineHeight: 1.75, marginBottom: '16px' }}>
             If you discover a security vulnerability in 8os.ai, please report it responsibly via
             email. We commit to acknowledging all reports within 24 hours, providing status updates
             within 72 hours, and crediting researchers who identify and responsibly disclose valid
             vulnerabilities.
           </p>
-          <p style={{ color: '#94a3b8', fontSize: '14px', marginBottom: '8px' }}>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', marginBottom: '8px' }}>
             Please do not publicly disclose vulnerabilities before we have had the opportunity to
             address them.
           </p>

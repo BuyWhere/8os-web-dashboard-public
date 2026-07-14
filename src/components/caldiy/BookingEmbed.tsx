@@ -123,7 +123,7 @@ const widgetStyle: React.CSSProperties = {
   background: '#111',
   border: '1px solid #333',
   borderRadius: '8px',
-  color: '#ededed',
+  color: 'var(--color-border)',
   textDecoration: 'none',
   fontSize: '0.875rem',
   fontWeight: '500',

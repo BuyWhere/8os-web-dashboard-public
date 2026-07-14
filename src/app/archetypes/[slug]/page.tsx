@@ -23,7 +23,7 @@ interface ArchetypeProfile {
 const PROFILES: Record<string, ArchetypeProfile> = {
   'capricorn-geng-metal': {
     slug: 'capricorn-geng-metal',
-    sign: 'Capricorn', element: 'Metal', elementEmoji: '⚙️', elementColor: '#94a3b8',
+    sign: 'Capricorn', element: 'Metal', elementEmoji: '⚙️', elementColor: 'var(--color-text-muted)',
     archetype: 'Strategic Commander', archetypeSlug: 'strategic-commander',
     tagline: 'The Architect Who Builds Empires',
     description: 'Capricorn × Geng Metal is the most structurally precise combination in the system. Capricorn\'s ambition and discipline amplify Geng Metal\'s decisiveness and systems-orientation into something formidable. Where others see obstacles, you see inefficiencies to eliminate. Where others feel overwhelmed, you feel the clarifying pressure of constraint.',
@@ -71,7 +71,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'aries-geng-metal': {
     slug: 'aries-geng-metal',
-    sign: 'Aries', element: 'Metal', elementEmoji: '⚙️', elementColor: '#94a3b8',
+    sign: 'Aries', element: 'Metal', elementEmoji: '⚙️', elementColor: 'var(--color-text-muted)',
     archetype: 'Strategic Commander', archetypeSlug: 'strategic-commander',
     tagline: 'The Decisive Force That Moves First',
     description: 'Aries × Geng Metal is the fastest-moving Strategic Commander. Aries acts on instinct; Geng Metal acts on precision. The combination produces someone who is both first AND right more often than anyone has a right to be.',
@@ -335,7 +335,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'virgo-geng-metal': {
     slug: 'virgo-geng-metal',
-    sign: 'Virgo', element: 'Metal', elementEmoji: '⚙️', elementColor: '#94a3b8',
+    sign: 'Virgo', element: 'Metal', elementEmoji: '⚙️', elementColor: 'var(--color-text-muted)',
     archetype: 'Strategic Commander', archetypeSlug: 'strategic-commander',
     tagline: 'The Precision Operator',
     description: 'Virgo × Geng Metal is the most exacting Strategic Commander. Virgo\'s analytical precision and quality obsession meets Geng Metal\'s decisive, systems-oriented force — producing someone who not only sees what is wrong but acts to correct it with surgical speed. This is the archetype of the elite operator: the person who builds the machine AND keeps it running.',
@@ -383,7 +383,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'gemini-geng-metal': {
     slug: 'gemini-geng-metal',
-    sign: 'Gemini', element: 'Metal', elementEmoji: '⚙️', elementColor: '#94a3b8',
+    sign: 'Gemini', element: 'Metal', elementEmoji: '⚙️', elementColor: 'var(--color-text-muted)',
     archetype: 'Strategic Commander', archetypeSlug: 'strategic-commander',
     tagline: 'The Sharp-Minded Connector',
     description: "Gemini × Geng Metal is one of the most intellectually precise combinations in the system. Gemini's restless curiosity and multi-channel communication meets Geng Metal's decisive, cutting clarity — producing someone who not only gathers information from everywhere but synthesises it into sharp, actionable conclusions faster than anyone else in the room.",
@@ -443,7 +443,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'libra-geng-metal': {
     slug: 'libra-geng-metal',
-    sign: 'Libra', element: 'Metal', elementEmoji: '⚙️', elementColor: '#94a3b8',
+    sign: 'Libra', element: 'Metal', elementEmoji: '⚙️', elementColor: 'var(--color-text-muted)',
     archetype: 'Strategic Commander', archetypeSlug: 'strategic-commander',
     tagline: 'The Decisive Diplomat',
     description: "Libra × Geng Metal is one of the most paradoxically effective combinations: Libra's drive for balance and consensus meets Geng Metal's sharp decisive force. Most Libras delay decisions in search of perfect harmony. Geng Metal cuts through that hesitation and turns Libra's careful analysis into clean, defensible choices.",
@@ -503,7 +503,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'taurus-geng-metal': {
     slug: 'taurus-geng-metal',
-    sign: 'Taurus', element: 'Metal', elementEmoji: '⚙️', elementColor: '#94a3b8',
+    sign: 'Taurus', element: 'Metal', elementEmoji: '⚙️', elementColor: 'var(--color-text-muted)',
     archetype: 'Strategic Commander', archetypeSlug: 'strategic-commander',
     tagline: 'The Unyielding Architect',
     description: "Taurus × Geng Metal is the most stubbornly excellent combination in the system. Taurus's slow, patient accumulation and sensory standard-setting meets Geng Metal's decisive, cutting precision. The result is a Strategic Commander who takes their time — but when they act, the execution is clean, complete, and built to outlast everything around it.",
@@ -731,7 +731,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'sagittarius-geng-metal': {
     slug: 'sagittarius-geng-metal',
-    sign: 'Sagittarius', element: 'Metal', elementEmoji: '⚙️', elementColor: '#94a3b8',
+    sign: 'Sagittarius', element: 'Metal', elementEmoji: '⚙️', elementColor: 'var(--color-text-muted)',
     archetype: 'Strategic Commander', archetypeSlug: 'strategic-commander',
     tagline: 'The Decisive Truth-Seeker',
     description: "Sagittarius × Geng Metal is one of the most intellectually formidable Strategic Commanders. Sagittarius's philosophical ambition and truth-seeking range meets Geng Metal's decisive, cutting precision. Where Sagittarius alone can philosophise endlessly, Geng Metal forces the question: what does this mean for what we do now? The result is a Strategic Commander who operates from genuine principle — and executes it without hesitation.",
@@ -784,12 +784,12 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
   if (!p) notFound();
 
   return (
-    <main style={{ minHeight: '100vh', background: '#080808', color: '#e2e8f0', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', padding: '56px 24px 80px' }}>
+    <main style={{ minHeight: '100vh', background: '#080808', color: 'var(--color-border)', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', padding: '56px 24px 80px' }}>
       <ArchetypeRevealedTracker archetype={slug} />
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
 
         {/* Breadcrumb */}
-        <div style={{ marginBottom: 32, display: 'flex', gap: 8, alignItems: 'center', fontSize: 13, color: '#64748b' }}>
+        <div style={{ marginBottom: 32, display: 'flex', gap: 8, alignItems: 'center', fontSize: 13, color: 'var(--color-text-secondary)' }}>
           <Link href="/archetypes" style={{ color: '#6e40c9', textDecoration: 'none' }}>Archetypes</Link>
           <span>›</span>
           <span>{p.sign}</span>
@@ -807,11 +807,11 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
               {p.archetype}
             </span>
           </div>
-          <h1 style={{ fontSize: 40, fontWeight: 900, letterSpacing: '-0.02em', marginBottom: 8, color: '#f1f5f9', lineHeight: 1.1 }}>
+          <h1 style={{ fontSize: 40, fontWeight: 900, letterSpacing: '-0.02em', marginBottom: 8, color: 'var(--color-bg-secondary)', lineHeight: 1.1 }}>
             {p.sign} × {p.element}
           </h1>
           <p style={{ fontSize: 20, color: p.elementColor, fontWeight: 600, marginBottom: 16 }}>{p.tagline}</p>
-          <p style={{ color: '#94a3b8', fontSize: 16, lineHeight: 1.7 }}>{p.description}</p>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: 16, lineHeight: 1.7 }}>{p.description}</p>
         </div>
 
         {/* Strengths + Challenges */}
@@ -822,7 +822,7 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
               {p.strengths.map((s, i) => (
                 <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                   <span style={{ color: '#22c55e', flexShrink: 0, marginTop: 2 }}>✓</span>
-                  <span style={{ color: '#94a3b8', fontSize: 14, lineHeight: 1.5 }}>{s}</span>
+                  <span style={{ color: 'var(--color-text-muted)', fontSize: 14, lineHeight: 1.5 }}>{s}</span>
                 </li>
               ))}
             </ul>
@@ -833,7 +833,7 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
               {p.challenges.map((c, i) => (
                 <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
                   <span style={{ color: '#f97316', flexShrink: 0, marginTop: 2 }}>△</span>
-                  <span style={{ color: '#94a3b8', fontSize: 14, lineHeight: 1.5 }}>{c}</span>
+                  <span style={{ color: 'var(--color-text-muted)', fontSize: 14, lineHeight: 1.5 }}>{c}</span>
                 </li>
               ))}
             </ul>
@@ -842,10 +842,10 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
 
         {/* Ideal Work */}
         <div style={{ background: '#0f0f0f', border: '1px solid #1e1e1e', borderRadius: 12, padding: 24, marginBottom: 20 }}>
-          <h2 style={{ fontSize: 15, fontWeight: 700, color: '#f1f5f9', marginBottom: 14 }}>Ideal Work</h2>
+          <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-bg-secondary)', marginBottom: 14 }}>Ideal Work</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {p.idealWork.map((w, i) => (
-              <span key={i} style={{ background: '#161616', border: '1px solid #2a2a2a', borderRadius: 8, padding: '6px 12px', color: '#94a3b8', fontSize: 13 }}>{w}</span>
+              <span key={i} style={{ background: '#161616', border: '1px solid #2a2a2a', borderRadius: 8, padding: '6px 12px', color: 'var(--color-text-muted)', fontSize: 13 }}>{w}</span>
             ))}
           </div>
         </div>
@@ -858,14 +858,14 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
 
         {/* Daily Practice */}
         <div style={{ background: '#0f0f0f', border: '1px solid #1e1e1e', borderRadius: 12, padding: 24, marginBottom: 40 }}>
-          <h2 style={{ fontSize: 13, fontWeight: 700, color: '#64748b', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>Daily Practice</h2>
-          <p style={{ color: '#94a3b8', fontSize: 15, lineHeight: 1.7, margin: 0 }}>{p.dailyPractice}</p>
+          <h2 style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>Daily Practice</h2>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: 15, lineHeight: 1.7, margin: 0 }}>{p.dailyPractice}</p>
         </div>
 
         {/* CTA */}
         <div style={{ background: 'linear-gradient(135deg, rgba(124,58,237,0.12), rgba(147,51,234,0.06))', border: '1px solid rgba(124,58,237,0.25)', borderRadius: 14, padding: 32, textAlign: 'center', marginBottom: 32 }}>
-          <h3 style={{ fontSize: 20, fontWeight: 700, color: '#f1f5f9', marginBottom: 10 }}>Is This Your Archetype?</h3>
-          <p style={{ color: '#64748b', fontSize: 15, marginBottom: 20 }}>90 seconds. No birth time required. Get your personal operating system free.</p>
+          <h3 style={{ fontSize: 20, fontWeight: 700, color: 'var(--color-bg-secondary)', marginBottom: 10 }}>Is This Your Archetype?</h3>
+          <p style={{ color: 'var(--color-text-secondary)', fontSize: 15, marginBottom: 20 }}>90 seconds. No birth time required. Get your personal operating system free.</p>
           <Link href="/onboarding" style={{ display: 'inline-block', background: 'linear-gradient(135deg, #7c3aed, #9333ea)', color: '#fff', padding: '12px 28px', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 15, marginRight: 12 }}>
             Get My Archetype →
           </Link>

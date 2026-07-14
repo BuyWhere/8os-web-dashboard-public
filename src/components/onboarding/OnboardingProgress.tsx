@@ -28,12 +28,12 @@ const STEPS: { key: OnboardingStepKey; label: string }[] = [
   { key: 'tasks', label: 'Tasks' },
 ]
 
-const GOLD = '#B08637'
-const INK = '#221F1A'
-const WARM_GRAY = '#6B6257'
-const MUTED = '#8A8175'
-const HAIRLINE = '#E7DFD2'
-const TRACK = '#EAE1D2'
+const GOLD = 'var(--color-accent)'
+const INK = 'var(--color-text-primary)'
+const WARM_GRAY = 'var(--color-text-secondary)'
+const MUTED = 'var(--color-text-muted)'
+const HAIRLINE = 'var(--color-border)'
+const TRACK = 'var(--color-border)'
 
 export function OnboardingProgress({
   current,

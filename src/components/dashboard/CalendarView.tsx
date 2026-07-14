@@ -66,7 +66,7 @@ const DOMAIN_COLORS: Record<string, string> = {
   relationships: '#ec4899', learning: '#3b82f6', legacy: '#8b5cf6',
 }
 
-const EVENT_COLORS = ['#B08637', '#6366f1', '#22c55e', '#ec4899', '#3b82f6', '#8b5cf6', '#f59e0b', '#7A3B2E']
+const EVENT_COLORS = ['var(--color-accent)', '#6366f1', '#22c55e', '#ec4899', '#3b82f6', '#8b5cf6', '#f59e0b', 'var(--color-accent-2)']
 
 const ENERGY_BG: Record<EnergyLevel, string> = {
   green: 'rgba(34,197,94,0.06)',
@@ -163,7 +163,7 @@ function eventHeight(event: CalendarEvent): number {
 }
 
 function eventColor(e: CalendarEvent): string {
-  return e.color ?? (e.domainId ? DOMAIN_COLORS[e.domainId] : null) ?? 'var(--color-accent, #B08637)'
+  return e.color ?? (e.domainId ? DOMAIN_COLORS[e.domainId] : null) ?? 'var(--color-accent, var(--color-accent))'
 }
 
 /** The editable base id for an expanded recurring instance ("id:date" → "id"). */
@@ -557,7 +557,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
                 style={{
                   width: '100%', padding: '4px 0', borderRadius: 5,
                   background: (scheduling === t.id || schedulingAll) ? 'var(--color-bg-primary)' : 'transparent',
-                  border: '1px solid #B0863744',
+                  border: '1px solid var(--color-accent)44',
                   color: (scheduling === t.id || schedulingAll) ? 'var(--color-text-muted)' : 'var(--color-accent)',
                   fontSize: 11, cursor: (scheduling === t.id || schedulingAll) ? 'default' : 'pointer', fontFamily: 'inherit',
                 }}
@@ -627,7 +627,7 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
   useEffect(() => { setForm(editing) }, [editing])
 
   const linkedGoal = form.goalId ? goalById.get(form.goalId) : null
-  const accent = form.color ?? (linkedGoal ? DOMAIN_COLORS[linkedGoal.domainId] : null) ?? '#B08637'
+  const accent = form.color ?? (linkedGoal ? DOMAIN_COLORS[linkedGoal.domainId] : null) ?? 'var(--color-accent)'
 
   function set<K extends keyof EditingEvent>(k: K, v: EditingEvent[K]) {
     setForm((f) => ({ ...f, [k]: v }))
@@ -740,7 +740,7 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
               </select>
               {linkedGoal && (
                 <div style={{ marginTop: 6, display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: 'var(--color-text-secondary)' }}>
-                  <span style={{ width: 10, height: 10, borderRadius: '50%', background: DOMAIN_COLORS[linkedGoal.domainId] ?? '#B08637' }} />
+                  <span style={{ width: 10, height: 10, borderRadius: '50%', background: DOMAIN_COLORS[linkedGoal.domainId] ?? 'var(--color-accent)' }} />
                   {linkedGoal.name} <span style={{ color: 'var(--color-text-muted)' }}>({linkedGoal.domainId})</span>
                 </div>
               )}

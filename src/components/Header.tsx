@@ -16,12 +16,12 @@ const fraunces = Fraunces({
 });
 
 // ── Warm editorial palette (matches the landing) ──────────────────────────
-const INK = '#221F1A';
-const GRAY = '#6B6257';
-const CREAM = '#F7F3EC';
-const GOLD = '#B08637';
-const OXBLOOD = '#7A3B2E';
-const HAIRLINE = '#E7DFD2';
+const INK = 'var(--color-text-primary)';
+const GRAY = 'var(--color-text-secondary)';
+const CREAM = 'var(--color-bg-primary)';
+const GOLD = 'var(--color-accent)';
+const OXBLOOD = 'var(--color-accent-2)';
+const HAIRLINE = 'var(--color-border)';
 
 const NAV_LINKS = [
   { href: '/features', label: 'Features' },

@@ -34,14 +34,14 @@ export default async function JournalPage() {
   const isPro = role === 'pro' || role === 'admin'
 
   return (
-    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: '#F7F3EC', color: '#221F1A' }}>
+    <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <Sidebar goals={sidebarGoals} initialCollapsed={settings?.sidebarCollapsed ?? false} />
 
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
         <div style={{ marginBottom: 28 }}>
-          <Link href="/dashboard" style={{ color: '#8A8175', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+          <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>Journal</h1>
-          <p style={{ margin: '4px 0 0', color: '#6B6257', fontSize: 14 }}>
+          <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 14 }}>
             Reflect, record, and grow
           </p>
         </div>
@@ -50,13 +50,13 @@ export default async function JournalPage() {
           /* ── Upgrade prompt (replaces the old silent /pricing redirect) ── */
           <div style={{ maxWidth: 520 }}>
             <div style={{
-              background: 'linear-gradient(135deg, #FFFFFF 0%, #F7F3EC 100%)',
-              border: '1px solid #B0863733',
+              background: 'linear-gradient(135deg, #FFFFFF 0%, var(--color-bg-primary) 100%)',
+              border: '1px solid var(--color-accent)33',
               borderRadius: 16, padding: '32px 36px', textAlign: 'center',
             }}>
               <div style={{ fontSize: 48, marginBottom: 16 }}>📔</div>
               <h2 style={{ margin: '0 0 8px', fontSize: 18, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>Journal is a Pro feature</h2>
-              <p style={{ color: '#6B6257', fontSize: 14, lineHeight: 1.6, margin: '0 0 24px' }}>
+              <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, lineHeight: 1.6, margin: '0 0 24px' }}>
                 Unlock the 8os Journal to capture daily reflections, track mood patterns,
                 and surface long-term insights from your writing — powered by your archetype.
               </p>
@@ -68,8 +68,8 @@ export default async function JournalPage() {
                   'Weekly reflection synthesis',
                 ].map((feature) => (
                   <div key={feature} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-                    <span style={{ color: '#B08637', fontSize: 14 }}>✦</span>
-                    <span style={{ color: '#221F1A', fontSize: 13 }}>{feature}</span>
+                    <span style={{ color: 'var(--color-accent)', fontSize: 14 }}>✦</span>
+                    <span style={{ color: 'var(--color-text-primary)', fontSize: 13 }}>{feature}</span>
                   </div>
                 ))}
               </div>
@@ -77,14 +77,14 @@ export default async function JournalPage() {
                 href="/pricing?upgrade=pro&feature=journal"
                 style={{
                   display: 'inline-block',
-                  background: '#B08637', color: '#FFFFFF',
+                  background: 'var(--color-accent)', color: '#FFFFFF',
                   padding: '12px 28px', borderRadius: 10,
                   textDecoration: 'none', fontSize: 14, fontWeight: 600,
                 }}
               >
                 Upgrade to Pro →
               </Link>
-              <div style={{ marginTop: 12, color: '#8A8175', fontSize: 12 }}>
+              <div style={{ marginTop: 12, color: 'var(--color-text-muted)', fontSize: 12 }}>
                 Starting from $12/month · cancel anytime
               </div>
             </div>
@@ -92,10 +92,10 @@ export default async function JournalPage() {
         ) : (
           /* ── Pro user: journal interface placeholder ── */
           <div style={{ maxWidth: 720 }}>
-            <div style={{ background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: 14, padding: 32, textAlign: 'center' }}>
+            <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 14, padding: 32, textAlign: 'center' }}>
               <div style={{ fontSize: 40, marginBottom: 12 }}>📔</div>
-              <div style={{ color: '#6B6257', fontSize: 15, marginBottom: 8 }}>Journal is coming soon.</div>
-              <div style={{ color: '#8A8175', fontSize: 13 }}>
+              <div style={{ color: 'var(--color-text-secondary)', fontSize: 15, marginBottom: 8 }}>Journal is coming soon.</div>
+              <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>
                 Your first entry will appear here. Check back after your next daily briefing.
               </div>
             </div>

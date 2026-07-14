@@ -35,8 +35,8 @@ export default function OnboardingLayout({ children }: { children: React.ReactNo
         className={`${fraunces.variable} ${inter.variable}`}
         style={{
           minHeight: '100vh',
-          background: '#F7F3EC',
-          color: '#221F1A',
+          background: 'var(--color-bg-primary)',
+          color: 'var(--color-text-primary)',
           fontFamily: 'var(--font-sans), Inter, system-ui, sans-serif',
         }}
       >
