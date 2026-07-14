@@ -79,16 +79,16 @@ export default function ForgotPasswordPage() {
 }
 
 const styles: Record<string, React.CSSProperties> = {
-  main: { display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '1rem', background: '#0a0a0a' },
-  card: { width: '100%', maxWidth: '400px', background: '#111', border: '1px solid #222', borderRadius: '16px', padding: '2rem' },
-  logo: { fontSize: '2rem', fontWeight: 'bold', margin: '0 0 0.5rem', letterSpacing: '-0.03em', color: 'var(--color-border)' },
-  heading: { fontSize: '1.125rem', fontWeight: '500', color: '#999', margin: '0 0 1.5rem' },
+  main: { display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', padding: '1rem', background: '#F7F3EC' },
+  card: { width: '100%', maxWidth: '400px', background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: '16px', padding: '2rem', boxShadow: '0 4px 24px rgba(34,31,26,0.06)' },
+  logo: { fontSize: '2rem', fontWeight: 'bold', margin: '0 0 0.5rem', letterSpacing: '-0.03em', color: '#221F1A' },
+  heading: { fontSize: '1.125rem', fontWeight: '500', color: '#6B6257', margin: '0 0 1.5rem' },
   form: { display: 'flex', flexDirection: 'column', gap: '1rem' },
-  label: { display: 'flex', flexDirection: 'column', gap: '0.375rem', fontSize: '0.875rem', color: '#ccc' },
-  input: { background: '#0a0a0a', border: '1px solid #333', borderRadius: '8px', padding: '0.75rem 1rem', color: 'var(--color-border)', fontSize: '1rem', outline: 'none', width: '100%', boxSizing: 'border-box' },
-  btn: { background: 'var(--color-border)', color: '#0a0a0a', border: 'none', borderRadius: '8px', padding: '0.75rem', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', marginTop: '0.5rem' },
-  errorBox: { background: '#1a0808', border: '1px solid #5c1818', color: '#ff6b6b', borderRadius: '8px', padding: '0.75rem 1rem', fontSize: '0.875rem', marginBottom: '0.5rem' },
-  successBox: { background: '#081a08', border: '1px solid #185c18', color: '#6bff6b', borderRadius: '8px', padding: '0.75rem 1rem', fontSize: '0.875rem', marginBottom: '0.5rem' },
-  footer: { textAlign: 'center', fontSize: '0.875rem', color: '#666', margin: '1rem 0 0' },
-  link: { color: 'var(--color-border)' },
+  label: { display: 'flex', flexDirection: 'column', gap: '0.375rem', fontSize: '0.875rem', color: '#221F1A' },
+  input: { background: '#FFFFFF', border: '1px solid #E7DFD2', borderRadius: '8px', padding: '0.75rem 1rem', color: '#221F1A', fontSize: '1rem', outline: 'none', width: '100%', boxSizing: 'border-box' },
+  btn: { background: '#B08637', color: '#FFFFFF', border: 'none', borderRadius: '8px', padding: '0.75rem', fontSize: '1rem', fontWeight: '600', cursor: 'pointer', marginTop: '0.5rem' },
+  errorBox: { background: '#FFF5F5', border: '1px solid #FCA5A5', color: '#B91C1C', borderRadius: '8px', padding: '0.75rem 1rem', fontSize: '0.875rem', marginBottom: '0.5rem' },
+  successBox: { background: '#F0FDF4', border: '1px solid #86EFAC', color: '#15803D', borderRadius: '8px', padding: '0.75rem 1rem', fontSize: '0.875rem', marginBottom: '0.5rem' },
+  footer: { textAlign: 'center', fontSize: '0.875rem', color: '#6B6257', margin: '1rem 0 0' },
+  link: { color: '#B08637' },
 }
