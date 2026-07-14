@@ -217,6 +217,21 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
   const router = useRouter()
   const [view, setView] = useState<CalView>('week')
   const [currentDate, setCurrentDate] = useState(new Date())
+  // Mobile: stack the layout (calendar over unscheduled) and default to the
+  // day view — a 7-column week grid is unusable at phone width.
+  const [isMobile, setIsMobile] = useState(false)
+  useEffect(() => {
+    if (typeof window === 'undefined' || !window.matchMedia) return
+    const mq = window.matchMedia('(max-width: 767px)')
+    const apply = (matches: boolean) => {
+      setIsMobile(matches)
+      if (matches) setView((v) => (v === 'week' ? 'day' : v))
+    }
+    apply(mq.matches)
+    const onChange = (e: MediaQueryListEvent) => apply(e.matches)
+    mq.addEventListener?.('change', onChange)
+    return () => mq.removeEventListener?.('change', onChange)
+  }, [])
   const [scheduling, setScheduling] = useState<string | null>(null)
   const [schedulingAll, setSchedulingAll] = useState(false)
   const [schedulingResult, setSchedulingResult] = useState<string | null>(null)
@@ -389,11 +404,11 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
       : currentDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
 
   return (
-    <div style={{ display: 'flex', flex: 1, overflow: 'hidden' }}>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
+    <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', flex: 1, overflow: 'hidden' }}>
+      <div style={{ flex: 1, minHeight: 0, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
         {/* Toolbar */}
-        <div style={{ padding: '16px 24px', borderBottom: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexShrink: 0 }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+        <div style={{ padding: isMobile ? '10px 12px' : '16px 24px', borderBottom: '1px solid var(--color-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, flexWrap: isMobile ? 'wrap' : 'nowrap', flexShrink: 0 }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 6 : 12 }}>
             <button onClick={() => setCurrentDate(new Date())} style={btnStyle}>Today</button>
             <button onClick={() => navigate(-1)} style={btnStyle} aria-label="Previous">◀</button>
             <button onClick={() => navigate(1)} style={btnStyle} aria-label="Next">▶</button>
@@ -516,7 +531,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
 
       {/* Unscheduled tasks sidebar */}
       {unscheduledTasks.length > 0 && (
-        <div style={{ width: 220, borderLeft: '1px solid var(--color-border)', background: 'var(--color-bg-primary)', padding: '16px 14px', overflowY: 'auto', flexShrink: 0 }}>
+        <div style={{ width: isMobile ? '100%' : 220, borderLeft: isMobile ? 'none' : '1px solid var(--color-border)', borderTop: isMobile ? '1px solid var(--color-border)' : 'none', background: 'var(--color-bg-primary)', padding: '16px 14px', overflowY: 'auto', flexShrink: 0, maxHeight: isMobile ? '46vh' : undefined }}>
           <div style={{ fontSize: 11, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12 }}>
             Unscheduled ({unscheduledTasks.length})
           </div>

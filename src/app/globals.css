@@ -155,6 +155,17 @@ body {
   }
 }
 
+/* Mobile: tighten the roomy desktop content padding (pages set 24px 32px /
+   32px 40px inline). !important is required to beat those inline styles. The
+   calendar manages its own full-bleed responsive layout, so it opts out. */
+@media (max-width: 767px) {
+  body:has(.app-sidebar) main:not(.cal-main) {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+    padding-top: 18px !important;
+  }
+}
+
 .skip-link {
   position: absolute;
   left: 1rem;

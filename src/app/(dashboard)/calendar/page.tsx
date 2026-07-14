@@ -230,7 +230,7 @@ export default async function CalendarPage() {
     <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <Sidebar goals={goals} />
 
-      <main style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+      <main className="cal-main" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
         <CalendarView
           events={[...nativeEvents, ...externalEvents, ...mappedCaldiyBookings]}
           goals={goals.map((g) => ({ id: g.id, name: g.name, domainId: g.domainId }))}
