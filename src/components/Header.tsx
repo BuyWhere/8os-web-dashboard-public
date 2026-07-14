@@ -15,13 +15,15 @@ const fraunces = Inter({
   display: 'swap',
 });
 
-// ── Warm editorial palette (matches the landing) ──────────────────────────
-const INK = 'var(--color-text-primary)';
-const GRAY = 'var(--color-text-secondary)';
+// ── Dark header palette (guarantees WCAG AA contrast on every page) ───────
+// Hard-coded light values so the header is readable regardless of the global
+// light/dark theme or any future token changes.
+const INK = '#FFFFFF';
+const GRAY = 'rgba(255, 255, 255, 0.75)';
 const CREAM = 'var(--color-bg-primary)';
 const GOLD = 'var(--color-accent)';
-const OXBLOOD = 'var(--color-accent-2)';
-const HAIRLINE = 'var(--color-border)';
+const OXBLOOD = '#C06B54';
+const HAIRLINE = 'rgba(255, 255, 255, 0.1)';
 
 const NAV_LINKS = [
   { href: '/features', label: 'Features' },
@@ -68,7 +70,7 @@ export function Header() {
           left: 0,
           right: 0,
           height: 'var(--header-height)',
-          background: 'var(--color-bg-card)',
+          background: 'rgba(13, 13, 15, 0.92)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
           borderBottom: `1px solid ${HAIRLINE}`,
@@ -157,7 +159,7 @@ export function Header() {
         left: 0,
         right: 0,
         height: 'var(--header-height)',
-        background: 'rgba(247, 243, 236, 0.86)',
+        background: 'rgba(13, 13, 15, 0.92)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${HAIRLINE}`,

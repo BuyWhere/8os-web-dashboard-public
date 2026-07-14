@@ -3,11 +3,13 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
-const INK = 'var(--color-text-primary)'
-const GRAY = 'var(--color-text-secondary)'
-const GOLD = '#8A6728' // OS-2712: darkened for WCAG AA (white-on-gold 5.18:1; gold text 4.69:1 on cream)
-const OXBLOOD = 'var(--color-accent-2)'
-const HAIRLINE = 'var(--color-border)'
+// Dark header palette: hard-coded light values guarantee WCAG AA contrast
+// regardless of the page's global light/dark theme.
+const INK = '#FFFFFF'
+const GRAY = 'rgba(255, 255, 255, 0.75)'
+const GOLD = '#C79A48'
+const OXBLOOD = '#C06B54'
+const HAIRLINE = 'rgba(255, 255, 255, 0.1)'
 
 // Same routes as the global marketing Header so the nav is identical on every
 // public page (no homepage-only anchors → consistent site shell).
@@ -36,7 +38,7 @@ export default function LandingHeader() {
         position: 'sticky',
         top: 0,
         zIndex: 200,
-        background: 'rgba(247, 243, 236, 0.82)',
+        background: 'rgba(13, 13, 15, 0.92)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${HAIRLINE}`,
