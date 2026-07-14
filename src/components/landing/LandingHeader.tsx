@@ -9,9 +9,10 @@ const GOLD = '#8A6728' // OS-2712: darkened for WCAG AA (white-on-gold 5.18:1; g
 const OXBLOOD = 'var(--color-accent-2)'
 const HAIRLINE = 'var(--color-border)'
 
+// Same routes as the global marketing Header so the nav is identical on every
+// public page (no homepage-only anchors → consistent site shell).
 const NAV = [
-  { href: '#features', label: 'Features' },
-  { href: '#how', label: 'How it works' },
+  { href: '/features', label: 'Features' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/blog', label: 'Blog' },
 ]

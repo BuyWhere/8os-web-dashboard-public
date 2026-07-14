@@ -479,7 +479,7 @@ export default function Home() {
             }}
           >
             Start free. Go Pro for{' '}
-            <span style={{ color: OXBLOOD }}>$16/mo</span>.
+            <span style={{ color: OXBLOOD }}>$18/mo</span>.
           </h2>
           <p
             style={{

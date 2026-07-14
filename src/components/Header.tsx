@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Fraunces } from 'next/font/google';
-import { SignedIn, SignedOut } from '@clerk/nextjs';
+import { SignedIn, SignedOut, ClerkLoading, ClerkLoaded } from '@clerk/nextjs';
 import { openSidebarDrawer } from '@/lib/ui/sidebarDrawer';
 import { AccountMenu } from '@/components/AccountMenu';
 
@@ -216,8 +216,29 @@ export function Header() {
           ))}
         </nav>
 
-        {/* Auth actions */}
+        {/* Auth actions. Log in / Sign up render during Clerk's load
+            (ClerkLoading) too — not only after — so they never "pop in" after
+            hydration (the inconsistency QA flagged). */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+          <ClerkLoading>
+            <Link
+              href="/login"
+              style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none', whiteSpace: 'nowrap' }}
+            >
+              Log in
+            </Link>
+            <Link
+              href="/signup"
+              style={{
+                padding: '0.55rem 1.15rem', background: GOLD, borderRadius: '9px', color: '#fff',
+                textDecoration: 'none', fontSize: '0.9375rem', fontWeight: 600, whiteSpace: 'nowrap',
+                boxShadow: '0 4px 14px rgba(176, 134, 55, 0.25)',
+              }}
+            >
+              Sign up
+            </Link>
+          </ClerkLoading>
+          <ClerkLoaded>
           <SignedOut>
             <Link
               href="/login"
@@ -253,6 +274,7 @@ export function Header() {
             </Link>
             <AccountMenu />
           </SignedIn>
+          </ClerkLoaded>
         </div>
       </div>
     </header>

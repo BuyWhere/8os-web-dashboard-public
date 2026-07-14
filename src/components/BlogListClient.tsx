@@ -24,14 +24,20 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
   const [activeCategory, setActiveCategory] = useState<BlogCategory | null>(null)
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE)
 
+  const featured = posts.find((p) => p.featured) ?? posts[0]
+
   const filtered = activeCategory
     ? posts.filter((p) => p.category === activeCategory)
     : posts
 
-  const visible = filtered.slice(0, visibleCount)
-  const remaining = filtered.length - visibleCount
+  // When the featured hero is shown (no category filter), drop it from the
+  // list below so it isn't duplicated as the first card.
+  const listSource = !activeCategory && featured
+    ? filtered.filter((p) => p.slug !== featured.slug)
+    : filtered
 
-  const featured = posts.find((p) => p.featured) ?? posts[0]
+  const visible = listSource.slice(0, visibleCount)
+  const remaining = listSource.length - visibleCount
 
   const categoryCounts: Record<BlogCategory, number> = {
     BaZi: 0,
@@ -236,15 +242,17 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                   >
                     {config.icon} {post.category}
                   </span>
-                  <span style={{ color: '#4a4a5a', fontSize: '12px' }}>·</span>
-                  <time
-                    dateTime={post.isoDate}
-                    style={{ color: 'var(--color-text-secondary)', fontSize: '12px' }}
-                  >
-                    {post.date}
-                  </time>
-                  <span style={{ color: '#4a4a5a', fontSize: '12px' }}>·</span>
-                  <span style={{ color: 'var(--color-text-secondary)', fontSize: '12px' }}>{post.readTime}</span>
+                  {post.date && <span style={{ color: '#4a4a5a', fontSize: '12px' }}>·</span>}
+                  {post.date && (
+                    <time
+                      dateTime={post.isoDate}
+                      style={{ color: 'var(--color-text-secondary)', fontSize: '12px' }}
+                    >
+                      {post.date}
+                    </time>
+                  )}
+                  {post.readTime && <span style={{ color: '#4a4a5a', fontSize: '12px' }}>·</span>}
+                  {post.readTime && <span style={{ color: 'var(--color-text-secondary)', fontSize: '12px' }}>{post.readTime}</span>}
                 </div>
                 <h2
                   style={{
