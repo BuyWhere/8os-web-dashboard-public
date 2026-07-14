@@ -177,7 +177,7 @@ export default function SourcesSettingsPage() {
           <div style={{ fontSize: 15, fontWeight: 700, marginBottom: 8 }}>What 8os reads, and what it never touches</div>
           <ul style={{ margin: 0, paddingLeft: 18, color: 'var(--color-text-secondary)', fontSize: 13, lineHeight: 1.7 }}>
             <li><b style={{ color: 'var(--color-text-primary)' }}>Read:</b> event titles, start/end times, and attendee names/emails from your primary calendar. Nothing else, no event descriptions or attachments, no emails, no documents.</li>
-            <li><b style={{ color: 'var(--color-text-primary)' }}>Access is read-only.</b> 8os never creates, edits or deletes events in your Google Calendar.</li>
+            <li><b style={{ color: 'var(--color-text-primary)' }}>Two-way access.</b> 8os reads your events for busy time and alignment, and writes only the events you create or edit inside 8os back to your calendar. It never touches events it didn&apos;t create.</li>
             <li><b style={{ color: 'var(--color-text-primary)' }}>Processed by:</b> Flow AI on 8os&apos;s own account, solely to attribute your attention to your goals. Your calendar data is never used to train models and never sold or shared.</li>
             <li><b style={{ color: 'var(--color-text-primary)' }}>Retention:</b> a rolling 180 days of events. Older entries are dropped; disconnecting stops all reading immediately.</li>
           </ul>

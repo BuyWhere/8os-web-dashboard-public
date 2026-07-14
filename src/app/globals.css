@@ -164,6 +164,9 @@ body {
     padding-right: 16px !important;
     padding-top: 18px !important;
   }
+  /* Calendar keeps its full-bleed grid but gets a small right inset on phones
+     so the grid + event boxes don't clip against the screen edge. */
+  .cal-main { padding-right: 8px; }
 }
 
 .skip-link {

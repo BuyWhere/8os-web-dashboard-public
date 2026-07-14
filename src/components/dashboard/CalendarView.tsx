@@ -58,6 +58,7 @@ interface Props {
   goals: GoalOption[]
   unscheduledTasks: UnscheduledTask[]
   energyMap: Record<number, EnergyLevel> | null
+  firstDayOfWeek?: number // 0 = Sunday, 1 = Monday (from user prefs)
 }
 
 type CalView = 'day' | 'week' | 'month'
@@ -214,7 +215,7 @@ function normalizeSaved(
 
 // ─── Root ────────────────────────────────────────────────────────────────────
 
-export function CalendarView({ events: serverEvents, goals, unscheduledTasks, energyMap }: Props) {
+export function CalendarView({ events: serverEvents, goals, unscheduledTasks, energyMap, firstDayOfWeek }: Props) {
   const router = useRouter()
   const [view, setView] = useState<CalView>('week')
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -237,7 +238,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
   const [schedulingAll, setSchedulingAll] = useState(false)
   const [schedulingResult, setSchedulingResult] = useState<string | null>(null)
   const [editing, setEditing] = useState<EditingEvent | null>(null)
-  const firstDay = 1 // Monday-first (matches the app's default first-day-of-week)
+  const firstDay = firstDayOfWeek ?? 1 // 0=Sun, 1=Mon; honors the user preference
 
   // ── Bug fix (week-view stale-render): the calendar renders from a *client*
   //    events state seeded from the server snapshot. Every view (day/week/month)
@@ -293,8 +294,8 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
   }, [])
 
   const energy = energyMap ?? DEFAULT_ENERGY
-  const weekDays = useMemo(() => getWeekDays(currentDate, firstDay), [currentDate])
-  const monthDays = useMemo(() => getMonthDays(currentDate.getFullYear(), currentDate.getMonth(), firstDay), [currentDate])
+  const weekDays = useMemo(() => getWeekDays(currentDate, firstDay), [currentDate, firstDay])
+  const monthDays = useMemo(() => getMonthDays(currentDate.getFullYear(), currentDate.getMonth(), firstDay), [currentDate, firstDay])
   const todayKey = dayKey(new Date())
 
   const goalById = useMemo(() => new Map(goals.map((g) => [g.id, g])), [goals])
@@ -561,9 +562,9 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
             <div key={t.id} style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 8, padding: '10px 12px', marginBottom: 8 }}>
               <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{t.name}</div>
               <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 6 }}>
-                <span style={{ fontSize: 10, color: 'var(--color-text-muted)' }}>{t.duration}m</span>
-                <span style={{ fontSize: 10, color: t.priority === 'high' ? '#ef4444' : t.priority === 'medium' ? '#f59e0b' : '#22c55e' }}>{t.priority}</span>
-                {t.domainId && <span style={{ fontSize: 10, color: DOMAIN_COLORS[t.domainId] }}>{t.domainId}</span>}
+                <span style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>{t.duration}m</span>
+                <span style={{ fontSize: 11, fontWeight: 600, color: t.priority === 'high' ? '#c0392b' : t.priority === 'medium' ? '#b45309' : '#15803d' }}>{t.priority}</span>
+                {t.domainId && <span style={{ fontSize: 11, fontWeight: 600, color: DOMAIN_COLORS[t.domainId] }}>{t.domainId}</span>}
               </div>
               {/* Compact per-task action, sits under the task name, so it's
                   clearly "schedule THIS task" rather than a wall of identical
@@ -575,9 +576,9 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
                 style={{
                   width: '100%', padding: '4px 0', borderRadius: 5,
                   background: (scheduling === t.id || schedulingAll) ? 'var(--color-bg-primary)' : 'transparent',
-                  border: '1px solid var(--color-accent)44',
-                  color: (scheduling === t.id || schedulingAll) ? 'var(--color-text-muted)' : 'var(--color-accent)',
-                  fontSize: 11, cursor: (scheduling === t.id || schedulingAll) ? 'default' : 'pointer', fontFamily: 'inherit',
+                  border: '1px solid var(--color-border-strong)',
+                  color: (scheduling === t.id || schedulingAll) ? 'var(--color-text-muted)' : '#8A6728',
+                  fontSize: 11, fontWeight: 600, cursor: (scheduling === t.id || schedulingAll) ? 'default' : 'pointer', fontFamily: 'inherit',
                 }}
               >
                 {scheduling === t.id ? 'Scheduling…' : '⚡ Schedule'}
