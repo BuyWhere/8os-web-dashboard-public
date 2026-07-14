@@ -159,7 +159,7 @@ export default function DefinePage() {
           </h1>
           <p style={{ color: WARM_GRAY, fontSize: '0.95rem', lineHeight: 1.6 }}>
             Name what you want and how you&apos;ll know you&apos;re making progress. We&apos;ll do this
-            one domain at a time — pick a measure that fits.
+            one domain at a time, pick a measure that fits.
           </p>
         </div>
 
@@ -294,7 +294,7 @@ export default function DefinePage() {
           <textarea
             value={currentGoal.definition}
             onChange={e => updateGoal({ definition: e.target.value })}
-            placeholder="Be specific — what does success look like in 12 months?"
+            placeholder="Be specific, what does success look like in 12 months?"
             rows={3}
             style={{
               ...inputBase,

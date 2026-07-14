@@ -134,7 +134,7 @@ export default function QuarterPage() {
           <Link href="/dashboard" style={{ color: 'var(--skin-color-text-muted, #555)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 24, fontWeight: 700, color: 'var(--skin-color-text, var(--color-border))' }}>Quarter · 12-week horizon</h1>
           <p style={{ margin: '4px 0 0', color: 'var(--skin-color-text-muted, #666)', fontSize: 13 }}>
-            Pace your goals to favorable months — the next 3 solar months (流月) and what each is best for.
+            Pace your goals to favorable months, the next 3 solar months (流月) and what each is best for.
           </p>
         </div>
 
@@ -149,8 +149,8 @@ export default function QuarterPage() {
             {/* favorable elements summary */}
             <div style={{ background: 'var(--skin-card-bg, #0d0d0d)', border: '1px solid var(--skin-card-border, #1a1a1a)', borderRadius: 'var(--skin-radius-card, 12px)', padding: '14px 18px', marginBottom: 20, fontSize: 12, color: 'var(--skin-color-text-secondary, #aaa)' }}>
               <strong style={{ color: 'var(--skin-color-text, var(--color-border))' }}>{data.dayMaster} {cap(data.dayElement)} · {data.strength}</strong>
-              {' '}— favorable: <span style={{ color: '#22c55e' }}>{(data.favorable || []).map(cap).join(', ') || '—'}</span>
-              {' · '}headwind: <span style={{ color: '#f59e0b' }}>{(data.unfavorable || []).map(cap).join(', ') || '—'}</span>
+              {' '}· favorable: <span style={{ color: '#22c55e' }}>{(data.favorable || []).map(cap).join(', ') || '-'}</span>
+              {' · '}headwind: <span style={{ color: '#f59e0b' }}>{(data.unfavorable || []).map(cap).join(', ') || '-'}</span>
               <div style={{ marginTop: 6, color: 'var(--skin-color-text-muted, #777)', fontStyle: 'italic' }}>{data.favorableBasis}</div>
             </div>
 
@@ -167,7 +167,7 @@ export default function QuarterPage() {
                         <span style={{ fontSize: 9, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.5, color }}>{MODE_LABEL[mo.mode]}</span>
                       </div>
                       <div style={{ fontSize: 11, color: 'var(--skin-color-text-muted, #777)', marginTop: 2 }}>
-                        {mo.pillar} · 流月 {mo.termName} ({mo.termEn}) · {fmt(mo.startDate)}–{fmt(mo.endDate)}
+                        {mo.pillar} · 流月 {mo.termName} ({mo.termEn}) · {fmt(mo.startDate)}-{fmt(mo.endDate)}
                         {mo.index === 0 ? ' · current' : ''}
                       </div>
                     </div>
@@ -180,7 +180,7 @@ export default function QuarterPage() {
                       </div>
                       {monthGoals.length === 0 ? (
                         <div style={{ fontSize: 12, color: 'var(--skin-color-text-muted, #777)', fontStyle: 'italic' }}>
-                          {mo.mode === 'consolidate' ? 'Consolidation month — prep and tighten systems; hold launches.' : 'No goals mapped here yet.'}
+                          {mo.mode === 'consolidate' ? 'Consolidation month, prep and tighten systems; hold launches.' : 'No goals mapped here yet.'}
                         </div>
                       ) : (
                         monthGoals.map((g) => (
@@ -204,7 +204,7 @@ export default function QuarterPage() {
 
             <div style={{ marginTop: 18, fontSize: 11, color: 'var(--skin-color-text-muted, #666)', fontStyle: 'italic' }}>
               Grounded in traditional BaZi: each month is its 流月 monthly pillar (五虎遁 stem + solar-term branch),
-              read against your favorable elements. A planning horizon, not a guarantee — the shorter the window, the softer the claim.
+              read against your favorable elements. A planning horizon, not a guarantee, the shorter the window, the softer the claim.
             </div>
           </>
         )}

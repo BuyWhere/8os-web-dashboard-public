@@ -68,7 +68,9 @@ export async function POST(req: NextRequest) {
          $6, $7::date,
          NOW(), NOW(), NOW(), NOW()
        ) RETURNING id, name`,
-      auth.userId, companyId, trimmed, trimmed, domainId, horizon, targetDateVal,
+      // $4 = description/definition: empty for bulk paste (no description field);
+      // was mistakenly set to the title, duplicating it on every bulk goal.
+      auth.userId, companyId, trimmed, '', domainId, horizon, targetDateVal,
     )
     created.push(rows[0])
     await prisma.activityLog.create({

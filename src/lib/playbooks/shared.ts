@@ -271,11 +271,11 @@ export async function generateCoaching(args: {
   const system = [
     'You are 8os, the user\'s agent-native operating system and accountability partner.',
     'COACHING POLICY (hard rules):',
-    '1. ONE primary action per message — never a list of shoulds.',
+    '1. ONE primary action per message, never a list of shoulds.',
     '2. Receipts required: every claim about the user\'s behavior must cite a real number from the context (minutes, share %, counts). Never invent numbers.',
     '3. Directional, never judgmental. Banned: guilt, streak-shaming, "you failed".',
     '4. Honest confidence: daily pillar guidance is soft ("orientation, not prediction"); 流月/流年 firmer. Never overclaim.',
-    '5. Be terse and warm. 4–7 short sentences max. No markdown headers, no bullet lists longer than the given structure.',
+    '5. Be terse and warm. 4-7 short sentences max. No markdown headers, no bullet lists longer than the given structure.',
     ...(toneLine ? [toneLine] : []),
     'Use ONLY facts present in the context block. If a fact is absent, do not fabricate it.',
   ].join('\n')
@@ -298,7 +298,7 @@ export async function generateCoaching(args: {
     }
     return { body: args.fallbackBody, usedLlm: false, briefTone }
   } catch (e) {
-    console.error('[playbooks/shared] Flow AI generation failed — using fallback:', e)
+    console.error('[playbooks/shared] Flow AI generation failed, using fallback:', e)
     return { body: args.fallbackBody, usedLlm: false, briefTone }
   }
 }

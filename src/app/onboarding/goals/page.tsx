@@ -69,8 +69,8 @@ export default function GoalsPage() {
           What areas of your life <br />are you focused on?
         </h1>
         <p style={{ color: WARM_GRAY, fontSize: '1rem', lineHeight: 1.6, maxWidth: 460, margin: '0 auto' }}>
-          Pick 1–5 domains that matter most right now. Your OS builds goals, projects, and daily
-          tasks around exactly these — nothing you don&apos;t choose.
+          Pick 1-5 domains that matter most right now. Your OS builds goals, projects, and daily
+          tasks around exactly these, nothing you don&apos;t choose.
         </p>
       </div>
 

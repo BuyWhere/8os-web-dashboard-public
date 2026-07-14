@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: '8os Methodology — How We Bridge Two Ancient Systems',
+  title: '8os Methodology, How We Bridge Two Ancient Systems',
   description:
     'The synthesis engine that combines Western astrology and BaZi to create 120 unique archetypes. Why we start with your sun sign.',
 };
@@ -29,7 +29,7 @@ export default function MethodologyPage() {
       <div style={innerStyle}>
         <div style={headerStyle}>
           <p style={eyebrowStyle}>Methodology</p>
-          <h1 style={pageTitleStyle}>How We Bridge Two Ancient Systems — And Why We Start Where You Are</h1>
+          <h1 style={pageTitleStyle}>How We Bridge Two Ancient Systems, And Why We Start Where You Are</h1>
         </div>
 
         {/* Synthesis Engine */}
@@ -81,7 +81,7 @@ export default function MethodologyPage() {
           <div style={problemFrameStyle}>
             <h3 style={h3Style}>The Barrier Problem</h3>
             <p style={bodyStyle}>
-              A full Western natal chart requires your <strong>exact birth time</strong> — down to the minute. This creates
+              A full Western natal chart requires your <strong>exact birth time</strong>, down to the minute. This creates
               three problems:
             </p>
             <div style={barrierGridStyle}>
@@ -98,7 +98,7 @@ export default function MethodologyPage() {
           <div style={solutionFrameStyle}>
             <h3 style={h3Style}>Our Solution: The Sun Sign Gateway</h3>
             <p style={bodyStyle}>
-              Your sun sign is your <strong>headline</strong> — accurate enough to be meaningful, accessible enough to be
+              Your sun sign is your <strong>headline</strong>, accurate enough to be meaningful, accessible enough to be
               shareable. It captures your core identity (ego, vitality, life force) without requiring sensitive data.
             </p>
             <p style={bodyStyle}>

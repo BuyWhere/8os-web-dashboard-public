@@ -128,7 +128,7 @@ export default function MemoryPage() {
           <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>What 8os knows about you</h1>
           <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 14 }}>
-            Durable facts 8os has learned — distilled from your journal and conversations, plus anything you add.
+            Durable facts 8os has learned, distilled from your journal and conversations, plus anything you add.
             Edit, pin the important ones, or delete anything wrong. Deleting removes it and stops 8os re-learning it.
           </p>
         </div>
@@ -168,7 +168,7 @@ export default function MemoryPage() {
 
         {!error && items.length === 0 && (
           <div style={{ maxWidth: 760, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 28, color: 'var(--color-text-secondary)', fontSize: 14 }}>
-            8os hasn&apos;t learned anything durable yet. As you journal and chat, it will distill stable facts here each night — or add one above.
+            8os hasn&apos;t learned anything durable yet. As you journal and chat, it will distill stable facts here each night, or add one above.
           </div>
         )}
 

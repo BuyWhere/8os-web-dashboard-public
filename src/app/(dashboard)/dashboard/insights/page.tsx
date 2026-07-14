@@ -18,7 +18,7 @@ export const dynamic = 'force-dynamic'
 export const runtime = 'nodejs'
 
 function pct(x: number | null): string {
-  return x === null ? '—' : `${(x * 100).toFixed(1)}%`
+  return x === null ? '-' : `${(x * 100).toFixed(1)}%`
 }
 
 const wrap: React.CSSProperties = { maxWidth: 960, margin: '0 auto', padding: '40px 24px 80px', color: 'var(--color-border)' }
@@ -38,7 +38,7 @@ export default async function OwnerInsightsPage() {
   return (
     <main style={wrap}>
       <p style={{ ...label, marginBottom: 4 }}>Owner · Dashboard of Record</p>
-      <h1 style={{ fontSize: 26, fontWeight: 800, margin: '0 0 24px' }}>8os Metrics — last {m.windowDays} days</h1>
+      <h1 style={{ fontSize: 26, fontWeight: 800, margin: '0 0 24px' }}>8os Metrics, last {m.windowDays} days</h1>
 
       {/* Headline metrics */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 16, marginBottom: 8 }}>
@@ -100,7 +100,7 @@ export default async function OwnerInsightsPage() {
             {m.funnel.map((f) => (
               <tr key={f.step}>
                 <td style={td}>{f.step}</td>
-                <td style={td}>{f.count === null ? '—' : f.count}</td>
+                <td style={td}>{f.count === null ? '-' : f.count}</td>
                 <td style={{ ...td, color: f.posthogSourced ? '#c9a227' : '#4FAE6F' }}>
                   {f.posthogSourced ? 'PostHog-sourced' : 'DB'}
                 </td>

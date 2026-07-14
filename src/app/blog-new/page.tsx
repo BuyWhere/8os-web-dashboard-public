@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 import { getAllBlogPosts } from '@/lib/content/blog'
 
 export const metadata: Metadata = {
-  title: '8os.ai Blog — BaZi, Archetypes & Personal Operating Systems',
+  title: '8os.ai Blog, BaZi, Archetypes & Personal Operating Systems',
   description:
     'Explore BaZi, the Five Elements, productivity archetypes, and goal-setting strategies. The 8os.ai knowledge base.',
   keywords: ['BaZi blog', 'productivity archetypes', 'five elements', 'personal OS', 'goal setting'],

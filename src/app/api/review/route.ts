@@ -109,7 +109,7 @@ export async function GET(req: NextRequest) {
     },
   })
 
-  let preview: Record<string, unknown> = { available: false, reason: 'No birth profile — complete onboarding first.' }
+  let preview: Record<string, unknown> = { available: false, reason: 'No birth profile, complete onboarding first.' }
   let goalDeltas = activeGoals.map((g) => ({
     goalId: g.id, name: g.name, domain: g.domainId,
     progress: g.progress, completedThisWeek: completedByGoal.get(g.id) ?? 0,
@@ -161,7 +161,7 @@ export async function GET(req: NextRequest) {
 
       preview = {
         available: true,
-        weekFrame: `This week is ${weekFrame(monthLayer.verdict)} — inherited from your active month pillar.`,
+        weekFrame: `This week is ${weekFrame(monthLayer.verdict)}, inherited from your active month pillar.`,
         monthPillar: monthLayer.pillar,
         monthBasis: monthLayer.basis,
         monthVerdict: monthLayer.verdict,

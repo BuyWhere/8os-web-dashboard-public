@@ -119,5 +119,5 @@ export function padEstimate(rawMinutes: number, factor: number): {
 export function paddingNote(domainId: string, factor: number): string | null {
   const f = clampFactor(factor)
   if (f <= 1.01) return null
-  return `Your ${domainId} tasks run ${f.toFixed(1)}× your estimates — padded (+${TRANSITION_BUFFER_MIN}m buffer).`
+  return `Your ${domainId} tasks run ${f.toFixed(1)}× your estimates, padded (+${TRANSITION_BUFFER_MIN}m buffer).`
 }

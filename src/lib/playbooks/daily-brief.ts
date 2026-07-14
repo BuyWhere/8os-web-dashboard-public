@@ -43,12 +43,12 @@ export async function runDailyBrief(
 
     // ── Deterministic receipts (the honest fallback + the LLM's source data) ──
     const pillarLine = big3.dayPillar
-      ? `Today's pillar ${big3.dayPillar} — ${big3.dayTintLine ?? 'work your plan.'} (soft daily tint, orientation not prediction)`
-      : (big3.dayTintLine ?? 'A steady day — work your plan.')
+      ? `Today's pillar ${big3.dayPillar}, ${big3.dayTintLine ?? 'work your plan.'} (soft daily tint, orientation not prediction)`
+      : (big3.dayTintLine ?? 'A steady day, work your plan.')
 
     const big3Lines = big3.big3.length
-      ? big3.big3.map((t, i) => `${i + 1}. ${t.name}${t.goalName ? ` — ${t.goalName}` : ''}`).join('\n')
-      : 'No open tasks queued — add one to seed today.'
+      ? big3.big3.map((t, i) => `${i + 1}. ${t.name}${t.goalName ? `, ${t.goalName}` : ''}`).join('\n')
+      : 'No open tasks queued, add one to seed today.'
 
     // One alignment note = the top-priority goal's real share, or the redirection.
     const topGoal = context.state.topGoals[0]
@@ -58,7 +58,7 @@ export async function runDailyBrief(
     } else if (topGoal) {
       alignmentNote = `${topGoal.name} is at ${topGoal.sharePct}% of your ${context.state.trackedMinutes} tracked minutes this week (${topGoal.momentum}).`
     } else {
-      alignmentNote = context.state.alignmentHeadline ?? 'No tracked attention yet this week — today\'s Big 3 is the place to start.'
+      alignmentNote = context.state.alignmentHeadline ?? 'No tracked attention yet this week, today\'s Big 3 is the place to start.'
     }
 
     // ── Due commitments (E-6 §3.3 follow-up) — neutral facts, never guilt ─────

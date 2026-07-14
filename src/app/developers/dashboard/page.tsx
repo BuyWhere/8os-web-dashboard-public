@@ -12,10 +12,10 @@ export default function DevelopersDashboardPage() {
         <h2>Agent Connect API</h2>
         <p>Use the Agent Connect API to integrate your agents with the 8OS platform:</p>
         <ul>
-          <li><code>POST /api/v1/keys</code> — Issue an Agent Connect API key (requires authentication)</li>
-          <li><code>GET /api/v1/archetype</code> — Retrieve the archetype catalogue</li>
-          <li><code>GET /api/v1/archetype/:id</code> — Retrieve a specific archetype definition</li>
-          <li><code>POST /api/v1/archetype/generate</code> — Generate a user archetype (requires authentication)</li>
+          <li><code>POST /api/v1/keys</code>, Issue an Agent Connect API key (requires authentication)</li>
+          <li><code>GET /api/v1/archetype</code>, Retrieve the archetype catalogue</li>
+          <li><code>GET /api/v1/archetype/:id</code>, Retrieve a specific archetype definition</li>
+          <li><code>POST /api/v1/archetype/generate</code>, Generate a user archetype (requires authentication)</li>
         </ul>
       </section>
       <section>

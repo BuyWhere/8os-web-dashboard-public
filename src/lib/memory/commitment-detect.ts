@@ -77,7 +77,7 @@ export async function detectAndStoreCommitment(
       '("tomorrow", "by Friday", "next week") to an absolute ISO date (YYYY-MM-DD).',
       'For "next week" with no weekday, use the following Monday. If truly undated,',
       'set due_date null.',
-      'You MUST reply with a single raw JSON object and NOTHING else — no prose, no',
+      'You MUST reply with a single raw JSON object and NOTHING else, no prose, no',
       'code fences. Schema:',
       '{"isCommitment": true|false, "content": "<concise 1-line restatement>", "due_date": "YYYY-MM-DD"|null}',
       'Example input: "I\'ll email the landlord tomorrow" →',

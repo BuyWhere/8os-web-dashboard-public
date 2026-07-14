@@ -155,7 +155,7 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
     if (messages.length === 0 && !conversationId) {
       setMessages([{
         id: 'welcome', role: 'assistant',
-        content: "Hi, I'm your 8os Coach. I can shape your goals, projects, tasks, and calendar around your archetype — or just capture a quick thought.\n\nWhat's on your mind?",
+        content: "Hi, I'm your 8os Coach. I can shape your goals, projects, tasks, and calendar around your archetype, or just capture a quick thought.\n\nWhat's on your mind?",
       }])
     }
   }, [conversationId, messages.length])

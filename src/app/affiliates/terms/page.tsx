@@ -49,7 +49,7 @@ export default function AffiliatesTermsPage() {
             Terms &amp; Conditions
           </h1>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '0.875rem' }}>
-            T&amp;Cs coming soon — check back once the affiliate program officially launches.
+            T&amp;Cs coming soon, check back once the affiliate program officially launches.
           </p>
         </div>
 

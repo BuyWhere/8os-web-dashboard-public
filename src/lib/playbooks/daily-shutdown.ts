@@ -32,16 +32,16 @@ function closeLine(
   const who = archetypeName ? `${archetypeName}, ` : ''
   let base: string
   if (doneCount === 0 && incompleteCount === 0) {
-    base = `${who}a quiet day — nothing logged. Rest counts too; tomorrow is a fresh page.`
+    base = `${who}a quiet day, nothing logged. Rest counts too; tomorrow is a fresh page.`
   } else if (incompleteCount === 0) {
-    base = `${who}you closed every open loop today — ${doneCount} done, nothing left hanging. Shut the laptop with a clear conscience.`
+    base = `${who}you closed every open loop today, ${doneCount} done, nothing left hanging. Shut the laptop with a clear conscience.`
   } else if (doneCount === 0) {
-    base = `${who}${incompleteCount} still open and a slow start — carry them to tomorrow and let today end. Momentum returns with the next sunrise.`
+    base = `${who}${incompleteCount} still open and a slow start, carry them to tomorrow and let today end. Momentum returns with the next sunrise.`
   } else {
-    base = `${who}${doneCount} done, ${incompleteCount} still open. Honest day's work — carry the rest forward and stop here.`
+    base = `${who}${doneCount} done, ${incompleteCount} still open. Honest day's work, carry the rest forward and stop here.`
   }
-  if (dayVerdict === 'favorable') return `${base} The day's transit was with you — let that carry into how you rest.`
-  if (dayVerdict === 'unfavorable') return `${base} The day ran a touch choppy — all the more reason to close cleanly and not push past the line.`
+  if (dayVerdict === 'favorable') return `${base} The day's transit was with you, let that carry into how you rest.`
+  if (dayVerdict === 'unfavorable') return `${base} The day ran a touch choppy, all the more reason to close cleanly and not push past the line.`
   return base
 }
 
@@ -131,7 +131,7 @@ export async function runDailyShutdown(
     const instruction = [
       'Write this user\'s END-OF-DAY SHUTDOWN message. Structure, in this order:',
       `1) A recap using the real counts: ${recapLine}`,
-      incompleteCount ? `2) The incomplete items to carry to tomorrow:\n${incompleteList}` : '2) Nothing left open — acknowledge a clean close.',
+      incompleteCount ? `2) The incomplete items to carry to tomorrow:\n${incompleteList}` : '2) Nothing left open, acknowledge a clean close.',
       `3) One archetype-voiced close line (use verbatim or lightly): ${close}`,
       `4) A brief mood ask, observational and light, do NOT comment on how they might feel: ${moodAsk}`,
       'End pointing at the single carry-over confirm action. One action only.',

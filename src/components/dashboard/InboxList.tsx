@@ -78,7 +78,7 @@ export function InboxList({ initialTasks, onChanged }: Props) {
 
       {tasks.length === 0 ? (
         <div style={{ color: 'var(--skin-color-text-muted, #666)', fontSize: 13, textAlign: 'center', padding: '24px 0' }}>
-          Inbox zero — nothing waiting to be scheduled.
+          Inbox zero, nothing waiting to be scheduled.
         </div>
       ) : (
         order.map((tier) =>

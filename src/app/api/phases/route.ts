@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
     },
   })
   if (!profile) {
-    return NextResponse.json({ error: 'No birth profile — complete onboarding first.' }, { status: 404 })
+    return NextResponse.json({ error: 'No birth profile, complete onboarding first.' }, { status: 404 })
   }
 
   // Decrypt birth date/time to get a precise birth moment for the luck-pillar start age.

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'FAQ — 8os.ai',
+  title: 'FAQ, 8os.ai',
   description:
     'Frequently asked questions about 8os.ai, BaZi, the Five Elements, archetypes, and how the platform works.',
   keywords: ['8os faq', 'BaZi questions', 'archetype quiz faq', 'five elements faq'],
@@ -14,7 +14,7 @@ const faqs = [
     questions: [
       {
         q: 'What is 8os.ai?',
-        a: '8os.ai is a personal operating system built on BaZi (Chinese metaphysics) and Western astrology. It reveals your dominant element — Metal, Water, Wood, Fire, or Earth — and translates that into a practical system for goal-setting, productivity, timing, and daily decision-making. Think of it as the operating system your personality has always needed.',
+        a: '8os.ai is a personal operating system built on BaZi (Chinese metaphysics) and Western astrology. It reveals your dominant element, Metal, Water, Wood, Fire, or Earth, and translates that into a practical system for goal-setting, productivity, timing, and daily decision-making. Think of it as the operating system your personality has always needed.',
       },
       {
         q: 'Is 8os free?',
@@ -22,7 +22,7 @@ const faqs = [
       },
       {
         q: 'Does 8os require my birth time?',
-        a: "No. Most traditional BaZi systems require an exact birth time to calculate the hour pillar. 8os uses a different methodology — birth date plus five behavioral questions — because birth time data is unreliable for over 70% of people. Our approach is more accessible and equally actionable.",
+        a: "No. Most traditional BaZi systems require an exact birth time to calculate the hour pillar. 8os uses a different methodology, birth date plus five behavioral questions, because birth time data is unreliable for over 70% of people. Our approach is more accessible and equally actionable.",
       },
       {
         q: 'Is my data private?',
@@ -35,7 +35,7 @@ const faqs = [
     questions: [
       {
         q: 'What is BaZi?',
-        a: 'BaZi (八字, "Eight Characters") is a Chinese metaphysical system that analyzes a person\'s birth date to determine their dominant elemental energy: Metal, Water, Wood, Fire, or Earth. Each element corresponds to a distinct operating style — how you make decisions, manage energy, relate to others, and pursue goals. BaZi is less about fate and more about understanding your natural operating conditions.',
+        a: 'BaZi (八字, "Eight Characters") is a Chinese metaphysical system that analyzes a person\'s birth date to determine their dominant elemental energy: Metal, Water, Wood, Fire, or Earth. Each element corresponds to a distinct operating style, how you make decisions, manage energy, relate to others, and pursue goals. BaZi is less about fate and more about understanding your natural operating conditions.',
       },
       {
         q: 'What is the Five Elements system?',
@@ -43,7 +43,7 @@ const faqs = [
       },
       {
         q: 'How is BaZi different from Myers-Briggs?',
-        a: "MBTI describes personality traits in a static snapshot. BaZi does two additional things: it incorporates timing (seasonal energy cycles that affect when you perform best) and it integrates directly with goal-setting and daily practice. Research also shows that MBTI type descriptions change for roughly 50% of people after five weeks — BaZi elements don't change, because they're based on birth date, not self-reported questionnaires.",
+        a: "MBTI describes personality traits in a static snapshot. BaZi does two additional things: it incorporates timing (seasonal energy cycles that affect when you perform best) and it integrates directly with goal-setting and daily practice. Research also shows that MBTI type descriptions change for roughly 50% of people after five weeks, BaZi elements don't change, because they're based on birth date, not self-reported questionnaires.",
       },
     ],
   },
@@ -52,7 +52,7 @@ const faqs = [
     questions: [
       {
         q: 'What is my archetype?',
-        a: 'Your archetype is your dominant BaZi element expressed as a practical identity: Strategic Commander (Metal), Nurturing Creative (Water), Steady Achiever (Wood), Visionary Builder (Fire), or Harmonizer Guardian (Earth). Each archetype comes with a complete operating profile — strengths, challenges, best tools, timing windows, and daily nudges.',
+        a: 'Your archetype is your dominant BaZi element expressed as a practical identity: Strategic Commander (Metal), Nurturing Creative (Water), Steady Achiever (Wood), Visionary Builder (Fire), or Harmonizer Guardian (Earth). Each archetype comes with a complete operating profile, strengths, challenges, best tools, timing windows, and daily nudges.',
       },
       {
         q: 'What are the 5 archetypes?',
@@ -60,7 +60,7 @@ const faqs = [
       },
       {
         q: 'How does the archetype quiz work?',
-        a: 'The quiz takes approximately 90 seconds. You enter your birth date, then answer five behavioral questions that calibrate your dominant element. No birth time is required. The result is your archetype — a complete operating profile you can immediately apply to your goals and daily routine.',
+        a: 'The quiz takes approximately 90 seconds. You enter your birth date, then answer five behavioral questions that calibrate your dominant element. No birth time is required. The result is your archetype, a complete operating profile you can immediately apply to your goals and daily routine.',
       },
     ],
   },
@@ -69,7 +69,7 @@ const faqs = [
     questions: [
       {
         q: 'Can I use 8os with my existing tools?',
-        a: 'Yes. 8os is designed to complement your existing productivity stack — Notion, Todoist, Obsidian, Google Calendar, and more. Your archetype profile includes tool recommendations matched to your element. Premium users can connect 8os to external tools via the API.',
+        a: 'Yes. 8os is designed to complement your existing productivity stack, Notion, Todoist, Obsidian, Google Calendar, and more. Your archetype profile includes tool recommendations matched to your element. Premium users can connect 8os to external tools via the API.',
       },
       {
         q: 'What is the daily briefing?',
@@ -90,11 +90,11 @@ const faqs = [
     questions: [
       {
         q: 'How is 8os different from astrology?',
-        a: "Western astrology gives you a personality sketch based on your sun sign. 8os goes further: it uses BaZi's elemental system to create a timing-aware operating system. The key differences are that 8os provides (1) actionable daily guidance, (2) timing windows for major decisions, (3) goal frameworks matched to your element, and (4) integration with productivity tools — not just a personality description.",
+        a: "Western astrology gives you a personality sketch based on your sun sign. 8os goes further: it uses BaZi's elemental system to create a timing-aware operating system. The key differences are that 8os provides (1) actionable daily guidance, (2) timing windows for major decisions, (3) goal frameworks matched to your element, and (4) integration with productivity tools, not just a personality description.",
       },
       {
         q: 'What if I disagree with my archetype?',
-        a: 'You can retake the quiz at any time from your account settings. If you still feel the result doesn\'t fit, reach out to our support team — we can help you calibrate based on additional questions. Note that it\'s common for people to initially identify with a different archetype than their actual dominant element, especially if they\'ve spent years adapting to environments that reward other elements.',
+        a: 'You can retake the quiz at any time from your account settings. If you still feel the result doesn\'t fit, reach out to our support team, we can help you calibrate based on additional questions. Note that it\'s common for people to initially identify with a different archetype than their actual dominant element, especially if they\'ve spent years adapting to environments that reward other elements.',
       },
     ],
   },

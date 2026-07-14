@@ -113,7 +113,7 @@ export async function POST(req: NextRequest, ctx: { params: Promise<{ id: string
       data: {
         userId: auth.userId,
         title: goal.name,
-        description: `Redirection block for “${goal.name}” — booked from an alignment proposal. [${REDIRECTION_MARKER}:${proposal.id}] [goalId:${goal.id}]`,
+        description: `Redirection block for “${goal.name}”, booked from an alignment proposal. [${REDIRECTION_MARKER}:${proposal.id}] [goalId:${goal.id}]`,
         startAt,
         endAt,
         domainId: goal.domainId,

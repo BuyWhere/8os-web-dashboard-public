@@ -57,7 +57,7 @@ export function formatSlot(startIso: string, endIso: string): string {
   else day = start.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })
   const hm = (d: Date) =>
     `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`
-  return `${day} ${hm(start)}–${hm(end)}`
+  return `${day} ${hm(start)}-${hm(end)}`
 }
 
 export function ProposalCard({
@@ -141,7 +141,7 @@ export function ProposalCard({
     return (
       <div data-testid="proposal-card-accepted" style={wrap()}>
         <span style={{ fontSize: 13, color: '#4F7A52' }}>
-          ✓ Booked — {formatSlot(proposal.proposedSlotStart, proposal.proposedSlotEnd)} on “{proposal.goalName}”.
+          ✓ Booked, {formatSlot(proposal.proposedSlotStart, proposal.proposedSlotEnd)} on “{proposal.goalName}”.
         </span>
       </div>
     )
@@ -149,7 +149,7 @@ export function ProposalCard({
   if (done === 'declined') {
     return (
       <div data-testid="proposal-card-declined" style={wrap()}>
-        <span style={{ fontSize: 13, color: 'var(--skin-color-text-muted, var(--color-text-secondary))' }}>Dismissed — noted.</span>
+        <span style={{ fontSize: 13, color: 'var(--skin-color-text-muted, var(--color-text-secondary))' }}>Dismissed, noted.</span>
       </div>
     )
   }

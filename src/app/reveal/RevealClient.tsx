@@ -125,7 +125,7 @@ export default function RevealClient() {
           />
 
           <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
-            Birth time <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional — sharpens the read)</span>
+            Birth time <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional, sharpens the read)</span>
           </label>
           <input
             type="time"

@@ -125,7 +125,7 @@ export function AffiliateForm() {
         <textarea
           value={form.audienceDescription}
           onChange={(e) => update('audienceDescription', e.target.value)}
-          placeholder="Describe your audience — e.g. astrology enthusiasts, productivity seekers, wellness coaches..."
+          placeholder="Describe your audience, e.g. astrology enthusiasts, productivity seekers, wellness coaches..."
           rows={3}
           maxLength={1000}
           style={styles.textarea}
@@ -163,7 +163,7 @@ export function AffiliateForm() {
             {showPassword ? '🙈' : '👁'}
           </button>
         </div>
-        <span style={styles.hint}>Optional — create a password to manage your affiliate account</span>
+        <span style={styles.hint}>Optional, create a password to manage your affiliate account</span>
       </div>
 
       <label style={styles.checkboxLabel}>
@@ -191,7 +191,7 @@ export function AffiliateForm() {
           opacity: loading ? 0.7 : 1,
         }}
       >
-        {loading ? 'Submitting…' : 'Apply Now — Join the 8os.ai Affiliate Program'}
+        {loading ? 'Submitting…' : 'Apply Now, Join the 8os.ai Affiliate Program'}
       </button>
     </form>
   )

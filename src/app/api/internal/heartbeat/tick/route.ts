@@ -43,8 +43,8 @@ const SKEW_MS = 5 * 60 * 1000
 const CONCURRENCY = 5
 const DEFAULT_BRIEF_HOUR = 7 // 07:30 default
 const DEFAULT_SHUTDOWN_HOUR = 21 // 21:30 default
-const CONSOLIDATION_HOUR = 3 // 3am local — low-traffic nightly memory consolidation (E-5/E-6)
-const ROLLUP_HOUR = 2 // 2am local — §4.4 daily_user_stats rollup of the day that just closed
+const CONSOLIDATION_HOUR = 3 // 3am local, low-traffic nightly memory consolidation (E-5/E-6)
+const ROLLUP_HOUR = 2 // 2am local, §4.4 daily_user_stats rollup of the day that just closed
 // Phase-E rhythm boundaries (all evaluated in the user's LOCAL time):
 //   weekly    → Sun evening (default local hour 18), key {userId}:weekly:{isoWeek}
 //   monthly   → the local day the 流月 solar-month turns over, key {userId}:monthly:{yyyymm}

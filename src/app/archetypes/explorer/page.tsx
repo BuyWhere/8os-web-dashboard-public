@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Archetype Explorer — 8os',
+  title: 'Archetype Explorer, 8os',
   description: 'Explore all 8os archetypes and discover which one matches your personality and energy patterns.',
 };
 
@@ -44,7 +44,7 @@ const archetypes = [
     element: 'Earth',
     color: '#d97706',
     traits: ['Reliable', 'Methodical', 'Grounded', 'Practical'],
-    desc: 'You are the foundation. Steady, consistent, and trustworthy — you build things that last.',
+    desc: 'You are the foundation. Steady, consistent, and trustworthy, you build things that last.',
     peak: 'Consistent throughout the day',
   },
 ];
@@ -81,7 +81,7 @@ export default function ArchetypeExplorerPage() {
             Archetype Explorer
           </h1>
           <p style={{ color: '#888', fontSize: '1.125rem', lineHeight: 1.6, maxWidth: '600px', margin: '0 auto' }}>
-            Every 8os is built on a BaZi-derived archetype. These are the five core patterns —
+            Every 8os is built on a BaZi-derived archetype. These are the five core patterns,
             your exact configuration is a unique blend.
           </p>
         </div>
@@ -153,7 +153,7 @@ export default function ArchetypeExplorerPage() {
           </h2>
           <p style={{ color: '#888', marginBottom: '1.5rem', lineHeight: 1.6 }}>
             Your exact archetype is a unique blend determined by your BaZi birth chart.
-            Generate yours in 90 seconds — free.
+            Generate yours in 90 seconds, free.
           </p>
           <Link href="/onboarding" style={{
             display: 'inline-block',
@@ -165,7 +165,7 @@ export default function ArchetypeExplorerPage() {
             fontSize: '1rem',
             fontWeight: 700,
           }}>
-            Generate My Life OS — Free
+            Generate My Life OS, Free
           </Link>
         </div>
       </div>

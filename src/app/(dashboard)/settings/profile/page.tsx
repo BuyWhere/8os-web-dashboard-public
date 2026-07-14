@@ -192,7 +192,7 @@ export default function ProfileSettingsPage() {
         <div style={styles.container}>
           <SettingsTabs active="/settings/profile" />
 
-          {/* Clerk-managed identity — name, email, connected accounts,
+          {/* Clerk-managed identity, name, email, connected accounts,
               password/passkeys, and Clerk security. This is the primary Profile
               surface; the sections below cover data/privacy + legacy security. */}
           <section style={styles.clerkSection}>
@@ -228,11 +228,11 @@ export default function ProfileSettingsPage() {
           <h2 style={styles.sectionTitle}>Account details</h2>
           <div style={styles.row}>
             <span style={styles.label}>Email</span>
-            <span style={styles.value}>{user.email ?? '—'} {emailVerified ? '✓' : '(unverified)'}</span>
+            <span style={styles.value}>{user.email ?? '-'} {emailVerified ? '✓' : '(unverified)'}</span>
           </div>
           <div style={styles.row}>
             <span style={styles.label}>Phone</span>
-            <span style={styles.value}>{user.phone ?? '—'} {user.phone && (user.phoneVerified ? '✓' : '(unverified)')}</span>
+            <span style={styles.value}>{user.phone ?? '-'} {user.phone && (user.phoneVerified ? '✓' : '(unverified)')}</span>
           </div>
           <div style={styles.row}>
             <span style={styles.label}>Role</span>

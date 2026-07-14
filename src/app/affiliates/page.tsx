@@ -3,13 +3,13 @@ import Link from 'next/link'
 import { AffiliateForm } from '@/components/affiliates/AffiliateForm'
 
 export const metadata: Metadata = {
-  title: 'Affiliate Program — Earn Commission Introducing 8os.ai | 8os.ai',
+  title: 'Affiliate Program, Earn Commission Introducing 8os.ai | 8os.ai',
   description:
     'Join the 8os.ai Affiliate Program and earn up to $297 per conversion. Promote AI-powered life operating systems built on BaZi and Western astrology.',
   openGraph: {
-    title: '8os.ai Affiliate Program — Earn Up to $297 per Conversion',
+    title: '8os.ai Affiliate Program, Earn Up to $297 per Conversion',
     description:
-      'Join the 8os.ai Affiliate Program and earn up to $297 per conversion. 20–25% recurring commission.',
+      'Join the 8os.ai Affiliate Program and earn up to $297 per conversion. 20-25% recurring commission.',
     type: 'website',
   },
 }
@@ -18,7 +18,7 @@ const HOW_IT_WORKS = [
   {
     step: '01',
     title: 'Sign up',
-    desc: 'Apply for the affiliate program — approval within 24 hours.',
+    desc: 'Apply for the affiliate program, approval within 24 hours.',
   },
   {
     step: '02',
@@ -33,7 +33,7 @@ const HOW_IT_WORKS = [
   {
     step: '04',
     title: 'Earn commission',
-    desc: 'Earn 20–25% on every paying conversion, every month.',
+    desc: 'Earn 20-25% on every paying conversion, every month.',
   },
 ]
 
@@ -83,7 +83,7 @@ const FAQS = [
   },
   {
     q: 'What\'s the attribution window?',
-    a: '30 days — anyone who clicks your link and converts within 30 days is credited to you.',
+    a: '30 days, anyone who clicks your link and converts within 30 days is credited to you.',
   },
   {
     q: 'Is there a minimum payout?',
@@ -91,11 +91,11 @@ const FAQS = [
   },
   {
     q: 'Do I need a tax form?',
-    a: 'Yes — we use Stripe Connect for payouts. US affiliates will receive a 1099 at $600+ annual earnings. International affiliates will receive appropriate tax documentation for their region.',
+    a: 'Yes, we use Stripe Connect for payouts. US affiliates will receive a 1099 at $600+ annual earnings. International affiliates will receive appropriate tax documentation for their region.',
   },
   {
     q: 'Can I promote 8os.ai on paid ads?',
-    a: 'No — paid search (Google Ads, Bing Ads, etc.) is not permitted. All other promotional methods are welcome.',
+    a: 'No, paid search (Google Ads, Bing Ads, etc.) is not permitted. All other promotional methods are welcome.',
   },
 ]
 
@@ -231,7 +231,7 @@ export default function AffiliatesPage() {
             <div style={applyLeftStyle}>
               <h2 style={sectionTitleStyle}>Ready to Join?</h2>
               <p style={applySubtitleStyle}>
-                Apply now — we review within 24 hours and you&apos;ll hear from us at{' '}
+                Apply now, we review within 24 hours and you&apos;ll hear from us at{' '}
                 <a href="mailto:affiliates@8os.ai" style={{ color: 'var(--color-accent)' }}>
                   affiliates@8os.ai
                 </a>

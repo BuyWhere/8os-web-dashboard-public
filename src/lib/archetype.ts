@@ -134,7 +134,7 @@ export const ARCHETYPES: ArchetypeDefinition[] = [
     id: 'hybrid_explorer',
     name: 'The Hybrid Explorer',
     tagline: 'Thriving in the space between worlds',
-    description: 'Fluid, adaptable, and multi-dimensional. Your strength is in synthesis — you bridge opposites and thrive in complexity.',
+    description: 'Fluid, adaptable, and multi-dimensional. Your strength is in synthesis, you bridge opposites and thrive in complexity.',
     icon: '🌀',
     color: '#06b6d4',
     baziElementAffinity: { wood: 0.5, fire: 0.5, earth: 0.5, metal: 0.5, water: 0.5 },

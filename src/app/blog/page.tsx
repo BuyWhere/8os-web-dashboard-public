@@ -5,7 +5,7 @@ import { getAllBlogPosts } from '@/lib/content/blog';
 import BlogListClient from '@/components/BlogListClient';
 
 export const metadata: Metadata = {
-  title: 'Blog — 8os',
+  title: 'Blog, 8os',
   description: 'Insights on productivity, BaZi, AI, and building your personalized Life OS.',
 };
 

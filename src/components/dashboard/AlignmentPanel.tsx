@@ -240,7 +240,7 @@ export function AlignmentPanel({ gapPx = 20 }: { gapPx?: number }) {
             }
           } catch { /* non-fatal */ }
         }
-        setCorrectMsg('Reassigned — the verdict has been re-scored.')
+        setCorrectMsg('Reassigned, the verdict has been re-scored.')
       } else {
         setCorrectMsg('Could not save that correction.')
       }
@@ -270,7 +270,7 @@ export function AlignmentPanel({ gapPx = 20 }: { gapPx?: number }) {
           Alignment
         </h2>
         <div style={{ color: 'var(--skin-color-text-muted, var(--color-text-muted))', fontSize: 13 }}>
-          The alignment view is unavailable right now — the rest of your dashboard is unaffected. It retries the next time you load this page.
+          The alignment view is unavailable right now, the rest of your dashboard is unaffected. It retries the next time you load this page.
         </div>
       </Card>
     )
@@ -297,7 +297,7 @@ export function AlignmentPanel({ gapPx = 20 }: { gapPx?: number }) {
         ↪ {weekly.topRedirection}
       </p>
 
-      {/* E-7: one-tap redirection — book the starving-#1 goal's block */}
+      {/* E-7: one-tap redirection, book the starving-#1 goal's block */}
       {proposal && (
         <div style={{ marginBottom: 16 }}>
           <ProposalCard proposal={proposal} onResolved={() => setProposal(null)} />

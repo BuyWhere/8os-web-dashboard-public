@@ -116,9 +116,9 @@ export const SUN_SIGN_DASHBOARD_TOKENS: Record<string, DashboardTokens> = {
     metaphor: { visual: 'Mountain range with summit markers', layout: 'Vertical hierarchy (base → mid → summit)', animation: 'Climbing ascent, flag planting at peak', icons: ['mountain', 'compass', 'flag', 'peak'] },
     taskPresentation: { style: 'Summit checkpoints (milestones, not tasks)', cardDescription: 'Elevation marker with altitude', progressLabel: '% to summit', dueDateTemplate: 'Summit by {{date}}' },
     progressVisualization: { type: 'Mountain elevation profile', fillDescription: 'Height gained, terrain difficulty', milestones: ['Base camp', 'Mid-camp', 'Summit'], celebrationStyle: 'Flag planting animation, summit panorama' },
-    schedulingPhilosophy: { blockStyle: 'Long ascent phases (2–3 hours)', restStyle: 'Scheduled at base camps', energyPattern: 'Steady, consistent, no sprints', calendarView: 'Seasonal view (quarterly goals)' },
+    schedulingPhilosophy: { blockStyle: 'Long ascent phases (2-3 hours)', restStyle: 'Scheduled at base camps', energyPattern: 'Steady, consistent, no sprints', calendarView: 'Seasonal view (quarterly goals)' },
     coachingTone: { style: 'Mentor, elder, experienced guide', exampleMessages: ['The summit is closer than it appears.', 'Every step upward is progress. Rest is part of the climb.', "You've reached base camp. Next: the ridge."], metaphorFrequency: 'high' },
-    ritualSuggestions: { daily: 'Morning altitude check — review today\'s elevation gain', weekly: 'Summit review — what was achieved, what\'s next ridge', monthly: 'Seasonal planning — which peaks this quarter', annual: 'Mountain range vision — 10-year summit map' },
+    ritualSuggestions: { daily: 'Morning altitude check, review today\'s elevation gain', weekly: 'Summit review, what was achieved, what\'s next ridge', monthly: 'Seasonal planning, which peaks this quarter', annual: 'Mountain range vision, 10-year summit map' },
   },
   aquarius: {
     colorPalette: { primary: '#3498DB', secondary: '#9B59B6', accent: '#1ABC9C', background: '#F8F9FA', text: '#2C3E50', success: '#2ECC71', warning: '#E74C3C' },
@@ -128,7 +128,7 @@ export const SUN_SIGN_DASHBOARD_TOKENS: Record<string, DashboardTokens> = {
     progressVisualization: { type: 'Network graph, constellation formation', fillDescription: 'Nodes connected, pathways lit', milestones: ['Proof of concept', 'Prototype', 'Launch'], celebrationStyle: 'Network explosion, new constellation' },
     schedulingPhilosophy: { blockStyle: 'Innovation sprints (90 min, Pomodoro variant)', restStyle: 'Recharge between experiments', energyPattern: 'Bursts of insight, flexible timing', calendarView: 'Project phases, not daily tasks' },
     coachingTone: { style: 'Futurist, inventor, disruptor', exampleMessages: ['The future is built one experiment at a time.', "That idea? It's a node waiting to connect.", 'Break the pattern. The solution is outside the box.'], metaphorFrequency: 'medium' },
-    ritualSuggestions: { daily: 'Innovation spark — 10-min ideation session', weekly: 'Lab review — what experiments worked/failed', monthly: 'Future scan — emerging trends, new tools', annual: 'Vision casting — 5-year breakthrough map' },
+    ritualSuggestions: { daily: 'Innovation spark, 10-min ideation session', weekly: 'Lab review, what experiments worked/failed', monthly: 'Future scan, emerging trends, new tools', annual: 'Vision casting, 5-year breakthrough map' },
   },
   pisces: {
     colorPalette: { primary: '#AED6F1', secondary: '#D7BDE2', accent: '#85C1E9', background: '#F5F5F5', text: '#5D6D7E', success: '#A9DFBF', warning: '#FAD7A0' },
@@ -137,8 +137,8 @@ export const SUN_SIGN_DASHBOARD_TOKENS: Record<string, DashboardTokens> = {
     taskPresentation: { style: 'Dream bubbles (ideas, visions, creative sparks)', cardDescription: 'Soft rounded shape with glow', progressLabel: 'Flow state', dueDateTemplate: 'When the tide is right' },
     progressVisualization: { type: 'Tide chart, wave height, flow meter', fillDescription: 'Water level rising, currents flowing', milestones: ['Low tide (rest)', 'High tide (action)', 'Full moon (peak)'], celebrationStyle: 'Wave crest, splash, rainbow' },
     schedulingPhilosophy: { blockStyle: 'Flow sessions (follow energy, no rigid time)', restStyle: 'Essential, guilt-free, part of the cycle', energyPattern: 'Ebb and flow, intuitive timing', calendarView: 'Moon phases, seasonal rhythms' },
-    coachingTone: { style: 'Mystic, poet, gentle guide', exampleMessages: ['The tide brings what you need. Trust the flow.', "Your dreams are not distractions — they're signals.", "Rest is not absence. It's the deep current."], metaphorFrequency: 'high' },
-    ritualSuggestions: { daily: 'Morning tide check — what does intuition say today?', weekly: 'Dream journal — log dreams, find patterns', monthly: 'Full moon reflection — release, renew, set intentions', annual: 'Ocean voyage — where is the current taking you?' },
+    coachingTone: { style: 'Mystic, poet, gentle guide', exampleMessages: ['The tide brings what you need. Trust the flow.', "Your dreams are not distractions, they're signals.", "Rest is not absence. It's the deep current."], metaphorFrequency: 'high' },
+    ritualSuggestions: { daily: 'Morning tide check, what does intuition say today?', weekly: 'Dream journal, log dreams, find patterns', monthly: 'Full moon reflection, release, renew, set intentions', annual: 'Ocean voyage, where is the current taking you?' },
   },
   aries: {
     colorPalette: { primary: '#E74C3C', secondary: '#C0392B', accent: '#F1C40F', background: '#FADBD8', text: '#2C3E50', success: '#27AE60', warning: '#E67E22' },
@@ -148,7 +148,7 @@ export const SUN_SIGN_DASHBOARD_TOKENS: Record<string, DashboardTokens> = {
     progressVisualization: { type: 'Battle map, territory control, conquest meter', fillDescription: 'Ground gained, flags planted', milestones: ['First blood', 'Breakthrough', 'Victory'], celebrationStyle: 'Explosion, victory fanfare, flag wave' },
     schedulingPhilosophy: { blockStyle: 'Combat rounds (25 min, intense focus)', restStyle: 'Recovery between battles', energyPattern: 'Bursts, sprints, all-out effort', calendarView: 'Campaign phases, battle plans' },
     coachingTone: { style: 'General, war leader, motivator', exampleMessages: ['The battlefield is yours. Charge!', 'Victory belongs to the bold.', "That objective? It's yours for the taking."], metaphorFrequency: 'high' },
-    ritualSuggestions: { daily: "Morning battle cry — declare today's objective", weekly: 'Victory lap — celebrate wins, learn from losses', monthly: 'Campaign review — strategy, tactics, alliances', annual: '1-year battle plan' },
+    ritualSuggestions: { daily: "Morning battle cry, declare today's objective", weekly: 'Victory lap, celebrate wins, learn from losses', monthly: 'Campaign review, strategy, tactics, alliances', annual: '1-year battle plan' },
   },
   taurus: {
     colorPalette: { primary: '#27AE60', secondary: '#8B7355', accent: '#F39C12', background: '#F5F5DC', text: '#3E2723', success: '#2ECC71', warning: '#D35400' },
@@ -158,7 +158,7 @@ export const SUN_SIGN_DASHBOARD_TOKENS: Record<string, DashboardTokens> = {
     progressVisualization: { type: 'Building construction, floor plan', fillDescription: 'Walls raised, rooms completed', milestones: ['Foundation', 'Frame', 'Roof', 'Interior'], celebrationStyle: 'Building completion, ribbon cutting' },
     schedulingPhilosophy: { blockStyle: 'Construction phases (steady, consistent)', restStyle: 'Essential for quality, not rushed', energyPattern: 'Steady, patient, persistent', calendarView: 'Seasonal (planting, growing, harvest)' },
     coachingTone: { style: 'Craftsman, farmer, builder', exampleMessages: ['Every brick matters. Lay it well.', 'The foundation determines the height.', 'Harvest comes to those who plant consistently.'], metaphorFrequency: 'high' },
-    ritualSuggestions: { daily: "Morning inspection — check today's build site", weekly: "Progress review — what's built, what's next", monthly: 'Seasonal planning — what to plant, what to harvest', annual: '10-year property vision' },
+    ritualSuggestions: { daily: "Morning inspection, check today's build site", weekly: "Progress review, what's built, what's next", monthly: 'Seasonal planning, what to plant, what to harvest', annual: '10-year property vision' },
   },
   gemini: {
     colorPalette: { primary: '#F1C40F', secondary: '#3498DB', accent: '#9B59B6', background: '#FEF9E7', text: '#2C3E50', success: '#2ECC71', warning: '#E67E22' },
@@ -168,7 +168,7 @@ export const SUN_SIGN_DASHBOARD_TOKENS: Record<string, DashboardTokens> = {
     progressVisualization: { type: 'Network graph, message threads, knowledge tree', fillDescription: 'Branches connected, information flowing', milestones: ['First contact', 'Deep dive', 'Synthesis'], celebrationStyle: 'Connection spark, network expansion' },
     schedulingPhilosophy: { blockStyle: 'Pomodoro with switching (25 min × 2, different topics)', restStyle: 'Mental variety, not physical rest', energyPattern: 'Curiosity-driven, multiple interests', calendarView: 'Topic-based, not time-based' },
     coachingTone: { style: 'Journalist, curator, connector', exampleMessages: ["That idea? Connect it to this one. Boom.", 'Your network is your net worth.', 'Two ideas walk into a bar. You make the introduction.'], metaphorFrequency: 'medium' },
-    ritualSuggestions: { daily: "Morning scan — what's new, what's interesting", weekly: 'Synthesis session — connect dots from the week', monthly: 'Curiosity audit — what did you learn, what next', annual: 'Knowledge map — what fields to explore' },
+    ritualSuggestions: { daily: "Morning scan, what's new, what's interesting", weekly: 'Synthesis session, connect dots from the week', monthly: 'Curiosity audit, what did you learn, what next', annual: 'Knowledge map, what fields to explore' },
   },
   cancer: {
     colorPalette: { primary: '#5DADE2', secondary: '#AED6F1', accent: '#F5B041', background: '#F8F9FA', text: '#2C3E50', success: '#A9DFBF', warning: '#F8C471' },
@@ -178,7 +178,7 @@ export const SUN_SIGN_DASHBOARD_TOKENS: Record<string, DashboardTokens> = {
     progressVisualization: { type: 'Nest building, home completion, family tree', fillDescription: 'Comfort level, safety index', milestones: ['Safe space', 'Thriving family', 'Legacy'], celebrationStyle: 'Home completion, family gathering' },
     schedulingPhilosophy: { blockStyle: 'Care sessions (focused on others)', restStyle: 'Self-care essential, guilt-free', energyPattern: 'Cyclical, lunar, emotional', calendarView: 'Family events, care schedules' },
     coachingTone: { style: 'Parent, protector, home-maker', exampleMessages: ['Your nest is your strength.', 'Care for yourself first. Then others.', 'Home is where your power grows.'], metaphorFrequency: 'high' },
-    ritualSuggestions: { daily: 'Morning nurture — what needs care today', weekly: 'Family check-in — how is everyone doing', monthly: 'Home audit — what needs fixing, what needs love', annual: 'Legacy of care — who have you nurtured, how' },
+    ritualSuggestions: { daily: 'Morning nurture, what needs care today', weekly: 'Family check-in, how is everyone doing', monthly: 'Home audit, what needs fixing, what needs love', annual: 'Legacy of care, who have you nurtured, how' },
   },
   leo: {
     colorPalette: { primary: '#F39C12', secondary: '#E67E22', accent: '#C0392B', background: '#FEF5E7', text: '#2C3E50', success: '#F1C40F', warning: '#E74C3C' },
@@ -188,7 +188,7 @@ export const SUN_SIGN_DASHBOARD_TOKENS: Record<string, DashboardTokens> = {
     progressVisualization: { type: 'Stage completion, show quality, audience size', fillDescription: 'Acts completed, scenes rehearsed', milestones: ['Rehearsal', 'Preview', 'Opening night', 'Encore'], celebrationStyle: 'Standing ovation, curtain call, trophy' },
     schedulingPhilosophy: { blockStyle: 'Performance sessions (rehearse, perform, review)', restStyle: 'Recovery between shows', energyPattern: 'Peak performance, dramatic entrances', calendarView: 'Show schedule, tour dates' },
     coachingTone: { style: 'Director, star, showman', exampleMessages: ['The stage is yours. Own it.', 'That performance? Oscar-worthy.', 'The audience is waiting. Give them a show.'], metaphorFrequency: 'high' },
-    ritualSuggestions: { daily: "Morning rehearsal — practice today's performance", weekly: 'Show review — what worked, what bombed, what to improve', monthly: 'Season planning — what shows, what roles', annual: 'Career retrospective — greatest hits, next blockbuster' },
+    ritualSuggestions: { daily: "Morning rehearsal, practice today's performance", weekly: 'Show review, what worked, what bombed, what to improve', monthly: 'Season planning, what shows, what roles', annual: 'Career retrospective, greatest hits, next blockbuster' },
   },
   virgo: {
     colorPalette: { primary: '#7D3C98', secondary: '#8E44AD', accent: '#2ECC71', background: '#F4F6F7', text: '#2C3E50', success: '#27AE60', warning: '#F39C12' },
@@ -198,7 +198,7 @@ export const SUN_SIGN_DASHBOARD_TOKENS: Record<string, DashboardTokens> = {
     progressVisualization: { type: 'Data charts, efficiency graphs, quality metrics', fillDescription: 'Accuracy improving, errors decreasing', milestones: ['Hypothesis', 'Experiment', 'Analysis', 'Conclusion'], celebrationStyle: 'Breakthrough discovery, peer review approval' },
     schedulingPhilosophy: { blockStyle: 'Analysis sessions (deep focus, no interruption)', restStyle: 'Mental reset, data-free time', energyPattern: 'Steady, methodical, detail-oriented', calendarView: 'Project phases, review cycles' },
     coachingTone: { style: 'Scientist, editor, quality controller', exampleMessages: ["The data doesn't lie. What does it tell you?", 'That process? 15% more efficient. Well done.', 'Perfection is asymptotic. Keep refining.'], metaphorFrequency: 'medium' },
-    ritualSuggestions: { daily: 'Morning calibration — check systems, review data', weekly: 'Lab report — what worked, what failed, what\'s next', monthly: 'Process audit — inefficiencies, optimizations', annual: 'Research review — publications, discoveries, next study' },
+    ritualSuggestions: { daily: 'Morning calibration, check systems, review data', weekly: 'Lab report, what worked, what failed, what\'s next', monthly: 'Process audit, inefficiencies, optimizations', annual: 'Research review, publications, discoveries, next study' },
   },
   libra: {
     colorPalette: { primary: '#E91E63', secondary: '#9C27B0', accent: '#00BCD4', background: '#FCE4EC', text: '#2C3E50', success: '#4CAF50', warning: '#FF9800' },
@@ -208,7 +208,7 @@ export const SUN_SIGN_DASHBOARD_TOKENS: Record<string, DashboardTokens> = {
     progressVisualization: { type: 'Scale, balance beam, harmony meter', fillDescription: 'Balance improving, conflicts resolving', milestones: ['Proposal', 'Negotiation', 'Agreement', 'Partnership'], celebrationStyle: 'Handshake, signed contract, harmony achieved' },
     schedulingPhilosophy: { blockStyle: 'Collaboration sessions (2+ people, balanced input)', restStyle: 'Solo reflection, rebalancing', energyPattern: 'Social, diplomatic, consensus-building', calendarView: 'Meeting-heavy, partnership-focused' },
     coachingTone: { style: 'Diplomat, mediator, partner', exampleMessages: ['Balance is not 50/50. It\'s 100/100.', "That conflict? There's a win-win. Find it.", 'Your strength is your fairness.'], metaphorFrequency: 'high' },
-    ritualSuggestions: { daily: 'Morning balance check — what needs harmony today', weekly: 'Partnership review — relationships, agreements, conflicts', monthly: "Justice audit — what's fair, what needs rebalancing", annual: 'Alliance map — key partnerships, new collaborations' },
+    ritualSuggestions: { daily: 'Morning balance check, what needs harmony today', weekly: 'Partnership review, relationships, agreements, conflicts', monthly: "Justice audit, what's fair, what needs rebalancing", annual: 'Alliance map, key partnerships, new collaborations' },
   },
   scorpio: {
     colorPalette: { primary: '#8E44AD', secondary: '#2C3E50', accent: '#C0392B', background: '#F5F5F5', text: '#ECF0F1', success: '#27AE60', warning: '#E74C3C' },
@@ -218,7 +218,7 @@ export const SUN_SIGN_DASHBOARD_TOKENS: Record<string, DashboardTokens> = {
     progressVisualization: { type: 'Depth meter, shadow integration, rebirth cycle', fillDescription: 'Darkness explored, light reclaimed', milestones: ['Descent', 'Crisis', 'Transformation', 'Rebirth'], celebrationStyle: 'Phoenix rising, shadow embraced, power reclaimed' },
     schedulingPhilosophy: { blockStyle: 'Deep dives (intense, uninterrupted, transformative)', restStyle: 'Integration time, not avoidance', energyPattern: 'All-or-nothing, passionate, obsessive', calendarView: 'Transformation phases, not daily tasks' },
     coachingTone: { style: 'Mystic, detective, alchemist', exampleMessages: ['The shadow holds your power. Dive in.', "That crisis? It's a cocoon. Emerge.", "You don't do surface. You do depth."], metaphorFrequency: 'high' },
-    ritualSuggestions: { daily: 'Morning descent — what shadow needs light today', weekly: 'Phoenix review — what died, what was reborn', monthly: 'Underworld journey — deep fears, hidden powers', annual: 'Great transformation — what must die for you to grow' },
+    ritualSuggestions: { daily: 'Morning descent, what shadow needs light today', weekly: 'Phoenix review, what died, what was reborn', monthly: 'Underworld journey, deep fears, hidden powers', annual: 'Great transformation, what must die for you to grow' },
   },
   sagittarius: {
     colorPalette: { primary: '#E67E22', secondary: '#D35400', accent: '#F1C40F', background: '#FEF5E7', text: '#2C3E50', success: '#27AE60', warning: '#E74C3C' },
@@ -228,7 +228,7 @@ export const SUN_SIGN_DASHBOARD_TOKENS: Record<string, DashboardTokens> = {
     progressVisualization: { type: 'Map exploration, territory discovered, horizon expanded', fillDescription: 'Land mapped, paths blazed', milestones: ['Departure', 'First sighting', 'Arrival', 'New horizon'], celebrationStyle: 'Flag planting, new land, vista view' },
     schedulingPhilosophy: { blockStyle: 'Expeditions (long, immersive, adventurous)', restStyle: 'Campfire time, story sharing', energyPattern: 'Burst, explore, rest, repeat', calendarView: 'Journey phases, destination-based' },
     coachingTone: { style: 'Explorer, philosopher, adventurer', exampleMessages: ['The horizon is calling. Pack your bags.', "That path? No one's walked it. You first.", 'The journey is the destination. Enjoy the view.'], metaphorFrequency: 'high' },
-    ritualSuggestions: { daily: 'Morning compass check — where are you heading today', weekly: 'Expedition review — what did you discover, what\'s next', monthly: 'Horizon scan — new territories, new adventures', annual: '1-year journey map' },
+    ritualSuggestions: { daily: 'Morning compass check, where are you heading today', weekly: 'Expedition review, what did you discover, what\'s next', monthly: 'Horizon scan, new territories, new adventures', annual: '1-year journey map' },
   },
 }
 
@@ -354,7 +354,7 @@ const DAY_ELEMENT_DESC: Record<string, string> = {
 
 const PERSONALITY_DESC: Record<PersonalityCode, string> = {
   sg: 'You execute methodically toward clear objectives, building systems that deliver.',
-  sp: 'You master the art of process — quality, craft, and continuous refinement.',
+  sp: 'You master the art of process, quality, craft, and continuous refinement.',
   ig: 'You charge toward your vision with intuitive boldness and creative energy.',
   ip: 'You trust the flow of ideas, letting emergence and creativity guide you.',
 }
@@ -388,7 +388,7 @@ const SUN_SIGN_THEMES: Record<string, string> = {
 
 const DOMAIN_GOAL_TEMPLATES: Record<string, Record<PersonalityCode, string[]>> = {
   career: {
-    sg: ['Reach [role] by [date] — define clear milestones', 'Launch [product] with measurable adoption metrics', 'Build a team of [n] that consistently ships on time'],
+    sg: ['Reach [role] by [date], define clear milestones', 'Launch [product] with measurable adoption metrics', 'Build a team of [n] that consistently ships on time'],
     sp: ['Achieve mastery in [skill] through deliberate practice', 'Optimize the [process] for 30% efficiency gain', 'Document and systematize [workflow] by [date]'],
     ig: ['Land [dream role] by taking bold, unconventional moves', 'Build [vision] that disrupts [industry]', 'Become known for [expertise] in [community]'],
     ip: ['Explore [field] deeply and let the right path emerge', 'Create [project] that expresses your unique perspective', 'Build a career that evolves with your growing interests'],
@@ -397,17 +397,17 @@ const DOMAIN_GOAL_TEMPLATES: Record<string, Record<PersonalityCode, string[]>> =
     sg: ['Save $[X] by [date] using automated savings milestones', 'Build $[X] investment portfolio with systematic monthly contributions', 'Achieve $[X] annual revenue by [date]'],
     sp: ['Optimize budget to reduce waste by [X]% each quarter', 'Build diversified income streams systematically', 'Track and refine investment strategy monthly'],
     ig: ['Create passive income of $[X]/month from [source]', 'Launch [business] that generates $[X] in year 1', 'Invest in opportunities aligned with your vision'],
-    ip: ['Build wealth doing what you love — [passion] monetized', 'Explore multiple income streams and find what flows naturally', 'Let financial abundance follow meaningful work'],
+    ip: ['Build wealth doing what you love, [passion] monetized', 'Explore multiple income streams and find what flows naturally', 'Let financial abundance follow meaningful work'],
   },
   health: {
     sg: ['Complete [fitness goal] by [date] with structured plan', 'Build daily habits: [exercise], [sleep], [nutrition] tracked', 'Achieve [health metric] in [X] weeks'],
     sp: ['Perfect a sustainable health routine refined over [X] months', 'Optimize sleep, nutrition, and movement as a system', 'Track biometrics and improve key indicators each quarter'],
-    ig: ['Run [race] / achieve [goal] fueled by ambitious drive', 'Transform your body and mind through bold new habits', 'Pursue peak performance — train like an athlete'],
+    ig: ['Run [race] / achieve [goal] fueled by ambitious drive', 'Transform your body and mind through bold new habits', 'Pursue peak performance, train like an athlete'],
     ip: ['Build a health practice that feels natural and joyful', 'Listen to your body and develop intuitive wellness habits', 'Explore healing practices that resonate deeply'],
   },
   relationships: {
     sg: ['Build [X] deep friendships by [date] with intentional investment', 'Strengthen key relationships through consistent quality time', 'Achieve relationship goals: [milestone] by [date]'],
-    sp: ['Develop a relationship nurturing routine — weekly check-ins', 'Learn and apply [communication skill] systematically', 'Build community through regular, meaningful rituals'],
+    sp: ['Develop a relationship nurturing routine, weekly check-ins', 'Learn and apply [communication skill] systematically', 'Build community through regular, meaningful rituals'],
     ig: ['Create a circle of [X] people who inspire and challenge you', 'Pursue the connections that excite and energize you', 'Build relationships that accelerate your shared vision'],
     ip: ['Let relationships deepen organically through authentic presence', 'Explore new communities and let resonant bonds emerge', 'Nurture connections that feel right at a soul level'],
   },
@@ -415,7 +415,7 @@ const DOMAIN_GOAL_TEMPLATES: Record<string, Record<PersonalityCode, string[]>> =
     sg: ['Master [skill/subject] with a structured curriculum by [date]', 'Complete [certification/degree] with milestone-based study plan', 'Read [X] books on [topic] and apply key lessons'],
     sp: ['Build deep expertise in [domain] through deliberate practice', 'Create a learning system: spaced repetition + project application', 'Develop [craft] to a professional standard'],
     ig: ['Learn [skill] and use it to create [bold project]', 'Pursue [field] with passionate curiosity and fast experimentation', 'Become a [title/expert] in [area] that lights you up'],
-    ip: ['Follow your curiosity wherever it leads — explore [interest]', 'Learn through doing: build [project] and discover as you go', 'Let learning evolve with your changing passions'],
+    ip: ['Follow your curiosity wherever it leads, explore [interest]', 'Learn through doing: build [project] and discover as you go', 'Let learning evolve with your changing passions'],
   },
   legacy: {
     sg: ['Build [legacy project] with a 10-year roadmap and quarterly milestones', 'Create [lasting institution/work] that outlives you', 'Mentor [X] people to their goals in the next [years]'],
@@ -439,41 +439,41 @@ const PROJECT_TASK_TEMPLATES: Record<PersonalityCode, (projectName: string) => s
   sg: (p) => [
     `Define ${p} scope, deliverables, and success metrics`,
     `Break ${p} into weekly milestones with clear owners`,
-    `Complete Phase 1 of ${p} — validate core assumption`,
-    `Review ${p} progress against plan — adjust if needed`,
-    `Ship ${p} v1 — measure impact and document learnings`,
+    `Complete Phase 1 of ${p}, validate core assumption`,
+    `Review ${p} progress against plan, adjust if needed`,
+    `Ship ${p} v1, measure impact and document learnings`,
   ],
   sp: (p) => [
     `Research and document best practices for ${p}`,
-    `Design the ${p} process/workflow — map each step`,
+    `Design the ${p} process/workflow, map each step`,
     `Build ${p} prototype focusing on craft and quality`,
-    `Refine ${p} based on detailed review — eliminate waste`,
-    `Finalize ${p} — ensure it meets the standard of excellence`,
+    `Refine ${p} based on detailed review, eliminate waste`,
+    `Finalize ${p}, ensure it meets the standard of excellence`,
   ],
   ig: (p) => [
     `Vision: write 1-page bold vision for ${p} outcome`,
     `Identify the 3 biggest bets that will make ${p} succeed`,
-    `Execute ${p} sprint 1 — move fast, learn faster`,
-    `Validate ${p} with real users — pivot if the data demands it`,
-    `Launch ${p} — make noise, measure the response`,
+    `Execute ${p} sprint 1, move fast, learn faster`,
+    `Validate ${p} with real users, pivot if the data demands it`,
+    `Launch ${p}, make noise, measure the response`,
   ],
   ip: (p) => [
-    `Explore what ${p} could become — let ideas emerge freely`,
-    `Experiment with ${p} approach — try 3 different directions`,
+    `Explore what ${p} could become, let ideas emerge freely`,
+    `Experiment with ${p} approach, try 3 different directions`,
     `Build ${p} prototype using whatever feels most natural`,
-    `Share ${p} work-in-progress — gather organic feedback`,
-    `Let ${p} evolve — iterate toward what feels right`,
+    `Share ${p} work-in-progress, gather organic feedback`,
+    `Let ${p} evolve, iterate toward what feels right`,
   ],
 }
 
 // ─── Energy Hour Calculator ───────────────────────────────────────────────────
 
 const ELEMENT_PEAK_HOURS: Record<string, number[]> = {
-  wood:  [6, 7, 8],       // early morning — growth, rising energy
-  fire:  [10, 11, 12, 13], // late morning to midday — peak heat
-  earth: [8, 9, 13, 14],  // mid-morning & early afternoon — grounded
-  metal: [15, 16, 17, 18], // late afternoon — precision sharpens
-  water: [21, 22, 23, 0],  // night — depth, introspection
+  wood:  [6, 7, 8],       // early morning, growth, rising energy
+  fire:  [10, 11, 12, 13], // late morning to midday, peak heat
+  earth: [8, 9, 13, 14],  // mid-morning & early afternoon, grounded
+  metal: [15, 16, 17, 18], // late afternoon, precision sharpens
+  water: [21, 22, 23, 0],  // night, depth, introspection
 }
 
 const PERSONALITY_PEAK_ADJUSTMENTS: Record<PersonalityCode, number[]> = {
@@ -486,7 +486,7 @@ const PERSONALITY_PEAK_ADJUSTMENTS: Record<PersonalityCode, number[]> = {
 export interface EnergyHourMap {
   peak: number[]           // 0-23, best hours for deep work
   moderate: number[]       // good for lighter tasks
-  rest: number[]           // protect — low energy / recovery
+  rest: number[]           // protect, low energy / recovery
 }
 
 function calculateEnergyHours(
@@ -629,7 +629,7 @@ export function generateArchetype(input: ArchieInput): ArchieResult {
     const shichen = SHICHEN_SLOTS[estimatedHourIndex % 12]
     if (shichen) {
       hourPillarIndex = shichen.index
-      hourPillarName = `${shichen.chineseName} — estimated (${shichen.animal} Hour, ${shichen.hours})`
+      hourPillarName = `${shichen.chineseName}, estimated (${shichen.animal} Hour, ${shichen.hours})`
     }
   }
 

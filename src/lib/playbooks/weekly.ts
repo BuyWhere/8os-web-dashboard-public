@@ -40,7 +40,7 @@ export async function runWeekly(
     // ── Alignment verdict + share-vs-priority deltas (real receipts) ──────────
     const perGoal = alignment ? [...alignment.weekly.perGoal].sort((a, b) => a.rank - b.rank) : []
     const trackedMin = perGoal.reduce((s, g) => s + g.minutes, 0)
-    const verdict = alignment?.weekly.headline || context.state.alignmentHeadline || 'No tracked attention this week yet — next week is a clean slate.'
+    const verdict = alignment?.weekly.headline || context.state.alignmentHeadline || 'No tracked attention this week yet, next week is a clean slate.'
     const deltaLines = perGoal.slice(0, 4).map((g) => {
       const gap = Math.round((g.share - g.expectedShare) * 100)
       const sign = gap > 0 ? '+' : ''
@@ -67,7 +67,7 @@ export async function runWeekly(
       `Weekly verdict: ${verdict}`,
       trackedMin ? `You tracked ${trackedMin} minutes across your goals this week.` : '',
       ...(deltaLines.length ? ['', 'Where your time went vs where you said it should:', ...deltaLines.map((l) => `- ${l}`)] : []),
-      ...(sweep.length ? ['', 'These slipped past twice in your dailies — let\'s settle them:', ...sweep.map((c) => `- ${c.content}${c.dueIso ? ` (was due ${c.dueIso})` : ''}`)] : []),
+      ...(sweep.length ? ['', 'These slipped past twice in your dailies, let\'s settle them:', ...sweep.map((c) => `- ${c.content}${c.dueIso ? ` (was due ${c.dueIso})` : ''}`)] : []),
       '',
       nextWeekLine,
       ...(hygieneLines.length ? ['', ...hygieneLines] : []),
@@ -79,7 +79,7 @@ export async function runWeekly(
       deltaLines.length ? `2) Their share-vs-priority deltas, stated as neutral facts:\n${deltaLines.join('\n')}` : '',
       sweep.length ? `3) Sweep the commitments that slipped past twice in their dailies (no guilt, just settle them): ${sweep.map((c) => `"${c.content}"`).join('; ')}.` : '',
       `4) Frame next week by their 流月: ${nextWeekLine}`,
-      hygieneLines.length ? `5) Then confront the starving top-priority goal(s) plainly and WITHOUT shame — retiring is a WIN of focus, not a failure: ${starving.map((s) => `"${s.name}" at ${Math.round(s.avgShare * 100)}% for ${s.windowDays}d`).join('; ')}. Tell them the buttons let them recommit, shrink, or retire it.` : '',
+      hygieneLines.length ? `5) Then confront the starving top-priority goal(s) plainly and WITHOUT shame, retiring is a WIN of focus, not a failure: ${starving.map((s) => `"${s.name}" at ${Math.round(s.avgShare * 100)}% for ${s.windowDays}d`).join('; ')}. Tell them the buttons let them recommit, shrink, or retire it.` : '',
       'End with a single directional nudge toward accepting next week\'s #1 focus block. ONE primary action only.',
       tokens?.tone ? `Tone: ${tokens.tone}.` : '',
     ].filter(Boolean).join('\n')
@@ -95,7 +95,7 @@ export async function runWeekly(
       const res = await ensureProposal(userId, {
         sourceKind: 'alignment',
         alignment: alignment ?? undefined,
-        ...(targetGoalId ? { goalId: targetGoalId, rationale: `Lock next week's #1 focus block onto “${starving[0].name}” — it's been under-fed and it's your top priority.` } : {}),
+        ...(targetGoalId ? { goalId: targetGoalId, rationale: `Lock next week's #1 focus block onto “${starving[0].name}”, it's been under-fed and it's your top priority.` } : {}),
         sourceRunId: opts.runId,
       })
       proposalId = res?.proposal.id ?? null

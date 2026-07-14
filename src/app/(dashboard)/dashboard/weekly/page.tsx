@@ -50,7 +50,7 @@ export default function WeeklyPage() {
       <main style={{ flex: 1, padding: '32px 40px', color: 'var(--color-text-primary)' }}>
         <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 6, fontFamily: 'var(--font-serif), Georgia, serif' }}>Your week</h1>
         <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, marginBottom: 24 }}>
-          A verdict on the week behind and a focus for the week ahead — framed by your solar month.
+          A verdict on the week behind and a focus for the week ahead, framed by your solar month.
         </p>
 
         {verdict && (

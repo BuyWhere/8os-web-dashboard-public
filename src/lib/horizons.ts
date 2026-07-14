@@ -107,7 +107,7 @@ export function buildGoalReminder(g: HorizonGoalInput, now: Date = new Date()): 
   if (g.totalTasks === 0) {
     return {
       level: 'break-down',
-      message: `No tasks yet — break this ${noun} into concrete next actions.`,
+      message: `No tasks yet, break this ${noun} into concrete next actions.`,
       daysLeft: dl,
       needsBreakdown: true,
     }
@@ -146,7 +146,7 @@ export function buildGoalReminder(g: HorizonGoalInput, now: Date = new Date()): 
   if (elapsedFrac - g.progress > 0.25) {
     return {
       level: 'due-soon',
-      message: `Behind pace — ${Math.round(elapsedFrac * 100)}% of the ${g.horizon === 'weekly' ? 'week' : 'month'} gone, ${Math.round(g.progress * 100)}% done. ${remaining} task${remaining === 1 ? '' : 's'} left.${nextBit}`,
+      message: `Behind pace, ${Math.round(elapsedFrac * 100)}% of the ${g.horizon === 'weekly' ? 'week' : 'month'} gone, ${Math.round(g.progress * 100)}% done. ${remaining} task${remaining === 1 ? '' : 's'} left.${nextBit}`,
       daysLeft: dl,
       needsBreakdown: false,
     }

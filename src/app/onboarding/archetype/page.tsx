@@ -232,11 +232,11 @@ export default function ArchetypePage() {
 
         {/* Payoff intro line */}
         <p style={{ textAlign: 'center', color: WARM_GRAY, fontSize: '0.95rem', marginBottom: '1.25rem', lineHeight: 1.6 }}>
-          Here&apos;s the result — the archetype your birth chart and answers point to. This shapes
+          Here&apos;s the result, the archetype your birth chart and answers point to. This shapes
           how your OS plans, prompts, and paces you.
         </p>
 
-        {/* Archetype card — the reveal */}
+        {/* Archetype card, the reveal */}
         <div style={{
           padding: '2.75rem 2.25rem',
           background: WHITE,
@@ -441,7 +441,7 @@ export default function ArchetypePage() {
           </div>
         </div>
 
-        {/* OS Config — live from os-generator */}
+        {/* OS Config, live from os-generator */}
         {osConfig && (
           <div style={{
             background: WHITE,

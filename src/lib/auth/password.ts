@@ -24,7 +24,7 @@ export async function isPasswordPwned(password: string): Promise<boolean> {
       headers: { 'Add-Padding': 'true' },
       signal: AbortSignal.timeout(3000),
     })
-    if (!res.ok) return false // fail open — don't block login on HIBP outage
+    if (!res.ok) return false // fail open, don't block login on HIBP outage
 
     const text = await res.text()
     return text.split('\r\n').some((line) => line.startsWith(suffix))

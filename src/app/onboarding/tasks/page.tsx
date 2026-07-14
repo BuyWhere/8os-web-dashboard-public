@@ -187,7 +187,7 @@ export default function TasksPage() {
         </h1>
         <p style={{ color: WARM_GRAY, fontSize: '0.95rem', lineHeight: 1.6, maxWidth: 480, margin: '0 auto' }}>
           ARCHIE turned your projects into {tasks.length} concrete next action{tasks.length !== 1 ? 's' : ''}.
-          They&apos;re saved and waiting on your dashboard — this is the last step.
+          They&apos;re saved and waiting on your dashboard, this is the last step.
         </p>
       </div>
 

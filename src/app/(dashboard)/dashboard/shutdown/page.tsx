@@ -128,7 +128,7 @@ export default function ShutdownPage() {
     setCarrying(false)
     if (moved > 0 && failed === 0) setCarryMsg(`Carried ${moved} task${moved === 1 ? '' : 's'} into tomorrow.`)
     else if (moved > 0 && failed > 0) setCarryMsg(`Carried ${moved} forward; ${failed} couldn't find a slot tomorrow.`)
-    else setCarryMsg('No free slots tomorrow — try Plan my day in the morning.')
+    else setCarryMsg('No free slots tomorrow, try Plan my day in the morning.')
   }
 
   if (loading) {
@@ -175,7 +175,7 @@ export default function ShutdownPage() {
             <p style={{ margin: 0, fontSize: 14, color: 'var(--color-text-primary)', lineHeight: 1.55 }}>{data.close.line}</p>
             {data.close.dayVerdict && (
               <p style={{ margin: '8px 0 0', fontSize: 10, color: 'var(--color-text-muted)' }}>
-                Tinted by today&apos;s daily transit (日) — the lightest BaZi signal, a tint not a rule.
+                Tinted by today&apos;s daily transit (日), the lightest BaZi signal, a tint not a rule.
               </p>
             )}
           </div>
@@ -226,7 +226,7 @@ export default function ShutdownPage() {
             </div>
             {incomplete.length === 0 ? (
               <div style={{ color: 'var(--color-text-muted)', fontSize: 13, padding: '8px 0' }}>
-                Nothing left open — every task scheduled for today is done. Clean shutdown.
+                Nothing left open, every task scheduled for today is done. Clean shutdown.
               </div>
             ) : (
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
@@ -256,7 +256,7 @@ export default function ShutdownPage() {
             style={{ width: '100%', boxSizing: 'border-box', background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 8, color: 'var(--color-text-primary)', fontSize: 13, padding: '10px 12px', resize: 'vertical', fontFamily: 'inherit' }}
           />
           <p style={{ margin: '8px 0 0', color: 'var(--color-text-muted)', fontSize: 11 }}>
-            Note: reflections are not saved yet — there&apos;s no journal model in the database, so this prompt is for in-session thinking only.
+            Note: reflections are not saved yet, there&apos;s no journal model in the database, so this prompt is for in-session thinking only.
           </p>
         </div>
       </main>

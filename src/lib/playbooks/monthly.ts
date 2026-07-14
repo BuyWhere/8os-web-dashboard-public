@@ -44,7 +44,7 @@ export async function runMonthly(
     const incoming = decoded?.quarter.months[0] ?? null
     const favorLine = monthLayer
       ? `${monthLayer.pillar} (流月): ${monthLayer.guidance}`
-      : 'A steady month — hold your pace on fundamentals.'
+      : 'A steady month, hold your pace on fundamentals.'
     const favorableDomains = incoming?.favorableDomains ?? []
 
     // ── Goal-pacing adjustment: front-load favored domains, hold the rest ─────
@@ -54,8 +54,8 @@ export async function runMonthly(
     const frontLoad = perGoal.filter((g) => favDomainSet.has(goalsWithDomain.get(g.goalId) ?? ''))
     const hold = perGoal.filter((g) => !favDomainSet.has(goalsWithDomain.get(g.goalId) ?? ''))
     const pacingLine = frontLoad.length
-      ? `Front-load ${frontLoad.slice(0, 2).map((g) => `“${g.name}”`).join(' and ')} this month — ${incoming?.mode === 'push' ? 'the month pushes their domain' : 'their domain reads best now'}. ${hold.length ? `Hold the big push on ${hold.slice(0, 2).map((g) => `“${g.name}”`).join(' and ')} for a friendlier month.` : ''}`
-      : `${incoming?.mode === 'consolidate' ? 'A consolidate month — tighten systems and prep rather than launch.' : 'Keep momentum on your top priority; no domain is strongly favored this month.'}`
+      ? `Front-load ${frontLoad.slice(0, 2).map((g) => `“${g.name}”`).join(' and ')} this month, ${incoming?.mode === 'push' ? 'the month pushes their domain' : 'their domain reads best now'}. ${hold.length ? `Hold the big push on ${hold.slice(0, 2).map((g) => `“${g.name}”`).join(' and ')} for a friendlier month.` : ''}`
+      : `${incoming?.mode === 'consolidate' ? 'A consolidate month, tighten systems and prep rather than launch.' : 'Keep momentum on your top priority; no domain is strongly favored this month.'}`
 
     // ── Hygiene check (E-10) ──────────────────────────────────────────────────
     const hygieneLine = starving.length

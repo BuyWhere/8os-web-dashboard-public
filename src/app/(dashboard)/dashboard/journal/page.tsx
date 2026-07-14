@@ -58,7 +58,7 @@ export default async function JournalPage() {
               <h2 style={{ margin: '0 0 8px', fontSize: 18, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>Journal is a Pro feature</h2>
               <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, lineHeight: 1.6, margin: '0 0 24px' }}>
                 Unlock the 8os Journal to capture daily reflections, track mood patterns,
-                and surface long-term insights from your writing — powered by your archetype.
+                and surface long-term insights from your writing, powered by your archetype.
               </p>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 28, textAlign: 'left' }}>
                 {[

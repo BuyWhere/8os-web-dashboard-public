@@ -146,7 +146,7 @@ export default async function GoalDetailPage({ params }: { params: { id: string 
                       {new Date(e.startAt).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' })}
                       {' '}
                       {new Date(e.startAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
-                      {' – '}
+                      {' - '}
                       {new Date(e.endAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                     </div>
                   </div>

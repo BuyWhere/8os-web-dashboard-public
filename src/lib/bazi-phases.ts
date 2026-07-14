@@ -84,7 +84,7 @@ export function deriveFavorableElements(
     return {
       favorable: [output, wealth, officer],
       unfavorable: [resource, self],
-      basis: `A strong ${ELEMENT_EN[self]} Day Master is balanced by output (${ELEMENT_EN[output]}), wealth (${ELEMENT_EN[wealth]}) and officer (${ELEMENT_EN[officer]}) — channels that express or check its strength. More of its own/resource element is unfavorable.`,
+      basis: `A strong ${ELEMENT_EN[self]} Day Master is balanced by output (${ELEMENT_EN[output]}), wealth (${ELEMENT_EN[wealth]}) and officer (${ELEMENT_EN[officer]}), channels that express or check its strength. More of its own/resource element is unfavorable.`,
     }
   }
   // balanced: gently favor output + wealth (expression without over-draining);
@@ -477,14 +477,14 @@ export function computePhases(input: PhaseInput): PhasesResult {
   const dayVerdict = readVerdict([daily.element, daily.branchElement], fav)
   const dayClash = branchesClash(daily.branch, dayBranch)
   const dayLayer: PhaseLayer = {
-    key: 'day', label: 'Day', basis: 'Daily transit 日 (traditional but weak — a gentle tint, not a mandate)',
+    key: 'day', label: 'Day', basis: 'Daily transit 日 (traditional but weak, a gentle tint, not a mandate)',
     pillar: daily.combined, verdict: dayClash ? 'unfavorable' : dayVerdict, confidence: 'low',
     guidance: dayGuidance(daily, dayVerdict, dayClash),
   }
 
   // LAYER 5 — Week — DERIVED (no BaZi basis), inherits the month theme
   const weekLayer: PhaseLayer = {
-    key: 'week', label: 'Week', basis: '8os derivation — NOT a BaZi pillar; a planning horizon that inherits the month theme',
+    key: 'week', label: 'Week', basis: '8os derivation, NOT a BaZi pillar; a planning horizon that inherits the month theme',
     pillar: null, verdict: monthVerdict, confidence: 'derived',
     guidance: weekGuidance(monthVerdict, weekOfMonth(now, monthly.startDate)),
   }
@@ -510,11 +510,11 @@ function buildDecadeLayer(luck: LuckPillarResult, fav: FavorableElements): Phase
   const remaining = Math.round(luck.yearsRemainingInPillar * 10) / 10
   let g: string
   if (verdict === 'favorable') {
-    g = `You're in a ${elementLabel(halfEl)} building decade (${luck.current.combined}) — your favorable element. An expansion phase: plant ambitiously; the active ${luck.activeHalf} half rewards initiative. ~${remaining}y left in this pillar.`
+    g = `You're in a ${elementLabel(halfEl)} building decade (${luck.current.combined}), your favorable element. An expansion phase: plant ambitiously; the active ${luck.activeHalf} half rewards initiative. ~${remaining}y left in this pillar.`
   } else if (verdict === 'unfavorable') {
-    g = `A fortify decade (${luck.current.combined}), not an expand one — its ${elementLabel(halfEl)} runs against your favorable set. Resistance to bold moves is the season talking; invest in skills, systems and relationships that pay out next pillar. ~${remaining}y left.`
+    g = `A fortify decade (${luck.current.combined}), not an expand one, its ${elementLabel(halfEl)} runs against your favorable set. Resistance to bold moves is the season talking; invest in skills, systems and relationships that pay out next pillar. ~${remaining}y left.`
   } else {
-    g = `A mixed decade (${luck.current.combined}) — ${elementLabel(halfEl)} is neutral for you. Steady progress; pick your spots rather than betting the decade. ~${remaining}y left (currently the ${luck.activeHalf} half).`
+    g = `A mixed decade (${luck.current.combined}), ${elementLabel(halfEl)} is neutral for you. Steady progress; pick your spots rather than betting the decade. ~${remaining}y left (currently the ${luck.activeHalf} half).`
   }
   return {
     key: 'decade', label: 'Couple of years', basis: 'Luck Pillar 大运 (traditional)',
@@ -523,36 +523,36 @@ function buildDecadeLayer(luck: LuckPillarResult, fav: FavorableElements): Phase
 }
 
 function yearGuidance(p: TransitPillar, v: Verdict, clash: boolean, combine: boolean): string {
-  if (clash) return `${p.combined} clashes your Day branch — expect movement and change (a move, a role switch). Channel it deliberately: pick the change you want before one is forced.`
-  if (v === 'favorable') return `${p.combined} adds your favorable ${elementLabel(p.element)} — a "fire the bullet" year. Set your most ambitious goal of the decade now and act decisively.${combine ? ' It also harmonises with your Day branch — partnerships land well.' : ''}`
-  if (v === 'unfavorable') return `${p.combined} brings friction (${elementLabel(p.element)} runs against your favorable set). Treat it as a positioning year — tighten systems and pipeline; the payoff window opens as conditions turn.`
-  return `${p.combined} is a neutral year — neither tailwind nor headwind. Make progress on fundamentals; save the boldest bets for a more favorable year.`
+  if (clash) return `${p.combined} clashes your Day branch, expect movement and change (a move, a role switch). Channel it deliberately: pick the change you want before one is forced.`
+  if (v === 'favorable') return `${p.combined} adds your favorable ${elementLabel(p.element)}, a "fire the bullet" year. Set your most ambitious goal of the decade now and act decisively.${combine ? ' It also harmonises with your Day branch, partnerships land well.' : ''}`
+  if (v === 'unfavorable') return `${p.combined} brings friction (${elementLabel(p.element)} runs against your favorable set). Treat it as a positioning year, tighten systems and pipeline; the payoff window opens as conditions turn.`
+  return `${p.combined} is a neutral year, neither tailwind nor headwind. Make progress on fundamentals; save the boldest bets for a more favorable year.`
 }
 
 function monthGuidance(p: TransitPillar, v: Verdict): string {
-  if (v === 'favorable') return `This month (${p.combined}) carries your favorable ${elementLabel(p.element)} — a green-light window. Front-load launches and outreach into the next ~4 weeks.`
-  if (v === 'unfavorable') return `A lower-key month (${p.combined}) — ${elementLabel(p.element)} is unfavorable. Handle maintenance, planning and admin; hold the big push for a friendlier month.`
-  return `A neutral month (${p.combined}). Steady execution — keep momentum without forcing a launch.`
+  if (v === 'favorable') return `This month (${p.combined}) carries your favorable ${elementLabel(p.element)}, a green-light window. Front-load launches and outreach into the next ~4 weeks.`
+  if (v === 'unfavorable') return `A lower-key month (${p.combined}), ${elementLabel(p.element)} is unfavorable. Handle maintenance, planning and admin; hold the big push for a friendlier month.`
+  return `A neutral month (${p.combined}). Steady execution, keep momentum without forcing a launch.`
 }
 
 function dayGuidance(p: TransitPillar, v: Verdict, clash: boolean): string {
-  if (clash) return `Today's branch (${p.combined}) clashes yours — a fine day for routine and clearing the deck, a poor day for signing or launching. If you can, push the big decision a day or two.`
-  if (v === 'favorable') return `Today (${p.combined}) leans favorable — a good day to tackle your top goal's hardest task.`
-  if (v === 'unfavorable') return `Today (${p.combined}) is a bit choppy — favour routine over launches. A light tint, not a rule.`
-  return `An ordinary day (${p.combined}) — nothing the transit pushes for or against. Work your plan.`
+  if (clash) return `Today's branch (${p.combined}) clashes yours, a fine day for routine and clearing the deck, a poor day for signing or launching. If you can, push the big decision a day or two.`
+  if (v === 'favorable') return `Today (${p.combined}) leans favorable, a good day to tackle your top goal's hardest task.`
+  if (v === 'unfavorable') return `Today (${p.combined}) is a bit choppy, favour routine over launches. A light tint, not a rule.`
+  return `An ordinary day (${p.combined}), nothing the transit pushes for or against. Work your plan.`
 }
 
 function weekGuidance(monthVerdict: Verdict, weekNo: number): string {
   const phase = weekNo <= 2 ? `Week ${weekNo} of the month` : `Week ${weekNo} of the month`
   if (monthVerdict === 'favorable') {
     return weekNo <= 2
-      ? `${phase} (derived from your favorable month): a build week — protect two deep-work blocks for your top goal.`
+      ? `${phase} (derived from your favorable month): a build week, protect two deep-work blocks for your top goal.`
       : `${phase} (derived from your favorable month): consolidate and review while the month still favours you.`
   }
   if (monthVerdict === 'unfavorable') {
-    return `${phase} (derived from a lower-key month): keep it light — review, plan, and prep rather than launch.`
+    return `${phase} (derived from a lower-key month): keep it light, review, plan, and prep rather than launch.`
   }
-  return `${phase} (derived from a neutral month): a steady week — pick two priorities and protect the time.`
+  return `${phase} (derived from a neutral month): a steady week, pick two priorities and protect the time.`
 }
 
 function weekOfMonth(now: Date, monthStartISO: string): number {
@@ -682,16 +682,16 @@ function buildTagline(
   const godPhrase = GOD_LABEL[god]
   const elName = elementLabel(el)
   if (overall === 'favorable') {
-    return `Your ${godPhrase} element (${elName}) is supported right now — this is a "press the advantage" ${domain} goal. Be ambitious with the target and move early.`
+    return `Your ${godPhrase} element (${elName}) is supported right now, this is a "press the advantage" ${domain} goal. Be ambitious with the target and move early.`
   }
   if (overall === 'unfavorable') {
-    return `Your ${godPhrase} element (${elName}) meets some friction this season. Treat this as a foundation-building ${domain} goal — tighten systems and skills now; the payoff window opens as conditions turn favorable.`
+    return `Your ${godPhrase} element (${elName}) meets some friction this season. Treat this as a foundation-building ${domain} goal, tighten systems and skills now; the payoff window opens as conditions turn favorable.`
   }
   // neutral, but lean on whichever layer is positive
   if (decade === 'favorable' || year === 'favorable') {
-    return `Conditions are mixed but leaning your way for this ${domain} goal (${godPhrase}, ${elName}). Make steady, intentional progress — the timing supports consistency over big bets.`
+    return `Conditions are mixed but leaning your way for this ${domain} goal (${godPhrase}, ${elName}). Make steady, intentional progress, the timing supports consistency over big bets.`
   }
-  return `A steady-season ${domain} goal (${godPhrase}, ${elName}) — neither tailwind nor headwind. Build the habit now so you're ready to push when the year turns favorable.`
+  return `A steady-season ${domain} goal (${godPhrase}, ${elName}), neither tailwind nor headwind. Build the habit now so you're ready to push when the year turns favorable.`
 }
 
 // re-export element names for callers
@@ -838,12 +838,12 @@ function monthTheme(p: TransitPillar, v: Verdict, favDomains: GoalDomain[]): str
     ? ` Best for ${favDomains.slice(0, 3).join(', ')}.`
     : ''
   if (v === 'favorable') {
-    return `Green-light month (${p.combined}) — its ${el} carries your favorable element. Front-load launches, outreach and your boldest milestone here.${domHint}`
+    return `Green-light month (${p.combined}), its ${el} carries your favorable element. Front-load launches, outreach and your boldest milestone here.${domHint}`
   }
   if (v === 'unfavorable') {
-    return `Consolidate month (${p.combined}) — ${el} runs against your favorable set. Tighten systems, plan and prep; hold the big push for a friendlier month.`
+    return `Consolidate month (${p.combined}), ${el} runs against your favorable set. Tighten systems, plan and prep; hold the big push for a friendlier month.`
   }
-  return `Steady month (${p.combined}) — ${el} is neutral. Keep momentum on fundamentals without forcing a launch.${domHint}`
+  return `Steady month (${p.combined}), ${el} is neutral. Keep momentum on fundamentals without forcing a launch.${domHint}`
 }
 
 /**

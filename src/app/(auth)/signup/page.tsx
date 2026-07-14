@@ -8,15 +8,15 @@ export const dynamic = "force-dynamic"
 // 8os-branded two-column shell (value prop + benefits beside the form) so it
 // feels like part of the product, not a detached vendor widget. Larger controls
 // (≥44px). Hash routing keeps verification on /signup; new users → /onboarding.
-const BG = "#F7F3EC"    // cream — --color-bg-primary
-const CARD = "#FFFFFF"  // white card — --color-bg-card
-const INK = "#221F1A"   // ink — --color-text-primary
-const MUTED = "#6B6257" // warm gray — --color-text-secondary
+const BG = "#F7F3EC"    // cream, --color-bg-primary
+const CARD = "#FFFFFF"  // white card, --color-bg-card
+const INK = "#221F1A"   // ink, --color-text-primary
+const MUTED = "#6B6257" // warm gray, --color-text-secondary
 const GOLD = "#B08637"  // 8os gold accent
 const BORDER = "#E7DFD2"
 
 const BENEFITS = [
-  { icon: "◐", title: "Your real BaZi archetype", body: "Not a horoscope — a decoded operating profile from your birth chart." },
+  { icon: "◐", title: "Your real BaZi archetype", body: "Not a horoscope, a decoded operating profile from your birth chart." },
   { icon: "◇", title: "Operated daily", body: "Goals, calendar, and a coach that knows when to push and when to rest." },
   { icon: "✦", title: "Right goal, right season", body: "Your dashboard aligns effort to the season you're actually in." },
 ]
@@ -25,7 +25,7 @@ export default function SignupPage() {
   return (
     <main style={{ minHeight: "100vh", background: BG, color: INK }}>
       <div className="signup-grid" style={{ maxWidth: 1080, margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "center", gap: "3rem", padding: "2rem 1.5rem" }}>
-        {/* Left — product context */}
+        {/* Left, product context */}
         <section className="signup-pitch" style={{ maxWidth: 460 }}>
           <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: "1.75rem" }} aria-label="8os home">
             <svg width={28} height={28} viewBox="0 0 32 32" fill="none" aria-hidden="true">
@@ -38,7 +38,7 @@ export default function SignupPage() {
             Build your personalized Life OS
           </h1>
           <p style={{ color: MUTED, fontSize: "1.05rem", lineHeight: 1.5, margin: "0 0 1.75rem" }}>
-            The planner that runs on your real BaZi archetype — free, no credit card.
+            The planner that runs on your real BaZi archetype, free, no credit card.
           </p>
           <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "1.1rem" }}>
             {BENEFITS.map((b) => (
@@ -56,7 +56,7 @@ export default function SignupPage() {
           </p>
         </section>
 
-        {/* Right — the Clerk form */}
+        {/* Right, the Clerk form */}
         <section style={{ display: "flex", justifyContent: "center" }}>
           <SignUp
             routing="hash"

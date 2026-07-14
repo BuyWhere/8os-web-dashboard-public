@@ -55,7 +55,7 @@ export async function POST(req: NextRequest) {
   }
 
   if (year < 1900 || year > new Date().getFullYear()) {
-    return NextResponse.json({ error: 'birthDate year out of supported range (1900–present)' }, { status: 422 })
+    return NextResponse.json({ error: 'birthDate year out of supported range (1900-present)' }, { status: 422 })
   }
 
   try {

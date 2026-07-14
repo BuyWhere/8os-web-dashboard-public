@@ -153,7 +153,7 @@ export default function CaptureBar() {
           ref={inputRef}
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Capture anything — 'call investor fri 3pm' or 'idea: launch a podcast'"
+          placeholder="Capture anything, 'call investor fri 3pm' or 'idea: launch a podcast'"
           disabled={loading}
           style={{
             flex: 1,

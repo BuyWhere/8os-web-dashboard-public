@@ -265,7 +265,7 @@ async function persistTree(args: {
       const goalName = bucket.label
       const goalDefinition =
         `${bucket.description}\n\n` +
-        `Tailored for the ${args.archetypeName} archetype — focus: ${bucket.archetype_focus}. ` +
+        `Tailored for the ${args.archetypeName} archetype, focus: ${bucket.archetype_focus}. ` +
         `Tone: ${args.config.tone}.`
 
       const goalInsert = await prisma.$queryRawUnsafe<Array<{ id: string }>>(
@@ -409,7 +409,7 @@ async function fetchOSConfig(birthDate: string): Promise<OSGeneratorConfig> {
     body: JSON.stringify({
       name: '8os User',
       birth_date: birthDate,
-      quiz: null, // /generate works without quiz — uses BaZi element alone
+      quiz: null, // /generate works without quiz, uses BaZi element alone
     }),
   })
   if (!resp.ok) {
@@ -453,11 +453,11 @@ function buildFallbackConfig(args: {
       name: '8os User',
       bazi_element: element,
       archetype: args.archetypeName,
-      archetype_descriptor: `${args.archetypeName} — ${ELEMENT_THEME_HINT[element]}`,
+      archetype_descriptor: `${args.archetypeName}, ${ELEMENT_THEME_HINT[element]}`,
     },
     buckets: FALLBACK_BUCKETS,
     workflow_description: [
-      `Operate from your ${args.archetypeName} archetype — ${ELEMENT_THEME_HINT[element]}`,
+      `Operate from your ${args.archetypeName} archetype, ${ELEMENT_THEME_HINT[element]}`,
       `Lean on your dominant element (${args.dominantElements[0] ?? element.toLowerCase()}) for steady execution`,
     ],
     tone: `${args.archetypeName.toLowerCase()}, direct, supportive`,
@@ -553,7 +553,7 @@ function buildFallbackTasks(dayElement: string): OSGeneratorTask[] {
           suggested_time: times[i % times.length],
           suggested_day: null,
         },
-        rationale: `Seeded starter for your archetype — ${themeLine}.`,
+        rationale: `Seeded starter for your archetype, ${themeLine}.`,
       })
       i++
     }

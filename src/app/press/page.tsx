@@ -10,22 +10,22 @@ const storyAngles = [
   {
     title: 'The productivity system you were born with',
     description:
-      '8os.ai argues that most productivity advice fails because it ignores the most fundamental variable: the person. BaZi\'s Five Elements reveal five distinct operating modes — each with different strengths, timing windows, and goal structures. The story of why one-size-fits-all productivity is broken and what comes next.',
+      '8os.ai argues that most productivity advice fails because it ignores the most fundamental variable: the person. BaZi\'s Five Elements reveal five distinct operating modes, each with different strengths, timing windows, and goal structures. The story of why one-size-fits-all productivity is broken and what comes next.',
   },
   {
     title: 'BaZi goes mainstream: Ancient Chinese metaphysics meets modern goal-setting',
     description:
-      '8os.ai is bringing a 2,000-year-old system to a 2026 audience — without the mysticism. By stripping BaZi down to its operational core (your elemental operating mode, timing cycles, and daily guidance), 8os has built something that resonates with people who would never pick up a horoscope.',
+      '8os.ai is bringing a 2,000-year-old system to a 2026 audience, without the mysticism. By stripping BaZi down to its operational core (your elemental operating mode, timing cycles, and daily guidance), 8os has built something that resonates with people who would never pick up a horoscope.',
   },
   {
     title: "The personality test that doesn't change",
     description:
-      'MBTI types shift for 50% of people within five weeks. Enneagram subtypes are hard to pin down. BaZi elements — derived from your birth date — don\'t change. 8os argues this stability is what makes elemental operating systems more useful for long-term goal planning.',
+      'MBTI types shift for 50% of people within five weeks. Enneagram subtypes are hard to pin down. BaZi elements, derived from your birth date, don\'t change. 8os argues this stability is what makes elemental operating systems more useful for long-term goal planning.',
   },
   {
     title: 'Building a personal OS for the era of AI overwhelm',
     description:
-      'As AI floods the world with more information and options, the bottleneck becomes human decision-making. 8os argues that a stable personal operating system — one that tells you how you work best, when to act, and which inputs to filter — becomes increasingly valuable.',
+      'As AI floods the world with more information and options, the bottleneck becomes human decision-making. 8os argues that a stable personal operating system, one that tells you how you work best, when to act, and which inputs to filter, becomes increasingly valuable.',
   },
   {
     title: 'No birth time, no problem: Rethinking BaZi for the modern world',
@@ -38,14 +38,14 @@ const keyFacts = [
   { label: 'Founded', value: '2026' },
   { label: 'Headquarters', value: 'Remote-first' },
   { label: 'Users', value: '5,000+' },
-  { label: 'Free to start', value: 'Yes — no credit card' },
+  { label: 'Free to start', value: 'Yes, no credit card' },
   { label: 'Archetypes', value: '5 (Metal, Water, Wood, Fire, Earth)' },
   { label: 'Blog articles', value: '20+' },
   { label: 'No birth time required', value: 'Yes' },
   { label: 'API available', value: 'Yes (on paid plans)' },
 ]
 
-const boilerplate = `8os.ai is a personal operating system built on BaZi (Chinese metaphysical system) and Western astrology. The platform reveals a user's dominant element — Metal, Water, Wood, Fire, or Earth — and translates it into actionable guidance for goal-setting, productivity, timing, and daily decision-making. 8os is free to start, requires no birth time, and takes 90 seconds to discover your archetype. Available at 8os.ai.`
+const boilerplate = `8os.ai is a personal operating system built on BaZi (Chinese metaphysical system) and Western astrology. The platform reveals a user's dominant element, Metal, Water, Wood, Fire, or Earth, and translates it into actionable guidance for goal-setting, productivity, timing, and daily decision-making. 8os is free to start, requires no birth time, and takes 90 seconds to discover your archetype. Available at 8os.ai.`
 
 export default function PressPage() {
   return (
@@ -65,7 +65,7 @@ export default function PressPage() {
             }}
           >
             <p style={{ fontSize: '17px', color: '#a5b4fc', fontWeight: 500, lineHeight: 1.6 }}>
-              8os.ai is a personal operating system built on BaZi and Western astrology — revealing
+              8os.ai is a personal operating system built on BaZi and Western astrology, revealing
               your dominant element and translating it into a practical system for goals, productivity,
               and timing. Free. 90 seconds. No birth time needed.
             </p>

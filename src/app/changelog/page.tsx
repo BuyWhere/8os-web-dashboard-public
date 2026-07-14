@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Changelog | 8os.ai',
-  description: 'What has changed in 8os.ai — new features, improvements, and fixes across all versions.',
+  description: 'What has changed in 8os.ai, new features, improvements, and fixes across all versions.',
   keywords: ['8os changelog', '8os updates', '8os release notes'],
 }
 
@@ -100,7 +100,7 @@ export default function ChangelogPage() {
             Changelog
           </h1>
           <p style={{ fontSize: '18px', color: 'var(--color-text-secondary)' }}>
-            New features, improvements, and fixes — in order of what shipped.
+            New features, improvements, and fixes, in order of what shipped.
           </p>
 
           {/* Legend */}

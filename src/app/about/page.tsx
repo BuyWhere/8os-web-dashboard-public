@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'About 8os — Why We Built the Bridge',
+  title: 'About 8os, Why We Built the Bridge',
   description:
-    'The origin story of 8os.ai — why we built a live operating system that bridges Western astrology and BaZi to help you become your best self.',
+    'The origin story of 8os.ai, why we built a live operating system that bridges Western astrology and BaZi to help you become your best self.',
 };
 
 export default function AboutPage() {
@@ -22,13 +22,13 @@ export default function AboutPage() {
           <div style={proseStyle}>
             <p style={leadStyle}>
               It started with a simple observation: everyone knows their star sign. Almost no one knows their BaZi. Yet
-              both systems describe the same person — just through different lenses.
+              both systems describe the same person, just through different lenses.
             </p>
 
             <p style={bodyStyle}>
               Our founder, a Capricorn and 庚 Metal Daymaster, spent years watching Western astrology hook people with
-              accessible sun-sign content, only to leave them hungry for more. Meanwhile, BaZi — with its extraordinary
-              precision for timing, career fit, and life structure — remained locked behind language barriers, cultural
+              accessible sun-sign content, only to leave them hungry for more. Meanwhile, BaZi, with its extraordinary
+              precision for timing, career fit, and life structure, remained locked behind language barriers, cultural
               distance, and the requirement for exact birth times.
             </p>
 
@@ -41,7 +41,7 @@ export default function AboutPage() {
               with you, or push you when you need pushing.
             </p>
 
-            <p style={highlightStyle}>8os.ai is that bridge — and that push.</p>
+            <p style={highlightStyle}>8os.ai is that bridge, and that push.</p>
 
             <p style={bodyStyle}>
               We believe your birth data isn&apos;t a destiny sentence. It&apos;s an <strong>operating manual</strong>.
@@ -85,15 +85,15 @@ export default function AboutPage() {
 const BELIEFS = [
   {
     title: 'Your path is yours to own',
-    body: 'The stars don\'t dictate outcomes — they reveal tendencies. You control the destination. The chart just shows you how you\'re built to travel.',
+    body: 'The stars don\'t dictate outcomes, they reveal tendencies. You control the destination. The chart just shows you how you\'re built to travel.',
   },
   {
     title: 'Self-knowledge is the best productivity tool',
-    body: 'Working with your nature instead of against it isn\'t woo — it\'s efficiency. Understanding your optimal timing, decision style, and energy patterns compounds every other effort.',
+    body: 'Working with your nature instead of against it isn\'t woo, it\'s efficiency. Understanding your optimal timing, decision style, and energy patterns compounds every other effort.',
   },
   {
     title: 'Achievement should feel like you',
-    body: 'Success that comes at the cost of your happiness isn\'t success. We\'re building systems that optimize for both — because they\'re not actually in conflict.',
+    body: 'Success that comes at the cost of your happiness isn\'t success. We\'re building systems that optimize for both, because they\'re not actually in conflict.',
   },
   {
     title: 'Ancient wisdom + modern systems',

@@ -113,7 +113,7 @@ export function OnboardingProgress({
         />
       </div>
 
-      {/* Step ticks — hidden on narrow screens to avoid crowding */}
+      {/* Step ticks, hidden on narrow screens to avoid crowding */}
       <div
         className="onb-progress-ticks"
         style={{

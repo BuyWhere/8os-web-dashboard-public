@@ -83,10 +83,10 @@ export function ContactForm() {
         }}
       >
         <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>
-          Thanks — message received.
+          Thanks, message received.
         </h3>
         <p style={{ color: 'var(--color-text-secondary)', margin: 0 }}>
-          We&apos;ll get back to you within 1–2 business days. You can also reach us directly at the addresses below.
+          We&apos;ll get back to you within 1-2 business days. You can also reach us directly at the addresses below.
         </p>
         <button
           type="button"
@@ -220,7 +220,7 @@ export function ContactForm() {
         />
       </div>
 
-      {/* Honeypot for bots — hidden from sighted users */}
+      {/* Honeypot for bots, hidden from sighted users */}
       <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', width: '1px', height: '1px', overflow: 'hidden' }}>
         <label htmlFor="contact-honeypot">Leave this empty</label>
         <input

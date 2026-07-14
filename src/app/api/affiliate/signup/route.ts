@@ -41,7 +41,7 @@ export async function POST(req: NextRequest) {
 
   // Determine default commission (use higher tier for now — per spec, Agent Connect = 25%)
   // In v2 this can be made configurable via URL params or tier selection
-  const defaultCommissionBps = 2500 // 25% — Agent Connect tier default
+  const defaultCommissionBps = 2500 // 25%, Agent Connect tier default
 
   const affiliateCode = await createAffiliateCode(name)
 
