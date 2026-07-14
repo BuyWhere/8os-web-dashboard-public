@@ -40,6 +40,7 @@ interface CatalogEntry {
 
 interface SourcesResponse {
   googleConfigured: boolean
+  microsoftConfigured?: boolean
   catalog?: CatalogEntry[]
   sources: SourceRow[]
 }
@@ -49,7 +50,7 @@ const card: React.CSSProperties = {
   borderRadius: 12, padding: 20, marginBottom: 16,
 }
 
-const PROVIDER_LABEL: Record<string, string> = { google_calendar: 'Google Calendar' }
+const PROVIDER_LABEL: Record<string, string> = { google_calendar: 'Google Calendar', microsoft_calendar: 'Outlook Calendar' }
 
 function statusBadge(status: string) {
   const map: Record<string, { bg: string; border: string; color: string; label: string }> = {
@@ -143,6 +144,8 @@ export default function SourcesSettingsPage() {
   }
 
   const googleSources = (data?.sources ?? []).filter((s) => s.provider === 'google_calendar')
+  const microsoftSources = (data?.sources ?? []).filter((s) => s.provider === 'microsoft_calendar')
+  const hasActiveMicrosoft = microsoftSources.some((s) => s.status !== 'revoked')
   const hasActiveGoogle = googleSources.some((s) => s.status !== 'revoked')
 
   return (
@@ -262,8 +265,60 @@ export default function SourcesSettingsPage() {
           )}
         </div>
 
+        {/* Outlook / Microsoft — same two-way plug-in, dormant until MICROSOFT_* env is set */}
+        <div style={card}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+            <span style={{ fontSize: 18 }}>◱</span>
+            <div style={{ flex: 1 }}>
+              <div style={{ fontSize: 15, fontWeight: 700 }}>Outlook Calendar</div>
+              <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginTop: 2 }}>
+                Two-way sync with Microsoft 365 / Outlook.com — the same read + write connector as Google.
+              </div>
+            </div>
+            {loading ? (
+              <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>…</span>
+            ) : !data?.microsoftConfigured && !hasActiveMicrosoft ? (
+              <span style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)', borderRadius: 8, fontSize: 11, fontWeight: 700, padding: '4px 10px' }}>
+                NOT CONFIGURED YET
+              </span>
+            ) : null}
+          </div>
+          {!loading && (
+            <div style={{ marginTop: 14 }}>
+              {microsoftSources.length === 0 && (
+                data?.microsoftConfigured ? (
+                  <a href="/api/sources/microsoft/connect" style={{ display: 'inline-block', background: 'var(--color-accent)', color: '#FFFFFF', borderRadius: 8, padding: '8px 16px', fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>
+                    Connect Outlook
+                  </a>
+                ) : (
+                  <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>
+                    Outlook isn&apos;t configured on this deployment yet — the connect button appears here the moment the Microsoft app credentials are set.
+                  </div>
+                )
+              )}
+              {microsoftSources.map((s) => (
+                <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 10, borderTop: '1px solid var(--color-border)', paddingTop: 12, marginTop: 12 }}>
+                  <div style={{ flex: 1 }}>
+                    <div style={{ fontSize: 13, fontWeight: 600 }}>{PROVIDER_LABEL[s.provider] ?? s.provider}</div>
+                    <div style={{ color: 'var(--color-text-secondary)', fontSize: 12, marginTop: 2 }}>
+                      {s.eventCount} event{s.eventCount === 1 ? '' : 's'} synced
+                      {s.lastSyncedAt ? ` · last sync ${new Date(s.lastSyncedAt).toLocaleString()}` : ' · not synced yet'}
+                    </div>
+                  </div>
+                  {statusBadge(s.status)}
+                  {s.status !== 'revoked' && (
+                    <button onClick={() => disconnect(s.id)} disabled={busy === s.id} style={{ background: 'transparent', border: '1px solid #E3C4B6', color: '#B5502F', borderRadius: 8, padding: '6px 12px', fontSize: 12, fontWeight: 600, cursor: 'pointer' }}>
+                      {busy === s.id ? '…' : 'Disconnect'}
+                    </button>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
         {/* Other calendars — scaffolded behind the same plug-in (coming soon) */}
-        {(data?.catalog ?? []).filter((p) => p.status === 'coming_soon').map((p) => (
+        {(data?.catalog ?? []).filter((p) => p.status === 'coming_soon' && p.provider !== 'outlook').map((p) => (
           <div key={p.provider} style={{ ...card, opacity: 0.75 }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
               <span style={{ fontSize: 18 }}>{p.icon}</span>

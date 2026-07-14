@@ -10,6 +10,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
 import { requireAuth } from '@/lib/auth/require-auth'
 import { isGoogleCalendarConfigured } from '@/lib/external/google-calendar'
+import { isMicrosoftCalendarConfigured } from '@/lib/external/microsoft-calendar'
 import { PROVIDER_CATALOG } from '@/lib/external/providers'
 
 export async function GET(req: NextRequest) {
@@ -38,11 +39,14 @@ export async function GET(req: NextRequest) {
   const catalog = PROVIDER_CATALOG.map((p) =>
     p.provider === 'google_calendar'
       ? { ...p, configured: isGoogleCalendarConfigured() }
-      : { ...p, configured: false },
+      : p.provider === 'outlook'
+        ? { ...p, configured: isMicrosoftCalendarConfigured() }
+        : { ...p, configured: false },
   )
 
   return NextResponse.json({
     googleConfigured: isGoogleCalendarConfigured(),
+    microsoftConfigured: isMicrosoftCalendarConfigured(),
     catalog,
     sources: sources.map((s) => ({
       id: s.id,
