@@ -102,28 +102,13 @@ export default function LandingHeader() {
           ))}
         </nav>
 
-        {/* Desktop auth */}
+        {/* Desktop auth — single secondary nav link. Primary CTA is "Get started" in hero. */}
         <div className="lh-desktop-auth" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <a
             href="/login"
             style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none' }}
           >
             Log in
-          </a>
-          <a
-            href="/signup"
-            style={{
-              padding: '0.55rem 1.15rem',
-              background: GOLD,
-              color: '#FFFFFF',
-              fontSize: '0.9375rem',
-              fontWeight: 600,
-              borderRadius: '9px',
-              textDecoration: 'none',
-              boxShadow: '0 4px 14px rgba(176, 134, 55, 0.25)',
-            }}
-          >
-            Sign up
           </a>
         </div>
 
@@ -207,22 +192,6 @@ export default function LandingHeader() {
               }}
             >
               Log in
-            </a>
-            <a
-              href="/signup"
-              onClick={() => setOpen(false)}
-              style={{
-                textAlign: 'center',
-                padding: '0.8rem',
-                background: GOLD,
-                color: '#FFFFFF',
-                borderRadius: '10px',
-                fontSize: '1rem',
-                fontWeight: 600,
-                textDecoration: 'none',
-              }}
-            >
-              Sign up
             </a>
           </div>
         </div>
