@@ -264,8 +264,12 @@ function MonthView({ days, events, todayKey }: { days: Date[]; events: CalendarE
   return (
     <div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', borderBottom: '1px solid #1a1a1a' }}>
-        {WEEKDAYS.map((d) => (
-          <div key={d} style={{ padding: '8px 12px', fontSize: 11, color: '#555', textTransform: 'uppercase', textAlign: 'center' }}>{d}</div>
+        {WEEKDAYS.map((d, i) => (
+          <div key={d} style={{
+            padding: '8px 12px', paddingRight: i === 6 ? 14 : 12,
+            fontSize: 11, color: '#555', textTransform: 'uppercase', textAlign: 'center',
+            borderLeft: i === 0 ? 'none' : '1px solid #141414',
+          }}>{d}</div>
         ))}
       </div>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gridTemplateRows: 'repeat(6, minmax(100px, 1fr))' }}>
@@ -274,11 +278,14 @@ function MonthView({ days, events, todayKey }: { days: Date[]; events: CalendarE
           const dayEvents = eventsForDay(events, day)
           const isToday = key === todayKey
           const isCurrentMonth = day.getMonth() === currentMonth
+          const isLastCol = (i + 1) % 7 === 0
 
           return (
             <div key={i} style={{
-              borderRight: '1px solid #141414', borderBottom: '1px solid #141414',
-              padding: '8px 10px', minHeight: 100,
+              borderRight: isLastCol ? 'none' : '1px solid #141414',
+              borderBottom: '1px solid #141414',
+              padding: '8px 10px', paddingRight: isLastCol ? 12 : 10,
+              minHeight: 100,
               background: isToday ? '#0d0d18' : 'transparent',
               opacity: isCurrentMonth ? 1 : 0.35,
             }}>
