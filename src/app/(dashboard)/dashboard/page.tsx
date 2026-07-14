@@ -14,6 +14,7 @@ import { ProgressRing } from '@/components/dashboard/ProgressRing'
 import { CalendarMini } from '@/components/dashboard/CalendarMini'
 import { caldiyApi } from '@/lib/caldiy/client'
 import { syncStaleGoogleSources } from '@/lib/external/google-calendar'
+import { syncStaleMicrosoftSources } from '@/lib/external/microsoft-calendar'
 import { QuickAdd } from '@/components/dashboard/QuickAdd'
 import { InsightDisplayCard } from '@/components/dashboard/InsightDisplayCard'
 import { AlignmentPanel } from '@/components/dashboard/AlignmentPanel'
@@ -62,7 +63,10 @@ export default async function DashboardPage() {
 
   // On-view freshness: pull recent Google changes so "This week" reflects the
   // real calendar (incremental, best-effort, ≤60s-throttled).
-  await syncStaleGoogleSources(userId).catch(() => {})
+  await Promise.all([
+    syncStaleGoogleSources(userId).catch(() => {}),
+    syncStaleMicrosoftSources(userId).catch(() => {}),
+  ])
 
   const now = new Date()
   // E-0 (OS-2651): "today" and the greeting must derive from the USER's

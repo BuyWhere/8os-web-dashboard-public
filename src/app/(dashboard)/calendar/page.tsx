@@ -16,6 +16,7 @@ import { QuickAdd } from '@/components/dashboard/QuickAdd'
 import { CalendarView } from '@/components/dashboard/CalendarView'
 import { caldiyApi } from '@/lib/caldiy/client'
 import { syncStaleGoogleSources } from '@/lib/external/google-calendar'
+import { syncStaleMicrosoftSources } from '@/lib/external/microsoft-calendar'
 import type { CalDiyBooking } from '@/types/caldiy'
 
 async function getUserId(): Promise<string> {
@@ -94,7 +95,10 @@ export default async function CalendarPage() {
   // On-view freshness: pull recent Google changes before rendering (incremental,
   // best-effort, ≤60s-throttled) so opening the calendar shows what changed
   // upstream — no waiting for a manual sync.
-  await syncStaleGoogleSources(userId).catch(() => {})
+  await Promise.all([
+    syncStaleGoogleSources(userId).catch(() => {}),
+    syncStaleMicrosoftSources(userId).catch(() => {}),
+  ])
 
   const now = new Date()
   const rangeStart = new Date(now)

@@ -13,6 +13,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
 import { requireAuth } from '@/lib/auth/require-auth'
 import { updateGoogleEvent, deleteGoogleEvent } from '@/lib/external/google-calendar'
+import { updateMicrosoftEvent, deleteMicrosoftEvent, MICROSOFT_CALENDAR_PROVIDER } from '@/lib/external/microsoft-calendar'
 import { z } from 'zod'
 
 const RECURRENCE = z.enum(['none', 'daily', 'weekly', 'biweekly', 'monthly'])
@@ -53,12 +54,14 @@ export async function PATCH(
     const newStart = d.startAt ? new Date(d.startAt) : ext.startsAt
     const newEnd = d.endAt ? new Date(d.endAt) : ext.endsAt
     const newTitle = d.title !== undefined ? d.title : (ext.title ?? 'Busy')
+    const evShape = { title: newTitle, description: null, location: d.location ?? null, startAt: newStart, endAt: newEnd, allDay: d.allDay ?? false }
+    // Write back to whichever provider owns this external event.
+    const src = await prisma.externalSignalSource.findUnique({ where: { id: ext.sourceId }, select: { provider: true } })
     let pushedToGoogle = false
     try {
-      const res = await updateGoogleEvent(auth.userId, ext.externalId, {
-        title: newTitle, description: null, location: d.location ?? null,
-        startAt: newStart, endAt: newEnd, allDay: d.allDay ?? false,
-      }, 'primary')
+      const res = src?.provider === MICROSOFT_CALENDAR_PROVIDER
+        ? await updateMicrosoftEvent(ext.sourceId, ext.externalId, evShape)
+        : await updateGoogleEvent(auth.userId, ext.externalId, evShape, 'primary')
       pushedToGoogle = !!res.ok
     } catch { /* surfaced via pushedToGoogle:false */ }
     const updatedExt = await prisma.externalEvent.update({
@@ -153,7 +156,11 @@ export async function DELETE(
       where: { id: params.id.slice(4), userId: auth.userId },
     })
     if (!ext) return NextResponse.json({ error: 'Not found' }, { status: 404 })
-    try { await deleteGoogleEvent(auth.userId, ext.externalId, 'primary') } catch { /* best-effort */ }
+    const src = await prisma.externalSignalSource.findUnique({ where: { id: ext.sourceId }, select: { provider: true } })
+    try {
+      if (src?.provider === MICROSOFT_CALENDAR_PROVIDER) await deleteMicrosoftEvent(ext.sourceId, ext.externalId)
+      else await deleteGoogleEvent(auth.userId, ext.externalId, 'primary')
+    } catch { /* best-effort */ }
     await prisma.externalEvent.update({ where: { id: ext.id }, data: { isDeleted: true } })
     return NextResponse.json({ ok: true, id: params.id })
   }
