@@ -15,6 +15,7 @@ import { Sidebar } from '@/components/dashboard/Sidebar'
 import { QuickAdd } from '@/components/dashboard/QuickAdd'
 import { CalendarView } from '@/components/dashboard/CalendarView'
 import { caldiyApi } from '@/lib/caldiy/client'
+import { syncStaleGoogleSources } from '@/lib/external/google-calendar'
 import type { CalDiyBooking } from '@/types/caldiy'
 
 async function getUserId(): Promise<string> {
@@ -89,6 +90,11 @@ function expandRecurrence(
 
 export default async function CalendarPage() {
   const userId = await getUserId()
+
+  // On-view freshness: pull recent Google changes before rendering (incremental,
+  // best-effort, ≤60s-throttled) so opening the calendar shows what changed
+  // upstream — no waiting for a manual sync.
+  await syncStaleGoogleSources(userId).catch(() => {})
 
   const now = new Date()
   const rangeStart = new Date(now)
@@ -180,14 +186,17 @@ export default async function CalendarPage() {
       endAt: x.endsAt.toISOString(),
       allDay: false,
       domainId: null,
-      color: 'var(--color-text-muted)',
+      // Literal hex (not a token): the view appends an alpha suffix (c + '18').
+      color: '#8A8175',
       location: null,
       goalId: null,
       recurrenceRule: 'none',
       recurrenceUntil: null,
       googleEventId: x.externalId,
       external: true,
-      readOnly: true,
+      // Google events are now editable in-app: edits write back to Google via
+      // the ext- PATCH path. (Cal.diy bookings below stay read-only.)
+      readOnly: false,
       task: null,
     }))
 

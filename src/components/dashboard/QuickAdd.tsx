@@ -84,9 +84,9 @@ export function QuickAdd({ onTaskAdded }: Props) {
 
   const chipStyle = (active: boolean, color?: string): React.CSSProperties => ({
     padding: '3px 10px', borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: 'pointer',
-    background: active ? (color ?? 'var(--color-accent)') + '22' : 'var(--color-bg-primary)',
-    border: `1px solid ${active ? (color ?? 'var(--color-accent)') + '55' : 'var(--color-border)'}`,
-    color: active ? (color ?? 'var(--color-accent)') : 'var(--color-text-muted)',
+    background: active ? (color ?? '#B08637') + '22' : 'var(--color-bg-primary)',
+    border: `1px solid ${active ? (color ?? '#B08637') + '55' : 'var(--color-border)'}`,
+    color: active ? (color ?? '#B08637') : 'var(--color-text-muted)',
     transition: 'all 0.15s',
   })
 

@@ -358,6 +358,42 @@ export async function syncSource(sourceId: string): Promise<SyncResult> {
   return { ...base, status: 'error', upserted, tombstoned, fullResync: true, message: 'sync token expired twice in a row' }
 }
 
+/**
+ * On-view freshness: sync the caller's Google sources that haven't synced in
+ * the last `maxAgeMs`. Called when the user opens the Calendar/Dashboard so
+ * recent upstream changes appear without waiting for a manual sync. Incremental
+ * (syncToken) so it's cheap; best-effort (never throws — a Google hiccup must
+ * not break page render). Returns the number of sources synced.
+ */
+export async function syncStaleGoogleSources(userId: string, maxAgeMs = 60_000): Promise<number> {
+  if (!isGoogleCalendarConfigured()) return 0
+  const cutoff = new Date(Date.now() - maxAgeMs)
+  let sources: { id: string }[] = []
+  try {
+    sources = await prisma.externalSignalSource.findMany({
+      where: {
+        userId,
+        provider: GOOGLE_CALENDAR_PROVIDER,
+        status: 'active',
+        OR: [{ lastSyncedAt: null }, { lastSyncedAt: { lt: cutoff } }],
+      },
+      select: { id: true },
+    })
+  } catch {
+    return 0
+  }
+  let synced = 0
+  for (const s of sources) {
+    try {
+      await syncSource(s.id)
+      synced++
+    } catch {
+      /* best-effort — skip a failing source, keep the page fast */
+    }
+  }
+  return synced
+}
+
 // ─── Busy-time for the scheduler ─────────────────────────────────────────────
 
 /**

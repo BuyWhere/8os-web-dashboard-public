@@ -66,7 +66,9 @@ const DOMAIN_COLORS: Record<string, string> = {
   relationships: '#ec4899', learning: '#3b82f6', legacy: '#8b5cf6',
 }
 
-const EVENT_COLORS = ['var(--color-accent)', '#6366f1', '#22c55e', '#ec4899', '#3b82f6', '#8b5cf6', '#f59e0b', 'var(--color-accent-2)']
+// Fixed hex hues: an alpha suffix is appended (c + '22') for tinted backgrounds,
+// which is invalid on a CSS var(), so these must stay literal hex.
+const EVENT_COLORS = ['#B08637', '#6366f1', '#22c55e', '#ec4899', '#3b82f6', '#8b5cf6', '#f59e0b', '#7A3B2E']
 
 const ENERGY_BG: Record<EnergyLevel, string> = {
   green: 'rgba(34,197,94,0.06)',
@@ -163,7 +165,7 @@ function eventHeight(event: CalendarEvent): number {
 }
 
 function eventColor(e: CalendarEvent): string {
-  return e.color ?? (e.domainId ? DOMAIN_COLORS[e.domainId] : null) ?? 'var(--color-accent, var(--color-accent))'
+  return e.color ?? (e.domainId ? DOMAIN_COLORS[e.domainId] : null) ?? '#B08637'
 }
 
 /** The editable base id for an expanded recurring instance ("id:date" → "id"). */

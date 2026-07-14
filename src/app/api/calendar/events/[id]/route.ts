@@ -38,6 +38,40 @@ export async function PATCH(
   const auth = await requireAuth(req)
   if (auth instanceof NextResponse) return auth
 
+  // External (Google-sourced) event: id is "ext-<externalEventId>". Not a native
+  // calendarEvent — the edit is written straight back to Google and mirrored in
+  // the local external_events row so it shows immediately (no "edit at source").
+  if (params.id.startsWith('ext-')) {
+    const ext = await prisma.externalEvent.findFirst({
+      where: { id: params.id.slice(4), userId: auth.userId, isDeleted: false },
+    })
+    if (!ext) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    const body = await req.json()
+    const parsed = UpdateEventSchema.safeParse(body)
+    if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
+    const d = parsed.data
+    const newStart = d.startAt ? new Date(d.startAt) : ext.startsAt
+    const newEnd = d.endAt ? new Date(d.endAt) : ext.endsAt
+    const newTitle = d.title !== undefined ? d.title : (ext.title ?? 'Busy')
+    let pushedToGoogle = false
+    try {
+      const res = await updateGoogleEvent(auth.userId, ext.externalId, {
+        title: newTitle, description: null, location: d.location ?? null,
+        startAt: newStart, endAt: newEnd, allDay: d.allDay ?? false,
+      }, 'primary')
+      pushedToGoogle = !!res.ok
+    } catch { /* surfaced via pushedToGoogle:false */ }
+    const updatedExt = await prisma.externalEvent.update({
+      where: { id: ext.id },
+      data: { title: newTitle, startsAt: newStart, endsAt: newEnd },
+    })
+    return NextResponse.json({
+      id: `ext-${updatedExt.id}`, title: updatedExt.title,
+      startAt: updatedExt.startsAt, endAt: updatedExt.endsAt,
+      external: true, pushedToGoogle,
+    })
+  }
+
   const event = await prisma.calendarEvent.findFirst({
     where: { id: params.id, userId: auth.userId },
   })
@@ -112,6 +146,17 @@ export async function DELETE(
 ) {
   const auth = await requireAuth(req)
   if (auth instanceof NextResponse) return auth
+
+  // External (Google-sourced) event → delete upstream + tombstone the mirror.
+  if (params.id.startsWith('ext-')) {
+    const ext = await prisma.externalEvent.findFirst({
+      where: { id: params.id.slice(4), userId: auth.userId },
+    })
+    if (!ext) return NextResponse.json({ error: 'Not found' }, { status: 404 })
+    try { await deleteGoogleEvent(auth.userId, ext.externalId, 'primary') } catch { /* best-effort */ }
+    await prisma.externalEvent.update({ where: { id: ext.id }, data: { isDeleted: true } })
+    return NextResponse.json({ ok: true, id: params.id })
+  }
 
   const event = await prisma.calendarEvent.findFirst({
     where: { id: params.id, userId: auth.userId },

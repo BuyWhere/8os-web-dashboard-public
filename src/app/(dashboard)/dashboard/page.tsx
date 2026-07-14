@@ -13,6 +13,7 @@ import { Sidebar } from '@/components/dashboard/Sidebar'
 import { ProgressRing } from '@/components/dashboard/ProgressRing'
 import { CalendarMini } from '@/components/dashboard/CalendarMini'
 import { caldiyApi } from '@/lib/caldiy/client'
+import { syncStaleGoogleSources } from '@/lib/external/google-calendar'
 import { QuickAdd } from '@/components/dashboard/QuickAdd'
 import { InsightDisplayCard } from '@/components/dashboard/InsightDisplayCard'
 import { AlignmentPanel } from '@/components/dashboard/AlignmentPanel'
@@ -59,6 +60,10 @@ async function getUserId(): Promise<string> {
 export default async function DashboardPage() {
   const userId = await getUserId()
 
+  // On-view freshness: pull recent Google changes so "This week" reflects the
+  // real calendar (incremental, best-effort, ≤60s-throttled).
+  await syncStaleGoogleSources(userId).catch(() => {})
+
   const now = new Date()
   // E-0 (OS-2651): "today" and the greeting must derive from the USER's
   // local civil time, not the server's. Resolve the stored timezone first.
@@ -77,7 +82,7 @@ export default async function DashboardPage() {
   weekStartAt.setUTCDate(weekStartAt.getUTCDate() - (dowUTC === 0 ? 6 : dowUTC - 1))
   const weekEnd = new Date(weekStartAt.getTime() + 7 * 86400000) // exclusive end of week
 
-  const [user, archetype, goals, todayTasksRaw, energyProfileRaw, settings, upcomingEvents, completedThisWeek, streakDays, userProfile] =
+  const [user, archetype, goals, todayTasksRaw, energyProfileRaw, settings, upcomingEvents, completedThisWeek, streakDays, userProfile, externalWeekRaw] =
     await Promise.all([
       prisma.user.findUnique({ where: { id: userId }, select: { id: true, email: true } }),
       prisma.archetypeResult.findUnique({ where: { userId } }),
@@ -89,7 +94,16 @@ export default async function DashboardPage() {
       prisma.activityLog.count({ where: { userId, action: 'task_completed', createdAt: { gte: new Date(now.getTime() - 7 * 86400000) } } }),
       computeStreak(userId),
       prisma.userProfile.findUnique({ where: { userId }, select: { birthTimezone: true } }),
+      // Google/external events for the same week — surfaced in "This week".
+      prisma.externalEvent.findMany({ where: { userId, isDeleted: false, startsAt: { gte: weekStartAt, lt: weekEnd } }, orderBy: { startsAt: 'asc' }, take: 60, select: { id: true, externalId: true, title: true, startsAt: true, endsAt: true } }),
     ])
+
+  // External (Google) week events, deduped against events 8os itself pushed
+  // (those already appear via `upcomingEvents`, matched on googleEventId).
+  const ownedGoogleIds = new Set(upcomingEvents.map((e) => e.googleEventId).filter((x): x is string => !!x))
+  const externalMiniEvents = externalWeekRaw
+    .filter((x) => !ownedGoogleIds.has(x.externalId))
+    .map((x) => ({ id: `ext-${x.id}`, title: x.title ?? 'Busy', startAt: x.startsAt.toISOString(), endAt: x.endsAt.toISOString(), domainId: null, color: 'var(--color-text-muted)' }))
 
   let caldiyBookings: { id: string; title: string; startTime: string; endTime: string }[] = []
   try {
@@ -239,6 +253,7 @@ export default async function DashboardPage() {
                 timezone={timezone}
                 events={[
                   ...upcomingEvents.map((e) => ({ id: e.id, title: e.title, startAt: e.startAt.toISOString(), endAt: e.endAt.toISOString(), domainId: e.domainId, color: e.color })),
+                  ...externalMiniEvents,
                   ...caldiyMiniEvents,
                 ]}
               />
