@@ -117,7 +117,7 @@ const jsonLd = {
 
 export default function FAQPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
+    <div style={{ background: 'var(--color-bg-primary)', minHeight: '100vh', color: 'var(--color-border)' }}>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
@@ -126,7 +126,7 @@ export default function FAQPage() {
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Header */}
         <div style={{ marginBottom: '48px' }}>
-          <h1 style={{ fontSize: '40px', fontWeight: 700, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
+          <h1 style={{ fontSize: '40px', fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: '12px' }}>
             Frequently Asked Questions
           </h1>
           <p style={{ fontSize: '18px', color: 'var(--color-text-secondary)' }}>
@@ -141,7 +141,7 @@ export default function FAQPage() {
               style={{
                 fontSize: '13px',
                 fontWeight: 700,
-                color: '#7c3aed',
+                color: 'var(--color-accent)',
                 textTransform: 'uppercase',
                 letterSpacing: '0.1em',
                 marginBottom: '20px',
@@ -155,8 +155,8 @@ export default function FAQPage() {
                 <details
                   key={i}
                   style={{
-                    background: '#0f0f0f',
-                    border: '1px solid #1e1e2e',
+                    background: 'var(--color-bg-primary)',
+                    border: '1px solid var(--color-bg-card)',
                     borderRadius: '10px',
                     overflow: 'hidden',
                   }}
@@ -166,7 +166,7 @@ export default function FAQPage() {
                       padding: '20px 24px',
                       fontSize: '16px',
                       fontWeight: 500,
-                      color: 'var(--color-bg-secondary)',
+                      color: 'var(--color-text-primary)',
                       cursor: 'pointer',
                       listStyle: 'none',
                       display: 'flex',
@@ -175,7 +175,7 @@ export default function FAQPage() {
                     }}
                   >
                     {qa.q}
-                    <span style={{ color: '#7c3aed', fontSize: '20px', marginLeft: '12px' }}>+</span>
+                    <span style={{ color: 'var(--color-accent)', fontSize: '20px', marginLeft: '12px' }}>+</span>
                   </summary>
                   <div
                     style={{
@@ -183,7 +183,7 @@ export default function FAQPage() {
                       color: 'var(--color-text-muted)',
                       lineHeight: 1.75,
                       fontSize: '15px',
-                      borderTop: '1px solid #1e1e2e',
+                      borderTop: '1px solid var(--color-bg-card)',
                       paddingTop: '16px',
                     }}
                   >
@@ -200,13 +200,13 @@ export default function FAQPage() {
           style={{
             marginTop: '48px',
             textAlign: 'center',
-            background: '#0f0f1a',
-            border: '1px solid #1e1b4b',
+            background: 'var(--color-bg-card)',
+            border: '1px solid var(--color-bg-card)',
             borderRadius: '16px',
             padding: '40px',
           }}
         >
-          <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
+          <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '12px' }}>
             Still have questions?
           </h3>
           <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px' }}>
@@ -215,7 +215,7 @@ export default function FAQPage() {
           <Link
             href="/onboarding"
             style={{
-              background: '#7c3aed',
+              background: 'var(--color-accent)',
               color: '#fff',
               padding: '14px 32px',
               borderRadius: '8px',

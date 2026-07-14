@@ -35,7 +35,7 @@ const ARCHETYPE_STYLES: Record<string, {
   },
   architect: {
     icon: '▣',
-    accent: 'var(--skin-color-primary, #a78bfa)',
+    accent: 'var(--skin-color-primary, var(--color-accent))',
     glow: 'var(--skin-glow-primary, rgba(167, 139, 250, 0.2))',
     background: 'var(--skin-gradient-card, linear-gradient(135deg, rgba(20, 15, 35, 0.98), rgba(12, 10, 22, 0.96)))',
     label: 'Structure',
@@ -179,7 +179,7 @@ export function InsightDisplayCard({
                 marginBottom: 10,
                 padding: '5px 10px',
                 borderRadius: 999,
-                background: 'rgba(255, 255, 255, 0.04)',
+                background: 'var(--color-bg-card)',
                 color: style.accent,
                 fontSize: 11,
                 fontWeight: 700,
@@ -208,8 +208,8 @@ export function InsightDisplayCard({
           style={{
             padding: '18px 18px 14px',
             borderRadius: 14,
-            background: 'rgba(255, 255, 255, 0.03)',
-            border: '1px solid rgba(255, 255, 255, 0.05)',
+            background: 'var(--color-bg-card)',
+            border: '1px solid var(--color-border)',
           }}
         >
           <p style={{ margin: 0, color: 'var(--skin-color-text)', fontSize: 15, lineHeight: 1.7 }}>
@@ -320,8 +320,8 @@ function FeedbackButton({
       onClick={onClick}
       style={{
         borderRadius: 999,
-        border: active ? '1px solid rgba(255, 255, 255, 0.22)' : '1px solid rgba(255, 255, 255, 0.08)',
-        background: active ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.04)',
+        border: active ? '1px solid var(--color-text-secondary)' : '1px solid var(--color-border)',
+        background: active ? 'var(--color-border)' : 'var(--color-bg-card)',
         color: active ? '#f3f4f6' : '#9ca3af',
         padding: '8px 12px',
         fontSize: 12,

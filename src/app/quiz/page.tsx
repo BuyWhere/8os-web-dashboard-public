@@ -114,21 +114,21 @@ const miniQA = [
 
 export default function QuizPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
+    <div style={{ background: 'var(--color-bg-primary)', minHeight: '100vh', color: 'var(--color-border)' }}>
       {/* Hero */}
       <div
         style={{
-          background: 'linear-gradient(180deg, #0f0a1e 0%, #080808 100%)',
+          background: 'linear-gradient(180deg, #0f0a1e 0%, var(--color-bg-primary) 100%)',
           padding: '80px 24px 64px',
           textAlign: 'center',
-          borderBottom: '1px solid #1e1b4b',
+          borderBottom: '1px solid var(--color-bg-card)',
         }}
       >
         <div style={{ maxWidth: '640px', margin: '0 auto' }}>
           <div
             style={{
               display: 'inline-block',
-              background: '#1e1b4b',
+              background: 'var(--color-bg-card)',
               color: '#a5b4fc',
               padding: '6px 16px',
               borderRadius: '9999px',
@@ -143,7 +143,7 @@ export default function QuizPage() {
             style={{
               fontSize: '46px',
               fontWeight: 700,
-              color: 'var(--color-bg-secondary)',
+              color: 'var(--color-text-primary)',
               lineHeight: 1.15,
               marginBottom: '20px',
             }}
@@ -157,7 +157,7 @@ export default function QuizPage() {
           <QuizCtaButton
             label="Take the Free Quiz →"
             style={{
-              background: '#7c3aed',
+              background: 'var(--color-accent)',
               color: '#fff',
               padding: '16px 40px',
               borderRadius: '10px',
@@ -177,7 +177,7 @@ export default function QuizPage() {
             style={{
               fontSize: '28px',
               fontWeight: 600,
-              color: 'var(--color-bg-secondary)',
+              color: 'var(--color-text-primary)',
               textAlign: 'center',
               marginBottom: '40px',
             }}
@@ -195,8 +195,8 @@ export default function QuizPage() {
               <div
                 key={step.number}
                 style={{
-                  background: '#0f0f0f',
-                  border: '1px solid #1e1e2e',
+                  background: 'var(--color-bg-primary)',
+                  border: '1px solid var(--color-bg-card)',
                   borderRadius: '12px',
                   padding: '28px',
                   textAlign: 'center',
@@ -206,7 +206,7 @@ export default function QuizPage() {
                   style={{
                     width: '44px',
                     height: '44px',
-                    background: '#7c3aed',
+                    background: 'var(--color-accent)',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
@@ -219,7 +219,7 @@ export default function QuizPage() {
                 >
                   {step.number}
                 </div>
-                <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '8px' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '8px' }}>
                   {step.title}
                 </h3>
                 <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
@@ -236,7 +236,7 @@ export default function QuizPage() {
             style={{
               fontSize: '28px',
               fontWeight: 600,
-              color: 'var(--color-bg-secondary)',
+              color: 'var(--color-text-primary)',
               textAlign: 'center',
               marginBottom: '8px',
             }}
@@ -270,7 +270,7 @@ export default function QuizPage() {
                 <div style={{ fontSize: '32px', flexShrink: 0 }}>{a.icon}</div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                    <h3 style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-bg-secondary)' }}>{a.name}</h3>
+                    <h3 style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-text-primary)' }}>{a.name}</h3>
                     <span
                       style={{
                         background: `${a.color}20`,
@@ -299,7 +299,7 @@ export default function QuizPage() {
             style={{
               fontSize: '24px',
               fontWeight: 600,
-              color: 'var(--color-bg-secondary)',
+              color: 'var(--color-text-primary)',
               marginBottom: '24px',
             }}
           >
@@ -310,8 +310,8 @@ export default function QuizPage() {
               <details
                 key={i}
                 style={{
-                  background: '#0f0f0f',
-                  border: '1px solid #1e1e2e',
+                  background: 'var(--color-bg-primary)',
+                  border: '1px solid var(--color-bg-card)',
                   borderRadius: '10px',
                 }}
               >
@@ -320,7 +320,7 @@ export default function QuizPage() {
                     padding: '18px 24px',
                     fontSize: '15px',
                     fontWeight: 500,
-                    color: 'var(--color-bg-secondary)',
+                    color: 'var(--color-text-primary)',
                     cursor: 'pointer',
                     listStyle: 'none',
                   }}
@@ -333,7 +333,7 @@ export default function QuizPage() {
                     color: 'var(--color-text-muted)',
                     fontSize: '14px',
                     lineHeight: 1.7,
-                    borderTop: '1px solid #1e1e2e',
+                    borderTop: '1px solid var(--color-bg-card)',
                     paddingTop: '14px',
                   }}
                 >
@@ -349,7 +349,7 @@ export default function QuizPage() {
           <QuizCtaButton
             label="Take the Free Archetype Quiz →"
             style={{
-              background: '#7c3aed',
+              background: 'var(--color-accent)',
               color: '#fff',
               padding: '16px 40px',
               borderRadius: '10px',
@@ -364,7 +364,7 @@ export default function QuizPage() {
             <a
               href="/reveal"
               style={{
-                color: '#c4b5fd',
+                color: 'var(--color-accent)',
                 fontSize: '0.95rem',
                 textDecoration: 'none',
                 borderBottom: '1px solid rgba(196, 181, 253, 0.3)',

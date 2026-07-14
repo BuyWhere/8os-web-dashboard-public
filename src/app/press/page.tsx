@@ -49,16 +49,16 @@ const boilerplate = `8os.ai is a personal operating system built on BaZi (Chines
 
 export default function PressPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
+    <div style={{ background: 'var(--color-bg-primary)', minHeight: '100vh', color: 'var(--color-border)' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Header */}
         <div style={{ marginBottom: '56px' }}>
-          <h1 style={{ fontSize: '42px', fontWeight: 700, color: 'var(--color-bg-secondary)', marginBottom: '16px' }}>
+          <h1 style={{ fontSize: '42px', fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: '16px' }}>
             Press
           </h1>
           <div
             style={{
-              background: '#0f0f1a',
+              background: 'var(--color-bg-card)',
               border: '1px solid #3730a3',
               borderRadius: '12px',
               padding: '20px 24px',
@@ -74,7 +74,7 @@ export default function PressPage() {
 
         {/* Story Angles */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '24px' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '24px' }}>
             Story Angles
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -82,13 +82,13 @@ export default function PressPage() {
               <div
                 key={i}
                 style={{
-                  background: '#0f0f0f',
-                  border: '1px solid #1e1e2e',
+                  background: 'var(--color-bg-primary)',
+                  border: '1px solid var(--color-bg-card)',
                   borderRadius: '12px',
                   padding: '24px',
                 }}
               >
-                <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '10px' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '10px' }}>
                   {i + 1}. {angle.title}
                 </h3>
                 <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', lineHeight: 1.7 }}>
@@ -101,13 +101,13 @@ export default function PressPage() {
 
         {/* Key Facts */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '24px' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '24px' }}>
             Key Facts
           </h2>
           <div
             style={{
-              background: '#0f0f0f',
-              border: '1px solid #1e1e2e',
+              background: 'var(--color-bg-primary)',
+              border: '1px solid var(--color-bg-card)',
               borderRadius: '12px',
               overflow: 'hidden',
             }}
@@ -119,12 +119,12 @@ export default function PressPage() {
                   display: 'flex',
                   justifyContent: 'space-between',
                   padding: '16px 24px',
-                  borderBottom: i < keyFacts.length - 1 ? '1px solid #1e1e2e' : 'none',
+                  borderBottom: i < keyFacts.length - 1 ? '1px solid var(--color-bg-card)' : 'none',
                   alignItems: 'center',
                 }}
               >
                 <span style={{ color: 'var(--color-text-secondary)', fontSize: '14px', fontWeight: 500 }}>{fact.label}</span>
-                <span style={{ color: 'var(--color-bg-secondary)', fontSize: '14px', fontWeight: 600 }}>{fact.value}</span>
+                <span style={{ color: 'var(--color-text-primary)', fontSize: '14px', fontWeight: 600 }}>{fact.value}</span>
               </div>
             ))}
           </div>
@@ -132,13 +132,13 @@ export default function PressPage() {
 
         {/* Boilerplate */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '16px' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '16px' }}>
             About 8os.ai (Boilerplate)
           </h2>
           <div
             style={{
-              background: '#0f0f0f',
-              border: '1px solid #1e1e2e',
+              background: 'var(--color-bg-primary)',
+              border: '1px solid var(--color-bg-card)',
               borderRadius: '12px',
               padding: '24px',
             }}
@@ -149,13 +149,13 @@ export default function PressPage() {
 
         {/* Contact */}
         <section>
-          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '16px' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '16px' }}>
             Media Contact
           </h2>
           <div
             style={{
-              background: '#0f0f1a',
-              border: '1px solid #1e1b4b',
+              background: 'var(--color-bg-card)',
+              border: '1px solid var(--color-bg-card)',
               borderRadius: '12px',
               padding: '24px',
             }}
@@ -166,7 +166,7 @@ export default function PressPage() {
             <a
               href="mailto:press@8os.ai"
               style={{
-                color: '#7c3aed',
+                color: 'var(--color-accent)',
                 fontSize: '16px',
                 fontWeight: 600,
                 textDecoration: 'none',

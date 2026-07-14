@@ -198,22 +198,22 @@ function getElementColor(element: string): string {
   for (const [el, color] of Object.entries(ELEMENT_COLORS)) {
     if (element.includes(el)) return color;
   }
-  return '#7c3aed';
+  return 'var(--color-accent)';
 }
 
 export default function SignsPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
+    <div style={{ background: 'var(--color-bg-primary)', minHeight: '100vh', color: 'var(--color-border)' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Breadcrumb */}
         <nav style={{ marginBottom: '32px' }}>
-          <Link href="/archetypes" style={{ color: '#7c3aed', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
+          <Link href="/archetypes" style={{ color: 'var(--color-accent)', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}>
             ← All Archetypes
           </Link>
         </nav>
 
         {/* Header */}
-        <h1 style={{ fontSize: '40px', fontWeight: 700, color: 'var(--color-bg-secondary)', lineHeight: 1.2, marginBottom: '16px' }}>
+        <h1 style={{ fontSize: '40px', fontWeight: 700, color: 'var(--color-text-primary)', lineHeight: 1.2, marginBottom: '16px' }}>
           Your BaZi Element by Zodiac Sign
         </h1>
         <p style={{ fontSize: '18px', color: 'var(--color-text-muted)', lineHeight: 1.7, marginBottom: '12px', maxWidth: '680px' }}>
@@ -231,8 +231,8 @@ export default function SignsPage() {
             <div
               key={s.sign}
               style={{
-                background: '#0f0f1a',
-                border: '1px solid #1e1b4b',
+                background: 'var(--color-bg-card)',
+                border: '1px solid var(--color-bg-card)',
                 borderRadius: '16px',
                 padding: '28px',
               }}
@@ -241,7 +241,7 @@ export default function SignsPage() {
               <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '12px' }}>
                 <span style={{ fontSize: '32px' }}>{s.emoji}</span>
                 <div>
-                  <h2 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--color-bg-secondary)', margin: 0 }}>{s.sign}</h2>
+                  <h2 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--color-text-primary)', margin: 0 }}>{s.sign}</h2>
                   <p style={{ fontSize: '13px', color: 'var(--color-text-secondary)', margin: 0 }}>{s.dates}</p>
                 </div>
               </div>
@@ -263,7 +263,7 @@ export default function SignsPage() {
                         display: 'flex',
                         alignItems: 'center',
                         justifyContent: 'space-between',
-                        background: '#080808',
+                        background: 'var(--color-bg-primary)',
                         border: `1px solid ${color}33`,
                         borderRadius: '8px',
                         padding: '12px 16px',
@@ -303,14 +303,14 @@ export default function SignsPage() {
         <div
           style={{
             marginTop: '64px',
-            background: 'linear-gradient(135deg, #1e1b4b, #0f0f1a)',
+            background: 'linear-gradient(135deg, var(--color-bg-card), var(--color-bg-card))',
             border: '1px solid #3730a3',
             borderRadius: '16px',
             padding: '40px',
             textAlign: 'center',
           }}
         >
-          <h3 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
+          <h3 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '12px' }}>
             Not Sure Which Profile Is Yours?
           </h3>
           <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px', fontSize: '15px' }}>
@@ -320,7 +320,7 @@ export default function SignsPage() {
           <Link
             href="/onboarding"
             style={{
-              background: '#7c3aed',
+              background: 'var(--color-accent)',
               color: '#fff',
               padding: '14px 32px',
               borderRadius: '8px',

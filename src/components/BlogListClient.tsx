@@ -7,7 +7,7 @@ import type { BlogPost, BlogCategory } from '@/lib/content/blog'
 const POSTS_PER_PAGE = 10
 
 const CATEGORY_CONFIG: Record<BlogCategory, { icon: string; color: string; bg: string }> = {
-  BaZi: { icon: '☯', color: '#a78bfa', bg: 'rgba(167,139,250,0.12)' },
+  BaZi: { icon: '☯', color: 'var(--color-accent)', bg: 'rgba(167,139,250,0.12)' },
   Productivity: { icon: '⚡', color: '#facc15', bg: 'rgba(250,204,21,0.12)' },
   Archetypes: { icon: '🎭', color: '#f472b6', bg: 'rgba(244,114,182,0.12)' },
   'Mental Health': { icon: '🧠', color: '#34d399', bg: 'rgba(52,211,153,0.12)' },
@@ -60,8 +60,8 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
         >
           <article
             style={{
-              background: 'linear-gradient(135deg, #1a1033 0%, #0f0f1a 50%, #0a1628 100%)',
-              border: '1px solid #2d1b69',
+              background: 'linear-gradient(135deg, var(--color-bg-card) 0%, var(--color-bg-card) 50%, var(--color-bg-card) 100%)',
+              border: '1px solid var(--color-bg-card)',
               borderRadius: '16px',
               padding: '32px',
               position: 'relative',
@@ -69,11 +69,11 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
               transition: 'border-color 0.2s, transform 0.2s',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.borderColor = '#7c3aed'
+              e.currentTarget.style.borderColor = 'var(--color-accent)'
               e.currentTarget.style.transform = 'translateY(-2px)'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.borderColor = '#2d1b69'
+              e.currentTarget.style.borderColor = 'var(--color-bg-card)'
               e.currentTarget.style.transform = 'translateY(0)'
             }}
           >
@@ -82,7 +82,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                 position: 'absolute',
                 top: '16px',
                 right: '16px',
-                background: '#7c3aed',
+                background: 'var(--color-accent)',
                 color: '#fff',
                 fontSize: '11px',
                 fontWeight: 600,
@@ -115,7 +115,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
               style={{
                 fontSize: '24px',
                 fontWeight: 700,
-                color: 'var(--color-bg-secondary)',
+                color: 'var(--color-text-primary)',
                 lineHeight: 1.3,
                 marginBottom: '12px',
               }}
@@ -156,9 +156,9 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
             setVisibleCount(POSTS_PER_PAGE)
           }}
           style={{
-            background: !activeCategory ? '#7c3aed' : '#1a1a2e',
+            background: !activeCategory ? 'var(--color-accent)' : 'var(--color-bg-card)',
             color: !activeCategory ? '#fff' : 'var(--color-text-muted)',
-            border: `1px solid ${!activeCategory ? '#7c3aed' : '#2a2a3e'}`,
+            border: `1px solid ${!activeCategory ? 'var(--color-accent)' : 'var(--color-border)'}`,
             borderRadius: '8px',
             padding: '8px 16px',
             fontSize: '13px',
@@ -180,9 +180,9 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                 setVisibleCount(POSTS_PER_PAGE)
               }}
               style={{
-                background: isActive ? config.bg : '#1a1a2e',
+                background: isActive ? config.bg : 'var(--color-bg-card)',
                 color: isActive ? config.color : 'var(--color-text-muted)',
-                border: `1px solid ${isActive ? config.color + '40' : '#2a2a3e'}`,
+                border: `1px solid ${isActive ? config.color + '40' : 'var(--color-border)'}`,
                 borderRadius: '8px',
                 padding: '8px 16px',
                 fontSize: '13px',
@@ -213,8 +213,8 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
             >
               <article
                 style={{
-                  background: '#0f0f0f',
-                  border: '1px solid #1e1e2e',
+                  background: 'var(--color-bg-primary)',
+                  border: '1px solid var(--color-bg-card)',
                   borderRadius: '12px',
                   padding: '24px',
                   transition: 'border-color 0.2s, transform 0.15s',
@@ -225,7 +225,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                   e.currentTarget.style.transform = 'translateY(-1px)'
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = '#1e1e2e'
+                  e.currentTarget.style.borderColor = 'var(--color-bg-card)'
                   e.currentTarget.style.transform = 'translateY(0)'
                 }}
               >
@@ -258,7 +258,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                   style={{
                     fontSize: '17px',
                     fontWeight: 600,
-                    color: 'var(--color-bg-secondary)',
+                    color: 'var(--color-text-primary)',
                     lineHeight: 1.35,
                     marginBottom: '8px',
                     margin: '0 0 8px 0',
@@ -288,9 +288,9 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
           <button
             onClick={() => setVisibleCount((c) => c + POSTS_PER_PAGE)}
             style={{
-              background: '#1a1a2e',
-              color: '#a78bfa',
-              border: '1px solid #2d1b69',
+              background: 'var(--color-bg-card)',
+              color: 'var(--color-accent)',
+              border: '1px solid var(--color-bg-card)',
               borderRadius: '8px',
               padding: '12px 28px',
               fontSize: '14px',
@@ -299,12 +299,12 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
               transition: 'all 0.2s',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.background = '#2d1b69'
+              e.currentTarget.style.background = 'var(--color-bg-card)'
               e.currentTarget.style.color = '#fff'
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = '#1a1a2e'
-              e.currentTarget.style.color = '#a78bfa'
+              e.currentTarget.style.background = 'var(--color-bg-card)'
+              e.currentTarget.style.color = 'var(--color-accent)'
             }}
           >
             Load More ({remaining} remaining)

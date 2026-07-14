@@ -159,7 +159,7 @@ const ARCHETYPE_META: Record<ArchetypeId, { label: string; element: string; tagl
     label: 'Strategic Commander',
     element: 'Metal / Wood',
     tagline: 'Decisive. Visionary. Built to lead.',
-    color: '#a78bfa',
+    color: 'var(--color-accent)',
     bg: 'rgba(167,139,250,0.08)',
   },
   nurturing_creative: {
@@ -263,31 +263,31 @@ export default function FamousArchetypesPage() {
   );
 }
 
-const pageStyle: React.CSSProperties = { background: '#060608', color: 'var(--color-bg-secondary)', minHeight: '100vh' };
+const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '1100px', margin: '0 auto', padding: '4rem 1.5rem' };
 const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '4rem' };
-const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#a78bfa' };
+const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)' };
 const pageTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.1, letterSpacing: '-0.04em' };
-const pageDescStyle: React.CSSProperties = { margin: '0 0 1.75rem', fontSize: '1rem', lineHeight: 1.65, color: 'rgba(248,250,252,0.6)', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' };
-const ctaBtnStyle: React.CSSProperties = { display: 'inline-block', padding: '0.85rem 1.75rem', borderRadius: '12px', background: 'linear-gradient(135deg, #7c3aed 0%, #9333ea 100%)', color: '#fff', fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none', boxShadow: '0 8px 24px rgba(124,58,237,0.4)' };
+const pageDescStyle: React.CSSProperties = { margin: '0 0 1.75rem', fontSize: '1rem', lineHeight: 1.65, color: 'var(--color-text-secondary)', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' };
+const ctaBtnStyle: React.CSSProperties = { display: 'inline-block', padding: '0.85rem 1.75rem', borderRadius: '12px', background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)', color: '#fff', fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none', boxShadow: '0 8px 24px var(--color-accent-soft)' };
 
 const sectionStyle: React.CSSProperties = { marginBottom: '2.5rem', padding: '2rem', borderRadius: '20px', border: '1px solid' };
 const sectionHeaderStyle: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', gap: '1rem', flexWrap: 'wrap' };
 const sectionTitleStyle: React.CSSProperties = { margin: '0 0 0.2rem', fontSize: '1.4rem', fontWeight: 800 };
-const sectionElementStyle: React.CSSProperties = { margin: '0 0 0.3rem', fontSize: '0.8rem', fontWeight: 600, color: 'rgba(248,250,252,0.4)' };
-const sectionTaglineStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', color: 'rgba(248,250,252,0.6)', fontStyle: 'italic' };
+const sectionElementStyle: React.CSSProperties = { margin: '0 0 0.3rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-text-secondary)' };
+const sectionTaglineStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', color: 'var(--color-text-secondary)', fontStyle: 'italic' };
 const countBadgeStyle: React.CSSProperties = { padding: '0.3rem 0.75rem', borderRadius: '999px', fontSize: '0.78rem', fontWeight: 700, flexShrink: 0 };
 
 const gridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.85rem' };
-const cardStyle: React.CSSProperties = { padding: '1rem', borderRadius: '12px', background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: '0.5rem' };
+const cardStyle: React.CSSProperties = { padding: '1rem', borderRadius: '12px', background: 'rgba(0,0,0,0.25)', border: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column', gap: '0.5rem' };
 const cardHeaderStyle: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: '0.65rem' };
-const avatarStyle: React.CSSProperties = { width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(124,58,237,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: 700, flexShrink: 0 };
+const avatarStyle: React.CSSProperties = { width: '36px', height: '36px', borderRadius: '50%', background: 'var(--color-accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: 700, flexShrink: 0 };
 const nameStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', fontWeight: 700, lineHeight: 1.3 };
-const bornStyle: React.CSSProperties = { margin: 0, fontSize: '0.72rem', color: 'rgba(248,250,252,0.35)' };
+const bornStyle: React.CSSProperties = { margin: 0, fontSize: '0.72rem', color: 'var(--color-text-secondary)' };
 const elementBadgeStyle: React.CSSProperties = { marginLeft: 'auto', fontSize: '1rem', flexShrink: 0 };
-const knownForStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'rgba(248,250,252,0.45)', lineHeight: 1.4 };
-const traitStyle: React.CSSProperties = { margin: 0, fontSize: '0.82rem', color: 'rgba(248,250,252,0.7)', lineHeight: 1.5, fontStyle: 'italic' };
+const knownForStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', lineHeight: 1.4 };
+const traitStyle: React.CSSProperties = { margin: 0, fontSize: '0.82rem', color: 'var(--color-text-secondary)', lineHeight: 1.5, fontStyle: 'italic' };
 
-const bottomCtaStyle: React.CSSProperties = { textAlign: 'center', padding: '3.5rem 2rem', borderRadius: '24px', border: '1px solid rgba(124,58,237,0.2)', background: 'rgba(124,58,237,0.06)', marginTop: '2rem' };
+const bottomCtaStyle: React.CSSProperties = { textAlign: 'center', padding: '3.5rem 2rem', borderRadius: '24px', border: '1px solid var(--color-accent-soft)', background: 'var(--color-accent-soft)', marginTop: '2rem' };
 const bottomTitleStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', letterSpacing: '-0.04em' };
-const bottomDescStyle: React.CSSProperties = { margin: '0 0 1.75rem', fontSize: '1rem', color: 'rgba(248,250,252,0.6)' };
+const bottomDescStyle: React.CSSProperties = { margin: '0 0 1.75rem', fontSize: '1rem', color: 'var(--color-text-secondary)' };
