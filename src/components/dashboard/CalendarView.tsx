@@ -577,7 +577,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
                   width: '100%', padding: '4px 0', borderRadius: 5,
                   background: (scheduling === t.id || schedulingAll) ? 'var(--color-bg-primary)' : 'transparent',
                   border: '1px solid var(--color-border-strong)',
-                  color: (scheduling === t.id || schedulingAll) ? 'var(--color-text-muted)' : '#8A6728',
+                  color: (scheduling === t.id || schedulingAll) ? 'var(--color-text-muted)' : 'var(--skin-color-badge-text)',
                   fontSize: 11, fontWeight: 600, cursor: (scheduling === t.id || schedulingAll) ? 'default' : 'pointer', fontFamily: 'inherit',
                 }}
               >
