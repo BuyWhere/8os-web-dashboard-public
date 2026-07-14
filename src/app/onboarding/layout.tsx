@@ -11,7 +11,7 @@
  * The _initialized guard in PostHogProvider prevents double-init if both
  * layouts mount in the same session.
  *
- * Also redirects already-onboarded users to dashboard.
+ * Also redirects already-onboarded users to dashboard (OS-3708).
  */
 import { redirect } from 'next/navigation'
 import { PostHogProvider } from '@/components/PostHogProvider'

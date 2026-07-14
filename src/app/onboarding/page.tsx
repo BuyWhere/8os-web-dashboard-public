@@ -8,7 +8,7 @@
  * screen here was a non-persisting preview mock; redirecting to /onboarding/birth
  * ensures every new user gets the real, data-backed flow.
  *
- * If the user has already completed onboarding, redirect to dashboard.
+ * If the user has already completed onboarding, redirect to dashboard (OS-3708).
  */
 import { redirect } from 'next/navigation'
 import { currentUser } from '@clerk/nextjs/server'
@@ -18,7 +18,6 @@ export default async function OnboardingIndex() {
   const clerkUser = await currentUser()
 
   if (clerkUser) {
-    // Check if user has already completed onboarding
     const dbUser = await prisma.user.findUnique({
       where: { id: clerkUser.id },
       select: { onboardingDone: true },
