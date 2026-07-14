@@ -4,7 +4,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'BaZi Element by Zodiac Sign | 8os.ai',
   description:
-    'Discover your BaZi element by zodiac sign. Each sign has multiple elemental expressions — find your exact combination and learn what it means for your goals and operating system.',
+    'Discover your BaZi element by zodiac sign. Each sign has multiple elemental expressions, find your exact combination and learn what it means for your goals and operating system.',
   keywords: [
     'bazi zodiac sign',
     'astrology element bazi',
@@ -18,7 +18,7 @@ export const metadata: Metadata = {
 const SIGNS = [
   {
     sign: 'Capricorn',
-    dates: 'Dec 22 – Jan 19',
+    dates: 'Dec 22 - Jan 19',
     emoji: '♑',
     description:
       'The sign of ambition and structured achievement. Capricorn amplifies Metal precision, Water strategic depth, Earth patient construction, Fire rare warmth, and Wood resilient adaptability into formidable archetypes.',
@@ -32,7 +32,7 @@ const SIGNS = [
   },
   {
     sign: 'Aquarius',
-    dates: 'Jan 20 – Feb 18',
+    dates: 'Jan 20 - Feb 18',
     emoji: '♒',
     description:
       'The sign of innovation and collective vision. Aquarius pairs with Fire for revolutionary leadership (both Bing and Ding), Water for systems intelligence, Wood for long-range growth, and Earth for systemic staying power.',
@@ -46,7 +46,7 @@ const SIGNS = [
   },
   {
     sign: 'Pisces',
-    dates: 'Feb 19 – Mar 20',
+    dates: 'Feb 19 - Mar 20',
     emoji: '♓',
     description:
       'The sign of deep feeling and transcendent perception. Pisces amplifies Water intuition (both Gui and Ren), Wood patient growth, Fire radiant transmission, and Earth compassionate stability into something almost otherworldly.',
@@ -60,7 +60,7 @@ const SIGNS = [
   },
   {
     sign: 'Aries',
-    dates: 'Mar 21 – Apr 19',
+    dates: 'Mar 21 - Apr 19',
     emoji: '♈',
     description:
       'The sign of initiation and fearless action. Aries pairs powerfully with Metal for decisive execution, Fire for pioneering momentum, Wood for adaptive persistence, Water for empathic speed, and Earth for grounded endurance.',
@@ -74,7 +74,7 @@ const SIGNS = [
   },
   {
     sign: 'Taurus',
-    dates: 'Apr 20 – May 20',
+    dates: 'Apr 20 - May 20',
     emoji: '♉',
     description:
       'The sign of patient building and sensory depth. Taurus amplifies Earth grounding, Water depth, Wood patient growth, Metal precision, and Fire intimate warmth into extraordinary durability.',
@@ -88,7 +88,7 @@ const SIGNS = [
   },
   {
     sign: 'Gemini',
-    dates: 'May 21 – Jun 20',
+    dates: 'May 21 - Jun 20',
     emoji: '♊',
     description:
       "The sign of intellectual range and communicative speed. Gemini amplifies Wood growth energy, Fire's radiant transmission, Metal's cutting precision, Earth's nurturing breadth, and Water's strategic synthesis.",
@@ -102,7 +102,7 @@ const SIGNS = [
   },
   {
     sign: 'Cancer',
-    dates: 'Jun 21 – Jul 22',
+    dates: 'Jun 21 - Jul 22',
     emoji: '♋',
     description:
       'The sign of deep care and protective nurturing. Cancer amplifies Fire warmth, Water depth (both Gui and Ren), Earth grounding, and Wood patient growth into its most emotionally attuned archetypes.',
@@ -116,7 +116,7 @@ const SIGNS = [
   },
   {
     sign: 'Leo',
-    dates: 'Jul 23 – Aug 22',
+    dates: 'Jul 23 - Aug 22',
     emoji: '♌',
     description:
       "The sign of bold expression and generous leadership. Leo pairs Fire brilliance, Earth's grounded authority, Wood's cumulative stature (both Jia and Yi), and Water's surprising emotional depth.",
@@ -130,7 +130,7 @@ const SIGNS = [
   },
   {
     sign: 'Virgo',
-    dates: 'Aug 23 – Sep 22',
+    dates: 'Aug 23 - Sep 22',
     emoji: '♍',
     description:
       'The sign of precision and discernment. Virgo amplifies Earth steadiness (Ji and Wu), Water analytical depth, Metal surgical execution, and Wood continuous improvement into exceptional quality.',
@@ -144,7 +144,7 @@ const SIGNS = [
   },
   {
     sign: 'Libra',
-    dates: 'Sep 23 – Oct 22',
+    dates: 'Sep 23 - Oct 22',
     emoji: '♎',
     description:
       "The sign of harmony and aesthetic intelligence. Libra amplifies Wood's collaborative nature, Water's empathic attunement, Metal's decisive fairness, Fire's intimate warmth, and Earth's grounded peacemaking into something unusually beautiful.",
@@ -158,7 +158,7 @@ const SIGNS = [
   },
   {
     sign: 'Scorpio',
-    dates: 'Oct 23 – Nov 21',
+    dates: 'Oct 23 - Nov 21',
     emoji: '♏',
     description:
       'The sign of transformation and penetrating perception. Scorpio amplifies Water, Wood, Fire, and Earth into the most intensely perceptive and transformative archetypes in the system.',
@@ -172,7 +172,7 @@ const SIGNS = [
   },
   {
     sign: 'Sagittarius',
-    dates: 'Nov 22 – Dec 21',
+    dates: 'Nov 22 - Dec 21',
     emoji: '♐',
     description:
       "The sign of expansive vision and philosophical exploration. Sagittarius amplifies Wood's patient growth, Fire's radiant broadcast, Water's philosophical depth, Yi Wood's flexible range, and Metal's decisive principle into wide-ranging, wisdom-seeking archetypes.",
@@ -218,7 +218,7 @@ export default function SignsPage() {
         </h1>
         <p style={{ fontSize: '18px', color: 'var(--color-text-muted)', lineHeight: 1.7, marginBottom: '12px', maxWidth: '680px' }}>
           Western astrology gives you a sign. BaZi gives you an element. Combined, they reveal your exact operating
-          system — how you think, work, make decisions, and pursue goals.
+          system, how you think, work, make decisions, and pursue goals.
         </p>
         <p style={{ fontSize: '16px', color: 'var(--color-text-secondary)', lineHeight: 1.6, marginBottom: '48px', maxWidth: '680px' }}>
           Each zodiac sign can express multiple BaZi elements depending on the year and month of birth. Find your sign
@@ -314,7 +314,7 @@ export default function SignsPage() {
             Not Sure Which Profile Is Yours?
           </h3>
           <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px', fontSize: '15px' }}>
-            Take the 90-second quiz. We identify your dominant element from your birth date and a few quick questions —
+            Take the 90-second quiz. We identify your dominant element from your birth date and a few quick questions,
             no birth time required.
           </p>
           <Link

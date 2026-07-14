@@ -154,7 +154,7 @@ export default function RetroPage() {
     const url = shareUrl(verdict)
     try {
       await navigator.clipboard.writeText(url)
-      setCopied('Link copied — paste it anywhere.')
+      setCopied('Link copied, paste it anywhere.')
     } catch {
       setCopied(url) // clipboard blocked: show the URL so it is still shareable
     }
@@ -191,7 +191,7 @@ export default function RetroPage() {
       <div style={{ paddingTop: 80 }}>
         <h1 style={{ fontSize: 22, color: 'var(--color-text-primary)', marginBottom: 10, fontFamily: 'var(--font-serif), Georgia, serif' }}>Your last 30 days</h1>
         <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, lineHeight: 1.6 }}>
-          The retro view is unavailable right now — refresh to try again. The rest of your
+          The retro view is unavailable right now, refresh to try again. The rest of your
           dashboard is unaffected. <Link href="/dashboard" style={{ color: 'var(--color-accent)' }}>Back to dashboard</Link>
         </div>
       </div>,
@@ -210,7 +210,7 @@ export default function RetroPage() {
 
       {!verdict.hasData && (
         <div style={{ padding: '16px 18px', borderRadius: 12, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', color: 'var(--color-text-secondary)', fontSize: 13, lineHeight: 1.6 }}>
-          There is nothing to look back on yet — connect a calendar, finish a task or journal a
+          There is nothing to look back on yet, connect a calendar, finish a task or journal a
           line and this page turns into your attention verdict.{' '}
           <Link href="/settings/sources" style={{ color: 'var(--color-accent)' }}>Connect a source →</Link>
         </div>
@@ -265,7 +265,7 @@ export default function RetroPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
             {verdict.starvingPriority && (
               <div data-testid="retro-starving">
-                <Callout color="#f59e0b" title={`Starving priority — #${verdict.starvingPriority.rank}`}>
+                <Callout color="#f59e0b" title={`Starving priority, #${verdict.starvingPriority.rank}`}>
                   <strong>“{verdict.starvingPriority.name}”</strong> got {verdict.starvingPriority.sharePct}% of your
                   attention against an expected {verdict.starvingPriority.expectedSharePct}% for its priority.
                 </Callout>
@@ -276,7 +276,7 @@ export default function RetroPage() {
                 <Callout color="var(--color-text-muted)" title="Top unaligned sink">
                   <strong>“{verdict.topUnalignedSink.title}”</strong> absorbed{' '}
                   {fmtMinutes(verdict.topUnalignedSink.minutes)} across {verdict.topUnalignedSink.occurrences}{' '}
-                  {verdict.topUnalignedSink.occurrences === 1 ? 'block' : 'blocks'} —{' '}
+                  {verdict.topUnalignedSink.occurrences === 1 ? 'block' : 'blocks'},{' '}
                   {verdict.topUnalignedSink.sharePct}% of everything tracked, pointed at no goal.
                 </Callout>
               </div>
@@ -299,20 +299,20 @@ export default function RetroPage() {
           {/* Passive coverage */}
           <p data-testid="retro-passive" style={{ fontSize: 12, color: 'var(--color-text-secondary)', margin: '0 0 20px', lineHeight: 1.6 }}>
             {verdict.passiveCoveragePct > 0
-              ? <>{verdict.passiveCoveragePct}% of these minutes were tracked <strong style={{ color: 'var(--color-text-primary)' }}>passively</strong> from your connected calendar — no manual logging.</>
-              : <>None of this came from a connected calendar yet — <Link href="/settings/sources" style={{ color: 'var(--color-accent)' }}>connect one</Link> and the picture fills itself in.</>}
+              ? <>{verdict.passiveCoveragePct}% of these minutes were tracked <strong style={{ color: 'var(--color-text-primary)' }}>passively</strong> from your connected calendar, no manual logging.</>
+              : <>None of this came from a connected calendar yet, <Link href="/settings/sources" style={{ color: 'var(--color-accent)' }}>connect one</Link> and the picture fills itself in.</>}
           </p>
 
           {/* Share card */}
           <div data-testid="retro-share-card" style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20 }}>
             <h2 style={{ margin: '0 0 6px', fontSize: 14, fontWeight: 700, color: 'var(--color-text-primary)', fontFamily: 'var(--font-serif), Georgia, serif' }}>Share your verdict</h2>
             <p style={{ margin: '0 0 12px', fontSize: 12, color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
-              A card with your goal names and percentages — nothing else leaves your account.
+              A card with your goal names and percentages, nothing else leaves your account.
             </p>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               src={shareUrl(verdict)}
-              alt="Your last 30 days — shareable verdict card"
+              alt="Your last 30 days, shareable verdict card"
               style={{ width: '100%', maxWidth: 560, borderRadius: 10, border: '1px solid var(--color-border)', display: 'block', marginBottom: 12 }}
             />
             <button

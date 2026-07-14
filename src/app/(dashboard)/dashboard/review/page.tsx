@@ -175,7 +175,7 @@ export default function ReviewPage() {
         body: JSON.stringify({ taskId: focusTaskId, searchFrom: new Date().toISOString(), searchDays: 7 }),
       })
       if (res.ok) {
-        setFocusMsg('Focus set — placed into the coming week.')
+        setFocusMsg('Focus set, placed into the coming week.')
         setFocusTaskId('')
         await load()
       } else {
@@ -239,7 +239,7 @@ export default function ReviewPage() {
   const rev = data?.review
   const prev = data?.preview
   const rate = rev?.completionRate
-  const weekLabel = data ? `${fmtDate(data.window.from)} – ${fmtDate(data.window.to)}` : ''
+  const weekLabel = data ? `${fmtDate(data.window.from)} - ${fmtDate(data.window.to)}` : ''
 
   // Candidate tasks for "set focus": carry-over tasks (the unfinished ones).
   const focusCandidates = rev?.carryOver ?? []
@@ -282,7 +282,7 @@ export default function ReviewPage() {
                   <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginTop: 2 }}>planned</div>
                 </div>
                 <div style={{ flex: 1, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 10, padding: '14px 16px' }}>
-                  <div style={{ fontSize: 26, fontWeight: 700, color: 'var(--color-accent)' }}>{rate != null ? `${rate}%` : '—'}</div>
+                  <div style={{ fontSize: 26, fontWeight: 700, color: 'var(--color-accent)' }}>{rate != null ? `${rate}%` : '-'}</div>
                   <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginTop: 2 }}>completion</div>
                 </div>
               </div>
@@ -293,7 +293,7 @@ export default function ReviewPage() {
                   Carry-over <span style={{ color: 'var(--color-text-muted)', fontWeight: 400 }}>({rev?.carryOverCount ?? 0} unfinished)</span>
                 </h3>
                 {(!rev || rev.carryOver.length === 0) ? (
-                  <div style={{ color: 'var(--color-text-muted)', fontSize: 13, padding: '8px 0' }}>Nothing carried over — clean week.</div>
+                  <div style={{ color: 'var(--color-text-muted)', fontSize: 13, padding: '8px 0' }}>Nothing carried over, clean week.</div>
                 ) : (
                   <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {rev.carryOver.slice(0, 12).map((t) => (
@@ -335,7 +335,7 @@ export default function ReviewPage() {
             </div>
 
             {/* Alignment (OS-2542): the weekly verdict + per-goal momentum.
-                Best-effort — the section is simply absent if the API errors. */}
+                Best-effort, the section is simply absent if the API errors. */}
             {alignment && (
               <div data-testid="review-alignment-section" style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20 }}>
                 <h3 style={{ margin: '0 0 8px', fontSize: 13, fontWeight: 700, color: 'var(--color-text-primary)' }}>Alignment</h3>
@@ -372,7 +372,7 @@ export default function ReviewPage() {
               </div>
             )}
 
-            {/* Reflection — saved to the journal (kind=weekly_reflection) */}
+            {/* Reflection, saved to the journal (kind=weekly_reflection) */}
             <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 20 }}>
               <h3 style={{ margin: '0 0 8px', fontSize: 13, fontWeight: 700, color: 'var(--color-text-primary)' }}>Reflection</h3>
               <p style={{ margin: '0 0 10px', color: 'var(--color-text-secondary)', fontSize: 13 }}>{data?.reflection.prompt}</p>
@@ -481,7 +481,7 @@ export default function ReviewPage() {
                 Pick a carry-over task to schedule into the coming week.
               </p>
               {focusCandidates.length === 0 ? (
-                <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>No carry-over tasks to focus — you&apos;re clear. Add one with ⌘K.</div>
+                <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>No carry-over tasks to focus, you&apos;re clear. Add one with ⌘K.</div>
               ) : (
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                   <select

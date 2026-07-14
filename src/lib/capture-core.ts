@@ -67,7 +67,7 @@ const CAPTURE_TOOLS: Tool[] = [
 ]
 
 function buildCapturePrompt(now: Date, archetypeName?: string | null): string {
-  let p = `You are the 8OS quick-capture engine. The user typed ONE short free-text note from anywhere in their dashboard. Turn it into exactly ONE OS object by calling EXACTLY ONE tool — either capture_task or capture_goal — and nothing else. Do not ask questions. Do not call more than one tool.
+  let p = `You are the 8OS quick-capture engine. The user typed ONE short free-text note from anywhere in their dashboard. Turn it into exactly ONE OS object by calling EXACTLY ONE tool, either capture_task or capture_goal, and nothing else. Do not ask questions. Do not call more than one tool.
 
 Decision rule:
 - If it is a single concrete action/errand/reminder/event (something to DO), call capture_task.

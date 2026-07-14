@@ -57,7 +57,7 @@ Write ONE concise, actionable daily insight (2-4 sentences maximum).
 - Reference their archetype's core strength
 - Connect to their actual goals or recent activity where relevant
 - End with a concrete micro-action for today
-- Tone: warm, direct, wise — not generic or preachy
+- Tone: warm, direct, wise, not generic or preachy
 
 Insight:`
 }

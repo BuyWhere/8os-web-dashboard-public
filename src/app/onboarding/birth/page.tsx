@@ -271,7 +271,7 @@ export default function BirthPage() {
           When were you born?
         </h1>
         <p style={{ color: WARM_GRAY, marginBottom: '2.5rem', lineHeight: 1.6, fontSize: '1rem' }}>
-          We use your exact birth moment to compute your BaZi chart — the Chinese Four-Pillar
+          We use your exact birth moment to compute your BaZi chart, the Chinese Four-Pillar
           system that maps your natural energy. It stays private, encrypted, and is used only to
           personalize your OS.
         </p>
@@ -343,7 +343,7 @@ export default function BirthPage() {
                 Day Master Preview
               </div>
               <div style={{ fontFamily: SERIF, fontSize: '1.25rem', fontWeight: 600, color: INK, letterSpacing: '-0.01em' }}>
-                {dayMasterStem} — {STEM_NAMES_EN[dayMasterStem]}
+                {dayMasterStem}, {STEM_NAMES_EN[dayMasterStem]}
               </div>
               <div style={{ fontSize: '0.85rem', color: WARM_GRAY, marginTop: '0.1rem' }}>
                 {dmPolarity.charAt(0).toUpperCase() + dmPolarity.slice(1)} {dmElement.charAt(0).toUpperCase() + dmElement.slice(1)}
@@ -393,7 +393,7 @@ export default function BirthPage() {
             </div>
           ) : (
             <p style={{ color: WARM_GRAY, fontSize: '0.85rem', padding: '0.85rem 1rem', background: CREAM, border: `1px solid ${HAIRLINE}`, borderRadius: '10px', margin: 0, lineHeight: 1.5 }}>
-              We&apos;ll use 12:00 noon for now — add your exact birth time for a more precise chart.
+              We&apos;ll use 12:00 noon for now, add your exact birth time for a more precise chart.
             </p>
           )}
 
@@ -485,7 +485,7 @@ export default function BirthPage() {
             </p>
           )}
           <p style={{ color: MUTED, fontSize: '0.75rem', marginTop: '0.35rem' }}>
-            Optional — used to refine timezone and seasonal calculations
+            Optional, used to refine timezone and seasonal calculations
           </p>
         </section>
 

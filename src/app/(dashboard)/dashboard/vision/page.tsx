@@ -216,7 +216,7 @@ export default function VisionBoardPage() {
         ) : items.length === 0 ? (
           <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 14, padding: 40, textAlign: 'center' }}>
             <div style={{ fontSize: 32, marginBottom: 12 }}>❖</div>
-            <div style={{ color: 'var(--color-text-secondary)' }}>Your vision board is empty. Add the futures you&apos;re working toward above — or ask the assistant to add one for you.</div>
+            <div style={{ color: 'var(--color-text-secondary)' }}>Your vision board is empty. Add the futures you&apos;re working toward above, or ask the assistant to add one for you.</div>
           </div>
         ) : (
           groups.map((group) => (

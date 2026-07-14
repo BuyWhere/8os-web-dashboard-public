@@ -24,7 +24,7 @@ const GOAL_COMPARISON = [
   {
     situation: 'You miss a milestone',
     traditional: 'Guilt, red alert, "try harder"',
-    with8os: '"Your 火 period ended. 土 period begins — shift from creation to structure. Adjust timeline."',
+    with8os: '"Your 火 period ended. 土 period begins, shift from creation to structure. Adjust timeline."',
   },
   {
     situation: 'You\'re procrastinating',
@@ -49,7 +49,7 @@ export default function HowItWorksPage() {
       <div style={innerStyle}>
         <div style={headerStyle}>
           <p style={eyebrowStyle}>How It Works</p>
-          <h1 style={pageTitleStyle}>From Birth Data to Live OS in 3 Minutes — Then, Achieve What Matters</h1>
+          <h1 style={pageTitleStyle}>From Birth Data to Live OS in 3 Minutes, Then, Achieve What Matters</h1>
         </div>
 
         {/* Step 1 */}
@@ -59,7 +59,7 @@ export default function HowItWorksPage() {
             <h2 style={stepTitleStyle}>The Gateway <span style={stepTimeStyle}>30 seconds</span></h2>
           </div>
           <p style={bodyStyle}>
-            Enter your birth date and location. Get your unified archetype card instantly. Set your first goal — what
+            Enter your birth date and location. Get your unified archetype card instantly. Set your first goal, what
             does &ldquo;best self&rdquo; mean to you?
           </p>
           <div style={goalExamplesStyle}>
@@ -85,7 +85,7 @@ export default function HowItWorksPage() {
             <h2 style={stepTitleStyle}>The Installation <span style={stepTimeStyle}>2 minutes</span></h2>
           </div>
           <p style={bodyStyle}>
-            Create your account. Confirm your archetype accuracy. Set 1–3 active goals with timelines. Connect
+            Create your account. Confirm your archetype accuracy. Set 1-3 active goals with timelines. Connect
             integrations to make your OS truly live.
           </p>
           <div style={integrationsGridStyle}>
@@ -111,7 +111,7 @@ export default function HowItWorksPage() {
             <h2 style={stepTitleStyle}>The Live OS <span style={stepTimeStyle}>Ongoing</span></h2>
           </div>
           <p style={bodyStyle}>
-            Your dashboard updates continuously — archetype timing, goal progress, health sync, journal insights, and
+            Your dashboard updates continuously, archetype timing, goal progress, health sync, journal insights, and
             relationship nudges all in one coherent system.
           </p>
 
@@ -124,7 +124,7 @@ export default function HowItWorksPage() {
                 <span style={dashDotStyle('#4ade80')} />
                 <span style={dashDotStyle('#facc15')} />
                 <span style={dashDotStyle('#f87171')} />
-                <span style={dashMockTitleStyle}>8os Live OS — Capricorn-庚 Metal</span>
+                <span style={dashMockTitleStyle}>8os Live OS, Capricorn-庚 Metal</span>
               </div>
               <div style={dashMockBodyStyle}>
                 <div style={dashRowStyle}>
@@ -137,7 +137,7 @@ export default function HowItWorksPage() {
                 </div>
                 <div style={dashRowStyle}>
                   <span style={dashLabelStyle}>Launch consulting</span>
-                  <span style={{ ...dashValueStyle, color: '#a78bfa' }}>73% — Incorporate next</span>
+                  <span style={{ ...dashValueStyle, color: '#a78bfa' }}>73%, Incorporate next</span>
                 </div>
                 <div style={dashDivStyle} />
                 <p style={dashInsightStyle}>
@@ -146,7 +146,7 @@ export default function HowItWorksPage() {
                 <p style={dashInsightStyle}>
                   📝 Journal: &ldquo;Your 庚 Metal thrives on structure, not chaos. Try batching client calls to Tuesdays only.&rdquo;
                 </p>
-                <p style={dashNudgeStyle}>💡 Relationship nudge: Venus enters 7th house Thursday — schedule date night</p>
+                <p style={dashNudgeStyle}>💡 Relationship nudge: Venus enters 7th house Thursday, schedule date night</p>
               </div>
             </div>
           </div>
@@ -160,7 +160,7 @@ export default function HowItWorksPage() {
                 <span style={dashDotStyle('#4ade80')} />
                 <span style={dashDotStyle('#facc15')} />
                 <span style={dashDotStyle('#f87171')} />
-                <span style={dashMockTitleStyle}>8os Live OS — Pisces-癸水</span>
+                <span style={dashMockTitleStyle}>8os Live OS, Pisces-癸水</span>
               </div>
               <div style={dashMockBodyStyle}>
                 <div style={dashRowStyle}>
@@ -173,7 +173,7 @@ export default function HowItWorksPage() {
                 </div>
                 <div style={dashDivStyle} />
                 <p style={dashInsightStyle}>
-                  📝 Journal: &ldquo;You&apos;ve used &apos;drained&apos; 6x. Your 癸水 needs solitude before client sessions — block 30 min morning quiet.&rdquo;
+                  📝 Journal: &ldquo;You&apos;ve used &apos;drained&apos; 6x. Your 癸水 needs solitude before client sessions, block 30 min morning quiet.&rdquo;
                 </p>
                 <p style={dashInsightStyle}>
                   🌊 Water period active: optimal for deep client work, referral conversations, and word-of-mouth growth.

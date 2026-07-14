@@ -44,17 +44,17 @@ function closeLine(
   // Base sentence from what actually happened today.
   let base: string
   if (doneCount === 0 && incompleteCount === 0) {
-    base = `${who}a quiet day — nothing logged. Rest counts too; tomorrow is a fresh page.`
+    base = `${who}a quiet day, nothing logged. Rest counts too; tomorrow is a fresh page.`
   } else if (incompleteCount === 0) {
-    base = `${who}you closed every open loop today — ${doneCount} done, nothing left hanging. Shut the laptop with a clear conscience.`
+    base = `${who}you closed every open loop today, ${doneCount} done, nothing left hanging. Shut the laptop with a clear conscience.`
   } else if (doneCount === 0) {
-    base = `${who}${incompleteCount} still open and a slow start — carry them to tomorrow and let today end. Momentum returns with the next sunrise.`
+    base = `${who}${incompleteCount} still open and a slow start, carry them to tomorrow and let today end. Momentum returns with the next sunrise.`
   } else {
-    base = `${who}${doneCount} done, ${incompleteCount} still open. Honest day's work — carry the rest forward and stop here.`
+    base = `${who}${doneCount} done, ${incompleteCount} still open. Honest day's work, carry the rest forward and stop here.`
   }
   // Day-layer tint (soft, never a rule).
-  if (dayVerdict === 'favorable') return `${base} The day's transit was with you — let that carry into how you rest.`
-  if (dayVerdict === 'unfavorable') return `${base} The day ran a touch choppy — all the more reason to close cleanly and not push past the line.`
+  if (dayVerdict === 'favorable') return `${base} The day's transit was with you, let that carry into how you rest.`
+  if (dayVerdict === 'unfavorable') return `${base} The day ran a touch choppy, all the more reason to close cleanly and not push past the line.`
   return base
 }
 

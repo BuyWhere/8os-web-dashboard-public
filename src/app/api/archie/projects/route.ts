@@ -34,10 +34,10 @@ async function generateWithClaude(
   apiKey: string
 ): Promise<Project[]> {
   const goalsText = goals.map((g, i) =>
-    `${i + 1}. [${g.domainId.toUpperCase()}] "${g.name}" — ${g.definition || 'no definition'} (measure: ${g.checkMethod})`
+    `${i + 1}. [${g.domainId.toUpperCase()}] "${g.name}", ${g.definition || 'no definition'} (measure: ${g.checkMethod})`
   ).join('\n')
 
-  const prompt = `You are ARCHIE, the adaptive intelligence engine of 8OS — a personalized operating system.
+  const prompt = `You are ARCHIE, the adaptive intelligence engine of 8OS, a personalized operating system.
 
 User archetype: ${archetypeName} (${archetype})
 

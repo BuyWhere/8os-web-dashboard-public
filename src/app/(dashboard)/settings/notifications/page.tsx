@@ -220,7 +220,7 @@ export default function NotificationsSettingsPage() {
             <div style={card}>
               <h2 style={{ fontSize: 16, fontWeight: 600, marginBottom: 8 }}>Focus Mode</h2>
               <p style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginBottom: 12 }}>
-                Focus Mode keeps you to 3 active goals at a time — a focus philosophy, not a paywall.
+                Focus Mode keeps you to 3 active goals at a time, a focus philosophy, not a paywall.
                 Turn it off to hold more active goals at once.
               </p>
               <label style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 14 }}>

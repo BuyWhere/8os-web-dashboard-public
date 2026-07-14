@@ -172,7 +172,7 @@ export default async function DashboardPage() {
     theme: `${solarMonth.termEn} · ${solarMonth.termName}`,
     focus: topGoal
       ? `Keep attention on ${topGoal.name} this week.`
-      : 'No active goal set — pick one focus to move this week.',
+      : 'No active goal set, pick one focus to move this week.',
     domain: topGoal ? (DOMAIN_ICONS[topGoal.domainId] ?? '🎯') : '🎯',
   }
   const briefLine = todayTasks.length === 0
@@ -209,7 +209,7 @@ export default async function DashboardPage() {
           </div>
         </header>
 
-        {/* ── Daily brief (insight) — the one thing to read first ────── */}
+        {/* ── Daily brief (insight), the one thing to read first ────── */}
         <Section serif={serif} title="Your daily brief" href="/dashboard/briefing" cta="Full briefing">
           <InsightDisplayCard
             insight={insightResult.content}
@@ -265,7 +265,7 @@ export default async function DashboardPage() {
           </div>
         </Section>
 
-        {/* ── Alignment — are you on the right goal this season ───────── */}
+        {/* ── Alignment, are you on the right goal this season ───────── */}
         <Section serif={serif} title="Alignment" subtitle="Is your attention on the right goal for this season?">
           <AlignmentPanel gapPx={0} />
         </Section>
@@ -293,7 +293,7 @@ export default async function DashboardPage() {
           </Card>
         </Section>
 
-        {/* ── Reflect — quick links ──────────────────────────────────── */}
+        {/* ── Reflect, quick links ──────────────────────────────────── */}
         <Section serif={serif} title="Reflect">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 14 }}>
             <QuickLink href="/dashboard/journal" title="Journal" body="Capture what happened today." />

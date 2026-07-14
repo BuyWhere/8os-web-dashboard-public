@@ -30,7 +30,7 @@ describe('bazi-advisor (OS-2543)', () => {
     expect(body).toContain('orientation, not prediction')
   })
 
-  test('buildBaziReading for 1990-01-15 14:30 male — known ground truth', () => {
+  test('buildBaziReading for 1990-01-15 14:30 male, known ground truth', () => {
     const r = buildBaziReading({
       birthDate: '1990-01-15',
       birthTime: '14:30',
@@ -138,14 +138,14 @@ describe('bazi-advisor (OS-2543)', () => {
     expect(c.guidance).toContain('ANSWERING_STYLE')
   })
 
-  test('tenGodOfStem — same-element peer', () => {
+  test('tenGodOfStem, same-element peer', () => {
     // 庚 vs 辛 → both metal but different polarity → 劫财 Rob Wealth
     const r = tenGodOfStem('庚', '辛')
     expect(r.group).toBe('peer')
     expect(r.name).toContain('劫财')
   })
 
-  test('tenGodOfStem — yang DM generates fire → output (食神)', () => {
+  test('tenGodOfStem, yang DM generates fire → output (食神)', () => {
     // 庚 metal generates water? No: metal → water. Let me reconsider:
     // GENERATES[metal] = water, so metal DM produces water → water = 食神 Eating God (same polarity) or 伤官 Hurting Officer (opposite)
     // 庚 (yang metal) vs 壬 (yang water) → same polarity, 食神

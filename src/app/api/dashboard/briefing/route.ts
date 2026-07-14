@@ -26,7 +26,7 @@ export function computeAccountabilityPulse(goals: { id: string; name: string; pr
   }
 
   const archetypeNudge = stalled.length > 0
-    ? `You've got ${stalled.length} goal${stalled.length > 1 ? 's' : ''} that ${stalled.length === 1 ? 'has' : 'have'} been waiting — time to check in and move forward.`
+    ? `You've got ${stalled.length} goal${stalled.length > 1 ? 's' : ''} that ${stalled.length === 1 ? 'has' : 'have'} been waiting, time to check in and move forward.`
     : null
 
   const summary = {

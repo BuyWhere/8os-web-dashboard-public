@@ -25,18 +25,18 @@ export interface SunSignData {
 }
 
 export const SUN_SIGNS: SunSignData[] = [
-  { id: 0,  key: 'capricorn',   name: 'Capricorn',   symbol: '♑', element: 'earth', modality: 'cardinal', rulingPlanet: 'Saturn',          dateRange: 'Dec 22 – Jan 19' },
-  { id: 1,  key: 'aquarius',    name: 'Aquarius',    symbol: '♒', element: 'air',   modality: 'fixed',    rulingPlanet: 'Saturn/Uranus',   dateRange: 'Jan 20 – Feb 18' },
-  { id: 2,  key: 'pisces',      name: 'Pisces',      symbol: '♓', element: 'water', modality: 'mutable',  rulingPlanet: 'Jupiter/Neptune', dateRange: 'Feb 19 – Mar 20' },
-  { id: 3,  key: 'aries',       name: 'Aries',       symbol: '♈', element: 'fire',  modality: 'cardinal', rulingPlanet: 'Mars',            dateRange: 'Mar 21 – Apr 19' },
-  { id: 4,  key: 'taurus',      name: 'Taurus',      symbol: '♉', element: 'earth', modality: 'fixed',    rulingPlanet: 'Venus',           dateRange: 'Apr 20 – May 20' },
-  { id: 5,  key: 'gemini',      name: 'Gemini',      symbol: '♊', element: 'air',   modality: 'mutable',  rulingPlanet: 'Mercury',         dateRange: 'May 21 – Jun 20' },
-  { id: 6,  key: 'cancer',      name: 'Cancer',      symbol: '♋', element: 'water', modality: 'cardinal', rulingPlanet: 'Moon',            dateRange: 'Jun 21 – Jul 22' },
-  { id: 7,  key: 'leo',         name: 'Leo',         symbol: '♌', element: 'fire',  modality: 'fixed',    rulingPlanet: 'Sun',             dateRange: 'Jul 23 – Aug 22' },
-  { id: 8,  key: 'virgo',       name: 'Virgo',       symbol: '♍', element: 'earth', modality: 'mutable',  rulingPlanet: 'Mercury',         dateRange: 'Aug 23 – Sep 22' },
-  { id: 9,  key: 'libra',       name: 'Libra',       symbol: '♎', element: 'air',   modality: 'cardinal', rulingPlanet: 'Venus',           dateRange: 'Sep 23 – Oct 22' },
-  { id: 10, key: 'scorpio',     name: 'Scorpio',     symbol: '♏', element: 'water', modality: 'fixed',    rulingPlanet: 'Mars/Pluto',      dateRange: 'Oct 23 – Nov 21' },
-  { id: 11, key: 'sagittarius', name: 'Sagittarius', symbol: '♐', element: 'fire',  modality: 'mutable',  rulingPlanet: 'Jupiter',         dateRange: 'Nov 22 – Dec 21' },
+  { id: 0,  key: 'capricorn',   name: 'Capricorn',   symbol: '♑', element: 'earth', modality: 'cardinal', rulingPlanet: 'Saturn',          dateRange: 'Dec 22 - Jan 19' },
+  { id: 1,  key: 'aquarius',    name: 'Aquarius',    symbol: '♒', element: 'air',   modality: 'fixed',    rulingPlanet: 'Saturn/Uranus',   dateRange: 'Jan 20 - Feb 18' },
+  { id: 2,  key: 'pisces',      name: 'Pisces',      symbol: '♓', element: 'water', modality: 'mutable',  rulingPlanet: 'Jupiter/Neptune', dateRange: 'Feb 19 - Mar 20' },
+  { id: 3,  key: 'aries',       name: 'Aries',       symbol: '♈', element: 'fire',  modality: 'cardinal', rulingPlanet: 'Mars',            dateRange: 'Mar 21 - Apr 19' },
+  { id: 4,  key: 'taurus',      name: 'Taurus',      symbol: '♉', element: 'earth', modality: 'fixed',    rulingPlanet: 'Venus',           dateRange: 'Apr 20 - May 20' },
+  { id: 5,  key: 'gemini',      name: 'Gemini',      symbol: '♊', element: 'air',   modality: 'mutable',  rulingPlanet: 'Mercury',         dateRange: 'May 21 - Jun 20' },
+  { id: 6,  key: 'cancer',      name: 'Cancer',      symbol: '♋', element: 'water', modality: 'cardinal', rulingPlanet: 'Moon',            dateRange: 'Jun 21 - Jul 22' },
+  { id: 7,  key: 'leo',         name: 'Leo',         symbol: '♌', element: 'fire',  modality: 'fixed',    rulingPlanet: 'Sun',             dateRange: 'Jul 23 - Aug 22' },
+  { id: 8,  key: 'virgo',       name: 'Virgo',       symbol: '♍', element: 'earth', modality: 'mutable',  rulingPlanet: 'Mercury',         dateRange: 'Aug 23 - Sep 22' },
+  { id: 9,  key: 'libra',       name: 'Libra',       symbol: '♎', element: 'air',   modality: 'cardinal', rulingPlanet: 'Venus',           dateRange: 'Sep 23 - Oct 22' },
+  { id: 10, key: 'scorpio',     name: 'Scorpio',     symbol: '♏', element: 'water', modality: 'fixed',    rulingPlanet: 'Mars/Pluto',      dateRange: 'Oct 23 - Nov 21' },
+  { id: 11, key: 'sagittarius', name: 'Sagittarius', symbol: '♐', element: 'fire',  modality: 'mutable',  rulingPlanet: 'Jupiter',         dateRange: 'Nov 22 - Dec 21' },
 ]
 
 // ─── Boundary table ───────────────────────────────────────────────────────────

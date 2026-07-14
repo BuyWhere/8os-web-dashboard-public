@@ -3,7 +3,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Security | 8os.ai',
   description:
-    'How 8os.ai protects your data — encryption, infrastructure, authentication, privacy by design, and vulnerability reporting.',
+    'How 8os.ai protects your data, encryption, infrastructure, authentication, privacy by design, and vulnerability reporting.',
   keywords: ['8os security', '8os data privacy', '8os.ai encryption'],
 }
 
@@ -17,7 +17,7 @@ const sections = [
       {
         title: 'Transit Encryption',
         description:
-          'All data transmitted between your browser and 8os servers is encrypted using TLS 1.3 — the current industry standard. Older TLS versions are not supported.',
+          'All data transmitted between your browser and 8os servers is encrypted using TLS 1.3, the current industry standard. Older TLS versions are not supported.',
       },
       {
         title: 'At-Rest Encryption',
@@ -78,7 +78,7 @@ const sections = [
       {
         title: 'OAuth',
         description:
-          'Third-party authentication (Google, GitHub) uses OAuth 2.0 with minimal, explicitly scoped permissions. We request only what we need — never broad profile or contact access.',
+          'Third-party authentication (Google, GitHub) uses OAuth 2.0 with minimal, explicitly scoped permissions. We request only what we need, never broad profile or contact access.',
       },
       {
         title: 'Rate Limiting',
@@ -150,7 +150,7 @@ export default function SecurityPage() {
             Security
           </h1>
           <p style={{ fontSize: '18px', color: 'var(--color-text-secondary)', lineHeight: 1.65 }}>
-            How 8os.ai protects your data — from encryption and infrastructure to authentication and
+            How 8os.ai protects your data, from encryption and infrastructure to authentication and
             privacy controls.
           </p>
         </div>

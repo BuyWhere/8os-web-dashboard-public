@@ -88,7 +88,7 @@ export function keywordSimilarity(a: string, b: string): number {
   return union === 0 ? 0 : inter / union
 }
 
-const MERGE_THRESHOLD = 0.4 // "same fact restated" — bump, don't duplicate
+const MERGE_THRESHOLD = 0.4 // "same fact restated", bump, don't duplicate
 const CONTRADICT_THRESHOLD = 0.28 // shares subject keywords but content diverges
 const NEG = /\b(no longer|not|never|stopped|quit|left|changed|instead|used to|now)\b/i
 
@@ -155,18 +155,18 @@ const SYSTEM = [
   'You are the memory-distillation module of 8os, a personal accountability OS.',
   'From the user\'s last 24h of journal entries, reflections, and chat turns, extract:',
   '',
-  '(A) durable MEMORY ITEMS — stable truths worth remembering across sessions:',
+  '(A) durable MEMORY ITEMS, stable truths worth remembering across sessions:',
   '    kind ∈ fact | preference | person | insight | event.',
   '    - fact: stable truth ("works at a fintech, reports to the board quarterly")',
   '    - preference: a like/dislike ("hates morning meetings")',
-  '    - person: a named relationship ("Wei Ling — cofounder")',
+  '    - person: a named relationship ("Wei Ling, cofounder")',
   '    - insight: an observed behavioral pattern ("ships best in 90-minute blocks")',
   '    - event: a dated life event ("moving apartments in August")',
-  '    salience is 1–5 (5 = core identity fact, 1 = minor).',
+  '    salience is 1-5 (5 = core identity fact, 1 = minor).',
   '    source_kind + source_id: copy them from the [tag#id] the fact came from.',
   '    Do NOT extract fleeting states, todos, or the day\'s mood. Only durable facts.',
   '',
-  '(B) COMMITMENTS — things the user said they WILL do, with an explicit or',
+  '(B) COMMITMENTS, things the user said they WILL do, with an explicit or',
   '    inferable date. ("I\'ll decide on the hire by Friday", "email the landlord',
   '    tomorrow"). due_date is an ISO date (YYYY-MM-DD) or null if truly undated.',
   '',
@@ -366,7 +366,7 @@ async function distill(sourceText: string): Promise<{
 
     // Pass 2 — retry ONCE on empty when the input was clearly non-trivial.
     if (nonTrivial && r.memory.length === 0 && r.commitments.length === 0) {
-      console.warn('[memory/extract] first pass empty on non-trivial input — retrying strict')
+      console.warn('[memory/extract] first pass empty on non-trivial input, retrying strict')
       const r2 = await attempt(SYSTEM_STRICT, 1200)
       attempts = 2
       // Prefer the pass that actually produced candidates.

@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { CheckoutButton } from '@/components/CheckoutButton';
 
 export const metadata: Metadata = {
-  title: 'Pricing — Choose Your Operating System | 8os.ai',
+  title: 'Pricing: Choose Your Operating System | 8os.ai',
   description:
     'Start free. Upgrade to Pro for AI journaling, advanced timing, and monthly reports. Agent Connect tier for BYO-AI users.',
   openGraph: {
@@ -61,7 +61,7 @@ const TIERS = [
       { label: 'Monthly personalized reports', included: false },
     ],
     bestFor: 'AI power users, privacy-focused, developers with existing AI subscriptions',
-    note: 'Connect Claude, GPT, or any local LLM via API. You bring the AI tokens — we provide the structured data and infrastructure.',
+    note: 'Connect Claude, GPT, or any local LLM via API. You bring the AI tokens, we provide the structured data and infrastructure.',
   },
   {
     id: 'pro',
@@ -76,7 +76,7 @@ const TIERS = [
     features: [
       { label: 'Everything in Agent Connect', included: true },
       { label: 'AI journaling & reflection (daily prompts, mood tracking)', included: true },
-      { label: 'AI goal therapy ("You\'re off track — here\'s why")', included: true },
+      { label: 'AI goal therapy ("You\'re off track, here\'s why")', included: true },
       { label: 'AI interpretation of health trends & patterns', included: true },
       { label: 'Advanced timing engine (optimal windows for goal types)', included: true },
       { label: 'Monthly personalized report (PDF + summary)', included: true },
@@ -127,7 +127,7 @@ const COMPARISON_FEATURES = [
 
 function FeatureValue({ value }: { value: boolean | string }) {
   if (value === true) return <span style={checkStyle}>✓</span>;
-  if (value === false) return <span style={crossStyle}>—</span>;
+  if (value === false) return <span style={crossStyle}>-</span>;
   return <span style={partialStyle}>{value}</span>;
 }
 
@@ -233,7 +233,7 @@ export default function PricingPage() {
         <div style={faqStyle}>
           <h3 style={faqTitleStyle}>Questions?</h3>
           <p style={faqBodyStyle}>
-            All plans can be cancelled anytime. Annual billing available (2 months free). Enterprise pricing is custom —
+            All plans can be cancelled anytime. Annual billing available (2 months free). Enterprise pricing is custom,
             contact us to discuss your team&apos;s needs.
           </p>
           <Link href="/contact" style={faqLinkStyle}>Contact us →</Link>

@@ -10,7 +10,7 @@ export default function Loading() {
         <div style={{ marginBottom: 28 }}>
           <div style={{ color: '#555', fontSize: 13, marginBottom: 4 }}>← Dashboard</div>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Daily Briefing</h1>
-          {/* Stable placeholder — avoid `new Date()` here so the SSR suspense
+          {/* Stable placeholder, avoid `new Date()` here so the SSR suspense
               fallback and any client reconciliation emit identical text (no
               server-zone vs browser-zone hydration mismatch). The real date
               arrives with the briefing payload in BriefingContent. */}

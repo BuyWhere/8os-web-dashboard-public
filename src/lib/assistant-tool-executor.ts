@@ -190,7 +190,7 @@ async function createGoal(userId: string, args: Record<string, any>) {
       definition, checkMethod, status, progress: 0,
     },
     capNotice: cap.blocked
-      ? `You already have ${cap.activeCount} active goals (Focus Mode cap is ${cap.cap}). I created this goal as PAUSED so we don't lose it — activate it in Goals when you free up a slot, or turn off Focus Mode in notification settings.`
+      ? `You already have ${cap.activeCount} active goals (Focus Mode cap is ${cap.cap}). I created this goal as PAUSED so we don't lose it, activate it in Goals when you free up a slot, or turn off Focus Mode in notification settings.`
       : undefined,
   }
 }

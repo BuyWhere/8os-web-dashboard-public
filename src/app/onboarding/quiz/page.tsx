@@ -245,7 +245,7 @@ export default function QuizPage() {
         </h1>
         <p style={{ color: WARM_GRAY, fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '2rem' }}>
           Your answers fine-tune the BaZi reading into an archetype that fits how you actually
-          operate. There are no wrong answers — go with your gut.
+          operate. There are no wrong answers, go with your gut.
         </p>
 
         {/* Within-step question progress */}
@@ -340,7 +340,7 @@ export default function QuizPage() {
 
           {/* Keyboard hint */}
           <p style={{ color: MUTED, fontSize: '0.72rem', marginTop: '1.5rem', textAlign: 'center', letterSpacing: '0.03em' }}>
-            Press 1–4 to answer · ← to go back · swipe right to go back
+            Press 1-4 to answer · ← to go back · swipe right to go back
           </p>
 
           {/* Back button */}
@@ -369,7 +369,7 @@ export default function QuizPage() {
         {skipSet.size > 0 && (
           <div style={{ marginTop: '2rem', padding: '0.75rem 1rem', background: WHITE, border: `1px solid ${HAIRLINE}`, borderRadius: '10px' }}>
             <p style={{ color: WARM_GRAY, fontSize: '0.78rem', margin: 0 }}>
-              Your BaZi chart revealed strong signals — {skipSet.size} question{skipSet.size > 1 ? 's' : ''} skipped
+              Your BaZi chart revealed strong signals, {skipSet.size} question{skipSet.size > 1 ? 's' : ''} skipped
             </p>
           </div>
         )}

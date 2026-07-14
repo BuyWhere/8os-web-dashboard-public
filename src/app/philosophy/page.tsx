@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: '8os Philosophy — You Are On a Path. You Control the Journey.',
+  title: '8os Philosophy, You Are On a Path. You Control the Journey.',
   description:
     'Agency over fate, happiness through authentic achievement, and the two-languages hypothesis. The core philosophy behind 8os.ai.',
 };
@@ -21,7 +21,7 @@ export default function PhilosophyPage() {
           <div style={thesisNumberStyle}>01</div>
           <h2 style={thesisTitleStyle}>Agency Over Fate</h2>
           <p style={thesisLeadStyle}>
-            This is not about whether you are lucky or unlucky. You are on a given path — your archetype, your
+            This is not about whether you are lucky or unlucky. You are on a given path, your archetype, your
             structure, your tendencies. <strong>But you control the journey and the destination.</strong> Your star sign
             and BaZi don&apos;t dictate outcomes. They dictate <em>how</em> and <em>when</em>.
           </p>
@@ -49,7 +49,7 @@ export default function PhilosophyPage() {
           </p>
           <p style={thesisBodyStyle}>
             Our position:{' '}
-            <strong>Push yourself to achieve what matters to you — in the way that suits you, so it makes you happy.</strong>
+            <strong>Push yourself to achieve what matters to you, in the way that suits you, so it makes you happy.</strong>
           </p>
           <div style={examplesGridStyle}>
             {HAPPINESS_EXAMPLES.map(({ archetype, method }) => (
@@ -61,7 +61,7 @@ export default function PhilosophyPage() {
           </div>
           <p style={thesisBodyStyle}>
             8os.ai doesn&apos;t just track your goals. It tracks whether your <em>method</em> aligns with your{' '}
-            <em>nature</em> — because success that feels wrong isn&apos;t success.
+            <em>nature</em>, because success that feels wrong isn&apos;t success.
           </p>
         </section>
 
@@ -146,7 +146,7 @@ const HAPPINESS_EXAMPLES = [
 const AGENCY_POINTS = [
   {
     label: 'No deterministic predictions',
-    body: 'We don\'t say "you will get married in 2027." We say "your relationship pillar is active in 2027 — optimal for commitment if you choose it."',
+    body: 'We don\'t say "you will get married in 2027." We say "your relationship pillar is active in 2027, optimal for commitment if you choose it."',
   },
   {
     label: 'Goal-native architecture',

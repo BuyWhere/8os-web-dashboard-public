@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Community | 8os.ai',
   description:
-    'The 8os.ai community — archetype groups, active discussions, and the coming forum. Find your element tribe.',
+    'The 8os.ai community, archetype groups, active discussions, and the coming forum. Find your element tribe.',
   keywords: ['8os community', 'BaZi community', 'archetype community', 'five elements community'],
 }
 
@@ -39,7 +39,7 @@ const groups = [
     border: '#22c55e40',
     members: '1,580+',
     description:
-      'The largest group — Wood types share habit stacks, long-game strategies, and compounding frameworks.',
+      'The largest group, Wood types share habit stacks, long-game strategies, and compounding frameworks.',
     activeTopics: ['Habit tracking', '1-year goal threads', 'Compounding strategies'],
   },
   {
@@ -86,7 +86,7 @@ const activeDiscussions = [
     lastActive: '1 day ago',
   },
   {
-    title: 'Fire burnout recovery — what actually worked',
+    title: 'Fire burnout recovery, what actually worked',
     archetype: 'Visionary Builder',
     replies: 52,
     lastActive: '6 hours ago',
@@ -271,7 +271,7 @@ export default function CommunityPage() {
             The 8os Forum
           </h3>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '15px', lineHeight: 1.65, maxWidth: '480px', margin: '0 auto 20px' }}>
-            A dedicated forum for each archetype group — with threads, goal accountability,
+            A dedicated forum for each archetype group, with threads, goal accountability,
             weekly check-ins, and cross-element collaboration spaces. Launching with the v1.0 release.
           </p>
           <p style={{ color: '#475569', fontSize: '13px' }}>

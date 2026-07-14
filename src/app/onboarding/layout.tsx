@@ -12,9 +12,9 @@
  * layouts mount in the same session.
  */
 import { PostHogProvider } from '@/components/PostHogProvider'
-import { Fraunces, Inter } from 'next/font/google'
+import { Inter } from 'next/font/google'
 
-const fraunces = Fraunces({
+const fraunces = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600', '700'],
   variable: '--font-serif',

@@ -23,20 +23,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
   
   return {
-    title: `${profile.name} — Famous Archetype | 8os.ai`,
+    title: `${profile.name}, Famous Archetype | 8os.ai`,
     description: `Discover ${profile.name}'s BaZi archetype: ${profile.archetype.replace('_', ' ')}. ${profile.trait}`,
     alternates: {
       canonical: `/archetypes/famous/${profile.slug}`,
     },
     openGraph: {
-      title: `${profile.name} — Famous Archetype | 8os.ai`,
+      title: `${profile.name}, Famous Archetype | 8os.ai`,
       description: `Discover ${profile.name}'s BaZi archetype: ${profile.archetype.replace('_', ' ')}. ${profile.trait}`,
       url: `https://8os.ai/archetypes/famous/${profile.slug}`,
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${profile.name} — Famous Archetype | 8os.ai`,
+      title: `${profile.name}, Famous Archetype | 8os.ai`,
       description: `Discover ${profile.name}'s BaZi archetype: ${profile.archetype.replace('_', ' ')}. ${profile.trait}`,
     },
   };

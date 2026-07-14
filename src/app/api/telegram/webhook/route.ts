@@ -79,7 +79,7 @@ async function handleStart(chatId: number, fromId: number, param: string | null)
     update: { userId },
     create: { userId, provider: 'telegram', providerUid },
   })
-  await reply(chatId, 'Linked ✓ — this chat now receives your 8os briefs.\nSend any to-do as plain text to capture it, or try /brief, /shutdown, /align.')
+  await reply(chatId, 'Linked ✓, this chat now receives your 8os briefs.\nSend any to-do as plain text to capture it, or try /brief, /shutdown, /align.')
 }
 
 async function handleMessage(msg: TgMessage): Promise<void> {
@@ -105,7 +105,7 @@ async function handleMessage(msg: TgMessage): Promise<void> {
   if (command === '/shutdown') { await reply(chatId, await renderShutdown(userId)); return }
   if (command === '/align') { await reply(chatId, await renderAlign(userId)); return }
   if (command.startsWith('/')) {
-    await reply(chatId, 'Commands: /brief, /shutdown, /align — or send plain text to capture a task or goal.')
+    await reply(chatId, 'Commands: /brief, /shutdown, /align, or send plain text to capture a task or goal.')
     return
   }
 
@@ -116,7 +116,7 @@ async function handleMessage(msg: TgMessage): Promise<void> {
 
 async function handleCallbackQuery(cq: TgCallbackQuery): Promise<void> {
   // Acknowledge so the client stops its spinner (best-effort).
-  await telegramApi('answerCallbackQuery', { callback_query_id: cq.id, text: 'Got it — recorded.' })
+  await telegramApi('answerCallbackQuery', { callback_query_id: cq.id, text: 'Got it, recorded.' })
 
   const userId = await linkedUserId(cq.from.id)
   if (!userId) return

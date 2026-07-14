@@ -4,7 +4,7 @@ import { SidebarNav } from '@/components/SidebarNav';
 import { ContactForm } from '@/components/ContactForm';
 
 export const metadata: Metadata = {
-  title: 'Contact — 8os',
+  title: 'Contact, 8os',
   description: 'Get in touch with the 8os team.',
 };
 
@@ -45,7 +45,7 @@ export default function ContactPage() {
               Send a message
             </h2>
             <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1.25rem', lineHeight: 1.5 }}>
-              Drop your details below and we&apos;ll reply within 1–2 business days. Or email us directly using the addresses below.
+              Drop your details below and we&apos;ll reply within 1-2 business days. Or email us directly using the addresses below.
             </p>
             <ContactForm />
           </section>

@@ -35,7 +35,7 @@ async function generateWithFlowAI(
 ): Promise<OSTask[]> {
   const accepted = projects.filter(p => p.accepted)
   const projectsText = accepted.map((p, i) =>
-    `${i + 1}. [${p.domainId}] "${p.name}" (${p.estimatedDuration}) — ${p.description}`
+    `${i + 1}. [${p.domainId}] "${p.name}" (${p.estimatedDuration}), ${p.description}`
   ).join('\n')
 
   const prompt = `You are ARCHIE, the adaptive intelligence engine of 8OS.
@@ -51,7 +51,7 @@ Return ONLY a valid JSON array:
 [
   {
     "id": "unique-id",
-    "projectId": "must match one of the project names — use slugified project name",
+    "projectId": "must match one of the project names, use slugified project name",
     "name": "Specific action verb + object",
     "duration": "e.g. 45 min, 2 hours",
     "priority": "high|medium|low",

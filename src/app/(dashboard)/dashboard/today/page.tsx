@@ -130,7 +130,7 @@ export default function TodayPage() {
               </div>
             </div>
 
-            {/* Inbox — matched vs deferred */}
+            {/* Inbox, matched vs deferred */}
             <section style={cardStyle}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
                 <h2 style={{ margin: 0, fontSize: 14, fontWeight: 700, color: 'var(--skin-color-text, var(--color-border))' }}>

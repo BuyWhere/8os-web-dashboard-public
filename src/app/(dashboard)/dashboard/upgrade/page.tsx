@@ -95,7 +95,7 @@ export default function UpgradePage() {
         </p>
         <h1 style={{ fontSize: 32, fontWeight: 800, margin: '8px 0 6px', fontFamily: 'var(--font-serif), Georgia, serif' }}>Unlock your full Live OS</h1>
         <p style={{ color: 'var(--color-text-secondary)', margin: 0 }}>
-          Start free. Go Pro when your goals need the full engine — or get your one-time deep report.
+          Start free. Go Pro when your goals need the full engine, or get your one-time deep report.
         </p>
       </div>
 

@@ -162,7 +162,7 @@ export default function InboxPage() {
               )}
             </h1>
             <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 14 }}>
-              Briefs, nudges and channel messages — the web inbox is always on
+              Briefs, nudges and channel messages, the web inbox is always on
             </p>
           </div>
           {unreadCount > 0 && (
@@ -184,7 +184,7 @@ export default function InboxPage() {
 
         {!error && messages.length === 0 && (
           <div style={{ maxWidth: 720, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 28, color: 'var(--color-text-secondary)', fontSize: 14 }}>
-            Nothing here yet. Daily briefs and nudges will land in this inbox — and in Telegram once you
+            Nothing here yet. Daily briefs and nudges will land in this inbox, and in Telegram once you
             {' '}<Link href="/settings/channels" style={{ color: 'var(--color-accent)' }}>link a channel</Link>.
           </div>
         )}

@@ -72,7 +72,7 @@ interface CandidateItem {
   minutes: number // >0 only for calendar events
   text: string // what the classifier sees
   groundTruthGoalId: string | null // set → skip LLM, weight=direct
-  cacheKey: string | null // E-8: (title|attendee-domains|goal-set-version) — classify-once reuse
+  cacheKey: string | null // E-8: (title|attendee-domains|goal-set-version), classify-once reuse
 }
 
 export interface AttributionRunStats {
@@ -82,9 +82,9 @@ export interface AttributionRunStats {
   llmClassified: number
   llmUnclassified: number
   llmBatches: number
-  llmDeferred: number // over cap or failed batch — retried on the next run
+  llmDeferred: number // over cap or failed batch, retried on the next run
   cacheReused: number // E-8: items resolved from a prior classification (recurring events)
-  budgetDegraded: boolean // E-8: per-user daily token budget tripped — adhoc work skipped this run
+  budgetDegraded: boolean // E-8: per-user daily token budget tripped, adhoc work skipped this run
   errors: string[]
 }
 
@@ -304,7 +304,7 @@ export async function runAttribution(
       sourceId: e.id,
       sourceDate: localDay(tz, e.startAt),
       minutes,
-      text: clip(`${e.title}${e.description ? ` — ${e.description}` : ''}`, 300),
+      text: clip(`${e.title}${e.description ? `, ${e.description}` : ''}`, 300),
       groundTruthGoalId: linkedGoal && goalIds.has(linkedGoal) ? linkedGoal : null,
       cacheKey: ck,
     })
@@ -316,7 +316,7 @@ export async function runAttribution(
       sourceId: t.id,
       sourceDate: localDay(tz, t.completedAt ?? now),
       minutes: 0,
-      text: clip(`Completed task: ${t.name}${t.notes ? ` — ${t.notes}` : ''}`, 300),
+      text: clip(`Completed task: ${t.name}${t.notes ? `, ${t.notes}` : ''}`, 300),
       groundTruthGoalId: gt && goalIds.has(gt) ? gt : null,
       cacheKey: null, // tasks are one-off; ground-truth links or unique text
     })
@@ -367,7 +367,7 @@ export async function runAttribution(
           .map((a) => (a && typeof a.email === 'string' && a.email.includes('@') ? a.email.split('@')[1] : null))
           .filter((d): d is string => !!d),
       )).slice(0, 5)
-      if (domains.length > 0) attendeeNote = ` — attendees from: ${domains.join(', ')}`
+      if (domains.length > 0) attendeeNote = `, attendees from: ${domains.join(', ')}`
     }
     // E-8: recurring external meetings dominate calendar data — key on
     // (title-hash, attendee-domains-hash, goal-set-version) so a daily standup
@@ -422,7 +422,7 @@ export async function runAttribution(
       goalId: c.groundTruthGoalId,
       weight: 'direct',
       minutes: c.minutes,
-      rationale: 'Explicitly linked to this goal (ground truth — no classification needed).',
+      rationale: 'Explicitly linked to this goal (ground truth, no classification needed).',
       confidence: 1,
       cacheKey: c.cacheKey,
     })
@@ -603,15 +603,15 @@ async function classifyBatch(
   const goalIds = new Set(goals.map((g) => g.id))
   const systemLines = [
     'You are an attention-attribution classifier inside a goal-alignment engine.',
-    'You receive a user\'s goals and a list of activity items (calendar events — including external/Google-synced ones, completed tasks, journal entries, messages to their assistant).',
+    'You receive a user\'s goals and a list of activity items (calendar events, including external/Google-synced ones, completed tasks, journal entries, messages to their assistant).',
     'For EACH item decide which single goal (if any) the item\'s attention feeds, and how:',
     '- "direct": the item IS work on / engagement with that goal.',
     '- "supporting": the item indirectly helps that goal (prep, research, recovery FOR it, talking it through).',
     '- "unrelated": the item does not meaningfully relate to any listed goal (errands, admin, unrelated leisure). goalId MUST be null.',
     '- "counter": the item actively works AGAINST a goal (set goalId to that goal).',
     'Also return a "confidence" between 0 and 1 for each item: how sure you are of the (goal, weight) call (1 = certain, 0 = a guess).',
-    'Rules: use ONLY goal ids from the provided list. When unsure between two goals, pick the closest and use "supporting". When nothing plausibly relates, use "unrelated" with goalId null — do NOT force a match. Keep each rationale under 20 words, plain and concrete.',
-    'Respond with ONLY a JSON array — no markdown fences, no commentary. One object per input item, echoing its sourceType and sourceId exactly:',
+    'Rules: use ONLY goal ids from the provided list. When unsure between two goals, pick the closest and use "supporting". When nothing plausibly relates, use "unrelated" with goalId null, do NOT force a match. Keep each rationale under 20 words, plain and concrete.',
+    'Respond with ONLY a JSON array, no markdown fences, no commentary. One object per input item, echoing its sourceType and sourceId exactly:',
     '[{"sourceType":"...","sourceId":"...","goalId":"<goal id or null>","weight":"direct|supporting|unrelated|counter","confidence":0.0,"rationale":"..."}]',
   ]
   // E-8 personal calibration: the user has previously corrected similar items.
@@ -884,7 +884,7 @@ export async function computeAlignment(
   // ── Weekly verdict ──
   let headline: string
   if (!anySignal) {
-    headline = `No attention recorded in the last ${days} days — schedule a block, finish a task or journal a line and the picture starts here.`
+    headline = `No attention recorded in the last ${days} days, schedule a block, finish a task or journal a line and the picture starts here.`
   } else {
     const top = [...perGoal].sort((a, b) => b.share - a.share)[0]
     headline =
@@ -900,14 +900,14 @@ export async function computeAlignment(
     .sort((a, b) => a.rank - b.rank || Number(b.inSeason === true) - Number(a.inSeason === true))
   let topRedirection: string
   if (!anySignal) {
-    topRedirection = 'Nothing is being tracked yet — put one block on the calendar for your #1 priority.'
+    topRedirection = 'Nothing is being tracked yet, put one block on the calendar for your #1 priority.'
   } else if (starving.length === 0) {
-    topRedirection = 'Every priority is getting some attention — hold the current balance.'
+    topRedirection = 'Every priority is getting some attention, hold the current balance.'
   } else {
     const g = starving[0]
     const season =
       g.inSeason === true
-        ? ' — and this is a favorable season for it'
+        ? ', and this is a favorable season for it'
         : g.inSeason === false
           ? ' (off-season, but it is still your stated priority)'
           : ''

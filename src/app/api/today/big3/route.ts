@@ -66,7 +66,7 @@ export async function GET(req: NextRequest) {
     },
   })
   if (!profile) {
-    return NextResponse.json({ error: 'No birth profile — complete onboarding first.' }, { status: 404 })
+    return NextResponse.json({ error: 'No birth profile, complete onboarding first.' }, { status: 404 })
   }
   // E-0 (OS-2651): "today" = the user's local day, not the server's.
   const timezone = isValidTimezone(profile.timezone) ? profile.timezone : DEFAULT_TIMEZONE
@@ -173,11 +173,11 @@ export async function GET(req: NextRequest) {
   let rationale: string
   const favInBig3 = big3.filter((c) => c.favorVerdict === 'favorable').length
   if (favLabels.length && favInBig3 > 0) {
-    rationale = `Weighted toward your favorable domain${favLabels.length > 1 ? 's' : ''} right now — ${favLabels.join(' & ')} (${favorableElements.join(', ')}) — where effort compounds. ${favInBig3} of today's three sit there.`
+    rationale = `Weighted toward your favorable domain${favLabels.length > 1 ? 's' : ''} right now, ${favLabels.join(' & ')} (${favorableElements.join(', ')}), where effort compounds. ${favInBig3} of today's three sit there.`
   } else if (favLabels.length) {
-    rationale = `Your favorable domain${favLabels.length > 1 ? 's' : ''} right now ${favLabels.length > 1 ? 'are' : 'is'} ${favLabels.join(' & ')} (${favorableElements.join(', ')}) — add a task there to ride the tailwind. For now these are your highest-leverage open items.`
+    rationale = `Your favorable domain${favLabels.length > 1 ? 's' : ''} right now ${favLabels.length > 1 ? 'are' : 'is'} ${favLabels.join(' & ')} (${favorableElements.join(', ')}), add a task there to ride the tailwind. For now these are your highest-leverage open items.`
   } else {
-    rationale = `A steady day — no domain is strongly favored. These are your highest-priority open items.`
+    rationale = `A steady day, no domain is strongly favored. These are your highest-priority open items.`
   }
 
   return NextResponse.json({
@@ -186,7 +186,7 @@ export async function GET(req: NextRequest) {
     favorableElements,
     favorableDomains: favorableDomainList,
     domainFavor: favorMap,
-    dayTint, // soft, gentle orientation — NOT a hard rule, no energy-hours
+    dayTint, // soft, gentle orientation, NOT a hard rule, no energy-hours
     rationale,
     big3,
     alternates,

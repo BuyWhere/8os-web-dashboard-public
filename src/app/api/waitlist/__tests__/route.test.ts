@@ -15,7 +15,7 @@ function makeReq(body: object): NextRequest {
   })
 }
 
-describe('POST /api/waitlist — reserved TLD validation (OS-1242)', () => {
+describe('POST /api/waitlist, reserved TLD validation (OS-1242)', () => {
   let fetchMock: jest.SpyInstance
 
   beforeEach(() => {

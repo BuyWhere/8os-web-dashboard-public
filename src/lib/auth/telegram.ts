@@ -58,7 +58,7 @@ export function verifyTelegramAuthData(data: Record<string, string>): TelegramAu
     hash.length !== expectedHash.length ||
     !timingSafeEqual(Buffer.from(hash, 'hex'), Buffer.from(expectedHash, 'hex'))
   ) {
-    throw new Error('Invalid Telegram auth hash — possible tampering')
+    throw new Error('Invalid Telegram auth hash, possible tampering')
   }
 
   const authDate = parseInt(rest.auth_date, 10)

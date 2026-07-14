@@ -221,7 +221,7 @@ export async function ensureProposal(
     const anySignal = alignment.weekly.perGoal.some((g) => g.minutes + g.actions + g.mentions > 0)
     rationale = anySignal
       ? alignment.weekly.topRedirection
-      : `Your #${starving[0].rank} priority “${starving[0].name}” has no tracked attention yet — book one block to start.`
+      : `Your #${starving[0].rank} priority “${starving[0].name}” has no tracked attention yet, book one block to start.`
   }
 
   const goal = await prisma.goal.findFirst({
@@ -230,7 +230,7 @@ export async function ensureProposal(
   })
   if (!goal) return null
   if (!rationale) {
-    rationale = `Your priority “${goal.name}” is starving — point your next open block at it.`
+    rationale = `Your priority “${goal.name}” is starving, point your next open block at it.`
   }
 
   // ── Dedupe: reuse the existing OPEN proposal for this goal ─────────────────

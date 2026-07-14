@@ -12,11 +12,11 @@ export const dynamic = "force-dynamic"
 // raised card surface. Dark ink text on cream; gold CTA on white card.
 // (Dark-theme auth was tried but near-black text-on-card collapsed visually
 // at 99.9% dark pixels per QA pixel analysis; light warm wins.)
-const BG = "#F7F3EC"   // cream — matches :root --color-bg-primary
-const CARD = "#FFFFFF"  // white card surface — matches --color-bg-card
-const INK = "#221F1A"   // ink — matches --color-text-primary
-const MUTED = "#6B6257" // warm gray — matches --color-text-secondary
-const GOLD = "#B08637"  // 8os gold accent — 4.69:1 on cream
+const BG = "#F7F3EC"   // cream, matches :root --color-bg-primary
+const CARD = "#FFFFFF"  // white card surface, matches --color-bg-card
+const INK = "#221F1A"   // ink, matches --color-text-primary
+const MUTED = "#6B6257" // warm gray, matches --color-text-secondary
+const GOLD = "#B08637"  // 8os gold accent, 4.69:1 on cream
 const BORDER = "#E7DFD2" // hairline
 
 export default function LoginPage() {

@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
-import { Fraunces, Inter } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import LandingHeader from '@/components/landing/LandingHeader'
 
 // Editorial serif for headlines + clean sans for body. Loaded via
 // next/font/google (built into Next 14 — no dependency change). Exposed as
 // CSS variables scoped to the landing wrapper so the rest of the app is
 // unaffected.
-const fraunces = Fraunces({
+const fraunces = Inter({
   subsets: ['latin'],
   weight: ['400', '500', '600'],
   style: ['normal', 'italic'],
@@ -22,15 +22,15 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: '8os — Right goal, right season',
+  title: '8os: Right goal, right season',
   description:
-    'Your real BaZi archetype, operated daily. 8os computes your archetype and decade-to-daily timing, then runs your goals and calendar around it — driven by an AI assistant. A life OS, not a horoscope.',
+    'Your real BaZi archetype, operated daily. 8os computes your archetype and decade-to-daily timing, then runs your goals and calendar around it, driven by an AI assistant. A life OS, not a horoscope.',
   alternates: { canonical: '/' },
   openGraph: {
     type: 'website',
     url: 'https://8os.ai/',
     siteName: '8os',
-    title: '8os — Right goal, right season',
+    title: '8os: Right goal, right season',
     description:
       'Your real BaZi archetype, operated daily. The planner that knows when to push.',
     images: [{ url: '/og-image.png', width: 1200, height: 630, alt: '8os' }],
@@ -107,7 +107,7 @@ const HOW_STEPS = [
   {
     n: '02',
     title: 'Meet your archetype',
-    body: 'We render your real BaZi chart — one of 17,280 configurations — and translate it into a working archetype you can act on.',
+    body: 'We render your real BaZi chart, one of 17,280 configurations, and translate it into a working archetype you can act on.',
   },
   {
     n: '03',
@@ -117,14 +117,14 @@ const HOW_STEPS = [
   {
     n: '04',
     title: 'Let the OS operate daily',
-    body: 'Each day 8os reads your timing and tells you where to spend attention — and, honestly, when to push and when to hold.',
+    body: 'Each day 8os reads your timing and tells you where to spend attention, and, honestly, when to push and when to hold.',
   },
 ]
 
 const FEATURES = [
   {
     title: 'The archetype engine',
-    body: 'Your chart resolved to a specific archetype — not a sun sign. 17,280 configurations, computed from your four pillars.',
+    body: 'Your chart resolved to a specific archetype, not a sun sign. 17,280 configurations, computed from your four pillars.',
   },
   {
     title: 'Decade-to-day timing',
@@ -132,7 +132,7 @@ const FEATURES = [
   },
   {
     title: 'The Alignment Engine',
-    body: 'A running check on whether your attention is on the right goal for this season — and a nudge when it drifts.',
+    body: 'A running check on whether your attention is on the right goal for this season, and a nudge when it drifts.',
   },
   {
     title: 'An assistant that acts',
@@ -140,11 +140,11 @@ const FEATURES = [
   },
   {
     title: 'Daily & weekly rituals',
-    body: 'Short, repeatable check-ins that keep the plan alive between big decisions — tuned to how you operate.',
+    body: 'Short, repeatable check-ins that keep the plan alive between big decisions, tuned to how you operate.',
   },
   {
     title: 'Memory that learns you',
-    body: 'The OS remembers what worked, what you avoided, and what moved the needle — so guidance gets sharper over time.',
+    body: 'The OS remembers what worked, what you avoided, and what moved the needle, so guidance gets sharper over time.',
   },
 ]
 
@@ -231,7 +231,7 @@ export default function Home() {
               }}
             >
               8os computes your real BaZi archetype and your decade-to-daily
-              timing, then operates your goals and calendar around it — guided
+              timing, then operates your goals and calendar around it, guided
               by an AI assistant that actually does the work.
             </p>
             <a
@@ -413,7 +413,7 @@ export default function Home() {
                 color: INK,
               }}
             >
-              See your archetype — free, no signup.
+              See your archetype, free, no signup.
             </h2>
             <p style={{ fontSize: '1.0625rem', lineHeight: 1.6, color: GRAY, margin: 0 }}>
               Enter your birth date and get a real taste of your chart in under a
@@ -490,7 +490,7 @@ export default function Home() {
               margin: '0 auto 2rem',
             }}
           >
-            Explore your archetype for free. Pro unlocks the full daily OS — the
+            Explore your archetype for free. Pro unlocks the full daily OS, the
             assistant, timing, alignment and memory working together.
           </p>
           <a
@@ -543,7 +543,7 @@ export default function Home() {
               </div>
               <p style={{ fontSize: '0.9375rem', lineHeight: 1.65, color: GRAY, maxWidth: '22rem', margin: 0 }}>
                 A life OS built on your real BaZi chart. Right goal, right
-                season — the planner that knows when to push.
+                season, the planner that knows when to push.
               </p>
               <p style={{ fontSize: '0.875rem', color: GRAY, marginTop: '1.25rem' }}>
                 <a href="mailto:hello@8os.ai" style={{ color: OXBLOOD, textDecoration: 'none', fontWeight: 500 }}>

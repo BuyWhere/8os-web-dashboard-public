@@ -73,7 +73,7 @@ export default async function GoalsPage() {
             <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 6 }}>← Dashboard</Link>
             <h1 style={{ margin: 0, fontFamily: 'var(--font-serif), Georgia, serif', fontSize: 32, fontWeight: 500, letterSpacing: '-0.02em', color: 'var(--color-text-primary)' }}>Goals</h1>
             <p style={{ margin: '6px 0 0', color: 'var(--color-text-secondary)', fontSize: 13.5 }}>
-              Across every horizon — from this week to the next five years.
+              Across every horizon, from this week to the next five years.
             </p>
           </div>
           <GoalComposer />
@@ -147,7 +147,7 @@ export default async function GoalsPage() {
                             </div>
                           </Link>
 
-                          {/* Near-term reminder — honest, derived from tasks + target date */}
+                          {/* Near-term reminder, honest, derived from tasks + target date */}
                           {reminder && (
                             <div style={{
                               display: 'flex', alignItems: 'flex-start', gap: 8, padding: '9px 11px', borderRadius: 10,

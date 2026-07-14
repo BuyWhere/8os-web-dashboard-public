@@ -376,11 +376,11 @@ function renderContextText(c: {
 }): string {
   const L: string[] = []
 
-  L.push(`[run — ${c.runKind}, ${c.localDate} local (${c.timezone})]`)
+  L.push(`[run, ${c.runKind}, ${c.localDate} local (${c.timezone})]`)
 
   // Identity
   L.push('')
-  L.push('[what 8os knows — identity]')
+  L.push('[what 8os knows, identity]')
   if (c.identity.archetypeName) L.push(`Archetype: ${c.identity.archetypeName}.`)
   if (c.identity.dayMaster || c.identity.dayElement) {
     const dm = c.identity.dayMaster ? `Day Master ${c.identity.dayMaster}` : 'Day Master'
@@ -397,11 +397,11 @@ function renderContextText(c: {
 
   // Season
   L.push('')
-  L.push('[what 8os knows — season (orientation, not prediction; confidence labelled)]')
+  L.push('[what 8os knows, season (orientation, not prediction; confidence labelled)]')
   if (c.season.length) {
     for (const s of c.season) {
       const p = s.pillar ? ` ${s.pillar}` : ''
-      L.push(`${s.label}${p} — ${s.verdict} [${s.confidence} confidence]: ${s.guidance}`)
+      L.push(`${s.label}${p}, ${s.verdict} [${s.confidence} confidence]: ${s.guidance}`)
     }
   } else {
     L.push('Seasonal read not available (no birth profile).')
@@ -409,12 +409,12 @@ function renderContextText(c: {
 
   // State
   L.push('')
-  L.push('[what 8os knows — your current state (from your own ledger)]')
+  L.push('[what 8os knows, your current state (from your own ledger)]')
   L.push(`Tracked this week: ${c.state.trackedMinutes} min.`)
   if (c.state.topGoals.length) {
     L.push('Top goals by priority:')
     for (const g of c.state.topGoals) {
-      L.push(`  #${g.rank} ${g.name} [${g.domain}] — ${g.sharePct}% share, ${g.momentum}, ${g.minutes} min.`)
+      L.push(`  #${g.rank} ${g.name} [${g.domain}], ${g.sharePct}% share, ${g.momentum}, ${g.minutes} min.`)
     }
   } else {
     L.push('No active goals with ledger signal yet.')
@@ -436,7 +436,7 @@ function renderContextText(c: {
   // (deleting there removes an item from this block). Never silently inferred
   // from sensitive categories: only what the user wrote or confirmed appears.
   L.push('')
-  L.push('[what 8os remembers — user-editable]')
+  L.push('[what 8os remembers, user-editable]')
   if (c.memory.items.length) {
     for (const m of c.memory.items) {
       L.push(`- (${m.kind}${m.pinned ? ', pinned' : ''}) ${m.content}`)

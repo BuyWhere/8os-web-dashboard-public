@@ -400,7 +400,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
   const headerTitle = view === 'month'
     ? currentDate.toLocaleDateString('en-US', { month: 'long', year: 'numeric' })
     : view === 'week'
-      ? `${weekDays[0].toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${weekDays[6].toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
+      ? `${weekDays[0].toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} - ${weekDays[6].toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
       : currentDate.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })
 
   return (
@@ -564,7 +564,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
                 <span style={{ fontSize: 10, color: t.priority === 'high' ? '#ef4444' : t.priority === 'medium' ? '#f59e0b' : '#22c55e' }}>{t.priority}</span>
                 {t.domainId && <span style={{ fontSize: 10, color: DOMAIN_COLORS[t.domainId] }}>{t.domainId}</span>}
               </div>
-              {/* Compact per-task action — sits under the task name, so it's
+              {/* Compact per-task action, sits under the task name, so it's
                   clearly "schedule THIS task" rather than a wall of identical
                   unlabeled buttons. */}
               <button
@@ -670,7 +670,7 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
       const res = form.mode === 'create'
         ? await fetch('/api/calendar/events', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
         : await fetch(`/api/calendar/events/${form.id}`, { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
-      if (!res.ok) { setErr('Could not save — try again.'); setSaving(false); return }
+      if (!res.ok) { setErr('Could not save, try again.'); setSaving(false); return }
       // Optimistically reflect the saved event in every view immediately (the
       // week grid reads the same state), then reconcile with the server. Fall
       // back to the form values if the response body isn't the event.
@@ -683,7 +683,7 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
       }
       onSaved(saved)
       onClose()
-    } catch { setErr('Could not save — try again.'); setSaving(false) }
+    } catch { setErr('Could not save, try again.'); setSaving(false) }
   }
 
   async function remove() {
@@ -693,10 +693,10 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
     const removedId = form.id
     try {
       const res = await fetch(`/api/calendar/events/${form.id}`, { method: 'DELETE' })
-      if (!res.ok) { setErr('Delete failed — try again.'); setSaving(false); return }
+      if (!res.ok) { setErr('Delete failed, try again.'); setSaving(false); return }
       onDeleted(removedId)
       onClose()
-    } catch { setErr('Delete failed — try again.'); setSaving(false) }
+    } catch { setErr('Delete failed, try again.'); setSaving(false) }
   }
 
   const title = form.mode === 'create' ? 'New event' : readOnly ? (form.external ? 'External event' : 'Event') : 'Edit event'
@@ -823,7 +823,7 @@ function ReadOnlyDetail({ form, linkedGoal, accent }: { form: EditingEvent; link
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
       <div style={{ fontSize: 18, fontWeight: 600, color: accent }}>{form.title}</div>
       <div style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>
-        {form.allDay ? 'All day' : `${fmtTime(new Date(form.startAt))} – ${fmtTime(new Date(form.endAt))}`}
+        {form.allDay ? 'All day' : `${fmtTime(new Date(form.startAt))} - ${fmtTime(new Date(form.endAt))}`}
         {' · '}{new Date(form.startAt).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
       </div>
       {form.location && <div style={{ fontSize: 13, color: 'var(--color-text-secondary)' }}>📍 {form.location}</div>}

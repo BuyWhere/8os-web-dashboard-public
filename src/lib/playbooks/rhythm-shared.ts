@@ -241,7 +241,7 @@ export async function callGenerateCoaching(args: {
     if (typeof fn !== 'function') return { body: args.fallbackBody, usedLlm: false }
     return await fn(args)
   } catch (e) {
-    console.error('[rhythm-shared] generateCoaching wrapper failed — fallback:', e)
+    console.error('[rhythm-shared] generateCoaching wrapper failed, fallback:', e)
     return { body: args.fallbackBody, usedLlm: false }
   }
 }

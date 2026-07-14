@@ -250,7 +250,7 @@ export async function syncSource(sourceId: string): Promise<SyncResult> {
     await prisma.externalSignalSource.update({ where: { id: sourceId }, data: { status: 'error' } })
     return { ...base, status: 'error', message: 'stored tokens could not be decrypted' }
   }
-  if (tokens.dev) return { ...base, message: 'dev-seeded source — no upstream calendar' }
+  if (tokens.dev) return { ...base, message: 'dev-seeded source, no upstream calendar' }
   if (!isGoogleCalendarConfigured()) return { ...base, message: 'google oauth env not configured (dormant)' }
 
   // ── Valid access token (refresh when missing/expiring) ──

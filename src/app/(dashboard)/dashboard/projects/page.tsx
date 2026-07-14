@@ -235,7 +235,7 @@ export default function ProjectsPage() {
                         >
                           {/* Drag handle + Name */}
                           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 12, marginBottom: 10 }}>
-                            <ProgressRing progress={progress} size={44} color={domainColor} label={total > 0 ? `${done}/${total}` : '—'} />
+                            <ProgressRing progress={progress} size={44} color={domainColor} label={total > 0 ? `${done}/${total}` : '-'} />
                             <div style={{ flex: 1, minWidth: 0 }}>
                               {editingId === p.id ? (
                                 <input

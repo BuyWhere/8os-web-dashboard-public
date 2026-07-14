@@ -6,7 +6,7 @@ import Link from 'next/link';
 // root layout (Header + Footer stay), so the body just needs brand tokens and
 // useful navigation. Real status code is still 404 (server response).
 export const metadata: Metadata = {
-  title: 'Page not found — 8os',
+  title: 'Page not found, 8os',
   description: "We couldn't find that page. Try the home page, the archetype explorer, or the quiz.",
   robots: {
     index: false,

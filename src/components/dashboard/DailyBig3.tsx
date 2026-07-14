@@ -124,7 +124,7 @@ export function DailyBig3({ onChanged }: { onChanged?: () => void }) {
           Your Daily Big 3
         </h2>
         <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>
-          favorable: {data.favorableDomains.length ? data.favorableDomains.map(cap).join(', ') : '—'}
+          favorable: {data.favorableDomains.length ? data.favorableDomains.map(cap).join(', ') : '-'}
           {data.favorableElements.length ? ` · ${data.favorableElements.join(', ')}` : ''}
         </span>
       </div>
@@ -173,7 +173,7 @@ export function DailyBig3({ onChanged }: { onChanged?: () => void }) {
         })}
       </div>
 
-      {/* soft day tint — gentle orientation, NOT a rule */}
+      {/* soft day tint, gentle orientation, NOT a rule */}
       {data.dayTint.line && (
         <div style={{ marginTop: 12, fontSize: 11.5, color: 'var(--skin-color-text-muted, var(--color-text-muted))', fontStyle: 'italic', lineHeight: 1.45, display: 'flex', gap: 6 }}>
           <span style={{ color: VERDICT_COLOR[data.dayTint.verdict], fontStyle: 'normal' }}>◐</span>

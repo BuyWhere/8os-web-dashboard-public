@@ -196,7 +196,7 @@ export async function recommitGoal(userId: string, goalId: string): Promise<Hygi
     const res = await ensureProposal(userId, {
       sourceKind: 'alignment',
       goalId: goal.id,
-      rationale: `You recommitted to “${goal.name}”. Here's a protected block to start feeding it again — accept to lock it in.`,
+      rationale: `You recommitted to “${goal.name}”. Here's a protected block to start feeding it again, accept to lock it in.`,
     })
     proposalId = res?.proposal.id ?? null
   } catch (e) {
@@ -232,14 +232,14 @@ export async function shrinkGoal(userId: string, goalId: string): Promise<Hygien
       instruction: [
         `The user's top-priority goal “${goal.name}” (${goal.domainId}) has been starving for 3 weeks.`,
         `Its current definition: "${goal.definition}".`,
-        'Draft a SMALLER, more achievable version — one concrete milestone they can finish in ~2 weeks.',
+        'Draft a SMALLER, more achievable version, one concrete milestone they can finish in ~2 weeks.',
         'Output ONLY the shrunk goal as a single sentence the user can accept as their new goal. No preamble, no coaching, no options.',
       ].join('\n'),
       fallbackBody: fallback,
     })
     draft = (gen.body || fallback).trim()
   } catch (e) {
-    console.error('[goal-hygiene] shrink draft failed — fallback:', e)
+    console.error('[goal-hygiene] shrink draft failed, fallback:', e)
   }
   await prisma.activityLog.create({
     data: { userId, goalId: goal.id, action: 'goal_shrink_drafted', metadata: { draft } },
@@ -261,8 +261,8 @@ export async function retireGoal(userId: string, goalId: string, note?: string):
   })
 
   const funeralLine = note?.trim()
-    ? `Retired “${goal.name}” to protect my focus — ${note.trim()}`
-    : `Retired “${goal.name}” — choosing focus over a crowded list is a win, not a failure. One fewer thing, more room for what matters now.`
+    ? `Retired “${goal.name}” to protect my focus, ${note.trim()}`
+    : `Retired “${goal.name}”, choosing focus over a crowded list is a win, not a failure. One fewer thing, more room for what matters now.`
 
   const profile = await prisma.userProfile.findUnique({ where: { userId }, select: { timezone: true } }).catch(() => null)
   const tz = isValidTimezone(profile?.timezone) ? (profile!.timezone as string) : DEFAULT_TIMEZONE

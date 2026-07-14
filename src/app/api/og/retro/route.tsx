@@ -137,7 +137,7 @@ export async function GET(req: NextRequest) {
           }}
         >
           <div style={{ fontSize: 20, color: '#8b93a1', display: 'flex' }}>
-            {passive !== null ? `${passive}% of this was tracked passively — zero manual logging.` : 'Right goal, right season.'}
+            {passive !== null ? `${passive}% of this was tracked passively, zero manual logging.` : 'Right goal, right season.'}
           </div>
           <div style={{ fontSize: 22, color: '#a5b4fc', fontWeight: 700 }}>8os.ai</div>
         </div>

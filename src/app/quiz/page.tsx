@@ -3,9 +3,9 @@ import type { Metadata } from 'next'
 import { QuizCtaButton } from '@/components/QuizCtaButton'
 
 export const metadata: Metadata = {
-  title: 'BaZi Archetype Quiz — Discover Your Element | 8os.ai',
+  title: 'BaZi Archetype Quiz, Discover Your Element | 8os.ai',
   description:
-    'Take the free 8os archetype quiz. Discover your BaZi element — Metal, Water, Wood, Fire, or Earth — and get your personal operating system in 90 seconds.',
+    'Take the free 8os archetype quiz. Discover your BaZi element, Metal, Water, Wood, Fire, or Earth, and get your personal operating system in 90 seconds.',
   keywords: [
     'BaZi quiz',
     'archetype quiz',
@@ -18,17 +18,17 @@ export const metadata: Metadata = {
     canonical: '/quiz',
   },
   openGraph: {
-    title: 'BaZi Archetype Quiz — Discover Your Element | 8os.ai',
+    title: 'BaZi Archetype Quiz, Discover Your Element | 8os.ai',
     description:
-      'Take the free 8os archetype quiz. Discover your BaZi element — Metal, Water, Wood, Fire, or Earth — and get your personal operating system in 90 seconds.',
+      'Take the free 8os archetype quiz. Discover your BaZi element, Metal, Water, Wood, Fire, or Earth, and get your personal operating system in 90 seconds.',
     url: 'https://8os.ai/quiz',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BaZi Archetype Quiz — Discover Your Element | 8os.ai',
+    title: 'BaZi Archetype Quiz, Discover Your Element | 8os.ai',
     description:
-      'Take the free 8os archetype quiz. Discover your BaZi element — Metal, Water, Wood, Fire, or Earth — and get your personal operating system in 90 seconds.',
+      'Take the free 8os archetype quiz. Discover your BaZi element, Metal, Water, Wood, Fire, or Earth, and get your personal operating system in 90 seconds.',
   },
 }
 
@@ -84,12 +84,12 @@ const steps = [
   {
     number: '2',
     title: 'Answer 5 questions',
-    description: 'Short behavioral questions that calibrate your dominant element. Takes 60–90 seconds.',
+    description: 'Short behavioral questions that calibrate your dominant element. Takes 60-90 seconds.',
   },
   {
     number: '3',
     title: 'Get your archetype',
-    description: 'Receive your full archetype profile — traits, strategies, tools, and daily briefing.',
+    description: 'Receive your full archetype profile, traits, strategies, tools, and daily briefing.',
   },
 ]
 
@@ -104,7 +104,7 @@ const miniQA = [
   },
   {
     q: 'How is this different from MBTI or Enneagram?',
-    a: 'BaZi elements are timing-aware and goal-integrated. Your archetype comes with seasonal guidance, tool recommendations, and daily nudges — not just a description.',
+    a: 'BaZi elements are timing-aware and goal-integrated. Your archetype comes with seasonal guidance, tool recommendations, and daily nudges, not just a description.',
   },
   {
     q: 'Can I retake the quiz?',
@@ -151,7 +151,7 @@ export default function QuizPage() {
             Discover Your BaZi Archetype
           </h1>
           <p style={{ fontSize: '18px', color: 'var(--color-text-muted)', lineHeight: 1.65, marginBottom: '36px' }}>
-            Five elements. Five operating systems. The quiz reveals which one is yours — and gives
+            Five elements. Five operating systems. The quiz reveals which one is yours, and gives
             you a complete system for goals, productivity, and timing.
           </p>
           <QuizCtaButton

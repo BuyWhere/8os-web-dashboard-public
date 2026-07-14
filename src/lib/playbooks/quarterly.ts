@@ -47,28 +47,28 @@ export async function runQuarterly(
     // ── Next-cycle themes paced to favorable months (computeQuarter) ──────────
     const months = decoded?.quarter.months ?? []
     const themeLines = months.map((m) =>
-      `${m.label} — ${m.mode === 'push' ? 'green-light' : m.mode === 'consolidate' ? 'consolidate' : 'steady'} (${m.pillar})${m.favorableDomains.length ? `, best for ${m.favorableDomains.slice(0, 3).join(', ')}` : ''}`,
+      `${m.label}, ${m.mode === 'push' ? 'green-light' : m.mode === 'consolidate' ? 'consolidate' : 'steady'} (${m.pillar})${m.favorableDomains.length ? `, best for ${m.favorableDomains.slice(0, 3).join(', ')}` : ''}`,
     )
     const pushMonths = months.filter((m) => m.mode === 'push').map((m) => m.label)
 
     const fallbackBody = [
       `12-week cycle retro:`,
-      ...(retroLines.length ? retroLines.map((l) => `- ${l}`) : ['- No tracked attention this cycle — the next 12 weeks are a fresh start.']),
+      ...(retroLines.length ? retroLines.map((l) => `- ${l}`) : ['- No tracked attention this cycle, the next 12 weeks are a fresh start.']),
       ...(starvingLine ? [starvingLine] : []),
       '',
       'Next cycle, paced to your chart:',
-      ...(themeLines.length ? themeLines.map((l) => `- ${l}`) : ['- Keep momentum on your top 1–3 goals.']),
-      pushMonths.length ? `\nYour green-light months are ${pushMonths.join(', ')} — set your boldest milestone there.` : '',
+      ...(themeLines.length ? themeLines.map((l) => `- ${l}`) : ['- Keep momentum on your top 1-3 goals.']),
+      pushMonths.length ? `\nYour green-light months are ${pushMonths.join(', ')}, set your boldest milestone there.` : '',
       '',
-      'Commit your 1–3 goals for the next cycle to lock the plan in.',
+      'Commit your 1-3 goals for the next cycle to lock the plan in.',
     ].filter(Boolean).join('\n')
 
     const instruction = [
       'Write this user\'s QUARTERLY (12-week cycle) review. Structure, in order:',
-      `1) A cycle retro with real receipts — which goals were FED vs STARVING over 12 weeks: ${retroLines.join('; ') || 'no tracked attention this cycle'}. ${starvingLine}`,
+      `1) A cycle retro with real receipts, which goals were FED vs STARVING over 12 weeks: ${retroLines.join('; ') || 'no tracked attention this cycle'}. ${starvingLine}`,
       themeLines.length ? `2) Next-cycle themes paced to their favorable months (name the pillars/modes): ${themeLines.join('; ')}.` : '',
       pushMonths.length ? `Their green-light (push) months are ${pushMonths.join(', ')}.` : '',
-      'End with a single directional nudge to commit their next cycle\'s 1–3 goals. ONE primary action only.',
+      'End with a single directional nudge to commit their next cycle\'s 1-3 goals. ONE primary action only.',
       tokens?.tone ? `Tone: ${tokens.tone}.` : '',
     ].filter(Boolean).join('\n')
 

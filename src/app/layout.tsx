@@ -1,6 +1,11 @@
 import type { Metadata } from 'next'
 import { ClerkProvider } from '@clerk/nextjs'
+import { Inter } from 'next/font/google'
 import { Suspense } from 'react'
+
+// Inter is the single typeface for the whole site (body + headings + wordmark).
+// Exposed globally as --font-sans on <html>; globals.css body reads it.
+const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-sans', display: 'swap' })
 // PostHogProvider moved to (dashboard)/layout.tsx — keeps PostHog SDK (~188 KiB)
 // off public marketing pages to improve Lighthouse perf on /, /features, etc.
 import { MetaPixel } from '@/components/MetaPixel'
@@ -103,9 +108,9 @@ export default function RootLayout({
       signInFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL ?? '/dashboard'}
       signUpFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL ?? '/onboarding'}
     >
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
       <head>
-        {/* No-flash theme boot — sets <html data-theme> synchronously from the
+        {/* No-flash theme boot, sets <html data-theme> synchronously from the
             persisted choice + OS preference, BEFORE first paint. Must run
             before any styled content renders. See src/lib/theme.ts. */}
         <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
@@ -118,7 +123,7 @@ export default function RootLayout({
         {/* ThemeProvider wraps all chrome (Header/Footer) + content so the
             whole tree can read/toggle the light/dark theme via useTheme(). */}
         <ThemeProvider>
-          {/* Meta Pixel — fires PageView on every route change. Bails out when
+          {/* Meta Pixel, fires PageView on every route change. Bails out when
               NEXT_PUBLIC_META_PIXEL_ID is unset (local dev, pre-pixel deploys).
               See src/components/MetaPixel.tsx. */}
           <MetaPixel />

@@ -109,7 +109,7 @@ export default function BillingPage() {
             <p style={{ fontSize: 13, color: 'var(--color-text-secondary)', margin: '0 0 14px' }}>
               {isPro
                 ? 'Change your plan or add the Full BaZi Life Report.'
-                : 'Unlock the full 8os experience — Pro is $16/mo or $119/yr.'}
+                : 'Unlock the full 8os experience, Pro is $16/mo or $119/yr.'}
             </p>
             <Link href="/dashboard/upgrade" style={btn}>
               {isPro ? 'Manage plan' : 'View plans'}

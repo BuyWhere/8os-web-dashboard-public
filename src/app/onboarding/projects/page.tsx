@@ -67,7 +67,7 @@ export default function ProjectsPage() {
         // Minimal fallback
         const fallback = goals.map((g, i) => ({
           id: `p-${i}`,
-          name: `${g.name} — Foundation`,
+          name: `${g.name}, Foundation`,
           description: `Core project to advance your ${g.domainId} goal.`,
           estimatedDuration: '3 months',
           suggestedOrder: i + 1,
@@ -204,7 +204,7 @@ export default function ProjectsPage() {
         </h1>
         <p style={{ color: WARM_GRAY, fontSize: '0.95rem', lineHeight: 1.6, maxWidth: 480, margin: '0 auto' }}>
           These are the projects ARCHIE thinks will move your goals forward. Keep the ones that fit,
-          rename or reorder them, add your own — anything you remove won&apos;t generate tasks.
+          rename or reorder them, add your own, anything you remove won&apos;t generate tasks.
         </p>
       </div>
 

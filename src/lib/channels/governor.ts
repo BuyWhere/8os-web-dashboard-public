@@ -150,7 +150,7 @@ export async function deliverProactive(
   try {
     prefs = await loadPrefs(userId)
   } catch (e) {
-    console.error('[governor] loadPrefs failed — failing closed:', e)
+    console.error('[governor] loadPrefs failed, failing closed:', e)
     await markSkipped(opts.runId, 'error')
     return { suppressed: true, reason: 'error' }
   }

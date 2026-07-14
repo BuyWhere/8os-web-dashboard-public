@@ -16,10 +16,10 @@
  */
 
 import { useState, useEffect, useCallback } from 'react'
-import { Fraunces } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import AssistantChat from './AssistantChat'
 
-const fraunces = Fraunces({ subsets: ['latin'], weight: ['600'], variable: '--font-serif-coach', display: 'swap' })
+const fraunces = Inter({ subsets: ['latin'], weight: ['600'], variable: '--font-serif-coach', display: 'swap' })
 
 const GOLD = 'var(--color-accent)'
 const GOLD_DARK = 'var(--color-accent)'
@@ -69,7 +69,7 @@ export default function AssistantPanel() {
 
   return (
     <div className={fraunces.variable}>
-      {/* Persistent launcher — always rendered, toggles the pop-up. */}
+      {/* Persistent launcher, always rendered, toggles the pop-up. */}
       <button
         onClick={() => setIsOpen((v) => !v)}
         aria-label={isOpen ? 'Close Coach' : 'Open Coach'}
@@ -104,7 +104,7 @@ export default function AssistantPanel() {
         {isOpen ? <CloseIcon size={20} /> : (<><CoachIcon size={18} /><span>Coach</span></>)}
       </button>
 
-      {/* Coach pop-up — anchored bottom-right, expandable. */}
+      {/* Coach pop-up, anchored bottom-right, expandable. */}
       {isOpen && (
         <div
           role="dialog"

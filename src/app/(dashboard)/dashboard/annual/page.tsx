@@ -68,7 +68,7 @@ export default function AnnualPage() {
   return (
     <div style={{ display: 'flex', minHeight: '100vh', background: '#000' }}>
       <main style={{ flex: 1, padding: '32px 40px', color: '#e5e5e5' }}>
-        <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 6 }}>Lì Chūn — your year ahead</h1>
+        <h1 style={{ fontSize: 26, fontWeight: 700, marginBottom: 6 }}>Lì Chūn, your year ahead</h1>
         <p style={{ color: '#71717a', fontSize: 14, marginBottom: 24 }}>
           The solar new year is the moment to read the year ahead and reset your goals.
           {preview?.yearPillar ? ` This year reads through ${preview.yearPillar}.` : ''}
@@ -85,10 +85,10 @@ export default function AnnualPage() {
         {preview?.offered && (
           <div style={{ ...card, borderColor: '#d4a000' }}>
             <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 8 }}>
-              Your full Life Report — ${preview.fullReportPriceUsd}
+              Your full Life Report, ${preview.fullReportPriceUsd}
             </div>
             <p style={{ color: '#a1a1aa', fontSize: 14, marginBottom: 14 }}>
-              All four pillars, your ten-year map, and your year-by-year fortune — the same honest, receipts-first method.
+              All four pillars, your ten-year map, and your year-by-year fortune, the same honest, receipts-first method.
             </p>
             <button style={btn} disabled={busy} onClick={buy}>
               {busy ? 'Opening checkout…' : `Unlock the full report ($${preview.fullReportPriceUsd})`}

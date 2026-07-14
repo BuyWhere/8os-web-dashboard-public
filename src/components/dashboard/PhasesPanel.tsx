@@ -51,7 +51,7 @@ export function PhasesPanel({ data, gapPx = 20 }: { data: PhasesPanelData; gapPx
           Your Phases
         </h2>
         <span style={{ fontSize: 11, color: 'var(--skin-color-text-muted)' }}>
-          favorable: {data.favorable.map(cap).join(', ') || '—'} · as of {data.asOf}
+          favorable: {data.favorable.map(cap).join(', ') || '-'} · as of {data.asOf}
         </span>
       </div>
 

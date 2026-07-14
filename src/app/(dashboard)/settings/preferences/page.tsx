@@ -190,7 +190,7 @@ export default function PreferencesPage() {
           {/* Theme */}
           <section style={card}>
             <h2 style={h2}>Appearance</h2>
-            <p style={sub}>Choose light, dark, or Auto — which follows your local time: light by day, dark after dark.</p>
+            <p style={sub}>Choose light, dark, or Auto, which follows your local time: light by day, dark after dark.</p>
             <div style={seg}>
               {THEME_OPTS.map((o) => (
                 <button

@@ -2,13 +2,13 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Fraunces } from 'next/font/google';
+import { Inter } from 'next/font/google';
 import { SignedIn, SignedOut, ClerkLoading, ClerkLoaded } from '@clerk/nextjs';
 import { openSidebarDrawer } from '@/lib/ui/sidebarDrawer';
 import { AccountMenu } from '@/components/AccountMenu';
 
 // Editorial serif for the wordmark — matches the landing header.
-const fraunces = Fraunces({
+const fraunces = Inter({
   subsets: ['latin'],
   weight: ['500', '600'],
   variable: '--font-serif-header',
@@ -86,7 +86,7 @@ export function Header() {
             width: '100%',
           }}
         >
-          {/* Mobile-only hamburger — opens the sidebar drawer. On desktop the
+          {/* Mobile-only hamburger, opens the sidebar drawer. On desktop the
               sidebar is always visible, so this is hidden (media query below).
               The 8os wordmark lives ONLY in the sidebar on app routes, so it is
               intentionally not rendered here (no duplicate wordmark). */}
@@ -114,19 +114,19 @@ export function Header() {
             </svg>
           </button>
 
-          {/* Account menu — the single account surface. The profile avatar
+          {/* Account menu, the single account surface. The profile avatar
               opens AccountMenu (Profile / Billing / Preferences / Notifications
               / Sources / theme / Sign out), replacing Clerk's <UserButton>.
               marginLeft:auto pins this group to the RIGHT edge of the header on
               desktop. Without it, the hamburger is display:none on desktop, so
-              this becomes the sole space-between child and gets pinned LEFT —
+              this becomes the sole space-between child and gets pinned LEFT,
               which made AccountMenu's right:0 dropdown open off-screen-left. */}
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.9rem', marginLeft: 'auto' }}>
             <SignedIn>
               <AccountMenu />
             </SignedIn>
             {/* If a session somehow isn't present on an app route, offer a
-                quiet sign-in link — never the marketing Sign up CTA. */}
+                quiet sign-in link, never the marketing Sign up CTA. */}
             <SignedOut>
               <Link
                 href="/login"
@@ -197,7 +197,7 @@ export function Header() {
           </span>
         </Link>
 
-        {/* Marketing nav — signed-out visitors only */}
+        {/* Marketing nav, signed-out visitors only */}
         <nav className="header-nav-links" aria-label="Site navigation">
           {NAV_LINKS.map(({ href, label }) => (
             <Link
@@ -217,7 +217,7 @@ export function Header() {
         </nav>
 
         {/* Auth actions. Log in / Sign up render during Clerk's load
-            (ClerkLoading) too — not only after — so they never "pop in" after
+            (ClerkLoading) too, not only after, so they never "pop in" after
             hydration (the inconsistency QA flagged). */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <ClerkLoading>
@@ -265,7 +265,7 @@ export function Header() {
           </SignedOut>
           <SignedIn>
             {/* A signed-in user browsing a marketing page still gets their
-                account menu + a way back into the app — never Log in/Sign up. */}
+                account menu + a way back into the app, never Log in/Sign up. */}
             <Link
               href="/dashboard"
               style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none', whiteSpace: 'nowrap' }}

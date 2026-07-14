@@ -33,7 +33,7 @@ export async function renderBrief(userId: string): Promise<string> {
     take: 100,
   })
   if (tasks.length === 0) {
-    return 'Your Big 3 — nothing on the board yet.\nSend me any to-do as plain text and I will capture it.'
+    return 'Your Big 3, nothing on the board yet.\nSend me any to-do as plain text and I will capture it.'
   }
   const scored = tasks
     .map((t) => {
@@ -68,7 +68,7 @@ export async function renderShutdown(userId: string): Promise<string> {
   ])
   const list = (rows: { name: string }[]) =>
     rows.slice(0, 5).map((r) => `  • ${r.name}`).join('\n') + (rows.length > 5 ? `\n  …and ${rows.length - 5} more` : '')
-  let out = `Shutdown — today's ledger:\nDone: ${done.length}`
+  let out = `Shutdown, today's ledger:\nDone: ${done.length}`
   if (done.length) out += `\n${list(done)}`
   out += `\nStill open (scheduled today): ${incomplete.length}`
   if (incomplete.length) out += `\n${list(incomplete)}`
@@ -86,6 +86,6 @@ export async function renderAlign(userId: string): Promise<string> {
     return parts.filter(Boolean).join('\n')
   } catch (e) {
     console.error('[channels/commands] renderAlign failed:', e)
-    return 'Alignment data is not ready yet — open 8os.ai and let the engine attribute a few days of activity first.'
+    return 'Alignment data is not ready yet, open 8os.ai and let the engine attribute a few days of activity first.'
   }
 }

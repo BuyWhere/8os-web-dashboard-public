@@ -3,12 +3,12 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { Fraunces } from 'next/font/google'
+import { Inter } from 'next/font/google'
 import { useSidebarDrawer, closeSidebarDrawer } from '@/lib/ui/sidebarDrawer'
 import { AccountMenu } from '@/components/AccountMenu'
 
 // Editorial serif for the wordmark — matches the landing.
-const fraunces = Fraunces({ subsets: ['latin'], weight: ['600'], variable: '--font-serif-side', display: 'swap' })
+const fraunces = Inter({ subsets: ['latin'], weight: ['600'], variable: '--font-serif-side', display: 'swap' })
 
 // ── Warm editorial palette ────────────────────────────────────────────────
 const INK = 'var(--color-text-primary)'
@@ -95,7 +95,7 @@ export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
 
   return (
     <>
-      {/* Mobile-only backdrop scrim — tap to close the drawer. */}
+      {/* Mobile-only backdrop scrim, tap to close the drawer. */}
       <div
         className="app-sidebar-scrim"
         data-open={drawerOpen ? 'true' : 'false'}
@@ -201,7 +201,7 @@ export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
         ))}
       </nav>
 
-      {/* Goals momentum — compact, warm */}
+      {/* Goals momentum, compact, warm */}
       {!collapsed && goals.length > 0 && (
         <div style={{ padding: '14px 18px', borderTop: `1px solid ${HAIRLINE}`, background: CREAM }}>
           <div style={{ color: MUTED, fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>
@@ -217,7 +217,7 @@ export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
         </div>
       )}
 
-      {/* Account — the single account surface, moved off the (now removed)
+      {/* Account, the single account surface, moved off the (now removed)
           top bar into the sidebar footer. Expanded → full identity row that
           opens the account menu upward; collapsed → just the avatar. */}
       <div style={{ marginTop: 'auto', borderTop: `1px solid ${HAIRLINE}`, padding: collapsed ? '10px 8px' : '8px 10px', display: 'flex', justifyContent: collapsed ? 'center' : 'stretch' }}>

@@ -29,7 +29,7 @@ function Bars({ points }: { points: HistoryPoint[] }) {
         const m = p.mood ?? 0
         const e = p.energy ?? 0
         return (
-          <div key={p.localDate} title={`${p.localDate} · mood ${p.mood ?? '—'} · energy ${p.energy ?? '—'}`}
+          <div key={p.localDate} title={`${p.localDate} · mood ${p.mood ?? '-'} · energy ${p.energy ?? '-'}`}
             style={{ display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', gap: 2, flex: 1, minWidth: 6 }}>
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 2, height: 40 }}>
               <div style={{ flex: 1, height: `${(m / 5) * 100}%`, minHeight: m ? 3 : 0, background: 'var(--skin-color-accent, var(--color-accent))', borderRadius: 2, opacity: 0.9 }} />
@@ -129,7 +129,7 @@ export function MoodStrip({ gapPx = 20 }: { gapPx?: number }) {
             </p>
           ))}
           <p style={{ margin: '2px 0 0', fontSize: 10, color: 'var(--skin-color-text-muted, var(--color-text-muted))' }}>
-            An observation from your own logs — a pattern, not a prescription.
+            An observation from your own logs, a pattern, not a prescription.
           </p>
         </div>
       )}

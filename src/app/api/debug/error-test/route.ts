@@ -20,7 +20,7 @@ export async function GET(req: NextRequest) {
   }
 
   const testError = new Error(
-    `[OS-533] Deliberate test error at ${new Date().toISOString()} — verify this appears in PostHog Error Tracking`,
+    `[OS-533] Deliberate test error at ${new Date().toISOString()}, verify this appears in PostHog Error Tracking`,
   )
 
   // Capture server-side via PostHog Node SDK
@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
 
   return NextResponse.json({
     ok: true,
-    message: 'Test error captured — check PostHog Error Tracking dashboard',
+    message: 'Test error captured, check PostHog Error Tracking dashboard',
     timestamp: new Date().toISOString(),
     posthogDashboard: 'https://us.posthog.com/error_tracking',
   })

@@ -20,24 +20,24 @@ export interface ShichenSlot {
   branch: Branch
   chineseName: string
   animal: string
-  hours: string       // e.g. "23:00–01:00"
+  hours: string       // e.g. "23:00-01:00"
   startHour: number   // 24h, e.g. 23
   endHour: number     // exclusive
 }
 
 export const SHICHEN_SLOTS: ShichenSlot[] = [
-  { index: 0,  branch: '子', chineseName: '子时', animal: 'Rat',     hours: '23:00–01:00', startHour: 23, endHour: 1  },
-  { index: 1,  branch: '丑', chineseName: '丑时', animal: 'Ox',      hours: '01:00–03:00', startHour: 1,  endHour: 3  },
-  { index: 2,  branch: '寅', chineseName: '寅时', animal: 'Tiger',   hours: '03:00–05:00', startHour: 3,  endHour: 5  },
-  { index: 3,  branch: '卯', chineseName: '卯时', animal: 'Rabbit',  hours: '05:00–07:00', startHour: 5,  endHour: 7  },
-  { index: 4,  branch: '辰', chineseName: '辰时', animal: 'Dragon',  hours: '07:00–09:00', startHour: 7,  endHour: 9  },
-  { index: 5,  branch: '巳', chineseName: '巳时', animal: 'Snake',   hours: '09:00–11:00', startHour: 9,  endHour: 11 },
-  { index: 6,  branch: '午', chineseName: '午时', animal: 'Horse',   hours: '11:00–13:00', startHour: 11, endHour: 13 },
-  { index: 7,  branch: '未', chineseName: '未时', animal: 'Goat',    hours: '13:00–15:00', startHour: 13, endHour: 15 },
-  { index: 8,  branch: '申', chineseName: '申时', animal: 'Monkey',  hours: '15:00–17:00', startHour: 15, endHour: 17 },
-  { index: 9,  branch: '酉', chineseName: '酉时', animal: 'Rooster', hours: '17:00–19:00', startHour: 17, endHour: 19 },
-  { index: 10, branch: '戌', chineseName: '戌时', animal: 'Dog',     hours: '19:00–21:00', startHour: 19, endHour: 21 },
-  { index: 11, branch: '亥', chineseName: '亥时', animal: 'Pig',     hours: '21:00–23:00', startHour: 21, endHour: 23 },
+  { index: 0,  branch: '子', chineseName: '子时', animal: 'Rat',     hours: '23:00-01:00', startHour: 23, endHour: 1  },
+  { index: 1,  branch: '丑', chineseName: '丑时', animal: 'Ox',      hours: '01:00-03:00', startHour: 1,  endHour: 3  },
+  { index: 2,  branch: '寅', chineseName: '寅时', animal: 'Tiger',   hours: '03:00-05:00', startHour: 3,  endHour: 5  },
+  { index: 3,  branch: '卯', chineseName: '卯时', animal: 'Rabbit',  hours: '05:00-07:00', startHour: 5,  endHour: 7  },
+  { index: 4,  branch: '辰', chineseName: '辰时', animal: 'Dragon',  hours: '07:00-09:00', startHour: 7,  endHour: 9  },
+  { index: 5,  branch: '巳', chineseName: '巳时', animal: 'Snake',   hours: '09:00-11:00', startHour: 9,  endHour: 11 },
+  { index: 6,  branch: '午', chineseName: '午时', animal: 'Horse',   hours: '11:00-13:00', startHour: 11, endHour: 13 },
+  { index: 7,  branch: '未', chineseName: '未时', animal: 'Goat',    hours: '13:00-15:00', startHour: 13, endHour: 15 },
+  { index: 8,  branch: '申', chineseName: '申时', animal: 'Monkey',  hours: '15:00-17:00', startHour: 15, endHour: 17 },
+  { index: 9,  branch: '酉', chineseName: '酉时', animal: 'Rooster', hours: '17:00-19:00', startHour: 17, endHour: 19 },
+  { index: 10, branch: '戌', chineseName: '戌时', animal: 'Dog',     hours: '19:00-21:00', startHour: 19, endHour: 21 },
+  { index: 11, branch: '亥', chineseName: '亥时', animal: 'Pig',     hours: '21:00-23:00', startHour: 21, endHour: 23 },
 ]
 
 // ─── Quiz Questions ───────────────────────────────────────────────────────────
@@ -60,12 +60,12 @@ export const TIME_QUIZ_QUESTIONS: TimeQuizQuestion[] = [
     id: 1,
     text: 'Your natural energy peak is:',
     options: [
-      { key: 'a', text: 'Late night — I think best after midnight',   weights: { 0: 3, 11: 2 } },
-      { key: 'b', text: 'Very early morning — before most wake up',    weights: { 1: 2, 2: 3, 3: 2 } },
-      { key: 'c', text: 'Morning — 7am–11am feels sharpest',           weights: { 4: 3, 5: 3 } },
-      { key: 'd', text: 'Midday — I hit my stride around noon',        weights: { 6: 3, 7: 2 } },
-      { key: 'e', text: 'Afternoon/evening — 3pm–7pm is my zone',      weights: { 8: 3, 9: 3 } },
-      { key: 'f', text: 'Evening — I come alive after dinner',         weights: { 10: 3, 11: 2 } },
+      { key: 'a', text: 'Late night, I think best after midnight',   weights: { 0: 3, 11: 2 } },
+      { key: 'b', text: 'Very early morning, before most wake up',    weights: { 1: 2, 2: 3, 3: 2 } },
+      { key: 'c', text: 'Morning, 7am-11am feels sharpest',           weights: { 4: 3, 5: 3 } },
+      { key: 'd', text: 'Midday, I hit my stride around noon',        weights: { 6: 3, 7: 2 } },
+      { key: 'e', text: 'Afternoon/evening, 3pm-7pm is my zone',      weights: { 8: 3, 9: 3 } },
+      { key: 'f', text: 'Evening, I come alive after dinner',         weights: { 10: 3, 11: 2 } },
     ],
   },
   {
@@ -82,10 +82,10 @@ export const TIME_QUIZ_QUESTIONS: TimeQuizQuestion[] = [
     id: 3,
     text: 'Your parents would have described you as:',
     options: [
-      { key: 'a', text: '"Night baby — hard to put down at bedtime"',  weights: { 0: 4, 11: 3 } },
-      { key: 'b', text: '"Early riser — up with the sun"',              weights: { 3: 4, 4: 3 } },
+      { key: 'a', text: '"Night baby, hard to put down at bedtime"',  weights: { 0: 4, 11: 3 } },
+      { key: 'b', text: '"Early riser, up with the sun"',              weights: { 3: 4, 4: 3 } },
       { key: 'c', text: '"Active during the day, sleepy at night"',     weights: { 5: 2, 6: 3, 7: 2 } },
-      { key: 'd', text: '"Evening energy — got a second wind at 8pm"',  weights: { 10: 4, 11: 3 } },
+      { key: 'd', text: '"Evening energy, got a second wind at 8pm"',  weights: { 10: 4, 11: 3 } },
     ],
   },
   {
@@ -104,8 +104,8 @@ export const TIME_QUIZ_QUESTIONS: TimeQuizQuestion[] = [
     options: [
       { key: 'a', text: 'Stay up very late, sleep in',                 weights: { 0: 3, 1: 2, 11: 1 } },
       { key: 'b', text: 'Early to bed, early to rise',                 weights: { 2: 2, 3: 3, 4: 2 } },
-      { key: 'c', text: 'Regular and consistent — asleep by 10pm',     weights: { 4: 2, 5: 2, 6: 1 } },
-      { key: 'd', text: 'Variable — depends on what I\'m doing',       weights: { 7: 1, 8: 1, 9: 1, 10: 1, 11: 1 } },
+      { key: 'c', text: 'Regular and consistent, asleep by 10pm',     weights: { 4: 2, 5: 2, 6: 1 } },
+      { key: 'd', text: 'Variable, depends on what I\'m doing',       weights: { 7: 1, 8: 1, 9: 1, 10: 1, 11: 1 } },
     ],
   },
 ]
@@ -166,24 +166,24 @@ export function scoreTimeQuiz(answers: TimeQuizAnswers): TimeQuizResult {
     topHour: topSlot.startHour,
     message: candidates.length > 0
       ? `Based on your answers, you were likely born during ${topSlot.chineseName} (${topSlot.animal} Hour, ${topSlot.hours}).`
-      : 'Could not determine a strong candidate — please check birth records if possible.',
+      : 'Could not determine a strong candidate, please check birth records if possible.',
   }
 }
 
 function buildDescription(slot: ShichenSlot): string {
   const traits: Record<string, string> = {
-    '子': 'Rat Hour — Deep thinker, night creative, private mind',
-    '丑': 'Ox Hour — Persistent, steady, works through the quiet hours',
-    '寅': 'Tiger Hour — Bold, action-oriented, rises before the world wakes',
-    '卯': 'Rabbit Hour — Gentle, artistic, early-morning clarity',
-    '辰': 'Dragon Hour — Ambitious, charismatic, commands the morning',
-    '巳': 'Snake Hour — Wise, introspective, midmorning strategist',
-    '午': 'Horse Hour — Dynamic, social, peak-energy leader',
-    '未': 'Goat Hour — Creative, empathetic, afternoon dreamer',
-    '申': 'Monkey Hour — Clever, quick, afternoon problem-solver',
-    '酉': 'Rooster Hour — Precise, detail-oriented, late afternoon executor',
-    '戌': 'Dog Hour — Loyal, reflective, evening guardian',
-    '亥': 'Pig Hour — Intuitive, nurturing, deep evening thinker',
+    '子': 'Rat Hour, Deep thinker, night creative, private mind',
+    '丑': 'Ox Hour, Persistent, steady, works through the quiet hours',
+    '寅': 'Tiger Hour, Bold, action-oriented, rises before the world wakes',
+    '卯': 'Rabbit Hour, Gentle, artistic, early-morning clarity',
+    '辰': 'Dragon Hour, Ambitious, charismatic, commands the morning',
+    '巳': 'Snake Hour, Wise, introspective, midmorning strategist',
+    '午': 'Horse Hour, Dynamic, social, peak-energy leader',
+    '未': 'Goat Hour, Creative, empathetic, afternoon dreamer',
+    '申': 'Monkey Hour, Clever, quick, afternoon problem-solver',
+    '酉': 'Rooster Hour, Precise, detail-oriented, late afternoon executor',
+    '戌': 'Dog Hour, Loyal, reflective, evening guardian',
+    '亥': 'Pig Hour, Intuitive, nurturing, deep evening thinker',
   }
   return traits[slot.branch] ?? `${slot.chineseName} (${slot.hours})`
 }

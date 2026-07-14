@@ -79,7 +79,7 @@ export default function ChannelsSettingsPage() {
           <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>Channels</h1>
           <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 14 }}>
-            Where 8os reaches you — briefs, nudges and one-tap actions
+            Where 8os reaches you, briefs, nudges and one-tap actions
           </p>
         </div>
 
@@ -89,14 +89,14 @@ export default function ChannelsSettingsPage() {
           </div>
         )}
 
-        {/* Web inbox — always on */}
+        {/* Web inbox, always on */}
         <div style={card}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontSize: 18 }}>✉</span>
             <div style={{ flex: 1 }}>
               <div style={{ fontSize: 15, fontWeight: 700 }}>Web inbox</div>
               <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginTop: 2 }}>
-                Every message lands in your <Link href="/dashboard/inbox" style={{ color: 'var(--color-accent)' }}>in-app inbox</Link> — the channel of record.
+                Every message lands in your <Link href="/dashboard/inbox" style={{ color: 'var(--color-accent)' }}>in-app inbox</Link>, the channel of record.
               </div>
             </div>
             <span style={{ background: '#EAF1EA', border: '1px solid #4F7A5244', color: '#4F7A52', borderRadius: 8, fontSize: 11, fontWeight: 700, padding: '4px 10px' }}>
@@ -143,7 +143,7 @@ export default function ChannelsSettingsPage() {
                   </button>
                   {tg && !tg.botConfigured && (
                     <div style={{ color: '#8a6d1a', fontSize: 12, marginTop: 8 }}>
-                      The bot isn&apos;t live yet — the link will complete once Telegram is switched on.
+                      The bot isn&apos;t live yet, the link will complete once Telegram is switched on.
                     </div>
                   )}
                 </>
@@ -170,13 +170,13 @@ export default function ChannelsSettingsPage() {
 
           {!loading && tg?.linked && (
             <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginTop: 12 }}>
-              Bot: @{tg.botUsername ?? '—'} · send it any to-do as plain text, or /brief, /shutdown, /align.
+              Bot: @{tg.botUsername ?? '-'} · send it any to-do as plain text, or /brief, /shutdown, /align.
             </div>
           )}
         </div>
 
         <div style={{ maxWidth: 640, color: 'var(--color-text-muted)', fontSize: 12 }}>
-          WhatsApp is on the roadmap — it plugs into the same delivery layer with zero changes to your setup.
+          WhatsApp is on the roadmap, it plugs into the same delivery layer with zero changes to your setup.
         </div>
       </main>
     </div>

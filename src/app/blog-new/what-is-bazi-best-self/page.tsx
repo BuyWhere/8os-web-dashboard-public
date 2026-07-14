@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: 'What Is BaZi? The Operating System for Your Best Self',
     description:
-      "BaZi doesn't predict your fate — it reveals your optimal operating system. Here's how to use it for goal achievement.",
+      "BaZi doesn't predict your fate, it reveals your optimal operating system. Here's how to use it for goal achievement.",
     type: 'article',
     url: 'https://8os.ai/blog/what-is-bazi-best-self',
     images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'What Is BaZi' }],
@@ -47,12 +47,12 @@ export default function WhatIsBaziPage() {
 
         <div style={contentStyle}>
           <p style={leadStyle}>
-            You already know your star sign. Here&apos;s the system that knows your <em>structure</em> — and how to use it to become who you want to be.
+            You already know your star sign. Here&apos;s the system that knows your <em>structure</em>, and how to use it to become who you want to be.
           </p>
 
           <h2 style={h2Style}>What Is BaZi?</h2>
           <p style={pStyle}>
-            BaZi (八字) — literally &ldquo;Eight Characters&rdquo; — is a Chinese metaphysical system that reads your life patterns from your birth data. Four pillars, eight characters, unique to your exact birth moment.
+            BaZi (八字), literally &ldquo;Eight Characters&rdquo;, is a Chinese metaphysical system that reads your life patterns from your birth data. Four pillars, eight characters, unique to your exact birth moment.
           </p>
           <p style={pStyle}>
             But here&apos;s what matters: <strong>BaZi doesn&apos;t predict your fate. It reveals your optimal operating system.</strong>
@@ -100,7 +100,7 @@ export default function WhatIsBaziPage() {
 
           <h2 style={h2Style}>Why It Works for Goal Achievement</h2>
           <p style={pStyle}>
-            BaZi measures time through astronomical cycles — Jupiter&apos;s 12-year orbit, Saturn&apos;s 30-year cycle.
+            BaZi measures time through astronomical cycles, Jupiter&apos;s 12-year orbit, Saturn&apos;s 30-year cycle.
           </p>
           <p style={pStyle}>
             When you were born, specific elemental forces were dominant. Those forces don&apos;t predict your future. They reveal <strong>how you&apos;re built to push, when you&apos;re built to rest, and what kind of achievement will actually satisfy you.</strong>
@@ -112,14 +112,14 @@ export default function WhatIsBaziPage() {
           <h2 style={h2Style}>The Five Elements in BaZi</h2>
           <p style={pStyle}>The Five Elements (Wu Xing) are the energetic forces that flow through your BaZi chart:</p>
           <ul style={ulStyle}>
-            <li><strong>Wood (甲, 乙)</strong> — Growth, expansion, flexibility</li>
-            <li><strong>Fire (丙, 丁)</strong> — Energy, visibility, transformation</li>
-            <li><strong>Earth (戊, 己)</strong> — Stability, nourishment, structure</li>
-            <li><strong>Metal (庚, 辛)</strong> — Precision, authority, clarity</li>
-            <li><strong>Water (壬, 癸)</strong> — Flow, intuition, depth</li>
+            <li><strong>Wood (甲, 乙)</strong>, Growth, expansion, flexibility</li>
+            <li><strong>Fire (丙, 丁)</strong>, Energy, visibility, transformation</li>
+            <li><strong>Earth (戊, 己)</strong>, Stability, nourishment, structure</li>
+            <li><strong>Metal (庚, 辛)</strong>, Precision, authority, clarity</li>
+            <li><strong>Water (壬, 癸)</strong>, Flow, intuition, depth</li>
           </ul>
           <p style={pStyle}>
-            Your Daymaster — the element tied to your Day Pillar — is your core self. It determines how you approach goals, work, relationships, and success.
+            Your Daymaster, the element tied to your Day Pillar, is your core self. It determines how you approach goals, work, relationships, and success.
           </p>
 
           <h2 style={h2Style}>BaZi vs. Western Astrology</h2>
@@ -162,7 +162,7 @@ export default function WhatIsBaziPage() {
             </table>
           </div>
           <p style={pStyle}>
-            Western astrology tells you <em>who you are</em>. BaZi tells you <em>how you operate</em> — and when your operating system is best supported by cosmic weather.
+            Western astrology tells you <em>who you are</em>. BaZi tells you <em>how you operate</em>, and when your operating system is best supported by cosmic weather.
           </p>
 
           <h2 style={h2Style}>The 8os Synthesis</h2>
@@ -176,7 +176,7 @@ export default function WhatIsBaziPage() {
 
           <div style={ctaBoxStyle}>
             <p style={ctaTextStyle}>
-              <strong>CTA:</strong> Get your full archetype — Western + BaZi unified. Define your goals. Start your Live OS.
+              <strong>CTA:</strong> Get your full archetype, Western + BaZi unified. Define your goals. Start your Live OS.
             </p>
             <Link href="/onboarding" style={ctaButtonStyle}>Get Your Free Archetype →</Link>
           </div>

@@ -2,7 +2,7 @@ import Link from 'next/link'
 import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
-  title: 'Developer docs — 8os.ai',
+  title: 'Developer docs, 8os.ai',
   description: 'Developer resources for integrating with 8os.ai and learning about upcoming API access.',
 }
 

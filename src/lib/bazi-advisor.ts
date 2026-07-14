@@ -109,7 +109,7 @@ function branchRelation(a: Branch, b: Branch) {
   if (harm) parts.push('六害 harm (subtle undermining)')
   if (sharedTrine) parts.push(`三合 same ${sharedTrine} trine (natural alliance)`)
   if (a === b) parts.push('same branch (self-punishment themes for 辰/午/酉/亥; otherwise resonance)')
-  return { combine, clash, harm, sharedTrine, summary: parts.length ? parts.join('; ') : 'no major combination/clash/harm — a neutral pairing' }
+  return { combine, clash, harm, sharedTrine, summary: parts.length ? parts.join('; ') : 'no major combination/clash/harm, a neutral pairing' }
 }
 
 function stemRelation(userStem: Stem, partnerStem: Stem): string {
@@ -117,17 +117,17 @@ function stemRelation(userStem: Stem, partnerStem: Stem): string {
   const pe = STEM_ELEMENT[partnerStem] as Element
   const fiveCombine = Math.abs(STEMS.indexOf(userStem) - STEMS.indexOf(partnerStem)) === 5
   let base: string
-  if (ue === pe) base = `both ${ue} Day Masters — peers (comrades or rivals depending on balance)`
-  else if (GENERATES[ue] === pe) base = `user's ${ue} produces partner's ${pe} — the user feeds/supports the partner`
-  else if (GENERATES[pe] === ue) base = `partner's ${pe} produces user's ${ue} — the partner feeds/supports the user`
-  else if (CONTROLS[ue] === pe) base = `user's ${ue} controls partner's ${pe} — the user structures/pressures the partner`
-  else base = `partner's ${pe} controls user's ${ue} — the partner structures/pressures the user`
+  if (ue === pe) base = `both ${ue} Day Masters, peers (comrades or rivals depending on balance)`
+  else if (GENERATES[ue] === pe) base = `user's ${ue} produces partner's ${pe}, the user feeds/supports the partner`
+  else if (GENERATES[pe] === ue) base = `partner's ${pe} produces user's ${ue}, the partner feeds/supports the user`
+  else if (CONTROLS[ue] === pe) base = `user's ${ue} controls partner's ${pe}, the user structures/pressures the partner`
+  else base = `partner's ${pe} controls user's ${ue}, the partner structures/pressures the user`
   return fiveCombine ? `${base}; ALSO 五合 stem combination between the day stems (the classic affinity signal)` : base
 }
 
 // ─── Shared chart summarization ──────────────────────────────────────────────
 function pillarText(p: Pillar): string {
-  return `${p.combined} — ${p.stemName} ${p.element} (${p.polarity}) over ${p.branchName} [branch element: ${BRANCH_ELEMENT[p.branch]}]`
+  return `${p.combined}, ${p.stemName} ${p.element} (${p.polarity}) over ${p.branchName} [branch element: ${BRANCH_ELEMENT[p.branch]}]`
 }
 
 function chartSummary(natal: BaziResult, strength: DayMasterStrength, hourAssumed: boolean) {
@@ -140,7 +140,7 @@ function chartSummary(natal: BaziResult, strength: DayMasterStrength, hourAssume
       month: pillarText(natal.monthPillar),
       day: pillarText(natal.dayPillar),
       hour: natal.hourPillar
-        ? pillarText(natal.hourPillar) + (hourAssumed ? ' (ASSUMED — birth time unknown, noon used; treat hour-pillar claims as low-confidence)' : '')
+        ? pillarText(natal.hourPillar) + (hourAssumed ? ' (ASSUMED, birth time unknown, noon used; treat hour-pillar claims as low-confidence)' : '')
         : null,
     },
     dayMaster: {
@@ -257,7 +257,7 @@ export interface CompatibilityInput {
   userBirthDate: string
   userBirthTime: string | null
   userGender: string
-  partnerBirthDate: string          // YYYY-MM-DD — computed on the fly, never stored
+  partnerBirthDate: string          // YYYY-MM-DD, computed on the fly, never stored
   partnerBirthTime?: string | null
   partnerGender?: string
   context?: CompatibilityContext
@@ -283,7 +283,7 @@ export function buildCompatibility(input: CompatibilityInput) {
 
   return {
     context: input.context ?? 'dating',
-    note: "Partner chart computed on the fly from the provided birth data — NOT stored. Partner's hour pillar is low-confidence if no birth time was given.",
+    note: "Partner chart computed on the fly from the provided birth data, NOT stored. Partner's hour pillar is low-confidence if no birth time was given.",
     user: userChart,
     partner: {
       ...partnerChart,

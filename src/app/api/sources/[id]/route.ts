@@ -102,7 +102,7 @@ export async function DELETE(req: NextRequest, { params }: { params: { id: strin
       extra: { phase: 'purge', sourceId: source.id, purgedSoFar: purged },
     })
     return NextResponse.json(
-      { error: 'Purge failed part-way — please retry.', purged, upstreamRevoked },
+      { error: 'Purge failed part-way, please retry.', purged, upstreamRevoked },
       { status: 500 },
     )
   }

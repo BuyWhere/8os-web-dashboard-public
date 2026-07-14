@@ -150,7 +150,7 @@ export function CalendarMini({ events, timezone, weekStartsOn = 1 }: Props) {
         })}
       </div>
 
-      {/* Selected-day items — was a blank box; now the day's key calendar items. */}
+      {/* Selected-day items, was a blank box; now the day's key calendar items. */}
       <div style={{ marginTop: 16, borderTop: '1px solid var(--color-border)', paddingTop: 12 }}>
         <div style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-text-muted)', marginBottom: 10 }}>
           {selected === today.key ? 'Today' : selectedLabel}

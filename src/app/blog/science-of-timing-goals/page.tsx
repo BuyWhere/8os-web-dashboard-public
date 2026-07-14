@@ -4,7 +4,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'The Science of Timing: Why Some Months Feel Off | 8os.ai',
   description:
-    'Why do some months feel harder? BaZi Luck Pillars and Western transit mechanics track the same thing — celestial weather. Learn how to dress for it.',
+    'Why do some months feel harder? BaZi Luck Pillars and Western transit mechanics track the same thing, celestial weather. Learn how to dress for it.',
   openGraph: {
     title: 'The Science of Timing: Why Some Months Feel Off',
     description:
@@ -22,7 +22,7 @@ const jsonLd = {
   '@type': 'Article',
   headline: 'The Science of Timing: Why Some Months Feel Off',
   description:
-    'Why do some months feel harder? BaZi Luck Pillars and Western transit mechanics track the same thing — celestial weather. Learn how to dress for it.',
+    'Why do some months feel harder? BaZi Luck Pillars and Western transit mechanics track the same thing, celestial weather. Learn how to dress for it.',
   author: { '@type': 'Organization', name: '8os.ai' },
   publisher: { '@type': 'Organization', name: '8os.ai', url: 'https://8os.ai' },
   datePublished: '2026-05-07',
@@ -80,7 +80,7 @@ export default function ScienceOfTimingPage() {
           </div>
 
           <h2 style={h2Style}>Understanding Luck Pillars</h2>
-          <p style={pStyle}>Your BaZi chart includes 10 Luck Pillars — each lasting 10 years — that represent the cosmic weather of that period of your life.</p>
+          <p style={pStyle}>Your BaZi chart includes 10 Luck Pillars, each lasting 10 years, that represent the cosmic weather of that period of your life.</p>
           <p style={pStyle}>These aren&apos;t random. They&apos;re calculated from your birth data and represent the elemental themes that will dominate each decade.</p>
           <p style={pStyle}><strong>Example:</strong> A person with 辛 Metal (supportive) as their current Luck Pillar might find:</p>
           <ul style={ulStyle}>
@@ -99,8 +99,8 @@ export default function ScienceOfTimingPage() {
 
           <h2 style={h2Style}>How to Use Timing for Goals</h2>
           <ol style={olStyle}>
-            <li><strong>Set goals during supportive periods</strong> — Launch initiatives when the cosmic weather supports expansion</li>
-            <li><strong>Restructure during challenging periods</strong> — Use friction as fuel for transformation, not as evidence of failure</li>
+            <li><strong>Set goals during supportive periods</strong>, Launch initiatives when the cosmic weather supports expansion</li>
+            <li><strong>Restructure during challenging periods</strong>, Use friction as fuel for transformation, not as evidence of failure</li>
             <li><strong>Match goal type to pillar type</strong>:
               <ul style={ulStyle}>
                 <li>Build/expand → Supportive pillars</li>
@@ -109,13 +109,13 @@ export default function ScienceOfTimingPage() {
                 <li>Maintain/preserve → Neutral pillars</li>
               </ul>
             </li>
-            <li><strong>Don&apos;t force a Fire launch during a Water pillar</strong> — Your energy will be low for visibility work; pivot to depth instead</li>
+            <li><strong>Don&apos;t force a Fire launch during a Water pillar</strong>, Your energy will be low for visibility work; pivot to depth instead</li>
           </ol>
 
           <h2 style={h2Style}>The Key Insight</h2>
-          <p style={pStyle}>Timing doesn&apos;t guarantee success — but it dramatically shifts the odds.</p>
+          <p style={pStyle}>Timing doesn&apos;t guarantee success, but it dramatically shifts the odds.</p>
           <p style={pStyle}>A goal launched in alignment with supportive cosmic weather has more momentum, fewer obstacles, and more &ldquo;lucky&rdquo; coincidences.</p>
-          <p style={pStyle}>A goal launched against the grain requires more effort, more resilience, and more patience — but sometimes the timing chooses you, and that&apos;s okay too.</p>
+          <p style={pStyle}>A goal launched against the grain requires more effort, more resilience, and more patience, but sometimes the timing chooses you, and that&apos;s okay too.</p>
           <p style={pStyle}><strong>8os tracks your Luck Pillar transitions and tells you what kind of work each period is best suited for.</strong></p>
 
           <div style={ctaBoxStyle}>
