@@ -535,7 +535,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
 
       {/* Unscheduled tasks sidebar */}
       {unscheduledTasks.length > 0 && (
-        <div style={{ width: isMobile ? '100%' : 220, borderLeft: isMobile ? 'none' : '1px solid var(--color-border)', borderTop: isMobile ? '1px solid var(--color-border)' : 'none', background: 'var(--color-bg-primary)', padding: '16px 14px', overflowY: 'auto', flexShrink: 0, maxHeight: isMobile ? '46vh' : undefined }}>
+        <div style={{ width: isMobile ? '100%' : 220, borderLeft: isMobile ? 'none' : '1px solid var(--color-border)', borderTop: isMobile ? '1px solid var(--color-border)' : 'none', background: 'var(--color-bg-primary)', padding: '16px 14px 84px', overflowY: 'auto', flexShrink: 0, maxHeight: isMobile ? '46vh' : undefined }}>
           <div style={{ fontSize: 11, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12 }}>
             Unscheduled ({unscheduledTasks.length})
           </div>
