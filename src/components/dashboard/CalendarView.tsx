@@ -516,8 +516,8 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
           </div>
         )}
 
-        {/* Grid */}
-        <div style={{ flex: 1, overflow: 'auto' }}>
+        {/* Grid — mobile: keep content off the viewport edge */}
+        <div style={{ flex: 1, overflow: 'auto', padding: isMobile ? '0 4px' : undefined }}>
           {view === 'month' && (
             <MonthView days={monthDays} events={events} todayKey={todayKey} onEventClick={openEvent} onDayClick={(d) => openCreate(atHour(d, 9))} firstDay={firstDay} />
           )}
