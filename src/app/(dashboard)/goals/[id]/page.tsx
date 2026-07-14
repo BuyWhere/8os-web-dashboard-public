@@ -8,6 +8,8 @@ import { redirect, notFound } from 'next/navigation'
 import { prisma } from '@/lib/db/prisma'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { ProgressRing } from '@/components/dashboard/ProgressRing'
+import { GoalActions } from '@/components/dashboard/GoalActions'
+import { normalizeHorizon } from '@/lib/horizons'
 import { QuickAdd } from '@/components/dashboard/QuickAdd'
 import Link from 'next/link'
 
@@ -94,6 +96,18 @@ export default async function GoalDetailPage({ params }: { params: { id: string 
             <Stat label="Completed" value={`${doneTasks}/${totalTasks}`} />
             <Stat label="Check method" value={goal.checkMethod} />
           </div>
+
+          <GoalActions
+            id={goal.id}
+            name={goal.name}
+            definition={goal.definition ?? ''}
+            horizon={normalizeHorizon((goal as Record<string, unknown>).horizon as string | undefined)}
+            targetDate={(() => {
+              const td = (goal as Record<string, unknown>).targetDate as string | Date | null | undefined
+              return td ? new Date(td).toISOString().slice(0, 10) : null
+            })()}
+            status={goal.status}
+          />
         </div>
 
         {/* Projects + Tasks */}
