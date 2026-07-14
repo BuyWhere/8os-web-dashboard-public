@@ -16,7 +16,9 @@ import { requireAuth } from '@/lib/auth/require-auth'
 import { pushEventToGoogle } from '@/lib/external/google-calendar'
 import { z } from 'zod'
 
+// Fixed cadences, or custom weekdays "days:0,3,5" (0=Sun..6=Sat).
 const RECURRENCE = z.enum(['none', 'daily', 'weekly', 'biweekly', 'monthly'])
+  .or(z.string().regex(/^days:[0-6](,[0-6]){0,6}$/))
 
 const CreateEventSchema = z.object({
   startAt: z.string().datetime(),

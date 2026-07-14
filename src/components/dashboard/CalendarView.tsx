@@ -21,7 +21,8 @@ import { useState, useMemo, useRef, useCallback, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 
 type EnergyLevel = 'green' | 'yellow' | 'red'
-type RecurrenceRule = 'none' | 'daily' | 'weekly' | 'biweekly' | 'monthly'
+// `days:0,3,5` = custom weekly-by-weekday (0=Sun..6=Sat), Motion-style.
+type RecurrenceRule = 'none' | 'daily' | 'weekly' | 'biweekly' | 'monthly' | `days:${string}`
 
 interface CalendarEvent {
   id: string
@@ -767,12 +768,21 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
 
             <Field label="Repeat">
               <div style={{ display: 'flex', gap: 8 }}>
-                <select value={form.recurrenceRule} onChange={(e) => set('recurrenceRule', e.target.value as RecurrenceRule)} style={{ ...inputStyle, flex: 1 }}>
+                <select
+                  value={form.recurrenceRule.startsWith('days') ? 'days' : form.recurrenceRule}
+                  onChange={(e) => {
+                    const v = e.target.value
+                    if (v === 'days') { const wd = new Date(form.startAt).getDay(); set('recurrenceRule', `days:${wd}` as RecurrenceRule) }
+                    else set('recurrenceRule', v as RecurrenceRule)
+                  }}
+                  style={{ ...inputStyle, flex: 1 }}
+                >
                   <option value="none">Does not repeat</option>
                   <option value="daily">Daily</option>
                   <option value="weekly">Weekly</option>
                   <option value="biweekly">Every 2 weeks</option>
                   <option value="monthly">Monthly</option>
+                  <option value="days">Custom weekdays…</option>
                 </select>
                 {form.recurrenceRule !== 'none' && (
                   <input type="date" title="Repeat until"
@@ -781,6 +791,26 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
                     style={{ ...inputStyle, flex: 1 }} />
                 )}
               </div>
+              {form.recurrenceRule.startsWith('days') && (
+                <div style={{ display: 'flex', gap: 6, marginTop: 8 }}>
+                  {([[1, 'M'], [2, 'T'], [3, 'W'], [4, 'T'], [5, 'F'], [6, 'S'], [0, 'S']] as [number, string][]).map(([d, lbl]) => {
+                    const days = new Set(form.recurrenceRule.slice(5).split(',').filter(Boolean).map(Number))
+                    const on = days.has(d)
+                    return (
+                      <button key={d} type="button" title={['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'][d]}
+                        onClick={() => {
+                          const s = new Set(form.recurrenceRule.slice(5).split(',').filter(Boolean).map(Number))
+                          if (s.has(d)) s.delete(d); else s.add(d)
+                          if (s.size === 0) return // keep at least one weekday
+                          set('recurrenceRule', `days:${Array.from(s).sort((a, b) => a - b).join(',')}` as RecurrenceRule)
+                        }}
+                        style={{ width: 32, height: 32, borderRadius: '50%', flexShrink: 0, cursor: 'pointer', fontSize: 12, fontWeight: 600, border: `1px solid ${on ? 'var(--color-accent)' : 'var(--color-border)'}`, background: on ? 'var(--color-accent)' : 'transparent', color: on ? '#fff' : 'var(--color-text-secondary)' }}>
+                        {lbl}
+                      </button>
+                    )
+                  })}
+                </div>
+              )}
             </Field>
 
             <Field label="Colour">
@@ -969,25 +999,31 @@ function useGridInteractions(
   return { beginDrag, beginResize, ghost }
 }
 
-function EventBlock({ e, ghost, onClick, onDragStart, onResizeStart, dense }: {
+function EventBlock({ e, ghost, onClick, onDragStart, onResizeStart, dense, col = 0, cols = 1 }: {
   e: CalendarEvent
   ghost: { id: string; top: number; height: number } | null
   onClick: (e: CalendarEvent) => void
   onDragStart: (ev: React.MouseEvent, e: CalendarEvent) => void
   onResizeStart: (ev: React.MouseEvent, e: CalendarEvent) => void
   dense?: boolean
+  col?: number   // overlap column index
+  cols?: number  // total columns in this event's overlap cluster
 }) {
   const isGhost = ghost?.id === e.id
   const top = isGhost ? ghost!.top : eventTop(e)
   const height = isGhost ? ghost!.height : eventHeight(e)
   const color = eventColor(e)
   const draggable = !e.readOnly && e.recurrenceRule === 'none'
+  // Side-by-side layout for overlapping events: each takes 1/cols of the width.
+  const leftPct = (col / cols) * 100
+  const widthCalc = `calc(${100 / cols}% - ${cols > 1 ? 3 : 4}px)`
   return (
     <div
       onMouseDown={(ev) => draggable && onDragStart(ev, e)}
       onClick={(ev) => { ev.stopPropagation(); onClick(e) }}
       style={{
-        position: 'absolute', top, left: 2, right: 2, height,
+        position: 'absolute', top, height,
+        left: `calc(${leftPct}% + 2px)`, width: widthCalc,
         background: e.external ? color + '18' : color + '22',
         border: `1px solid ${color}44`, borderLeft: `3px solid ${color}`,
         borderRadius: 4, padding: dense ? '1px 5px' : '2px 6px',
@@ -1002,7 +1038,7 @@ function EventBlock({ e, ghost, onClick, onDragStart, onResizeStart, dense }: {
         {e.recurrenceRule !== 'none' && '↻ '}{e.title}
       </div>
       {height > 34 && (
-        <div style={{ fontSize: 10, color: color + 'cc' }}>{fmtTime(new Date(e.startAt))}</div>
+        <div style={{ fontSize: 10, color: color + 'cc' }}>{fmtTime(new Date(e.startAt))} - {fmtTime(new Date(e.endAt))}</div>
       )}
       {draggable && (
         <div onMouseDown={(ev) => onResizeStart(ev, e)} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 7, cursor: 'ns-resize' }} title="Drag to resize">
@@ -1129,6 +1165,39 @@ function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, 
 
 // ─── Day column (used by both Week and Day views) ────────────────────────────
 
+// Column-pack overlapping events so they render side-by-side (not stacked).
+// id → { col, cols }: greedy interval colouring within each cluster of
+// transitively-overlapping events.
+function layoutColumns(events: CalendarEvent[]): Map<string, { col: number; cols: number }> {
+  const out = new Map<string, { col: number; cols: number }>()
+  const timed = events
+    .map((e) => ({ id: e.id, s: new Date(e.startAt).getTime(), e: new Date(e.endAt).getTime() }))
+    .sort((a, b) => a.s - b.s || a.e - b.e)
+  let cluster: typeof timed = []
+  let clusterEnd: number | null = null
+  const flush = (grp: typeof timed) => {
+    const colEnds: number[] = []
+    const colOf = new Map<string, number>()
+    for (const ev of grp) {
+      let placed = -1
+      for (let i = 0; i < colEnds.length; i++) {
+        if (colEnds[i] <= ev.s) { colEnds[i] = ev.e; placed = i; break }
+      }
+      if (placed < 0) { placed = colEnds.length; colEnds.push(ev.e) }
+      colOf.set(ev.id, placed)
+    }
+    const total = colEnds.length
+    for (const ev of grp) out.set(ev.id, { col: colOf.get(ev.id) ?? 0, cols: total })
+  }
+  for (const ev of timed) {
+    if (cluster.length && clusterEnd !== null && ev.s >= clusterEnd) { flush(cluster); cluster = []; clusterEnd = null }
+    cluster.push(ev)
+    clusterEnd = clusterEnd === null ? ev.e : Math.max(clusterEnd, ev.e)
+  }
+  if (cluster.length) flush(cluster)
+  return out
+}
+
 function DayColumn({ day, events, energy, ghost, onSlotCreate, onEventClick, onDragStart, onResizeStart, showNow, dense }: {
   day: Date; events: CalendarEvent[]; energy: Record<number, EnergyLevel>
   ghost: { id: string; top: number; height: number } | null
@@ -1165,9 +1234,13 @@ function DayColumn({ day, events, energy, ghost, onSlotCreate, onEventClick, onD
         </div>
       )}
 
-      {events.map((e) => (
-        <EventBlock key={e.id} e={e} ghost={ghost} onClick={onEventClick} onDragStart={onDragStart} onResizeStart={onResizeStart} dense={dense} />
-      ))}
+      {(() => {
+        const layout = layoutColumns(events)
+        return events.map((e) => {
+          const pos = layout.get(e.id) ?? { col: 0, cols: 1 }
+          return <EventBlock key={e.id} e={e} ghost={ghost} onClick={onEventClick} onDragStart={onDragStart} onResizeStart={onResizeStart} dense={dense} col={pos.col} cols={pos.cols} />
+        })
+      })()}
     </div>
   )
 }
