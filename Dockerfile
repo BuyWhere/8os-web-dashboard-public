@@ -22,20 +22,22 @@ ENV JWT_PUBLIC_KEY="placeholder"
 # PUBLIC value (pk_live, already shipped to browsers), so it is safe in the
 # build layer. Without this, <ClerkProvider> throws "Missing publishableKey"
 # while prerendering static pages and the build fails.
+# OS-3318: removed deprecated NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL /
+# AFTER_SIGN_UP_URL ARGs. These injected empty-string env vars that got
+# baked into the RSC payload even when empty, causing Clerk SDK
+# deprecation warnings in the browser console on every page load.
 ARG NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 ARG NEXT_PUBLIC_CLERK_SIGN_IN_URL
 ARG NEXT_PUBLIC_CLERK_SIGN_UP_URL
-ARG NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL
-ARG NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL
 ENV NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=$NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY
 ENV NEXT_PUBLIC_CLERK_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_SIGN_IN_URL
 ENV NEXT_PUBLIC_CLERK_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_SIGN_UP_URL
-ENV NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL
-ENV NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL=$NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL
 
 # Generate Prisma client then build Next.js
 # output: 'standalone' is set in next.config.js for optimal image size
-RUN npx prisma generate --schema=./prisma/schema.prisma && npx next build
+# OS-3318: run patch-package before build to apply the @clerk/nextjs patch
+# that strips deprecated afterSignInUrl/afterSignUpUrl props.
+RUN npx patch-package && npx prisma generate --schema=./prisma/schema.prisma && npx next build
 
 FROM node:22-alpine AS runner
 WORKDIR /app
