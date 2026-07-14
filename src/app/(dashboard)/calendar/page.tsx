@@ -102,7 +102,7 @@ export default async function CalendarPage() {
   const rangeEnd = new Date(now)
   rangeEnd.setDate(rangeEnd.getDate() + 120)
 
-  const [goals, calendarEventsRaw, energyProfileRaw, tasks, externalEventsRaw] = await Promise.all([
+  const [goals, calendarEventsRaw, energyProfileRaw, tasks, externalEventsRaw, userSettingsRaw] = await Promise.all([
     prisma.goal.findMany({
       where: { userId, status: 'active' },
       select: { id: true, domainId: true, name: true, progress: true },
@@ -132,9 +132,11 @@ export default async function CalendarPage() {
       select: { id: true, externalId: true, icalUid: true, title: true, startsAt: true, endsAt: true },
       take: 1000,
     }),
+    prisma.userSettings.findUnique({ where: { userId }, select: { firstDayOfWeek: true } }),
   ])
 
   const energyMap = (energyProfileRaw?.hourMap as Record<number, 'green' | 'yellow' | 'red'>) ?? null
+  const firstDayOfWeek: 0 | 1 = userSettingsRaw?.firstDayOfWeek === 0 ? 0 : 1
 
   // Native events (with recurrence expansion). Track which Google event ids 8os
   // owns so the read-only external overlay never double-shows a pushed event.
@@ -243,6 +245,7 @@ export default async function CalendarPage() {
             domainId: t.domainId,
           }))}
           energyMap={energyMap}
+          firstDayOfWeek={firstDayOfWeek}
         />
       </main>
 

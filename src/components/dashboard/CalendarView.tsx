@@ -57,6 +57,8 @@ interface Props {
   goals: GoalOption[]
   unscheduledTasks: UnscheduledTask[]
   energyMap: Record<number, EnergyLevel> | null
+  /** 0 = Sunday, 1 = Monday. Mirrors UserSettings.firstDayOfWeek. */
+  firstDayOfWeek?: 0 | 1
 }
 
 type CalView = 'day' | 'week' | 'month'
@@ -213,7 +215,7 @@ function normalizeSaved(
 
 // ─── Root ────────────────────────────────────────────────────────────────────
 
-export function CalendarView({ events: serverEvents, goals, unscheduledTasks, energyMap }: Props) {
+export function CalendarView({ events: serverEvents, goals, unscheduledTasks, energyMap, firstDayOfWeek = 1 }: Props) {
   const router = useRouter()
   const [view, setView] = useState<CalView>('week')
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -221,7 +223,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
   const [schedulingAll, setSchedulingAll] = useState(false)
   const [schedulingResult, setSchedulingResult] = useState<string | null>(null)
   const [editing, setEditing] = useState<EditingEvent | null>(null)
-  const firstDay = 1 // Monday-first (matches the app's default first-day-of-week)
+  const firstDay = firstDayOfWeek === 0 ? 0 : 1
 
   // ── Bug fix (week-view stale-render): the calendar renders from a *client*
   //    events state seeded from the server snapshot. Every view (day/week/month)
@@ -501,7 +503,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
         {/* Grid */}
         <div style={{ flex: 1, overflow: 'auto' }}>
           {view === 'month' && (
-            <MonthView days={monthDays} events={events} todayKey={todayKey} onEventClick={openEvent} onDayClick={(d) => openCreate(atHour(d, 9))} />
+            <MonthView days={monthDays} events={events} todayKey={todayKey} onEventClick={openEvent} onDayClick={(d) => openCreate(atHour(d, 9))} firstDay={firstDay} />
           )}
           {view === 'week' && (
             <WeekView days={weekDays} events={events} energy={energy} todayKey={todayKey}
@@ -832,11 +834,14 @@ function Field({ label, children, style }: { label: string; children: React.Reac
 
 // ─── Month View ──────────────────────────────────────────────────────────────
 
-function MonthView({ days, events, todayKey, onEventClick, onDayClick }: {
+function MonthView({ days, events, todayKey, onEventClick, onDayClick, firstDay = 1 }: {
   days: Date[]; events: CalendarEvent[]; todayKey: string
   onEventClick: (e: CalendarEvent) => void; onDayClick: (d: Date) => void
+  firstDay?: 0 | 1
 }) {
-  const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  const WEEKDAYS = firstDay === 0
+    ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
   const currentMonth = days[15]?.getMonth()
   return (
     <div>
