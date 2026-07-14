@@ -523,7 +523,8 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
           )}
           {view === 'week' && (
             <WeekView days={weekDays} events={events} energy={energy} todayKey={todayKey}
-              onSlotCreate={openCreate} onEventClick={openEvent} onEventDrag={patchTimes} onEventResize={patchTimes} />
+              onSlotCreate={openCreate} onEventClick={openEvent} onEventDrag={patchTimes} onEventResize={patchTimes}
+              firstDay={firstDay} />
           )}
           {view === 'day' && (
             <DayView day={currentDate} events={events} energy={energy}
@@ -1090,14 +1091,17 @@ function useSlotCreate(day: Date, onSlotCreate: (start: Date, mins: number) => v
 
 // ─── Week View ───────────────────────────────────────────────────────────────
 
-function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, onEventDrag, onEventResize }: {
+function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, onEventDrag, onEventResize, firstDay = 1 }: {
   days: Date[]; events: CalendarEvent[]; energy: Record<number, EnergyLevel>; todayKey: string
   onSlotCreate: (start: Date, mins: number) => void
   onEventClick: (e: CalendarEvent) => void
   onEventDrag: (id: string, s: Date, e: Date) => void
   onEventResize: (id: string, s: Date, e: Date) => void
+  firstDay?: 0 | 1
 }) {
-  const WEEKDAYS_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
+  const WEEKDAYS_SHORT = firstDay === 0
+    ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
+    : ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
   const { beginDrag, beginResize, ghost } = useGridInteractions(onEventDrag, onEventResize)
   const anyAllDay = days.some((d) => allDayForDay(events, d).length > 0)
 
@@ -1110,7 +1114,7 @@ function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, 
           const isToday = dayKey(d) === todayKey
           return (
             <div key={i} style={{ padding: '10px 8px', textAlign: 'center', borderLeft: '1px solid var(--color-border)' }}>
-              <div style={{ fontSize: 10, color: 'var(--color-text-muted)' }}>{WEEKDAYS_SHORT[(d.getDay() + 6) % 7]}</div>
+              <div style={{ fontSize: 10, color: 'var(--color-text-muted)' }}>{WEEKDAYS_SHORT[(d.getDay() - firstDay + 7) % 7]}</div>
               <div style={{ width: 28, height: 28, borderRadius: '50%', margin: '2px auto 0', background: isToday ? 'var(--color-accent)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, color: isToday ? '#fff' : 'var(--color-text-primary)', fontWeight: isToday ? 700 : 400 }}>{d.getDate()}</div>
             </div>
           )
