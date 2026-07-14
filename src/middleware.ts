@@ -39,6 +39,10 @@ const isProtectedRoute = createRouteMatcher([
 // Routes that require admin role
 const isAdminRoute = createRouteMatcher(['/admin(.*)'])
 
+// Onboarding routes redirect to /signup instead of /login for better conversion
+// from public CTAs like "Generate My Life OS — Free"
+const isOnboardingRoute = createRouteMatcher(['/onboarding(.*)'])
+
 const clerk = clerkMiddleware(async (auth, req) => {
   // Clerk v6: the middleware `auth` helper is async and its methods are called
   // directly (await auth.protect()), NOT auth().protect() (that was Clerk v5 and
@@ -46,10 +50,15 @@ const clerk = clerkMiddleware(async (auth, req) => {
   // protected route). protect() redirects unauthenticated users to the sign-in
   // URL (NEXT_PUBLIC_CLERK_SIGN_IN_URL=/login) instead of 500-ing.
   const loginUrl = new URL('/login', req.url).toString()
+  const signupUrl = new URL('/signup', req.url).toString()
   if (isAdminRoute(req)) {
     await auth.protect((has) => has({ role: 'org:admin' }), {
       unauthenticatedUrl: loginUrl,
     })
+  } else if (isOnboardingRoute(req)) {
+    // OS-3649: Public CTAs use "free" copy and link to /onboarding. Unauthenticated
+    // users should land on /signup (not /login) to preserve conversion intent.
+    await auth.protect({ unauthenticatedUrl: signupUrl })
   } else if (isProtectedRoute(req)) {
     // Clerk v6: bare protect() REWRITES signed-out users to a 404
     // (x-clerk-auth-reason: protect-rewrite). Passing unauthenticatedUrl makes
