@@ -61,14 +61,14 @@ export function Header() {
   if (appRoute) {
     return (
       <header
-        className={fraunces.variable}
+        className={`${fraunces.variable} app-topbar`}
         style={{
           position: 'fixed',
           top: 0,
           left: 0,
           right: 0,
           height: 'var(--header-height)',
-          background: 'rgba(247, 243, 236, 0.86)',
+          background: 'var(--color-bg-card)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
           borderBottom: `1px solid ${HAIRLINE}`,
@@ -139,7 +139,8 @@ export function Header() {
         </div>
         <style
           dangerouslySetInnerHTML={{
-            __html: `@media (max-width: 767px){ .app-header-hamburger{ display: flex !important; } }`,
+            __html: `@media (max-width: 767px){ .app-header-hamburger{ display: flex !important; } }
+                     @media (min-width: 768px){ .app-topbar{ display: none !important; } }`,
           }}
         />
       </header>

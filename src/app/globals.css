@@ -146,6 +146,15 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* App routes drop the desktop top bar (Header .app-topbar is display:none ≥768px),
+   so reclaim the reserved header height: content + sidebar start at the very top.
+   Mobile keeps the compact top bar, so the padding stays there. */
+@media (min-width: 768px) {
+  body:has(.app-sidebar) {
+    padding-top: 0;
+  }
+}
+
 .skip-link {
   position: absolute;
   left: 1rem;

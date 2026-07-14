@@ -3,6 +3,7 @@
 import { useState, useEffect, type FormEvent } from 'react'
 import { useRouter } from 'next/navigation'
 import { UserProfile as ClerkUserProfile, useUser } from '@clerk/nextjs'
+import { useTheme } from '@/components/ThemeProvider'
 import { GoogleAuthButton } from '@/components/auth/GoogleAuthButton'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { SettingsTabs } from '@/components/SettingsTabs'
@@ -33,6 +34,8 @@ interface Session {
 export default function ProfileSettingsPage() {
   const router = useRouter()
   const { user: clerkUser } = useUser()
+  const { resolved } = useTheme()
+  const clerkDark = resolved === 'dark'
   const [user, setUser] = useState<UserProfile | null>(null)
   const [sessions, setSessions] = useState<Session[]>([])
   const [loading, setLoading] = useState(true)
@@ -196,6 +199,17 @@ export default function ProfileSettingsPage() {
             <ClerkUserProfile
               routing="hash"
               appearance={{
+                variables: clerkDark
+                  ? {
+                      colorBackground: '#221E18',
+                      colorText: '#EDE7DD',
+                      colorTextSecondary: '#B8AF9F',
+                      colorInputBackground: '#1F1B15',
+                      colorInputText: '#EDE7DD',
+                      colorPrimary: '#C79A48',
+                      colorNeutral: '#EDE7DD',
+                    }
+                  : { colorPrimary: '#B08637' },
                 elements: {
                   rootBox: { width: '100%' },
                   card: { boxShadow: 'none', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)' },

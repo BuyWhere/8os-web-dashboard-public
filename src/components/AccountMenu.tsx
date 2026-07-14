@@ -35,13 +35,32 @@ const THEME_OPTIONS: { value: ThemeChoice; label: string }[] = [
   { value: 'auto', label: 'Auto' },
 ]
 
-export function AccountMenu() {
+export function AccountMenu({ placement = 'header' }: { placement?: 'header' | 'sidebar' } = {}) {
   const [open, setOpen] = useState(false)
   const rootRef = useRef<HTMLDivElement>(null)
+  const triggerRef = useRef<HTMLButtonElement>(null)
+  // The dropdown is fixed-positioned (computed from the trigger rect) so it
+  // escapes any clipping ancestor (e.g. the sidebar's overflow:hidden) and, in
+  // the sidebar, opens UPWARD from the footer.
+  const [coords, setCoords] = useState<{ left?: number; top?: number; right?: number; bottom?: number }>({})
   const router = useRouter()
   const { user } = useUser()
   const { signOut } = useClerk()
   const { choice, setTheme } = useTheme()
+
+  const toggle = () => {
+    if (open) { setOpen(false); return }
+    const el = triggerRef.current
+    if (el) {
+      const r = el.getBoundingClientRect()
+      setCoords(
+        placement === 'sidebar'
+          ? { left: r.left, bottom: window.innerHeight - r.top + 8 }
+          : { top: r.bottom + 10, right: window.innerWidth - r.right },
+      )
+    }
+    setOpen(true)
+  }
 
   // Close on outside click + Escape.
   useEffect(() => {
@@ -70,48 +89,82 @@ export function AccountMenu() {
     await signOut(() => router.push('/'))
   }
 
+  const avatarCircle = (size: number) => ({
+    width: size,
+    height: size,
+    borderRadius: '50%',
+    flexShrink: 0,
+    border: '1px solid var(--color-border)',
+    background: avatarUrl ? `center/cover no-repeat url(${avatarUrl})` : 'var(--color-accent)',
+    color: '#fff',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    fontSize: Math.round(size * 0.42),
+    fontWeight: 600,
+    overflow: 'hidden',
+  }) as const
+
   return (
-    <div ref={rootRef} style={{ position: 'relative' }}>
-      <button
-        type="button"
-        aria-label="Account menu"
-        aria-haspopup="menu"
-        aria-expanded={open}
-        onClick={() => setOpen((v) => !v)}
-        style={{
-          width: 34,
-          height: 34,
-          borderRadius: '50%',
-          border: '1px solid var(--color-border)',
-          background: avatarUrl ? `center/cover no-repeat url(${avatarUrl})` : 'var(--color-accent)',
-          color: '#fff',
-          cursor: 'pointer',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 14,
-          fontWeight: 600,
-          padding: 0,
-          overflow: 'hidden',
-        }}
-      >
-        {!avatarUrl && initial}
-      </button>
+    <div ref={rootRef} style={{ position: 'relative', width: placement === 'sidebar' ? '100%' : 'auto' }}>
+      {placement === 'sidebar' ? (
+        <button
+          ref={triggerRef}
+          type="button"
+          aria-label="Account menu"
+          aria-haspopup="menu"
+          aria-expanded={open}
+          onClick={toggle}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: 10,
+            width: '100%',
+            padding: '9px 10px',
+            borderRadius: 10,
+            border: 'none',
+            background: open ? 'var(--color-accent-soft)' : 'transparent',
+            cursor: 'pointer',
+            textAlign: 'left',
+          }}
+          onMouseEnter={(e) => { if (!open) e.currentTarget.style.background = 'var(--color-accent-soft)' }}
+          onMouseLeave={(e) => { if (!open) e.currentTarget.style.background = 'transparent' }}
+        >
+          <div style={avatarCircle(30)}>{!avatarUrl && initial}</div>
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--color-text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{name}</div>
+            {email && <div style={{ fontSize: 11, color: 'var(--color-text-muted)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email}</div>}
+          </div>
+          <span style={{ color: 'var(--color-text-muted)', fontSize: 12, flexShrink: 0 }}>⌄</span>
+        </button>
+      ) : (
+        <button
+          ref={triggerRef}
+          type="button"
+          aria-label="Account menu"
+          aria-haspopup="menu"
+          aria-expanded={open}
+          onClick={toggle}
+          style={{ ...avatarCircle(34), cursor: 'pointer', padding: 0 }}
+        >
+          {!avatarUrl && initial}
+        </button>
+      )}
 
       {open && (
         <div
           role="menu"
           style={{
-            position: 'absolute',
-            top: 'calc(100% + 10px)',
-            right: 0,
+            position: 'fixed',
+            ...coords,
             width: 288,
+            maxWidth: 'calc(100vw - 24px)',
             background: 'var(--color-bg-card)',
             border: '1px solid var(--color-border)',
             borderRadius: 14,
-            boxShadow: '0 16px 40px rgba(0,0,0,0.16)',
+            boxShadow: '0 16px 40px rgba(0,0,0,0.28)',
             padding: 8,
-            zIndex: 200,
+            zIndex: 400,
           }}
         >
           {/* Identity header */}

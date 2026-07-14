@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Fraunces } from 'next/font/google'
 import { useSidebarDrawer, closeSidebarDrawer } from '@/lib/ui/sidebarDrawer'
+import { AccountMenu } from '@/components/AccountMenu'
 
 // Editorial serif for the wordmark — matches the landing.
 const fraunces = Fraunces({ subsets: ['latin'], weight: ['600'], variable: '--font-serif-side', display: 'swap' })
@@ -111,8 +112,11 @@ export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
         // below overrides these to a fixed slide-in drawer (position/height
         // are set with !important there, so this does not affect mobile).
         position: 'sticky',
-        top: 'var(--header-height)',
-        height: 'calc(100vh - var(--header-height))',
+        // On desktop the top bar is gone, so the sidebar spans the full height
+        // from the very top. The mobile media query below overrides these back
+        // to a header-offset drawer (with !important).
+        top: 0,
+        height: '100vh',
         alignSelf: 'flex-start',
         background: SURFACE,
         borderRight: `1px solid ${HAIRLINE}`,
@@ -212,6 +216,13 @@ export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
           ))}
         </div>
       )}
+
+      {/* Account — the single account surface, moved off the (now removed)
+          top bar into the sidebar footer. Expanded → full identity row that
+          opens the account menu upward; collapsed → just the avatar. */}
+      <div style={{ marginTop: 'auto', borderTop: `1px solid ${HAIRLINE}`, padding: collapsed ? '10px 8px' : '8px 10px', display: 'flex', justifyContent: collapsed ? 'center' : 'stretch' }}>
+        {collapsed ? <AccountMenu /> : <AccountMenu placement="sidebar" />}
+      </div>
       </aside>
 
       {/* ── Responsive behavior ────────────────────────────────────────────
