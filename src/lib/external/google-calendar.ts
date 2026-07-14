@@ -58,7 +58,7 @@ export function googleCalendarRedirectUri(): string {
   return process.env.GOOGLE_CALENDAR_REDIRECT_URI || 'https://8os.ai/api/sources/google/callback'
 }
 
-/** Google consent-screen URL for the readonly-calendar scope. */
+/** Google consent-screen URL for the read+write calendar.events scope. */
 export function buildConsentUrl(state: string): string {
   const params = new URLSearchParams({
     client_id: process.env.GOOGLE_CALENDAR_CLIENT_ID || '',

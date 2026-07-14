@@ -6,7 +6,7 @@
  * (200) instead of redirecting — the settings UI renders "not configured yet".
  *
  * When configured: 307-redirects to Google's consent screen with the
- * calendar.readonly scope, access_type=offline + prompt=consent (so a
+ * calendar.events scope (read+write for two-way sync), access_type=offline + prompt=consent (so a
  * refresh_token is always issued). `state` is the userId + timestamp sealed
  * with the same AES-256-GCM util as birth data — the callback decrypts it and
  * requires it to match the signed-in user (CSRF binding, ≤10 min old).
