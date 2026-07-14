@@ -209,7 +209,7 @@ export default function PricingPage() {
                   <th style={{ ...thStyle, textAlign: 'left', width: '32%' }}>Feature</th>
                   <th style={{ ...thStyle, width: '17%' }}>Free</th>
                   <th style={{ ...thStyle, width: '17%' }}>Agent Connect<br /><span style={thPriceStyle}>$9.99</span></th>
-                  <th style={{ ...thStyle, color: '#a78bfa', width: '17%' }}>Pro<br /><span style={thPriceStyle}>$18</span></th>
+                  <th style={{ ...thStyle, color: 'var(--color-accent)', width: '17%' }}>Pro<br /><span style={thPriceStyle}>$18</span></th>
                   <th style={{ ...thStyle, width: '17%' }}>Enterprise</th>
                 </tr>
               </thead>
@@ -251,10 +251,10 @@ export default function PricingPage() {
               href="/signup"
               style={{
                 ...ctaButtonStyle,
-                background: 'rgba(118, 75, 162, 0.15)',
-                border: '1px solid rgba(118, 75, 162, 0.5)',
+                background: 'var(--color-accent-soft)',
+                border: '1px solid var(--color-accent-soft)',
                 boxShadow: 'none',
-                color: '#c4b5fd',
+                color: 'var(--color-accent)',
               }}
             >
               Get started
@@ -266,59 +266,59 @@ export default function PricingPage() {
   );
 }
 
-const pageStyle: React.CSSProperties = { background: '#060608', color: 'var(--color-bg-secondary)', minHeight: '100vh' };
+const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '5rem 2rem', minWidth: 0 };
 const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '4rem' };
-const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#a78bfa' };
+const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)' };
 const pageTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.1, letterSpacing: '-0.04em' };
-const pageDescStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', color: 'rgba(248,250,252,0.6)', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.65 };
+const pageDescStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', color: 'var(--color-text-secondary)', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.65 };
 
 const tiersGridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem', marginBottom: '5rem', alignItems: 'start' };
 
-const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '2rem', borderRadius: '20px', border: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', display: 'flex', flexDirection: 'column', gap: '1.25rem' };
-const tierHighlightedStyle: React.CSSProperties = { border: '1px solid rgba(124,58,237,0.5)', background: 'rgba(124,58,237,0.07)', boxShadow: '0 0 0 1px rgba(124,58,237,0.2)' };
+const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '2rem', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'flex', flexDirection: 'column', gap: '1.25rem' };
+const tierHighlightedStyle: React.CSSProperties = { border: '1px solid var(--color-accent-soft)', background: 'var(--color-accent-soft)', boxShadow: '0 0 0 1px var(--color-accent-soft)' };
 
-const popularBadgeStyle: React.CSSProperties = { position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', padding: '0.3rem 0.85rem', borderRadius: '999px', background: 'linear-gradient(135deg, #7c3aed, #9333ea)', color: '#fff', fontSize: '0.75rem', fontWeight: 700, whiteSpace: 'nowrap' };
+const popularBadgeStyle: React.CSSProperties = { position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', padding: '0.3rem 0.85rem', borderRadius: '999px', background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent))', color: '#fff', fontSize: '0.75rem', fontWeight: 700, whiteSpace: 'nowrap' };
 
 const tierHeaderStyle: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' };
 const tierNameStyle: React.CSSProperties = { margin: '0 0 0.2rem', fontSize: '1.15rem', fontWeight: 800 };
-const tierTaglineStyle: React.CSSProperties = { margin: 0, fontSize: '0.8rem', color: '#a78bfa', fontWeight: 600 };
+const tierTaglineStyle: React.CSSProperties = { margin: 0, fontSize: '0.8rem', color: 'var(--color-accent)', fontWeight: 600 };
 const tierPriceBlockStyle: React.CSSProperties = { textAlign: 'right', flexShrink: 0 };
 const tierPriceStyle: React.CSSProperties = { display: 'block', fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1 };
-const tierPeriodStyle: React.CSSProperties = { display: 'block', fontSize: '0.75rem', color: 'rgba(248,250,252,0.4)', marginTop: '0.15rem' };
-const tierDescStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', lineHeight: 1.65, color: 'rgba(248,250,252,0.6)' };
+const tierPeriodStyle: React.CSSProperties = { display: 'block', fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginTop: '0.15rem' };
+const tierDescStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-text-secondary)' };
 const tierNoteStyle: React.CSSProperties = { padding: '0.85rem 1rem', borderRadius: '10px', background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.15)' };
-const tierNoteTextStyle: React.CSSProperties = { margin: 0, fontSize: '0.82rem', lineHeight: 1.6, color: 'rgba(248,250,252,0.6)', fontStyle: 'italic' };
+const tierNoteTextStyle: React.CSSProperties = { margin: 0, fontSize: '0.82rem', lineHeight: 1.6, color: 'var(--color-text-secondary)', fontStyle: 'italic' };
 
 const featureListStyle: React.CSSProperties = { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 };
-const featureItemStyle = (included: boolean): React.CSSProperties => ({ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.85rem', lineHeight: 1.5, color: included ? 'rgba(248,250,252,0.8)' : 'rgba(255,255,255,0.55)' });
-const featureCheckStyle = (included: boolean): React.CSSProperties => ({ flexShrink: 0, fontSize: '0.8rem', fontWeight: 700, color: included ? '#4ade80' : 'rgba(255,255,255,0.55)', marginTop: '0.1rem' });
+const featureItemStyle = (included: boolean): React.CSSProperties => ({ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.85rem', lineHeight: 1.5, color: included ? 'var(--color-text-secondary)' : 'var(--color-text-secondary)' });
+const featureCheckStyle = (included: boolean): React.CSSProperties => ({ flexShrink: 0, fontSize: '0.8rem', fontWeight: 700, color: included ? '#4ade80' : 'var(--color-text-secondary)', marginTop: '0.1rem' });
 
-const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid rgba(255,255,255,0.07)', paddingTop: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' };
-const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'rgba(248,250,252,0.35)', fontWeight: 600 };
-const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'rgba(248,250,252,0.5)' };
-const tierCtaStyle: React.CSSProperties = { display: 'block', textAlign: 'center', padding: '0.8rem', borderRadius: '10px', background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)', color: 'var(--color-bg-secondary)', fontWeight: 700, textDecoration: 'none', fontSize: '0.9rem' };
-const tierCtaHighlightedStyle: React.CSSProperties = { background: 'linear-gradient(135deg, #7c3aed 0%, #9333ea 100%)', border: 'none', boxShadow: '0 6px 20px rgba(124,58,237,0.4)' };
+const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', paddingTop: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' };
+const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600 };
+const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--color-text-secondary)' };
+const tierCtaStyle: React.CSSProperties = { display: 'block', textAlign: 'center', padding: '0.8rem', borderRadius: '10px', background: 'var(--color-border)', border: '1px solid var(--color-border)', color: 'var(--color-text-primary)', fontWeight: 700, textDecoration: 'none', fontSize: '0.9rem' };
+const tierCtaHighlightedStyle: React.CSSProperties = { background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)', border: 'none', boxShadow: '0 6px 20px var(--color-accent-soft)' };
 
 const tableSection: React.CSSProperties = { marginBottom: '4rem' };
 const sectionTitleStyle: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', letterSpacing: '-0.03em' };
-const tableWrapStyle: React.CSSProperties = { overflowX: 'auto', WebkitOverflowScrolling: 'touch', width: '100%', maxWidth: '100%', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)' };
+const tableWrapStyle: React.CSSProperties = { overflowX: 'auto', WebkitOverflowScrolling: 'touch', width: '100%', maxWidth: '100%', borderRadius: '16px', border: '1px solid var(--color-border)' };
 const tableStyle: React.CSSProperties = { width: '100%', minWidth: '640px', borderCollapse: 'collapse', tableLayout: 'fixed', fontSize: '0.88rem' };
-const tableScrollHintStyle: React.CSSProperties = { display: 'none', margin: '0.75rem 0 0', fontSize: '0.78rem', color: 'rgba(248,250,252,0.4)', textAlign: 'center' };
-const thStyle: React.CSSProperties = { padding: '1rem', textAlign: 'center', fontSize: '0.8rem', fontWeight: 700, color: 'rgba(248,250,252,0.45)', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' };
-const thPriceStyle: React.CSSProperties = { fontWeight: 400, fontSize: '0.75rem', color: 'rgba(248,250,252,0.3)' };
-const trEvenStyle: React.CSSProperties = { background: 'rgba(255,255,255,0.02)' };
-const tdStyle: React.CSSProperties = { padding: '0.75rem 1rem', color: 'rgba(248,250,252,0.7)', borderBottom: '1px solid rgba(255,255,255,0.05)' };
+const tableScrollHintStyle: React.CSSProperties = { display: 'none', margin: '0.75rem 0 0', fontSize: '0.78rem', color: 'var(--color-text-secondary)', textAlign: 'center' };
+const thStyle: React.CSSProperties = { padding: '1rem', textAlign: 'center', fontSize: '0.8rem', fontWeight: 700, color: 'var(--color-text-secondary)', borderBottom: '1px solid var(--color-border)', background: 'var(--color-bg-card)' };
+const thPriceStyle: React.CSSProperties = { fontWeight: 400, fontSize: '0.75rem', color: 'var(--color-text-secondary)' };
+const trEvenStyle: React.CSSProperties = { background: 'var(--color-bg-card)' };
+const tdStyle: React.CSSProperties = { padding: '0.75rem 1rem', color: 'var(--color-text-secondary)', borderBottom: '1px solid var(--color-border)' };
 const checkStyle: React.CSSProperties = { color: '#4ade80', fontWeight: 700, fontSize: '1rem' };
-const crossStyle: React.CSSProperties = { color: 'rgba(248,250,252,0.55)', fontSize: '0.9rem' };
-const partialStyle: React.CSSProperties = { color: '#a78bfa', fontSize: '0.82rem', fontWeight: 600 };
+const crossStyle: React.CSSProperties = { color: 'var(--color-text-secondary)', fontSize: '0.9rem' };
+const partialStyle: React.CSSProperties = { color: 'var(--color-accent)', fontSize: '0.82rem', fontWeight: 600 };
 
-const faqStyle: React.CSSProperties = { padding: '2rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.07)', background: 'rgba(255,255,255,0.02)', marginBottom: '3rem' };
+const faqStyle: React.CSSProperties = { padding: '2rem', borderRadius: '16px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', marginBottom: '3rem' };
 const faqTitleStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '1.1rem', fontWeight: 700 };
-const faqBodyStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: '0.9rem', lineHeight: 1.7, color: 'rgba(248,250,252,0.6)' };
-const faqLinkStyle: React.CSSProperties = { display: 'inline-block', fontSize: '0.9rem', fontWeight: 700, color: '#a78bfa', textDecoration: 'none' };
+const faqBodyStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: '0.9rem', lineHeight: 1.7, color: 'var(--color-text-secondary)' };
+const faqLinkStyle: React.CSSProperties = { display: 'inline-block', fontSize: '0.9rem', fontWeight: 700, color: 'var(--color-accent)', textDecoration: 'none' };
 
-const ctaBoxStyle: React.CSSProperties = { textAlign: 'center', padding: '4rem 2rem', borderRadius: '24px', border: '1px solid rgba(124,58,237,0.2)', background: 'rgba(124,58,237,0.06)' };
+const ctaBoxStyle: React.CSSProperties = { textAlign: 'center', padding: '4rem 2rem', borderRadius: '24px', border: '1px solid var(--color-accent-soft)', background: 'var(--color-accent-soft)' };
 const ctaTitleStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', letterSpacing: '-0.04em' };
-const ctaDescStyle: React.CSSProperties = { margin: '0 0 2rem', fontSize: '1rem', color: 'rgba(248,250,252,0.6)' };
-const ctaButtonStyle: React.CSSProperties = { display: 'inline-block', padding: '1rem 2rem', borderRadius: '12px', background: 'linear-gradient(135deg, #7c3aed 0%, #9333ea 100%)', color: '#fff', fontWeight: 700, fontSize: '1rem', textDecoration: 'none', boxShadow: '0 12px 32px rgba(124,58,237,0.45)' };
+const ctaDescStyle: React.CSSProperties = { margin: '0 0 2rem', fontSize: '1rem', color: 'var(--color-text-secondary)' };
+const ctaButtonStyle: React.CSSProperties = { display: 'inline-block', padding: '1rem 2rem', borderRadius: '12px', background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)', color: '#fff', fontWeight: 700, fontSize: '1rem', textDecoration: 'none', boxShadow: '0 12px 32px var(--color-accent-soft)' };

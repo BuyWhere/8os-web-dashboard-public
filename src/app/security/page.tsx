@@ -63,7 +63,7 @@ const sections = [
     id: 'authentication',
     heading: 'Authentication',
     icon: '🔑',
-    color: '#a855f7',
+    color: 'var(--color-accent)',
     items: [
       {
         title: 'Password Hashing',
@@ -142,11 +142,11 @@ const sections = [
 
 export default function SecurityPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
+    <div style={{ background: 'var(--color-bg-primary)', minHeight: '100vh', color: 'var(--color-border)' }}>
       <div style={{ maxWidth: '800px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Header */}
         <div style={{ marginBottom: '56px' }}>
-          <h1 style={{ fontSize: '42px', fontWeight: 700, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
+          <h1 style={{ fontSize: '42px', fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: '12px' }}>
             Security
           </h1>
           <p style={{ fontSize: '18px', color: 'var(--color-text-secondary)', lineHeight: 1.65 }}>
@@ -173,14 +173,14 @@ export default function SecurityPage() {
                   <div
                     key={item.title}
                     style={{
-                      background: '#0f0f0f',
-                      border: '1px solid #1e1e2e',
+                      background: 'var(--color-bg-primary)',
+                      border: '1px solid var(--color-bg-card)',
                       borderLeft: `3px solid ${section.color}`,
                       borderRadius: '0 10px 10px 0',
                       padding: '18px 20px',
                     }}
                   >
-                    <h3 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '6px' }}>
+                    <h3 style={{ fontSize: '15px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '6px' }}>
                       {item.title}
                     </h3>
                     <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', lineHeight: 1.7 }}>
@@ -197,13 +197,13 @@ export default function SecurityPage() {
         <div
           style={{
             marginTop: '56px',
-            background: '#0f0f1a',
-            border: '1px solid #1e1b4b',
+            background: 'var(--color-bg-card)',
+            border: '1px solid var(--color-bg-card)',
             borderRadius: '16px',
             padding: '32px',
           }}
         >
-          <h2 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
+          <h2 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '12px' }}>
             Vulnerability Reporting
           </h2>
           <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', lineHeight: 1.75, marginBottom: '16px' }}>
@@ -219,7 +219,7 @@ export default function SecurityPage() {
           <a
             href="mailto:security@8os.ai"
             style={{
-              color: '#7c3aed',
+              color: 'var(--color-accent)',
               fontSize: '15px',
               fontWeight: 600,
               textDecoration: 'none',

@@ -53,12 +53,12 @@ export default function ArchetypeExplorerPage() {
   return (
     <main style={{
       minHeight: '100vh',
-      background: '#0a0a0a',
+      background: 'var(--color-bg-primary)',
       color: 'var(--color-border)',
       padding: '4rem 2rem',
     }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: '#667eea', textDecoration: 'none', fontSize: '0.875rem' }}>
+        <Link href="/" style={{ color: 'var(--color-accent)', textDecoration: 'none', fontSize: '0.875rem' }}>
           ← Back to 8os
         </Link>
 
@@ -70,7 +70,7 @@ export default function ArchetypeExplorerPage() {
             borderRadius: '9999px',
             fontSize: '0.75rem',
             fontWeight: 600,
-            color: '#667eea',
+            color: 'var(--color-accent)',
             letterSpacing: '0.05em',
             textTransform: 'uppercase',
             marginBottom: '1rem',
@@ -89,8 +89,8 @@ export default function ArchetypeExplorerPage() {
         <div style={{ display: 'grid', gap: '1.5rem', marginBottom: '4rem' }}>
           {archetypes.map((a) => (
             <div key={a.name} style={{
-              background: 'rgba(255,255,255,0.03)',
-              border: '1px solid rgba(255,255,255,0.08)',
+              background: 'var(--color-bg-card)',
+              border: '1px solid var(--color-border)',
               borderRadius: '16px',
               padding: '2rem',
               display: 'grid',
@@ -124,7 +124,7 @@ export default function ArchetypeExplorerPage() {
                   {a.traits.map((t) => (
                     <span key={t} style={{
                       padding: '0.25rem 0.625rem',
-                      background: 'rgba(255,255,255,0.06)',
+                      background: 'var(--color-border)',
                       borderRadius: '6px',
                       fontSize: '0.75rem',
                       color: '#aaa',
@@ -158,7 +158,7 @@ export default function ArchetypeExplorerPage() {
           <Link href="/onboarding" style={{
             display: 'inline-block',
             padding: '1rem 2rem',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)',
             borderRadius: '12px',
             color: '#fff',
             textDecoration: 'none',

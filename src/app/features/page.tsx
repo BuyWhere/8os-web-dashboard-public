@@ -109,7 +109,7 @@ export default function FeaturesPage() {
             <Link href="/onboarding" style={{
               display: 'inline-block',
               padding: '1rem 2rem',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)',
               borderRadius: '12px',
               color: '#fff',
               textDecoration: 'none',

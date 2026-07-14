@@ -102,8 +102,8 @@ const BELIEFS = [
 ];
 
 const pageStyle: React.CSSProperties = {
-  background: '#060608',
-  color: 'var(--color-bg-secondary)',
+  background: 'var(--color-bg-primary)',
+  color: 'var(--color-text-primary)',
   minHeight: '100vh',
 };
 
@@ -123,7 +123,7 @@ const eyebrowStyle: React.CSSProperties = {
   fontWeight: 700,
   letterSpacing: '0.14em',
   textTransform: 'uppercase',
-  color: '#a78bfa',
+  color: 'var(--color-accent)',
 };
 
 const pageTitleStyle: React.CSSProperties = {
@@ -147,7 +147,7 @@ const leadStyle: React.CSSProperties = {
   margin: 0,
   fontSize: '1.2rem',
   lineHeight: 1.7,
-  color: 'rgba(248, 250, 252, 0.9)',
+  color: 'var(--color-text-secondary)',
   fontWeight: 500,
 };
 
@@ -155,25 +155,25 @@ const bodyStyle: React.CSSProperties = {
   margin: 0,
   fontSize: '1.05rem',
   lineHeight: 1.75,
-  color: 'rgba(248, 250, 252, 0.7)',
+  color: 'var(--color-text-secondary)',
 };
 
 const highlightStyle: React.CSSProperties = {
   margin: 0,
   padding: '1.25rem 1.5rem',
-  borderLeft: '3px solid #7c3aed',
+  borderLeft: '3px solid var(--color-accent)',
   fontSize: '1.15rem',
   fontStyle: 'italic',
   fontWeight: 600,
-  color: 'var(--color-bg-secondary)',
-  background: 'rgba(124, 58, 237, 0.08)',
+  color: 'var(--color-text-primary)',
+  background: 'var(--color-accent-soft)',
   borderRadius: '0 12px 12px 0',
 };
 
 const beliefsSection: React.CSSProperties = {
   marginBottom: '4rem',
   paddingTop: '3rem',
-  borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+  borderTop: '1px solid var(--color-border)',
 };
 
 const h2Style: React.CSSProperties = {
@@ -191,8 +191,8 @@ const beliefsGridStyle: React.CSSProperties = {
 const beliefCardStyle: React.CSSProperties = {
   padding: '1.75rem',
   borderRadius: '16px',
-  border: '1px solid rgba(255, 255, 255, 0.08)',
-  background: 'rgba(255, 255, 255, 0.03)',
+  border: '1px solid var(--color-border)',
+  background: 'var(--color-bg-card)',
 };
 
 const beliefTitleStyle: React.CSSProperties = {
@@ -205,12 +205,12 @@ const beliefBodyStyle: React.CSSProperties = {
   margin: 0,
   fontSize: '0.92rem',
   lineHeight: 1.7,
-  color: 'rgba(248, 250, 252, 0.6)',
+  color: 'var(--color-text-secondary)',
 };
 
 const ctaSectionStyle: React.CSSProperties = {
   paddingTop: '3rem',
-  borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+  borderTop: '1px solid var(--color-border)',
 };
 
 const ctaTitleStyle: React.CSSProperties = {
@@ -230,16 +230,16 @@ const primaryLinkStyle: React.CSSProperties = {
   display: 'inline-block',
   padding: '0.85rem 1.75rem',
   borderRadius: '12px',
-  background: 'linear-gradient(135deg, #7c3aed 0%, #9333ea 100%)',
+  background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)',
   color: '#fff',
   fontWeight: 700,
   textDecoration: 'none',
-  boxShadow: '0 8px 24px rgba(124, 58, 237, 0.4)',
+  boxShadow: '0 8px 24px var(--color-accent-soft)',
 };
 
 const secondaryLinkStyle: React.CSSProperties = {
   display: 'inline-block',
   fontSize: '0.95rem',
-  color: 'rgba(248, 250, 252, 0.6)',
+  color: 'var(--color-text-secondary)',
   textDecoration: 'none',
 };

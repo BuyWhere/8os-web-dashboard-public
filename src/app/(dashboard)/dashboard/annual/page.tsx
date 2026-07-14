@@ -19,10 +19,10 @@ interface Preview {
 }
 
 const card: React.CSSProperties = {
-  maxWidth: 680, background: '#0d0d0d', border: '1px solid #1a1a1a', borderRadius: 12, padding: 22, marginBottom: 16,
+  maxWidth: 680, background: 'var(--color-bg-primary)', border: '1px solid #1a1a1a', borderRadius: 12, padding: 22, marginBottom: 16,
 }
 const btn: React.CSSProperties = {
-  background: '#d4a000', color: '#0a0a0a', border: 'none', borderRadius: 8,
+  background: '#d4a000', color: 'var(--color-bg-primary)', border: 'none', borderRadius: 8,
   padding: '11px 20px', fontSize: 15, fontWeight: 700, cursor: 'pointer',
 }
 

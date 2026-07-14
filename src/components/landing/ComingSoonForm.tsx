@@ -60,8 +60,8 @@ export default function ComingSoonForm({
   }
 
   const cardStyle: React.CSSProperties = {
-    background: 'rgba(255,255,255,0.03)',
-    border: '1px solid rgba(255,255,255,0.08)',
+    background: 'var(--color-bg-card)',
+    border: '1px solid var(--color-border)',
     borderRadius: '16px',
     padding: '2rem',
     backdropFilter: 'blur(10px)',
@@ -101,10 +101,10 @@ export default function ComingSoonForm({
             style={{
               marginTop: '1.25rem',
               padding: '0.875rem 1rem',
-              background: 'rgba(118, 75, 162, 0.1)',
-              border: '1px solid rgba(118, 75, 162, 0.3)',
+              background: 'var(--color-accent-soft)',
+              border: '1px solid var(--color-accent-soft)',
               borderRadius: '8px',
-              color: '#c4b5fd',
+              color: 'var(--color-accent)',
               fontSize: '0.875rem',
               lineHeight: 1.5,
             }}
@@ -148,7 +148,7 @@ export default function ComingSoonForm({
               padding: '0.875rem 1rem',
               fontSize: '1rem',
               background: 'rgba(0,0,0,0.4)',
-              border: '1px solid rgba(255,255,255,0.1)',
+              border: '1px solid var(--color-border)',
               borderRadius: '8px',
               color: '#fff',
               outline: 'none',
@@ -163,8 +163,8 @@ export default function ComingSoonForm({
             alignItems: 'flex-start',
             gap: '0.75rem',
             padding: '0.875rem 1rem',
-            background: 'rgba(118, 75, 162, 0.06)',
-            border: '1px solid rgba(118, 75, 162, 0.2)',
+            background: 'var(--color-accent-soft)',
+            border: '1px solid var(--color-accent-soft)',
             borderRadius: '8px',
             cursor: 'pointer',
           }}
@@ -177,7 +177,7 @@ export default function ComingSoonForm({
               marginTop: '0.15rem',
               width: '1.1rem',
               height: '1.1rem',
-              accentColor: '#764ba2',
+              accentColor: 'var(--color-accent)',
               cursor: 'pointer',
               flexShrink: 0,
             }}
@@ -198,7 +198,7 @@ export default function ComingSoonForm({
             background:
               status === 'loading'
                 ? '#555'
-                : 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                : 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)',
             border: 'none',
             borderRadius: '8px',
             color: '#fff',

@@ -26,7 +26,7 @@ const MODE_LABEL: Record<string, string> = {
 }
 const DOMAIN_COLORS: Record<string, string> = {
   career: '#6366f1', wealth: '#f59e0b', health: '#22c55e',
-  relationships: '#ec4899', learning: '#3b82f6', legacy: '#8b5cf6',
+  relationships: '#ec4899', learning: '#3b82f6', legacy: 'var(--color-accent)',
 }
 const DOMAIN_ICONS: Record<string, string> = {
   career: '💼', wealth: '💰', health: '💪', relationships: '❤️', learning: '📚', legacy: '🌟',
@@ -107,7 +107,7 @@ export default function QuarterPage() {
 
   if (loading) {
     return (
-      <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--skin-color-bg, #0a0a0a)' }}>
+      <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--skin-color-bg, var(--color-bg-primary))' }}>
         <Sidebar goals={[]} />
         <main style={{ flex: 1, padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <div style={{ color: 'var(--skin-color-text-muted, #666)' }}>Mapping your next 3 months…</div>
@@ -126,7 +126,7 @@ export default function QuarterPage() {
   }
 
   return (
-    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--skin-color-bg, #0a0a0a)' }}>
+    <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--skin-color-bg, var(--color-bg-primary))' }}>
       <Sidebar goals={goals} />
 
       <main style={{ flex: 1, padding: '24px 24px', overflowY: 'auto', maxWidth: '100%', overflowX: 'hidden' }}>
@@ -147,7 +147,7 @@ export default function QuarterPage() {
         {data && (
           <>
             {/* favorable elements summary */}
-            <div style={{ background: 'var(--skin-card-bg, #0d0d0d)', border: '1px solid var(--skin-card-border, #1a1a1a)', borderRadius: 'var(--skin-radius-card, 12px)', padding: '14px 18px', marginBottom: 20, fontSize: 12, color: 'var(--skin-color-text-secondary, #aaa)' }}>
+            <div style={{ background: 'var(--skin-card-bg, var(--color-bg-primary))', border: '1px solid var(--skin-card-border, #1a1a1a)', borderRadius: 'var(--skin-radius-card, 12px)', padding: '14px 18px', marginBottom: 20, fontSize: 12, color: 'var(--skin-color-text-secondary, #aaa)' }}>
               <strong style={{ color: 'var(--skin-color-text, var(--color-border))' }}>{data.dayMaster} {cap(data.dayElement)} · {data.strength}</strong>
               {' '}· favorable: <span style={{ color: '#22c55e' }}>{(data.favorable || []).map(cap).join(', ') || '-'}</span>
               {' · '}headwind: <span style={{ color: '#f59e0b' }}>{(data.unfavorable || []).map(cap).join(', ') || '-'}</span>
@@ -160,7 +160,7 @@ export default function QuarterPage() {
                 const monthGoals = goalsByMonth[mo.index] ?? []
                 const color = MODE_COLOR[mo.mode] ?? 'var(--color-text-secondary)'
                 return (
-                  <section key={mo.index} style={{ background: 'var(--skin-card-bg, #0d0d0d)', border: '1px solid var(--skin-card-border, #1a1a1a)', borderTop: `3px solid ${color}`, borderRadius: 'var(--skin-radius-card, 12px)', padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
+                  <section key={mo.index} style={{ background: 'var(--skin-card-bg, var(--color-bg-primary))', border: '1px solid var(--skin-card-border, #1a1a1a)', borderTop: `3px solid ${color}`, borderRadius: 'var(--skin-radius-card, 12px)', padding: 18, display: 'flex', flexDirection: 'column', gap: 12 }}>
                     <div>
                       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
                         <h2 style={{ margin: 0, fontSize: 16, fontWeight: 700, color: 'var(--skin-color-text, var(--color-border))' }}>{mo.label}</h2>

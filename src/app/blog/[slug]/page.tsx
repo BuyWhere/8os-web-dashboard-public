@@ -49,13 +49,13 @@ export default function BlogPostPage({ params }: Props) {
   if (!post) notFound()
 
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: 'var(--color-border)' }}>
+    <div style={{ background: 'var(--color-bg-primary)', minHeight: '100vh', color: 'var(--color-border)' }}>
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Breadcrumb */}
         <nav style={{ marginBottom: '32px' }}>
           <Link
             href="/blog"
-            style={{ color: '#7c3aed', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}
+            style={{ color: 'var(--color-accent)', textDecoration: 'none', fontSize: '14px', fontWeight: 500 }}
           >
             ← Back to Blog
           </Link>
@@ -72,7 +72,7 @@ export default function BlogPostPage({ params }: Props) {
           style={{
             fontSize: '40px',
             fontWeight: 700,
-            color: 'var(--color-bg-secondary)',
+            color: 'var(--color-text-primary)',
             lineHeight: 1.2,
             marginBottom: '20px',
           }}
@@ -100,7 +100,7 @@ export default function BlogPostPage({ params }: Props) {
             fontStyle: 'italic',
             lineHeight: 1.6,
             marginBottom: '48px',
-            borderLeft: '3px solid #7c3aed',
+            borderLeft: '3px solid var(--color-accent)',
             paddingLeft: '16px',
           }}
         >
@@ -114,7 +114,7 @@ export default function BlogPostPage({ params }: Props) {
               <span
                 key={kw}
                 style={{
-                  background: '#1e1b4b',
+                  background: 'var(--color-bg-card)',
                   color: '#a5b4fc',
                   padding: '4px 12px',
                   borderRadius: '9999px',
@@ -137,7 +137,7 @@ export default function BlogPostPage({ params }: Props) {
                   style={{
                     fontSize: '24px',
                     fontWeight: 600,
-                    color: 'var(--color-bg-secondary)',
+                    color: 'var(--color-text-primary)',
                     marginBottom: '16px',
                   }}
                 >
@@ -154,8 +154,8 @@ export default function BlogPostPage({ params }: Props) {
         ) : (
           <div
             style={{
-              background: '#0f0f1a',
-              border: '1px solid #1e1b4b',
+              background: 'var(--color-bg-card)',
+              border: '1px solid var(--color-bg-card)',
               borderRadius: '12px',
               padding: '32px',
               textAlign: 'center',
@@ -173,14 +173,14 @@ export default function BlogPostPage({ params }: Props) {
         <div
           style={{
             marginTop: '64px',
-            background: 'linear-gradient(135deg, #1e1b4b, #0f0f1a)',
+            background: 'linear-gradient(135deg, var(--color-bg-card), var(--color-bg-card))',
             border: '1px solid #3730a3',
             borderRadius: '16px',
             padding: '40px',
             textAlign: 'center',
           }}
         >
-          <h3 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-bg-secondary)', marginBottom: '12px' }}>
+          <h3 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '12px' }}>
             Discover Your BaZi Archetype
           </h3>
           <p style={{ color: 'var(--color-text-muted)', marginBottom: '24px', fontSize: '15px' }}>
@@ -189,7 +189,7 @@ export default function BlogPostPage({ params }: Props) {
           <Link
             href="/onboarding"
             style={{
-              background: '#7c3aed',
+              background: 'var(--color-accent)',
               color: '#fff',
               padding: '14px 32px',
               borderRadius: '8px',
