@@ -198,8 +198,9 @@ export default function QuizPage() {
                   background: '#0f0f0f',
                   border: '1px solid #1e1e2e',
                   borderRadius: '12px',
-                  padding: '28px',
+                  padding: '28px 24px 24px',
                   textAlign: 'center',
+                  minHeight: '250px',
                 }}
               >
                 <div
