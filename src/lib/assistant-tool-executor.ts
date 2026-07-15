@@ -45,6 +45,8 @@ type ToolName =
   | 'get_energy_hours'
   | 'delete_goal'
   | 'delete_task'
+  | 'delete_goals'
+  | 'convert_goals_to_tasks'
 
 const DOMAIN_IDS = ['career', 'wealth', 'health', 'relationships', 'learning', 'legacy'] as const
 type DomainId = (typeof DOMAIN_IDS)[number]
@@ -102,6 +104,10 @@ export async function executeTool(
       return deleteGoal(userId, args.goalId, args.confirm === true)
     case 'delete_task':
       return deleteTask(userId, args.taskId)
+    case 'delete_goals':
+      return deleteGoals(userId, args.goalIds)
+    case 'convert_goals_to_tasks':
+      return convertGoalsToTasks(userId, args.goalIds, args.scheduledAt, tz)
     case 'get_projects':
       return getProjects(userId, args.goalId, args.domainId)
     case 'create_project':
@@ -201,6 +207,41 @@ async function deleteTask(userId: string, taskId: string) {
   await prisma.calendarEvent.deleteMany({ where: { taskId } }).catch(() => {})
   await prisma.oSTask.delete({ where: { id: taskId } })
   return { success: true, deleted: { id: taskId, name: task.name } }
+}
+
+/** BULK archive many goals in one call — the reliable way to clear a batch of
+ *  mistakes/duplicates (the model can't emit dozens of single delete calls). The
+ *  user has explicitly named these ids, so no per-goal confirmation is needed. */
+async function deleteGoals(userId: string, goalIds: string[]) {
+  if (!Array.isArray(goalIds) || goalIds.length === 0) throw new Error('delete_goals requires a non-empty goalIds array')
+  const results: Array<{ id: string; ok: boolean; name?: string; reason?: string }> = []
+  for (const id of goalIds.slice(0, 200)) {
+    try {
+      const goal = await prisma.goal.findFirst({ where: { id, userId } })
+      if (!goal) { results.push({ id, ok: false, reason: 'not found' }); continue }
+      await prisma.goal.update({ where: { id }, data: { status: 'archived' } })
+      results.push({ id, ok: true, name: goal.name })
+    } catch (e) { results.push({ id, ok: false, reason: e instanceof Error ? e.message : 'error' }) }
+  }
+  return { success: true, archived: results.filter((r) => r.ok).length, results }
+}
+
+/** BULK convert many goals into tasks in one call: for each goal, create a task
+ *  carrying its name/domain, then archive the goal. Pass scheduledAt (ISO) to
+ *  schedule them all, or omit to create them as unscheduled tasks. */
+async function convertGoalsToTasks(userId: string, goalIds: string[], scheduledAt: string | undefined, tz?: string) {
+  if (!Array.isArray(goalIds) || goalIds.length === 0) throw new Error('convert_goals_to_tasks requires a non-empty goalIds array')
+  const results: Array<{ id: string; ok: boolean; name?: string; taskId?: string; reason?: string }> = []
+  for (const id of goalIds.slice(0, 200)) {
+    try {
+      const goal = await prisma.goal.findFirst({ where: { id, userId } })
+      if (!goal) { results.push({ id, ok: false, reason: 'not found' }); continue }
+      const created = await createTask(userId, { name: goal.name, domainId: goal.domainId, ...(scheduledAt ? { scheduledAt } : {}) }, tz)
+      await prisma.goal.update({ where: { id }, data: { status: 'archived' } })
+      results.push({ id, ok: true, name: goal.name, taskId: created?.task?.id })
+    } catch (e) { results.push({ id, ok: false, reason: e instanceof Error ? e.message : 'error' }) }
+  }
+  return { success: true, converted: results.filter((r) => r.ok).length, results }
 }
 
 async function createGoal(userId: string, args: Record<string, any>) {
@@ -336,7 +377,10 @@ async function getTasks(userId: string, projectId?: string, goalId?: string, sta
       userId,
       ...(projectId ? { projectId } : {}),
       ...(goalId ? { goalId } : {}),
-      ...(status ? { status: status as any } : {}),
+      // 'all' (or empty) → no status filter. Passing the literal 'all' to Prisma
+      // crashed the tool ("Invalid findMany ... status: all"), which broke the
+      // Coach's id-fetch and left it flailing.
+      ...(status && status !== 'all' ? { status: status as any } : {}),
     },
     orderBy: [{ scheduledAt: 'asc' }, { createdAt: 'asc' }],
     take: 100,

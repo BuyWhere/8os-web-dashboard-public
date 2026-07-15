@@ -164,6 +164,35 @@ export const ASSISTANT_TOOLS: Tool[] = [
   {
     type: 'function',
     function: {
+      name: 'delete_goals',
+      description: 'Remove MANY goals in ONE call (a batch of mistakes or duplicates). ALWAYS prefer this over calling delete_goal many times — the single-item tool is unreliable at scale. Pass goalIds as an array of exact ids. Archives them (recoverable).',
+      parameters: {
+        type: 'object',
+        properties: {
+          goalIds: { type: 'array', items: { type: 'string' }, description: 'Array of exact goal ids to remove.' },
+        },
+        required: ['goalIds'],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'convert_goals_to_tasks',
+      description: "Turn MANY goals into tasks in ONE call: for each goal it creates a task with the goal's name and archives the goal. Use when the user says items were mistakenly filed as goals and should be tasks. ALWAYS prefer this over converting one-by-one. Pass goalIds (array of exact ids). Optionally pass scheduledAt (ISO datetime) to schedule them all; omit to create them as unscheduled tasks (they appear in the task list, not the calendar).",
+      parameters: {
+        type: 'object',
+        properties: {
+          goalIds: { type: 'array', items: { type: 'string' }, description: 'Array of exact goal ids to convert.' },
+          scheduledAt: { type: 'string', description: 'Optional ISO datetime to schedule all resulting tasks.' },
+        },
+        required: ['goalIds'],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
       name: 'create_goal',
       description:
         'Create a NEW goal for the user in one of the six life domains. Use this whenever the user asks to add/create/set a goal. After creating a goal you can create_task (pass the returned goalId) and schedule_task to put its first action on the calendar.',
