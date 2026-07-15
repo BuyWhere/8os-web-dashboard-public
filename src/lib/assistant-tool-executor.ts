@@ -12,6 +12,7 @@
 
 import { prisma } from '@/lib/db/prisma'
 import { wouldExceedActiveCap } from '@/lib/goal-hygiene'
+import { normalizeHorizon } from '@/lib/horizons'
 
 /**
  * The production `goals` table has NOT NULL `company_id`, `title`, `description`
@@ -154,6 +155,7 @@ async function createGoal(userId: string, args: Record<string, any>) {
   const definition = String(args.definition || name).slice(0, 1000)
   const checkMethod = CHECK_METHODS.includes(args.checkMethod) ? args.checkMethod : 'milestone'
   const checkConfig = (args.checkConfig && typeof args.checkConfig === 'object') ? args.checkConfig : {}
+  const horizon = normalizeHorizon(args.horizon)
 
   // Respect the E-10 active-goal cap ("Focus Mode"), but degrade gracefully:
   // if capped, create the goal as `paused` instead of failing, and tell the
@@ -167,15 +169,15 @@ async function createGoal(userId: string, args: Record<string, any>) {
   const rows = await prisma.$queryRawUnsafe<Array<{ id: string }>>(
     `INSERT INTO goals (
        id, "userId", "company_id", title, description, level, status,
-       "domainId", name, definition, "checkMethod", "checkConfig", progress,
+       "domainId", name, definition, "checkMethod", "checkConfig", "horizon", progress,
        "createdAt", "updatedAt", "created_at", "updated_at"
      ) VALUES (
        gen_random_uuid(), $1, $2::uuid, $3, $4, 'task', $8,
-       $5, $3, $4, $6, $7::jsonb, 0,
+       $5, $3, $4, $6, $7::jsonb, $9, 0,
        NOW(), NOW(), NOW(), NOW()
      ) RETURNING id`,
     userId, companyId, name, definition, domainId, checkMethod,
-    JSON.stringify(checkConfig), status,
+    JSON.stringify(checkConfig), status, horizon,
   )
   const goalId = rows[0].id
 
@@ -187,7 +189,7 @@ async function createGoal(userId: string, args: Record<string, any>) {
     success: true,
     goal: {
       id: goalId, domainId, name,
-      definition, checkMethod, status, progress: 0,
+      definition, checkMethod, horizon, status, progress: 0,
     },
     capNotice: cap.blocked
       ? `You already have ${cap.activeCount} active goals (Focus Mode cap is ${cap.cap}). I created this goal as PAUSED so we don't lose it, activate it in Goals when you free up a slot, or turn off Focus Mode in notification settings.`

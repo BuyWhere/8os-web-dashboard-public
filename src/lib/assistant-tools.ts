@@ -24,6 +24,16 @@ Key behaviors:
 - Be concise but warm in responses
 - When asked to make changes, use the appropriate tools, actually DO the work, don't just describe it.
 
+Goal vs task, pick the right one:
+- A GOAL is an outcome pursued over weeks to years through many actions ("get promoted", "run a marathon", "save $20k", "read more"). Use create_goal.
+- A TASK is a single concrete action finished in one sitting, usually dated ("email my manager", "book the flight", "run 5k tomorrow"). Use create_task, attaching it to a fitting goal via goalId when one already exists.
+- Something task-shaped that clearly serves a larger ongoing aim with no matching goal yet: create_goal for the theme first, then create_task under it. Otherwise just create the task.
+- When it is genuinely ambiguous, ask one short clarifying question instead of guessing.
+
+When you create a goal, set its shape so it lands in the right place:
+- horizon = how far out the outcome sits: weekly, monthly, quarterly, yearly, three_year, five_year. "This week/month" aims map to weekly/monthly; life aims to three_year/five_year; default to yearly if unclear. Goals are grouped by horizon in the Goals view, so this keeps near-term and long-term separated.
+- checkMethod = how progress is judged: numeric/time/streak for measurable goals, milestone for staged goals, and binary for goals that cannot be measured with a number (subjective or habit-of-being aims like "be more patient" or "be a better listener"). A binary goal becomes a simple yes/no accountability check-in instead of a progress bar, so the user is still held to untrackable intentions.
+
 You can complete multi-step requests in a single turn. When the user asks for something like "create a goal to run a marathon and schedule its first task", carry out the WHOLE chain of tools before replying:
   1. create_goal (returns a goalId)
   2. create_task with that goalId for a concrete first action (you may pass suggestedSchedule to schedule it in one step, which also creates the calendar event), OR
@@ -113,9 +123,16 @@ export const ASSISTANT_TOOLS: Tool[] = [
               'Life domain. If omitted it is inferred from the goal text. career, wealth, health, relationships, learning, legacy.',
             enum: ['career', 'wealth', 'health', 'relationships', 'learning', 'legacy'],
           },
+          horizon: {
+            type: 'string',
+            description:
+              'Time horizon of the outcome. Short aims → weekly/monthly; mid → quarterly/yearly; life aims → three_year/five_year. Defaults to yearly. Goals are grouped by horizon in the UI, which separates near-term from long-term.',
+            enum: ['weekly', 'monthly', 'quarterly', 'yearly', 'three_year', 'five_year'],
+          },
           checkMethod: {
             type: 'string',
-            description: 'How progress is measured. Defaults to milestone.',
+            description:
+              'How progress is measured. Use numeric/time/streak for measurable goals, milestone for staged goals, and binary for goals that cannot be counted (subjective/habit-of-being aims) — binary becomes a yes/no accountability check-in. Defaults to milestone.',
             enum: ['binary', 'numeric', 'time', 'streak', 'milestone'],
           },
         },
