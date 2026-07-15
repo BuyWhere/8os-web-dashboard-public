@@ -26,8 +26,8 @@ export const metadata: Metadata = {
     canonical: '/',
     // Note: i18n routes (/en, /zh) removed from hreflang on 2026-06-15.
     // The 8os.ai launch is English-only. We do not advertise non-existent
-    // language alternates to Google. To re-enable when real translations
-    // ship, add the routes back and restore the languages map.
+    // language alternates to Google. To re-enable when real translations ship,
+    // add the routes back and restore the languages map.
   },
   openGraph: {
     type: 'website',
@@ -108,36 +108,36 @@ export default function RootLayout({
       signInFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL ?? '/dashboard'}
       signUpFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL ?? '/onboarding'}
     >
-    <html lang="en" className={inter.variable} suppressHydrationWarning>
-      <head>
-        {/* No-flash theme boot, sets <html data-theme> synchronously from the
-            persisted choice + OS preference, BEFORE first paint. Must run
-            before any styled content renders. See src/lib/theme.ts. */}
-        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
-        <script
-          type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
-        />
-      </head>
-      <body>
-        {/* ThemeProvider wraps all chrome (Header/Footer) + content so the
-            whole tree can read/toggle the light/dark theme via useTheme(). */}
-        <ThemeProvider>
-          {/* Meta Pixel, fires PageView on every route change. Bails out when
-              NEXT_PUBLIC_META_PIXEL_ID is unset (local dev, pre-pixel deploys).
-              See src/components/MetaPixel.tsx. */}
-          <MetaPixel />
-          <a href="#main-content" className="skip-link">
-            Skip to content
-          </a>
-          <Header />
-          <div id="main-content" tabIndex={-1}>
-            {children}
-          </div>
-          <Footer />
-        </ThemeProvider>
-      </body>
-    </html>
+      <html lang="en" className={inter.variable} suppressHydrationWarning>
+        <head>
+          {/* No-flash theme boot, sets <html data-theme> synchronously from the
+              persisted choice + OS preference, BEFORE first paint. Must run
+              before any styled content renders. See src/lib/theme.ts. */}
+          <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
+          <script
+            type="application/ld+json"
+            dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+          />
+        </head>
+        <body>
+          {/* ThemeProvider wraps all chrome (Header/Footer) + content so the
+              whole tree can read/toggle the light/dark theme via useTheme(). */}
+          <ThemeProvider>
+            {/* Meta Pixel, fires PageView on every route change. Bails out when
+                NEXT_PUBLIC_META_PIXEL_ID is unset (local dev, pre-pixel deploys).
+                See src/components/MetaPixel.tsx. */}
+            <MetaPixel />
+            <a href="#main-content" className="skip-link">
+              Skip to content
+            </a>
+            <Header />
+            <div id="main-content" tabIndex={-1}>
+              {children}
+            </div>
+            <Footer />
+          </ThemeProvider>
+        </body>
+      </html>
     </ClerkProvider>
   )
 }

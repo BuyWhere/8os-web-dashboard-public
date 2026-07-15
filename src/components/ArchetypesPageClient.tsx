@@ -92,6 +92,11 @@ export default function ArchetypesPageClient() {
         <div style={statusPillStyle}>
           {activeArchetypeId ? `Active archetype: ${activeLabel}` : 'No active archetype saved yet'}
         </div>
+        {!activeArchetypeId && (
+          <a href="/quiz" style={ctaButtonStyle}>
+            Take the Assessment
+          </a>
+        )}
       </section>
 
       <section style={gridStyle(isCompact)}>
@@ -207,6 +212,20 @@ const statusPillStyle: React.CSSProperties = {
   padding: '0.55rem 0.9rem',
   fontSize: '0.82rem',
   fontWeight: 600,
+};
+
+const ctaButtonStyle: React.CSSProperties = {
+  display: 'inline-block',
+  marginTop: '1.5rem',
+  padding: '0.85rem 1.75rem',
+  borderRadius: '999px',
+  background: '#E8B86D', // 8os brand gold — always high-contrast, independent of archetype CSS vars
+  color: '#1A1B4B', // indigo text on gold: 8.7:1 AA pass
+  fontSize: '1rem',
+  fontWeight: 700,
+  textDecoration: 'none',
+  transition: 'transform 0.2s ease, box-shadow 0.2s ease',
+  cursor: 'pointer',
 };
 
 const gridStyle = (isCompact: boolean): React.CSSProperties => ({

@@ -51,9 +51,6 @@ export default function SignupPage() {
               </li>
             ))}
           </ul>
-          <p style={{ color: MUTED, fontSize: "0.85rem", marginTop: "1.75rem" }}>
-            Already have an account? <Link href="/login" style={{ color: GOLD, fontWeight: 600 }}>Log in</Link>
-          </p>
         </section>
 
         {/* Right, the Clerk form */}

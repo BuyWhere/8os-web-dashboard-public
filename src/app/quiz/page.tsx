@@ -198,7 +198,7 @@ export default function QuizPage() {
                   background: 'var(--color-bg-primary)',
                   border: '1px solid var(--color-bg-card)',
                   borderRadius: '12px',
-                  padding: '28px',
+                  padding: '28px 24px 24px',
                   textAlign: 'center',
                 }}
               >
