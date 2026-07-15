@@ -562,7 +562,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
             <div key={t.id} style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 8, padding: '10px 12px', marginBottom: 8 }}>
               <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{t.name}</div>
               <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 6 }}>
-                <span style={{ fontSize: 11, color: 'var(--color-text-secondary)' }}>{t.duration}m</span>
+                <span style={{ fontSize: 11, fontWeight: 500, color: '#555555' }}>{t.duration}m</span>
                 <span style={{ fontSize: 11, fontWeight: 600, color: t.priority === 'high' ? '#c0392b' : t.priority === 'medium' ? '#b45309' : '#15803d' }}>{t.priority}</span>
                 {t.domainId && <span style={{ fontSize: 11, fontWeight: 600, color: DOMAIN_COLORS[t.domainId] }}>{t.domainId}</span>}
               </div>
