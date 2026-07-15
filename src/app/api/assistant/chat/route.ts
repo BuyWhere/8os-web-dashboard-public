@@ -93,7 +93,7 @@ export async function POST(request: NextRequest) {
     const [liveGoals, openTaskCount, agentContext] = await Promise.all([
       prisma.goal.findMany({
         where: { userId: user.id, status: { in: ['active', 'paused'] } },
-        select: { id: true, name: true, status: true, horizon: true },
+        select: { id: true, name: true, status: true, horizon: true, createdAt: true, projects: { select: { id: true } } },
         orderBy: { createdAt: 'asc' },
         take: 150,
       }),
@@ -105,12 +105,25 @@ export async function POST(request: NextRequest) {
     ])
     // Curated shared playbook layer (best-practice plays relevant to this message).
     const plays = await selectPlays(message).catch(() => '')
+    const todayIso = (() => {
+      try { return new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(new Date()) } catch { return new Date().toISOString().slice(0, 10) }
+    })()
+    const goalDay = (d: Date) => {
+      try { return new Intl.DateTimeFormat('en-CA', { timeZone: timezone }).format(d) } catch { return d.toISOString().slice(0, 10) }
+    }
     const snapshot =
       `\n\n## The user's current goals (LIVE — this is their full list; never say you can't see their goals)\n` +
+      `Today is ${todayIso}. "created" dates below let you tell which goals are recent vs long-standing.\n` +
       (liveGoals.length === 0
         ? 'No goals yet.'
-        : liveGoals.map((g) => `- [${g.id}] "${g.name}" — ${g.status}, ${g.horizon}`).join('\n')) +
-      `\n\nOpen tasks: ${openTaskCount} (call get_tasks for details). When you update, schedule, or delete something, use these EXACT ids. To remove a goal/task the user created by mistake, call delete_goal / delete_task. NEVER paste raw JSON or tool output into your reply — summarise in plain language.`
+        : liveGoals.map((g) => {
+            const cd = goalDay(g.createdAt as Date)
+            const flag = cd === todayIso ? ' [CREATED TODAY]' : ''
+            const proj = g.projects?.length ? `, ${g.projects.length} project(s)` : ''
+            return `- [${g.id}] "${g.name}" — ${g.status}, ${g.horizon}, created ${cd}${flag}${proj}`
+          }).join('\n')) +
+      `\n\nOpen tasks: ${openTaskCount} (call get_tasks for details). When you update, schedule, or delete something, use these EXACT ids.\n` +
+      `DELETION SAFETY: "today's goals" / "the ones you just created" means ONLY goals marked [CREATED TODAY]. NEVER delete a goal created on an earlier date or one that has projects unless the user names it explicitly — those are long-standing goals (the six foundational domain goals like Build/Fix/Improve/Operate/Think/Personal are permanent; never delete them as "today's"). When unsure which goals the user means, LIST the candidates and ask before deleting. NEVER paste raw JSON or tool output into your reply — summarise in plain language.`
 
     // Two-tier brain: SHARED knowledge (platform + topical BaZi doctrine) + the
     // PER-USER context (identity/season/state/memory/commitments). This is what

@@ -136,11 +136,12 @@ export const ASSISTANT_TOOLS: Tool[] = [
     type: 'function',
     function: {
       name: 'delete_goal',
-      description: "Remove a goal the user no longer wants (e.g. one created by mistake). Archives it so it disappears from their goals; recoverable, no work lost. Pass the exact goalId from your system context or get_goals.",
+      description: "Remove a goal the user no longer wants (e.g. one created by mistake). Archives it so it disappears from their goals; recoverable, no work lost. Pass the exact goalId. If the goal is long-standing (created before today) or has projects, this returns needsConfirm — do NOT retry blindly; confirm with the user that they want THAT specific goal removed, then call again with confirm=true. Only mistakes made TODAY (marked [CREATED TODAY]) should be deleted without asking.",
       parameters: {
         type: 'object',
         properties: {
           goalId: { type: 'string', description: 'The exact id of the goal to remove.' },
+          confirm: { type: 'boolean', description: 'Set true ONLY after the user explicitly confirms deleting this specific long-standing/project-bearing goal.' },
         },
         required: ['goalId'],
       },

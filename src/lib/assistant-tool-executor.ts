@@ -97,7 +97,7 @@ export async function executeTool(
     case 'update_goal':
       return updateGoal(userId, args.goalId, args.updates)
     case 'delete_goal':
-      return deleteGoal(userId, args.goalId)
+      return deleteGoal(userId, args.goalId, args.confirm === true)
     case 'delete_task':
       return deleteTask(userId, args.taskId)
     case 'get_projects':
@@ -166,9 +166,25 @@ async function getGoals(userId: string, domainId?: string, status?: string) {
 
 /** Remove a goal the user created by mistake — archived (hidden from their goals,
  *  recoverable), not hard-deleted, so no work is lost. */
-async function deleteGoal(userId: string, goalId: string) {
-  const goal = await prisma.goal.findFirst({ where: { id: goalId, userId } })
+async function deleteGoal(userId: string, goalId: string, confirm?: boolean) {
+  const goal = await prisma.goal.findFirst({
+    where: { id: goalId, userId },
+    include: { projects: { select: { id: true } } },
+  })
   if (!goal) throw new Error(`Goal not found: ${goalId}`)
+  // SAFETY: a "delete today's mistakes" batch must NOT wipe long-standing goals.
+  // Refuse (and explain) for goals older than 24h or with projects, unless the
+  // caller explicitly confirms THIS specific goal. Prevents the Coach from
+  // archiving foundational goals (Build/Fix/…) it mistook for today's junk.
+  const isOld = Date.now() - new Date(goal.createdAt as Date).getTime() > 24 * 60 * 60 * 1000
+  const projectCount = (goal as any).projects?.length ?? 0
+  if (!confirm && (isOld || projectCount > 0)) {
+    return {
+      needsConfirm: true,
+      goal: { id: goal.id, name: goal.name },
+      warning: `"${goal.name}" is ${isOld ? 'a long-standing goal (created before today)' : 'a goal'}${projectCount ? ` with ${projectCount} project(s)` : ''} — it does NOT look like a throwaway created by mistake just now. Do not delete it as part of a "delete today's goals" batch. Confirm with the user that they specifically want THIS goal removed; only then call delete_goal again with confirm=true.`,
+    }
+  }
   await prisma.goal.update({ where: { id: goalId }, data: { status: 'archived' } })
   await prisma.activityLog
     .create({ data: { userId, goalId, action: 'goal_archived', metadata: { name: goal.name, via: 'assistant' } } })
