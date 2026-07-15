@@ -271,7 +271,7 @@ export default function PricingPage() {
 
 const tiersGridResponsiveStyle = `
   .tiers-grid { margin-bottom: 5rem; }
-  @media (max-width: 1200px) {
+  @media (max-width: 1100px) {
     .tiers-grid { grid-template-columns: repeat(2, 1fr) !important; }
   }
   @media (max-width: 600px) {
