@@ -170,7 +170,7 @@ export default function QuizPage() {
         </div>
       </div>
 
-      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '64px 24px' }}>
+      <div style={{ maxWidth: '900px', margin: '0 auto', padding: '64px 24px 120px' }}>
         {/* How it works */}
         <section style={{ marginBottom: '72px' }}>
           <h2
