@@ -6,7 +6,7 @@ import Link from 'next/link'
 // Dark header palette: hard-coded light values guarantee WCAG AA contrast
 // regardless of the page's global light/dark theme.
 const INK = '#FFFFFF'
-const GRAY = 'rgba(255, 255, 255, 0.75)'
+const GRAY = 'rgba(255, 255, 255, 0.9)'
 const GOLD = '#C79A48'
 const OXBLOOD = '#C06B54'
 const HAIRLINE = 'rgba(255, 255, 255, 0.1)'

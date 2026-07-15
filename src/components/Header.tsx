@@ -19,7 +19,7 @@ const fraunces = Inter({
 // Hard-coded light values so the header is readable regardless of the global
 // light/dark theme or any future token changes.
 const INK = '#FFFFFF';
-const GRAY = 'rgba(255, 255, 255, 0.75)';
+const GRAY = 'rgba(255, 255, 255, 0.9)';
 const CREAM = 'var(--color-bg-primary)';
 const GOLD = 'var(--color-accent)';
 const OXBLOOD = '#C06B54';
