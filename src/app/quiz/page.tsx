@@ -158,7 +158,7 @@ export default function QuizPage() {
             label="Take the Free Quiz →"
             style={{
               background: 'var(--color-accent)',
-              color: '#fff',
+              color: '#0d0b14',
               padding: '16px 40px',
               borderRadius: '10px',
               textDecoration: 'none',
@@ -350,7 +350,7 @@ export default function QuizPage() {
             label="Take the Free Archetype Quiz →"
             style={{
               background: 'var(--color-accent)',
-              color: '#fff',
+              color: '#0d0b14',
               padding: '16px 40px',
               borderRadius: '10px',
               textDecoration: 'none',
