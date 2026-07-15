@@ -23,6 +23,7 @@
 import { prisma } from '@/lib/db/prisma'
 import { deliver, type DeliverOutcome } from './index'
 import type { ChannelMessage } from './types'
+import { postToCoachThread } from '@/lib/coach/thread'
 import {
   DEFAULT_TIMEZONE, isValidTimezone, userDayBounds, userLocalDate,
 } from '@/lib/user-time'
@@ -186,5 +187,8 @@ export async function deliverProactive(
   // toward the cap on subsequent sends this local day.
   const taggedMeta = { ...(message.meta ?? {}), proactive: true, kind: opts.kind, localDate: userLocalDate(tz, at).iso }
   const outcome = await deliver(userId, { ...message, meta: taggedMeta })
+  // One agent, one thread: mirror the proactive message into the Coach conversation
+  // so scheduled briefs/nudges read as the same coach reaching out. Best-effort.
+  await postToCoachThread(userId, message.title, message.body, opts.kind)
   return { suppressed: false, outcome }
 }

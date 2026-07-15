@@ -16,6 +16,7 @@ import { executeTool } from '@/lib/assistant-tool-executor'
 import { requireAuth } from '@/lib/auth/require-auth'
 import { assembleAgentContext } from '@/lib/agent-context'
 import { PLATFORM_KNOWLEDGE, selectBaziDoctrine } from '@/lib/coach/knowledge'
+import { selectPlays } from '@/lib/coach/plays'
 import { detectAndStoreCommitment } from '@/lib/memory/commitment-detect'
 import { consolidateUser } from '@/lib/memory/extract'
 
@@ -102,6 +103,8 @@ export async function POST(request: NextRequest) {
       // commitments — ranked, token-budgeted. Never throws.
       assembleAgentContext(user.id, 'adhoc_nudge').catch(() => null),
     ])
+    // Curated shared playbook layer (best-practice plays relevant to this message).
+    const plays = await selectPlays(message).catch(() => '')
     const snapshot =
       `\n\n## The user's current goals (LIVE — this is their full list; never say you can't see their goals)\n` +
       (liveGoals.length === 0
@@ -114,7 +117,7 @@ export async function POST(request: NextRequest) {
     // makes the Coach actually understand 8os and remember the user across sessions.
     const brain = agentContext?.text ? `\n\n${agentContext.text}` : ''
     const baziDoctrine = selectBaziDoctrine(message)
-    const systemPrompt = personalizedPrompt + '\n\n' + PLATFORM_KNOWLEDGE + brain + baziDoctrine + snapshot
+    const systemPrompt = personalizedPrompt + '\n\n' + PLATFORM_KNOWLEDGE + plays + brain + baziDoctrine + snapshot
 
     // Build message history
     const messages: ChatMessage[] = [
