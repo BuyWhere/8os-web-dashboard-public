@@ -271,7 +271,7 @@ export default function PricingPage() {
 
 const tiersGridResponsiveStyle = `
   .tiers-grid { margin-bottom: 5rem; }
-  @media (max-width: 1100px) {
+  @media (max-width: 1200px) {
     .tiers-grid { grid-template-columns: repeat(2, 1fr) !important; }
   }
   @media (max-width: 600px) {
@@ -293,10 +293,10 @@ const tierHighlightedStyle: React.CSSProperties = { border: '1px solid var(--col
 
 const popularBadgeStyle: React.CSSProperties = { position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', padding: '0.3rem 0.85rem', borderRadius: '999px', background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent))', color: '#fff', fontSize: '0.75rem', fontWeight: 700, whiteSpace: 'nowrap' };
 
-const tierHeaderStyle: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: '0.5rem' };
+const tierHeaderStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: '0.75rem' };
 const tierNameStyle: React.CSSProperties = { margin: '0 0 0.2rem', fontSize: '1.15rem', fontWeight: 800 };
 const tierTaglineStyle: React.CSSProperties = { margin: 0, fontSize: '0.8rem', color: 'var(--color-accent)', fontWeight: 600 };
-const tierPriceBlockStyle: React.CSSProperties = { textAlign: 'right', flexShrink: 0 };
+const tierPriceBlockStyle: React.CSSProperties = { textAlign: 'left' };
 const tierPriceStyle: React.CSSProperties = { display: 'block', fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1 };
 const tierPeriodStyle: React.CSSProperties = { display: 'block', fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginTop: '0.15rem' };
 const tierDescStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-text-secondary)' };
