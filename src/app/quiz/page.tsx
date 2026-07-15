@@ -128,8 +128,8 @@ export default function QuizPage() {
           <div
             style={{
               display: 'inline-block',
-              background: 'var(--color-bg-card)',
-              color: '#a5b4fc',
+              background: 'var(--color-accent-soft)',
+              color: 'var(--color-text-primary)',
               padding: '6px 16px',
               borderRadius: '9999px',
               fontSize: '13px',
@@ -143,14 +143,14 @@ export default function QuizPage() {
             style={{
               fontSize: '46px',
               fontWeight: 700,
-              color: 'var(--color-text-primary)',
+              color: '#FAF7F0',
               lineHeight: 1.15,
               marginBottom: '20px',
             }}
           >
             Discover Your BaZi Archetype
           </h1>
-          <p style={{ fontSize: '18px', color: 'var(--color-text-muted)', lineHeight: 1.65, marginBottom: '36px' }}>
+          <p style={{ fontSize: '18px', color: '#E0DAEC', lineHeight: 1.65, marginBottom: '36px' }}>
             Five elements. Five operating systems. The quiz reveals which one is yours, and gives
             you a complete system for goals, productivity, and timing.
           </p>
@@ -214,7 +214,7 @@ export default function QuizPage() {
                     margin: '0 auto 16px',
                     fontSize: '18px',
                     fontWeight: 700,
-                    color: '#fff',
+                    color: '#0d0b14',
                   }}
                 >
                   {step.number}
@@ -364,10 +364,11 @@ export default function QuizPage() {
             <a
               href="/reveal"
               style={{
-                color: 'var(--color-accent)',
+                color: 'var(--color-accent-2)',
                 fontSize: '0.95rem',
                 textDecoration: 'none',
-                borderBottom: '1px solid rgba(196, 181, 253, 0.3)',
+                borderBottom: '1px solid rgba(122, 59, 46, 0.4)',
+                fontWeight: 600,
               }}
             >
               Take the quiz →
