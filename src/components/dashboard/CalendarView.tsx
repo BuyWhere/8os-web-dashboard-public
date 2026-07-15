@@ -1130,68 +1130,6 @@ function useSlotCreate(day: Date, onSlotCreate: (start: Date, mins: number) => v
   const [sel, setSel] = useState<{ top: number; height: number } | null>(null)
   const selRef = useRef(sel); selRef.current = sel
 
-<<<<<<< HEAD
-function MonthView({ days, events, todayKey }: { days: Date[]; events: CalendarEvent[]; todayKey: string }) {
-  const WEEKDAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun']
-  const currentMonth = days[15]?.getMonth()
-
-  return (
-    <div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', borderBottom: '1px solid #1a1a1a' }}>
-        {WEEKDAYS.map((d, i) => (
-          <div key={d} style={{
-            padding: '8px 12px', paddingRight: i === 6 ? 14 : 12,
-            fontSize: 11, color: '#555', textTransform: 'uppercase', textAlign: 'center',
-            borderLeft: i === 0 ? 'none' : '1px solid #141414',
-          }}>{d}</div>
-        ))}
-      </div>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(7, 1fr)', gridTemplateRows: 'repeat(6, minmax(100px, 1fr))' }}>
-        {days.map((day, i) => {
-          const key = day.toISOString().slice(0, 10)
-          const dayEvents = eventsForDay(events, day)
-          const isToday = key === todayKey
-          const isCurrentMonth = day.getMonth() === currentMonth
-          const isLastCol = (i + 1) % 7 === 0
-
-          return (
-            <div key={i} style={{
-              borderRight: isLastCol ? 'none' : '1px solid #141414',
-              borderBottom: '1px solid #141414',
-              padding: '8px 10px', paddingRight: isLastCol ? 12 : 10,
-              minHeight: 100,
-              background: isToday ? '#0d0d18' : 'transparent',
-              opacity: isCurrentMonth ? 1 : 0.35,
-            }}>
-              <div style={{
-                width: 26, height: 26, borderRadius: '50%',
-                background: isToday ? '#6366f1' : 'transparent',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                fontSize: 12, color: isToday ? '#fff' : '#888', fontWeight: isToday ? 700 : 400,
-                marginBottom: 4,
-              }}>
-                {day.getDate()}
-              </div>
-              {dayEvents.slice(0, 3).map((e) => (
-                <div key={e.id} style={{
-                  padding: '2px 6px', borderRadius: 3, marginBottom: 2,
-                  background: (e.color ?? (e.domainId ? DOMAIN_COLORS[e.domainId] : '#6366f1') ?? '#6366f1') + '33',
-                  color: e.color ?? (e.domainId ? DOMAIN_COLORS[e.domainId] : '#8b8ff8') ?? '#8b8ff8',
-                  fontSize: 10, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis',
-                }}>
-                  {new Date(e.startAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })} {e.title}
-                </div>
-              ))}
-              {dayEvents.length > 3 && (
-                <div style={{ fontSize: 10, color: '#555' }}>+{dayEvents.length - 3} more</div>
-              )}
-            </div>
-          )
-        })}
-      </div>
-    </div>
-  )
-=======
   function topToDate(top: number): Date {
     const mins = snapMinutes((top / SLOT_PX) * SLOT_MIN)
     const d = new Date(day); d.setHours(DAY_START_HOUR, 0, 0, 0); d.setMinutes(d.getMinutes() + mins)
@@ -1223,7 +1161,6 @@ function MonthView({ days, events, todayKey }: { days: Date[]; events: CalendarE
     window.addEventListener('mousemove', move); window.addEventListener('mouseup', up)
   }
   return { onMouseDown, sel }
->>>>>>> forge/main
 }
 
 // ─── Week View ───────────────────────────────────────────────────────────────

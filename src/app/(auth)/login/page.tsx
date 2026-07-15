@@ -1,9 +1,3 @@
-<<<<<<< HEAD
-import { SignIn } from '@clerk/nextjs'
-
-// Clerk components read request context; render at request time (never prerender).
-export const dynamic = 'force-dynamic'
-=======
 import { LoginClerkErrorBridge } from "@/components/auth/LoginClerkErrorBridge"
 
 // Clerk components read request context; render at request time (never prerender).
@@ -24,34 +18,11 @@ const INK = "#221F1A"   // ink, matches --color-text-primary
 const MUTED = "#6B6257" // warm gray, matches --color-text-secondary
 const GOLD = "#B08637"  // 8os gold accent, 4.69:1 on cream
 const BORDER = "#E7DFD2" // hairline
->>>>>>> forge/main
 
 export default function LoginPage() {
   return (
     <main
       style={{
-<<<<<<< HEAD
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        padding: '1rem',
-        background: '#0a0a0a',
-      }}
-    >
-      <SignIn
-        routing='hash'
-        signUpUrl='/signup'
-        forceRedirectUrl='/dashboard'
-        appearance={{
-          variables: {
-            colorBackground: '#111111',
-            colorText: '#ededed',
-            colorPrimary: '#ededed',
-            colorInputBackground: '#0a0a0a',
-            colorInputText: '#ededed',
-            borderRadius: '12px',
-=======
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -86,7 +57,6 @@ export default function LoginPage() {
               border: `1px solid ${BORDER}`,
               boxShadow: "0 4px 24px rgba(34,31,26,0.06)",
             },
->>>>>>> forge/main
           },
         }}
       />
