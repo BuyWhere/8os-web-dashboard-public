@@ -9,6 +9,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { jwtVerify, importSPKI } from 'jose'
 import { prisma } from '@/lib/db/prisma'
+import { getUserPlan } from '@/lib/subscription'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import Link from 'next/link'
 
@@ -31,7 +32,11 @@ export default async function JournalPage() {
   ])
 
   const sidebarGoals = goals.map((g) => ({ id: g.id, domainId: g.domainId, name: g.name, progress: g.progress }))
-  const isPro = role === 'pro' || role === 'admin'
+  // Pro entitlement comes from the SUBSCRIPTION (source of truth, set by the Stripe
+  // webhook), NOT user.role — the webhook never writes role, so paid users were
+  // wrongly gated here while /settings/billing correctly showed Pro.
+  const plan = await getUserPlan(userId)
+  const isPro = plan === 'pro' || role === 'admin'
 
   return (
     <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>

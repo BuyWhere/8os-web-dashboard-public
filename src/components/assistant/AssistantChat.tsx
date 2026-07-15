@@ -148,8 +148,14 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
     setMicSupported(hasSpeech || hasRecorder)
   }, [])
 
+  // Keep pinned to the newest message. The FIRST time (opening / resuming a
+  // conversation) jump instantly to the bottom — no animation — so it doesn't
+  // scroll through the whole history each refresh. Only new live messages animate.
+  const didInitialScroll = useRef(false)
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (messages.length === 0) return
+    messagesEndRef.current?.scrollIntoView({ behavior: didInitialScroll.current ? 'smooth' : 'auto', block: 'end' })
+    didInitialScroll.current = true
   }, [messages])
 
   // On open, resume the most recent conversation if it was active in the last 24h
