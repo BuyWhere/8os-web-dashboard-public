@@ -11,6 +11,7 @@ import { jwtVerify, importSPKI } from 'jose'
 import { prisma } from '@/lib/db/prisma'
 import { getUserPlan } from '@/lib/subscription'
 import { Sidebar } from '@/components/dashboard/Sidebar'
+import { JournalClient } from '@/components/journal/JournalClient'
 import Link from 'next/link'
 
 type UserRole = 'user' | 'premium' | 'pro' | 'admin'
@@ -95,16 +96,8 @@ export default async function JournalPage() {
             </div>
           </div>
         ) : (
-          /* ── Pro user: journal interface placeholder ── */
-          <div style={{ maxWidth: 720 }}>
-            <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 14, padding: 32, textAlign: 'center' }}>
-              <div style={{ fontSize: 40, marginBottom: 12 }}>📔</div>
-              <div style={{ color: 'var(--color-text-secondary)', fontSize: 15, marginBottom: 8 }}>Journal is coming soon.</div>
-              <div style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>
-                Your first entry will appear here. Check back after your next daily briefing.
-              </div>
-            </div>
-          </div>
+          /* ── Pro user: the real journal — write anytime + read past entries ── */
+          <JournalClient />
         )}
       </main>
     </div>
