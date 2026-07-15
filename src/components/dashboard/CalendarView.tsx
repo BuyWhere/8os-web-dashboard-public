@@ -75,6 +75,7 @@ const EVENT_COLORS = ['#B08637', '#6366f1', '#22c55e', '#ec4899', '#3b82f6', '#8
 
 // WCAG AA (≥4.5:1) dark text for each event colour — covers all 8 EVENT_COLORS
 // plus domain-derived hues so event titles are legible on tinted backgrounds.
+// Dark text on the light (color+'22') event tint — for LIGHT mode (WCAG AA).
 const EVENT_TEXT_COLORS: Record<string, string> = {
   '#B08637': '#3a1f00', // dark brown on olive
   '#6366f1': '#1e1b4b', // dark indigo on purple
@@ -85,9 +86,25 @@ const EVENT_TEXT_COLORS: Record<string, string> = {
   '#f59e0b': '#78350f', // dark amber on amber
   '#7A3B2E': '#450a0a', // dark red on brown-red
 }
+// LIGHT text for DARK mode — the color+'22' tint sits on a dark surface, so the
+// light-mode dark text was invisible (dark-on-dark). This was the "all calendar/
+// task items show blank in dark mode" bug.
+const EVENT_TEXT_COLORS_DARK: Record<string, string> = {
+  '#B08637': '#e9cfa0',
+  '#6366f1': '#c7d2fe',
+  '#22c55e': '#bbf7d0',
+  '#ec4899': '#fbcfe8',
+  '#3b82f6': '#bfdbfe',
+  '#8b5cf6': '#ddd6fe',
+  '#f59e0b': '#fde68a',
+  '#7A3B2E': '#fecaca',
+}
 
-/** Returns a WCAG-compliant dark text colour for any event colour value. */
+/** Theme-aware, WCAG-legible text colour for an event's colour. Reads the active
+ *  theme (data-theme on <html>) at render so titles are visible in BOTH modes. */
 function eventTextColor(color: string): string {
+  const dark = typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'dark'
+  if (dark) return EVENT_TEXT_COLORS_DARK[color] ?? '#EDE7DD'
   return EVENT_TEXT_COLORS[color] ?? color
 }
 
