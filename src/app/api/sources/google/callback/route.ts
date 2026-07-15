@@ -17,6 +17,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
 import { requireAuth } from '@/lib/auth/require-auth'
 import { encrypt, decrypt } from '@/lib/encryption'
+import { appUrl } from '@/lib/app-url'
 import {
   isGoogleCalendarConfigured,
   exchangeCodeForTokens,
@@ -28,7 +29,7 @@ import {
 const STATE_MAX_AGE_MS = 10 * 60 * 1000
 
 function settingsRedirect(req: NextRequest, qs: string): NextResponse {
-  return NextResponse.redirect(new URL(`/settings/sources?${qs}`, req.nextUrl), 307)
+  return NextResponse.redirect(appUrl(`/settings/sources?${qs}`), 307)
 }
 
 export async function GET(req: NextRequest) {

@@ -13,6 +13,7 @@
 import { prisma } from '@/lib/db/prisma'
 import { wouldExceedActiveCap } from '@/lib/goal-hygiene'
 import { normalizeHorizon } from '@/lib/horizons'
+import { zonedNaiveToUtc, userLocalDate } from '@/lib/user-time'
 
 /**
  * The production `goals` table has NOT NULL `company_id`, `title`, `description`
@@ -87,7 +88,8 @@ function parseDurationMinutes(d?: string | number): number {
 export async function executeTool(
   toolName: ToolName,
   args: Record<string, any>,
-  userId: string
+  userId: string,
+  tz?: string, // user's timezone, so naive "9am" datetimes resolve to the USER's local time
 ): Promise<any> {
   switch (toolName) {
     case 'get_goals':
@@ -109,15 +111,15 @@ export async function executeTool(
     case 'get_tasks':
       return getTasks(userId, args.projectId, args.goalId, args.status)
     case 'create_task':
-      return createTask(userId, args)
+      return createTask(userId, args, tz)
     case 'schedule_task':
-      return scheduleTask(userId, args)
+      return scheduleTask(userId, args, tz)
     case 'complete_task':
       return completeTask(userId, args.taskId)
     case 'get_calendar_events':
       return getCalendarEvents(userId, args.startDate, args.endDate)
     case 'create_calendar_event':
-      return createCalendarEvent(userId, args)
+      return createCalendarEvent(userId, args, tz)
     case 'get_archetype_info':
       return getArchetypeInfo(userId)
     case 'get_energy_hours':
@@ -353,7 +355,7 @@ async function getTasks(userId: string, projectId?: string, goalId?: string, sta
  * (a loose task with an inferred domain). Optionally schedules it immediately
  * (scheduledAt ISO or "morning"/"afternoon"/"evening" tomorrow).
  */
-async function createTask(userId: string, args: Record<string, any>) {
+async function createTask(userId: string, args: Record<string, any>, tz?: string) {
   let projectId: string | null = args.projectId ?? null
   let goalId: string | null = args.goalId ?? null
   let domainId: string | null = DOMAIN_IDS.includes(args.domainId) ? args.domainId : null
@@ -378,7 +380,7 @@ async function createTask(userId: string, args: Record<string, any>) {
   if (!domainId) domainId = inferDomain(String(args.name || ''))
 
   const duration = parseDurationMinutes(args.duration)
-  const scheduledAt = resolveScheduleTime(args.scheduledAt || args.suggestedSchedule)
+  const scheduledAt = resolveScheduleTime(args.scheduledAt || args.suggestedSchedule, tz)
   const scheduledEnd = scheduledAt ? new Date(scheduledAt.getTime() + duration * 60000) : null
 
   const task = await prisma.oSTask.create({
@@ -422,11 +424,11 @@ async function createTask(userId: string, args: Record<string, any>) {
  * Schedule an EXISTING task (or one just created) onto a time slot, creating a
  * calendar event. Accepts taskId + startTime (ISO) OR a natural slot.
  */
-async function scheduleTask(userId: string, args: Record<string, any>) {
+async function scheduleTask(userId: string, args: Record<string, any>, tz?: string) {
   const task = await prisma.oSTask.findFirst({ where: { id: args.taskId, userId } })
   if (!task) throw new Error(`Task not found: ${args.taskId}`)
 
-  const startAt = resolveScheduleTime(args.startTime || args.scheduledAt || args.slot) || defaultSlot()
+  const startAt = resolveScheduleTime(args.startTime || args.scheduledAt || args.slot, tz) || defaultSlot()
   const duration = task.duration || parseDurationMinutes(args.duration)
   const endAt = new Date(startAt.getTime() + duration * 60000)
 
@@ -478,10 +480,10 @@ async function getCalendarEvents(userId: string, startDate?: string, endDate?: s
   }
 }
 
-async function createCalendarEvent(userId: string, args: Record<string, any>) {
-  const startAt = resolveScheduleTime(args.startTime || args.startAt) || defaultSlot()
+async function createCalendarEvent(userId: string, args: Record<string, any>, tz?: string) {
+  const startAt = resolveScheduleTime(args.startTime || args.startAt, tz) || defaultSlot()
   const endAt = args.endTime || args.endAt
-    ? new Date(args.endTime || args.endAt)
+    ? (resolveScheduleTime(args.endTime || args.endAt, tz) || new Date(startAt.getTime() + 60 * 60000))
     : new Date(startAt.getTime() + 60 * 60000)
 
   // If a taskId is given, resolve title/domain from it.
@@ -536,18 +538,33 @@ function defaultSlot(): Date {
  *  - "morning" | "afternoon" | "evening" | "anytime"/"tomorrow" → tomorrow slot
  *  - undefined/null → null (unscheduled)
  */
-function resolveScheduleTime(input?: string): Date | null {
+function resolveScheduleTime(input?: string, tz?: string): Date | null {
   if (!input) return null
   const s = String(input).trim()
-  // ISO datetime?
+  // NAIVE datetime (date + time, NO timezone offset/Z) → interpret in the USER's
+  // timezone, not the UTC server. This is the calendar "events land 8h off" fix:
+  // "2026-07-15T09:00:00" from the Coach means 9am to the user.
+  const naive = s.match(/^(\d{4})-(\d{2})-(\d{2})[T ](\d{2}):(\d{2})(?::(\d{2}))?$/)
+  if (naive && tz) {
+    return zonedNaiveToUtc(tz, +naive[1], +naive[2], +naive[3], +naive[4], +naive[5], +(naive[6] || 0))
+  }
+  // Has an explicit offset/Z (or other parseable ISO) → respect it as-is.
   const iso = Date.parse(s)
   if (!Number.isNaN(iso) && /\d{4}-\d{2}-\d{2}/.test(s)) return new Date(iso)
+  // Natural language — anchor to the user's LOCAL day (fallback to UTC server day).
   const lower = s.toLowerCase()
-  const base = new Date()
-  base.setDate(base.getDate() + 1)
-  if (lower.includes('morning')) { base.setHours(9, 0, 0, 0); return base }
-  if (lower.includes('afternoon')) { base.setHours(14, 0, 0, 0); return base }
-  if (lower.includes('evening') || lower.includes('night')) { base.setHours(19, 0, 0, 0); return base }
-  if (lower.includes('tomorrow') || lower.includes('anytime') || lower.includes('today')) { base.setHours(9, 0, 0, 0); return base }
+  const now = new Date()
+  const ld = tz ? userLocalDate(tz, now) : { year: now.getUTCFullYear(), month: now.getUTCMonth() + 1, day: now.getUTCDate() }
+  let { year, month, day } = ld
+  if (!lower.includes('today')) { // default target is tomorrow local
+    const t = new Date(Date.UTC(ld.year, ld.month - 1, ld.day + 1))
+    year = t.getUTCFullYear(); month = t.getUTCMonth() + 1; day = t.getUTCDate()
+  }
+  let hour = 9
+  if (lower.includes('afternoon')) hour = 14
+  else if (lower.includes('evening') || lower.includes('night')) hour = 19
+  if (['morning', 'afternoon', 'evening', 'night', 'tomorrow', 'anytime', 'today'].some((k) => lower.includes(k))) {
+    return tz ? zonedNaiveToUtc(tz, year, month, day, hour, 0, 0) : new Date(Date.UTC(year, month - 1, day, hour, 0, 0))
+  }
   return null
 }

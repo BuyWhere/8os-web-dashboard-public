@@ -270,7 +270,7 @@ export async function POST(request: NextRequest) {
               let resultPayload: any
               try {
                 const args = tc.arguments ? JSON.parse(tc.arguments) : {}
-                resultPayload = await executeTool(tc.name as any, args, user.id)
+                resultPayload = await executeTool(tc.name as any, args, user.id, timezone)
               } catch (error) {
                 resultPayload = { error: `Tool execution failed: ${error instanceof Error ? error.message : 'Unknown error'}` }
               }

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { verifyAccessToken } from '@/lib/auth/jwt'
+import { appUrl } from '@/lib/app-url'
 import {
   buildGoogleAuthorizationUrl,
   createGoogleOauthFlowToken,
@@ -17,14 +18,14 @@ export async function GET(req: NextRequest) {
   if (mode === 'link') {
     const token = req.cookies.get('access_token')?.value
     if (!token) {
-      return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent('Sign in first to connect Google')}`, req.url))
+      return NextResponse.redirect(appUrl(`/login?error=${encodeURIComponent('Sign in first to connect Google')}`))
     }
 
     try {
       const payload = await verifyAccessToken(token)
       userId = payload.sub
     } catch {
-      return NextResponse.redirect(new URL(`/login?error=${encodeURIComponent('Session expired. Sign in again to connect Google')}`, req.url))
+      return NextResponse.redirect(appUrl(`/login?error=${encodeURIComponent('Session expired. Sign in again to connect Google')}`))
     }
   }
 
@@ -39,7 +40,7 @@ export async function GET(req: NextRequest) {
     // instead of a generic 500 stack trace.
     console.error('[api/auth/google] OAuth env vars missing or invalid:', err)
     return NextResponse.redirect(
-      new URL(`/login?error=${encodeURIComponent('Google sign-in is temporarily unavailable')}`, req.url),
+      appUrl(`/login?error=${encodeURIComponent('Google sign-in is temporarily unavailable')}`),
       { status: 307 },
     )
   }

@@ -110,6 +110,21 @@ function tzOffsetMs(tz: string, at: Date): number {
   return asUTC - Math.floor(at.getTime() / 1000) * 1000
 }
 
+/**
+ * The UTC instant for a NAIVE wall-clock datetime interpreted in `zone`. E.g.
+ * ("Asia/Singapore", 2026, 7, 15, 9, 0, 0) → the Date whose SGT wall clock reads
+ * 09:00 (i.e. 01:00 UTC). Used so the Coach's "9am" means 9am to the USER, not
+ * 9am UTC. Same DST-safe refine as localMidnightUTC.
+ */
+export function zonedNaiveToUtc(
+  zone: string, year: number, month: number, day: number, hour: number, minute: number, second = 0,
+): Date {
+  const naive = Date.UTC(year, month - 1, day, hour, minute, second)
+  let guess = new Date(naive - tzOffsetMs(zone, new Date(naive)))
+  guess = new Date(naive - tzOffsetMs(zone, guess))
+  return guess
+}
+
 /** The UTC instant of local midnight (00:00:00.000) on y-m-d in `zone`. */
 function localMidnightUTC(zone: string, year: number, month: number, day: number): Date {
   const naive = Date.UTC(year, month - 1, day)

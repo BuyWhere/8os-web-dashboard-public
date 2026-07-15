@@ -17,11 +17,12 @@ import {
   MICROSOFT_CALENDAR_PROVIDER,
 } from '@/lib/external/microsoft-calendar'
 import type { StoredTokens } from '@/lib/external/google-calendar'
+import { appUrl } from '@/lib/app-url'
 
 const STATE_MAX_AGE_MS = 10 * 60 * 1000
 
 function settingsRedirect(req: NextRequest, qs: string): NextResponse {
-  return NextResponse.redirect(new URL(`/settings/sources?${qs}`, req.nextUrl), 307)
+  return NextResponse.redirect(appUrl(`/settings/sources?${qs}`), 307)
 }
 
 export async function GET(req: NextRequest) {

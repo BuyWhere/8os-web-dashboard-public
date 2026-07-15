@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
 import { setAuthCookies } from '@/lib/auth/cookies'
 import { createSession } from '@/lib/auth/session'
+import { appUrl } from '@/lib/app-url'
 import {
   exchangeGoogleCode,
   fetchGoogleUserInfo,
@@ -186,7 +187,7 @@ export async function GET(req: NextRequest) {
         ? (user.onboardingDone ? flow.next : '/onboarding')
         : flow.next
 
-    const response = NextResponse.redirect(new URL(redirectPath, req.url))
+    const response = NextResponse.redirect(appUrl(redirectPath))
     setAuthCookies(response, accessToken, refreshToken)
     clearOauthFlowCookie(response)
     return response
