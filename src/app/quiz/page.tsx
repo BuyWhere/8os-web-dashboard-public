@@ -200,7 +200,6 @@ export default function QuizPage() {
                   borderRadius: '12px',
                   padding: '28px 24px 24px',
                   textAlign: 'center',
-                  minHeight: '250px',
                 }}
               >
                 <div
