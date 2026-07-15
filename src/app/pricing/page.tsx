@@ -133,6 +133,8 @@ function FeatureValue({ value }: { value: boolean | string }) {
 
 export default function PricingPage() {
   return (
+    <>
+      <style dangerouslySetInnerHTML={{ __html: tiersGridResponsiveStyle }} />
     <main style={pageStyle} aria-label="Pricing tiers">
       <div style={innerStyle}>
         <div style={headerStyle}>
@@ -144,7 +146,7 @@ export default function PricingPage() {
         </div>
 
         {/* Tier cards */}
-        <div style={tiersGridStyle}>
+        <div className="tiers-grid" style={tiersGridStyle}>
           {TIERS.map((tier) => (
             <div key={tier.id} style={{ ...tierCardStyle, ...(tier.highlighted ? tierHighlightedStyle : {}) }}>
               {tier.highlighted && (
@@ -263,8 +265,19 @@ export default function PricingPage() {
         </div>
       </div>
     </main>
+    </>
   );
 }
+
+const tiersGridResponsiveStyle = `
+  .tiers-grid { margin-bottom: 5rem; }
+  @media (max-width: 1100px) {
+    .tiers-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+  @media (max-width: 600px) {
+    .tiers-grid { grid-template-columns: 1fr !important; }
+  }
+`;
 
 const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '5rem 2rem', minWidth: 0 };
@@ -273,7 +286,7 @@ const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.
 const pageTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.1, letterSpacing: '-0.04em' };
 const pageDescStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', color: 'var(--color-text-secondary)', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.65 };
 
-const tiersGridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.25rem', marginBottom: '5rem', alignItems: 'start' };
+const tiersGridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', alignItems: 'start' };
 
 const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '2rem', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'flex', flexDirection: 'column', gap: '1.25rem' };
 const tierHighlightedStyle: React.CSSProperties = { border: '1px solid var(--color-accent-soft)', background: 'var(--color-accent-soft)', boxShadow: '0 0 0 1px var(--color-accent-soft)' };
