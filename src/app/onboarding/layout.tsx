@@ -13,6 +13,9 @@
  */
 import { PostHogProvider } from '@/components/PostHogProvider'
 import { Inter } from 'next/font/google'
+import { redirect } from 'next/navigation'
+import { getServerAppUserId } from '@/lib/auth/server-user'
+import { prisma } from '@/lib/db/prisma'
 
 const fraunces = Inter({
   subsets: ['latin'],
@@ -28,7 +31,13 @@ const inter = Inter({
   display: 'swap',
 })
 
-export default function OnboardingLayout({ children }: { children: React.ReactNode }) {
+export default async function OnboardingLayout({ children }: { children: React.ReactNode }) {
+  // Guard: an already-onboarded user should never re-enter the onboarding flow
+  // (they could accidentally re-submit birth/quiz/archetype). Send them home.
+  const userId = await getServerAppUserId('/onboarding')
+  const u = await prisma.user.findUnique({ where: { id: userId }, select: { onboardingDone: true } })
+  if (u?.onboardingDone) redirect('/dashboard')
+
   return (
     <PostHogProvider>
       <div

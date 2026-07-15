@@ -85,7 +85,7 @@ export default async function JournalPage() {
                 Upgrade to Pro →
               </Link>
               <div style={{ marginTop: 12, color: 'var(--color-text-muted)', fontSize: 12 }}>
-                Starting from $12/month · cancel anytime
+                $18/month · cancel anytime
               </div>
             </div>
           </div>
