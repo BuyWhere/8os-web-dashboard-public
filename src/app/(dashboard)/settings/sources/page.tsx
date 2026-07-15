@@ -18,6 +18,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import posthog from 'posthog-js'
 import { Sidebar } from '@/components/dashboard/Sidebar'
+import { SettingsTabs } from '@/components/SettingsTabs'
 
 interface SourceRow {
   id: string
@@ -162,8 +163,8 @@ export default function SourcesSettingsPage() {
       <Sidebar goals={[]} />
 
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
+        <SettingsTabs active="/settings/sources" />
         <div style={{ marginBottom: 24, maxWidth: 640 }}>
-          <Link href="/dashboard" style={{ color: textSecondaryOnCream, fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>Sources</h1>
           <p style={{ margin: '4px 0 0', color: textSecondaryOnCream, fontSize: 14 }}>
             Let real life flow into 8os, no manual entry

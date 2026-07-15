@@ -213,6 +213,10 @@ export default function ProfileSettingsPage() {
                 elements: {
                   rootBox: { width: '100%' },
                   card: { boxShadow: 'none', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)' },
+                  // Hide Clerk's own left Profile/Security nav — the account already
+                  // has the SettingsTabs bar, so this removes the redundant second nav.
+                  navbar: { display: 'none' },
+                  navbarMobileMenuRow: { display: 'none' },
                 },
               }}
             />

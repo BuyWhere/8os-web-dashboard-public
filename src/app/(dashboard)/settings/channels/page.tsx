@@ -14,6 +14,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import { Sidebar } from '@/components/dashboard/Sidebar'
+import { SettingsTabs } from '@/components/SettingsTabs'
 
 interface ChannelStatus {
   webInbox: { enabled: boolean }
@@ -75,8 +76,8 @@ export default function ChannelsSettingsPage() {
       <Sidebar goals={[]} />
 
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
+        <SettingsTabs active="/settings/channels" />
         <div style={{ marginBottom: 24, maxWidth: 640 }}>
-          <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>Channels</h1>
           <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 14 }}>
             Where 8os reaches you, briefs, nudges and one-tap actions

@@ -13,6 +13,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import { Sidebar } from '@/components/dashboard/Sidebar'
+import { SettingsTabs } from '@/components/SettingsTabs'
 
 interface PrefsResponse {
   prefs: {
@@ -130,6 +131,7 @@ export default function NotificationsSettingsPage() {
     <div style={{ display: 'flex', minHeight: '100vh', background: 'var(--color-bg-primary)' }}>
       <Sidebar />
       <main style={{ flex: 1, padding: '32px 40px', color: 'var(--color-text-primary)' }}>
+        <SettingsTabs active="/settings/notifications" />
         <h1 style={{ fontSize: 24, fontWeight: 700, marginBottom: 6, fontFamily: 'var(--font-serif), Georgia, serif' }}>Notifications</h1>
         <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, marginBottom: 24 }}>
           8os only reaches out proactively within these rules. Reactive replies (when you message it) are never governed.
