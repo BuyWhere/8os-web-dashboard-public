@@ -73,6 +73,31 @@ const DOMAIN_COLORS: Record<string, string> = {
 // which is invalid on a CSS var(), so these must stay literal hex.
 const EVENT_COLORS = ['#B08637', '#6366f1', '#22c55e', '#ec4899', '#3b82f6', '#8b5cf6', '#f59e0b', '#7A3B2E']
 
+// WCAG AA (≥4.5:1) dark text for each event colour — covers all 8 EVENT_COLORS
+// plus domain-derived hues so event titles are legible on tinted backgrounds.
+const EVENT_TEXT_COLORS: Record<string, string> = {
+  '#B08637': '#3a1f00', // dark brown on olive
+  '#6366f1': '#1e1b4b', // dark indigo on purple
+  '#22c55e': '#14532d', // dark green on green
+  '#ec4899': '#831843', // dark pink on pink
+  '#3b82f6': '#1e3a8a', // dark blue on blue
+  '#8b5cf6': '#3b0764', // dark violet on violet
+  '#f59e0b': '#78350f', // dark amber on amber
+  '#7A3B2E': '#450a0a', // dark red on brown-red
+  // Domain colour fallbacks
+  '#6366f1': '#1e1b4b', // career
+  '#f59e0b': '#78350f', // wealth
+  '#22c55e': '#14532d', // health
+  '#ec4899': '#831843', // relationships
+  '#3b82f6': '#1e3a8a', // learning
+  '#8b5cf6': '#3b0764', // legacy
+}
+
+/** Returns a WCAG-compliant dark text colour for any event colour value. */
+function eventTextColor(color: string): string {
+  return EVENT_TEXT_COLORS[color] ?? color
+}
+
 const ENERGY_BG: Record<EnergyLevel, string> = {
   green: 'rgba(34,197,94,0.06)',
   yellow: 'rgba(245,158,11,0.06)',
@@ -973,7 +998,7 @@ function MonthView({ days, events, todayKey, onEventClick, onDayClick, firstDay 
                 return (
                   <div key={e.id} onClick={(ev) => { ev.stopPropagation(); onEventClick(e) }} style={{
                     padding: '2px 6px', borderRadius: 3, marginBottom: 2, cursor: 'pointer',
-                    background: c + '22', color: c, fontSize: 10, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis',
+                    background: c + '22', color: eventTextColor(c), fontSize: 10, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis',
                     borderLeft: `2px solid ${c}`,
                   }}>
                     {e.allDay ? '' : fmtTime(new Date(e.startAt)) + ' '}{e.title}
@@ -1088,11 +1113,11 @@ function EventBlock({ e, ghost, onClick, onDragStart, onResizeStart, dense, col 
       }}
       title={`${e.title}${e.location ? ' · ' + e.location : ''}`}
     >
-      <div style={{ fontSize: 11, fontWeight: 600, color, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+      <div style={{ fontSize: 11, fontWeight: 600, color: eventTextColor(color), whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
         {e.recurrenceRule !== 'none' && '↻ '}{e.title}
       </div>
       {height > 34 && (
-        <div style={{ fontSize: 10, color: color + 'cc' }}>{fmtTime(new Date(e.startAt))} - {fmtTime(new Date(e.endAt))}</div>
+        <div style={{ fontSize: 10, color: eventTextColor(color) + 'cc' }}>{fmtTime(new Date(e.startAt))} - {fmtTime(new Date(e.endAt))}</div>
       )}
       {draggable && (
         <div onMouseDown={(ev) => onResizeStart(ev, e)} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 7, cursor: 'ns-resize' }} title="Drag to resize">
@@ -1182,7 +1207,7 @@ function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, 
             <div key={i} style={{ borderLeft: '1px solid var(--color-border)', padding: 2 }}>
               {allDayForDay(events, d).map((e) => {
                 const c = eventColor(e)
-                return <div key={e.id} onClick={() => onEventClick(e)} style={{ background: c + '22', color: c, borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 10, padding: '1px 5px', marginBottom: 2, cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{e.title}</div>
+                return <div key={e.id} onClick={() => onEventClick(e)} style={{ background: c + '22', color: eventTextColor(c), borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 10, padding: '1px 5px', marginBottom: 2, cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{e.title}</div>
               })}
             </div>
           ))}
@@ -1322,7 +1347,7 @@ function DayView({ day, events, energy, onSlotCreate, onEventClick, onEventDrag,
         <div style={{ display: 'grid', gridTemplateColumns: '56px 1fr', borderBottom: '1px solid var(--color-border)', padding: '2px 0' }}>
           <div style={{ fontSize: 9, color: 'var(--color-text-muted)', textAlign: 'right', paddingRight: 6, paddingTop: 4 }}>all-day</div>
           <div style={{ padding: 2 }}>
-            {allDay.map((e) => { const c = eventColor(e); return <div key={e.id} onClick={() => onEventClick(e)} style={{ background: c + '22', color: c, borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 11, padding: '2px 6px', marginBottom: 2, cursor: 'pointer' }}>{e.title}</div> })}
+            {allDay.map((e) => { const c = eventColor(e); return <div key={e.id} onClick={() => onEventClick(e)} style={{ background: c + '22', color: eventTextColor(c), borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 11, padding: '2px 6px', marginBottom: 2, cursor: 'pointer' }}>{e.title}</div> })}
           </div>
         </div>
       )}
