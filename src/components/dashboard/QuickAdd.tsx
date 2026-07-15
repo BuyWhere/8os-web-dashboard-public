@@ -1,81 +1,41 @@
 'use client'
 
-import { useState, useRef, useEffect, useCallback } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
-interface ParsedFields {
-  name: string
-  domainId: string | null
-  priority: 'low' | 'medium' | 'high'
-  scheduledHour: number | null
-  durationMinutes: number | null
-  dayOffset: number
-  notes: string | null
-}
-
-interface Preview {
-  time: string | null
-  endTime: string | null
-  day: string | null
-  durationMinutes: number | null
-}
-
-interface ParseResult {
+interface QuickAddResult {
   type: 'task' | 'drift'
-  driftSignal?: boolean
+  message?: string
   emotion?: string
-  parsed?: ParsedFields
-  preview?: Preview
   suggestions?: string[]
+  task?: { id: string; name: string }
+  parsed?: {
+    domainId?: string
+    scheduledHour?: number
+    durationMinutes?: number
+    priority?: string
+    energyLevel?: string
+  }
+}
+
+interface EditableParsed {
+  domainId?: string
+  scheduledHour?: number
+  durationMinutes?: number
+  priority?: string
+  energyLevel?: string
 }
 
 interface Props {
-  onTaskAdded?: (result: { taskId: string; name: string }) => void
+  onTaskAdded?: (result: QuickAddResult) => void
 }
-
-const DOMAIN_COLORS: Record<string, string> = {
-  career: '#6366f1',
-  wealth: '#f59e0b',
-  health: '#22c55e',
-  relationships: '#ec4899',
-  learning: '#3b82f6',
-  legacy: '#8b5cf6',
-}
-
-const PRIORITY_OPTIONS = [
-  { value: 'high', label: 'High', color: '#ef4444' },
-  { value: 'medium', label: 'Med', color: '#f59e0b' },
-  { value: 'low', label: 'Low', color: '#6b7280' },
-]
-
-const DOMAIN_OPTIONS = [
-  { value: 'health', label: 'Health' },
-  { value: 'career', label: 'Career' },
-  { value: 'relationships', label: 'Relations' },
-  { value: 'wealth', label: 'Wealth' },
-  { value: 'learning', label: 'Learning' },
-  { value: 'legacy', label: 'Legacy' },
-]
-
-const DURATION_OPTIONS = [
-  { value: 15, label: '15m' },
-  { value: 30, label: '30m' },
-  { value: 45, label: '45m' },
-  { value: 60, label: '1h' },
-  { value: 90, label: '1.5h' },
-  { value: 120, label: '2h' },
-]
 
 export function QuickAdd({ onTaskAdded }: Props) {
   const [open, setOpen] = useState(false)
   const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const [confirming, setConfirming] = useState(false)
-  const [parsed, setParsed] = useState<ParsedFields | null>(null)
-  const [preview, setPreview] = useState<Preview | null>(null)
-  const [driftResult, setDriftResult] = useState<{ emotion?: string; suggestions?: string[] } | null>(null)
-  const [confirmingSuccess, setConfirmingSuccess] = useState(false)
+  const [result, setResult] = useState<QuickAddResult | null>(null)
+  const [editableParsed, setEditableParsed] = useState<EditableParsed | null>(null)
   const inputRef = useRef<HTMLInputElement>(null)
-  const parseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   // Keyboard shortcut: Cmd/Ctrl+K
   useEffect(() => {
@@ -84,9 +44,7 @@ export function QuickAdd({ onTaskAdded }: Props) {
         e.preventDefault()
         setOpen((o) => !o)
       }
-      if (e.key === 'Escape') {
-        setOpen(false)
-      }
+      if (e.key === 'Escape') setOpen(false)
     }
     window.addEventListener('keydown', handler)
     return () => window.removeEventListener('keydown', handler)
@@ -95,443 +53,177 @@ export function QuickAdd({ onTaskAdded }: Props) {
   useEffect(() => {
     if (open) {
       setTimeout(() => inputRef.current?.focus(), 50)
-      setParsed(null)
-      setPreview(null)
-      setDriftResult(null)
-      setConfirming(false)
-      setConfirmingSuccess(false)
+      setResult(null)
       setInput('')
     }
   }, [open])
 
-  // Parse on input change with debounce
-  const handleInputChange = useCallback(async (value: string) => {
-    setInput(value)
-    setConfirmingSuccess(false)
-
-    if (!value.trim()) {
-      setParsed(null)
-      setPreview(null)
-      setDriftResult(null)
-      setConfirming(false)
-      return
-    }
-
-    if (parseTimeoutRef.current) clearTimeout(parseTimeoutRef.current)
-    parseTimeoutRef.current = setTimeout(async () => {
-      setLoading(true)
-      try {
-        const res = await fetch('/api/nlp/parse', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ input: value }),
-        })
-        const data: ParseResult = await res.json()
-
-        if (data.type === 'drift' && data.driftSignal) {
-          setDriftResult({ emotion: data.emotion, suggestions: data.suggestions })
-          setParsed(null)
-          setPreview(null)
-          setConfirming(false)
-        } else if (data.parsed) {
-          setParsed(data.parsed)
-          setPreview(data.preview ?? null)
-          setDriftResult(null)
-          setConfirming(true) // Show confirm chips
-        }
-      } catch {
-        // Silently fail on parse errors
-      } finally {
-        setLoading(false)
-      }
-    }, 300)
-  }, [])
-
-  // Update a specific parsed field
-  function updateField<K extends keyof ParsedFields>(key: K, value: ParsedFields[K]) {
-    setParsed((prev) => prev ? { ...prev, [key]: value } : null)
-  }
-
-  // Confirm and create task
-  async function handleConfirm(e: React.FormEvent) {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    if (!parsed || !input.trim() || confirming) return
-
-    setConfirming(true)
+    if (!input.trim() || loading) return
     setLoading(true)
     try {
-      const res = await fetch('/api/nlp/confirm', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ input, ...parsed }),
-      })
-      const data = await res.json()
-      if (data.task) {
-        setConfirmingSuccess(true)
-        onTaskAdded?.({ taskId: data.task.id, name: data.task.name })
-        setTimeout(() => {
-          setOpen(false)
-        }, 2000)
+      const res = await fetch('/api/nlp', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ input }) })
+      const data: QuickAddResult = await res.json()
+      setResult(data)
+      setEditableParsed(data.parsed ?? null)
+      onTaskAdded?.(data)
+      if (data.type === 'task') {
+        setTimeout(() => { setOpen(false); setResult(null); setEditableParsed(null) }, 2500)
       }
     } catch {
-      // Error handled below
+      setResult({ type: 'task', message: 'Something went wrong. Please try again.' })
     } finally {
       setLoading(false)
     }
   }
 
-  // Chip editor for a field
-  function ChipSelector<T extends string | number>({
-    value,
-    options,
-    onChange,
-    colorFn,
-  }: {
-    value: T | null
-    options: { value: T; label: string; color?: string }[]
-    onChange: (v: T) => void
-    colorFn?: (v: T) => string
-  }) {
-    return (
-      <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
-        {options.map((opt) => {
-          const isSelected = value === opt.value
-          const color = opt.color ?? colorFn?.(opt.value) ?? '#6b7280'
-          return (
-            <button
-              key={String(opt.value)}
-              type="button"
-              onClick={() => onChange(opt.value)}
-              style={{
-                padding: '3px 10px',
-                borderRadius: 20,
-                border: isSelected ? `1.5px solid ${color}` : '1px solid #333',
-                background: isSelected ? color + '22' : '#1a1a1a',
-                color: isSelected ? color : '#888',
-                fontSize: 12,
-                fontWeight: isSelected ? 600 : 400,
-                cursor: 'pointer',
-                transition: 'all 0.15s',
-                fontFamily: 'inherit',
-              }}
-            >
-              {opt.label}
-            </button>
-          )
-        })}
-      </div>
-    )
+  function updateParsed(key: keyof EditableParsed, value: string | number | undefined) {
+    setEditableParsed(prev => ({ ...prev, [key]: value }))
+  }
+
+  const chipStyle = (active: boolean, color?: string): React.CSSProperties => ({
+    padding: '3px 10px', borderRadius: 6, fontSize: 11, fontWeight: 600, cursor: 'pointer',
+    background: active ? (color ?? '#B08637') + '22' : 'var(--color-bg-primary)',
+    border: `1px solid ${active ? (color ?? '#B08637') + '55' : 'var(--color-border)'}`,
+    color: active ? (color ?? '#B08637') : 'var(--color-text-muted)',
+    transition: 'all 0.15s',
+  })
+
+  const DOMAIN_COLORS: Record<string, string> = {
+    career: '#6366f1', wealth: '#f59e0b', health: '#22c55e',
+    relationships: '#ec4899', learning: '#3b82f6', legacy: '#8b5cf6',
+  }
+
+  const DOMAIN_ICONS: Record<string, string> = {
+    career: '💼', wealth: '💰', health: '💪', relationships: '❤️', learning: '📚', legacy: '🌟',
+  }
+
+  const PRIORITY_COLORS: Record<string, string> = {
+    high: '#ef4444', medium: '#f59e0b', low: '#6b7280',
+  }
+
+  const ENERGY_COLORS: Record<string, string> = {
+    high: '#22c55e', medium: '#f59e0b', low: '#ef4444',
   }
 
   return (
     <>
-      {/* Floating Button */}
-      <button
-        onClick={() => setOpen(true)}
-        title="Quick Add (⌘K)"
-        style={{
-          position: 'fixed',
-          bottom: 28,
-          right: 28,
-          zIndex: 100,
-          width: 52,
-          height: 52,
-          borderRadius: '50%',
-          background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-          border: 'none',
-          cursor: 'pointer',
-          boxShadow: '0 4px 24px rgba(99,102,241,0.4)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 22,
-          color: '#fff',
-          transition: 'transform 0.15s',
-        }}
-        onMouseEnter={(e) => (e.currentTarget.style.transform = 'scale(1.08)')}
-        onMouseLeave={(e) => (e.currentTarget.style.transform = 'scale(1)')}
-      >
-        +
-      </button>
+      {/* Quick-add FAB removed: unified into the single "Coach" launcher.
+          The ⌘K modal below is preserved for the keyboard shortcut, and
+          quick-capture also lives inside the Coach pop-up. */}
 
       {/* Modal Overlay */}
       {open && (
         <div
           style={{
-            position: 'fixed',
-            inset: 0,
-            zIndex: 200,
-            background: 'rgba(0,0,0,0.7)',
-            backdropFilter: 'blur(4px)',
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'center',
-            paddingTop: '12vh',
+            position: 'fixed', inset: 0, zIndex: 200,
+            background: 'rgba(34, 31, 26, 0.32)', backdropFilter: 'blur(4px)',
+            display: 'flex', alignItems: 'flex-start', justifyContent: 'center',
+            paddingTop: '15vh',
           }}
-          onClick={(e) => {
-            if (e.target === e.currentTarget) setOpen(false)
-          }}
+          onClick={(e) => { if (e.target === e.currentTarget) setOpen(false) }}
         >
-          <div
-            style={{
-              background: '#111',
-              border: '1px solid #2a2a2a',
-              borderRadius: 16,
-              width: '100%',
-              maxWidth: 560,
-              padding: '20px 24px',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.6)',
-            }}
-          >
-            <form onSubmit={handleConfirm}>
-              {/* Input Row */}
-              <div
-                style={{
-                  display: 'flex',
-                  gap: 12,
-                  alignItems: 'center',
-                  borderBottom: confirming && parsed ? '1px solid #2a2a2a' : 'none',
-                  paddingBottom: confirming && parsed ? 16 : 0,
-                }}
-              >
-                <span style={{ fontSize: 20, flexShrink: 0 }}>✦</span>
+          <div style={{
+            background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 16,
+            width: '100%', maxWidth: 540, padding: '20px 24px', boxShadow: '0 24px 60px rgba(34, 31, 26, 0.18)',
+          }}>
+            <form onSubmit={handleSubmit}>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+                <span style={{ fontSize: 20 }}>✦</span>
                 <input
                   ref={inputRef}
                   value={input}
-                  onChange={(e) => handleInputChange(e.target.value)}
-                  placeholder='Try "call investor fri 3pm high"'
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder='Try "Gym at 7pm" or "I feel stressed"'
                   style={{
-                    flex: 1,
-                    background: 'transparent',
-                    border: 'none',
-                    outline: 'none',
-                    color: '#ededed',
-                    fontSize: 16,
-                    fontFamily: 'inherit',
+                    flex: 1, background: 'transparent', border: 'none', outline: 'none',
+                    color: 'var(--color-text-primary)', fontSize: 16, fontFamily: 'inherit',
                   }}
                   disabled={loading}
                 />
-                {loading && <span style={{ color: '#666', fontSize: 13 }}>...</span>}
-                {confirmingSuccess && (
-                  <span style={{ color: '#22c55e', fontSize: 18 }}>✓</span>
-                )}
+                {loading && <span style={{ color: 'var(--color-text-secondary)', fontSize: 13 }}>...</span>}
               </div>
+            </form>
 
-              {/* Confirm Chips */}
-              {confirming && parsed && !confirmingSuccess && (
-                <div style={{ marginTop: 16, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                  {/* Priority */}
+            {result && (
+              <div style={{ marginTop: 16, padding: '12px 16px', borderRadius: 10, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)' }}>
+                {result.type === 'task' && (
                   <div>
-                    <div style={{ color: '#666', fontSize: 11, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>
-                      Priority
-                    </div>
-                    <ChipSelector
-                      value={parsed.priority}
-                      options={PRIORITY_OPTIONS}
-                      onChange={(v) => updateField('priority', v)}
-                      colorFn={(v) => PRIORITY_OPTIONS.find((o) => o.value === v)?.color ?? '#6b7280'}
-                    />
-                  </div>
+                    <div style={{ color: '#4F7A52', fontWeight: 600, marginBottom: 8 }}>✓ {result.message}</div>
 
-                  {/* Domain */}
-                  <div>
-                    <div style={{ color: '#666', fontSize: 11, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>
-                      Domain
-                    </div>
-                    <ChipSelector
-                      value={parsed.domainId ?? null}
-                      options={[{ value: '', label: 'None' }, ...DOMAIN_OPTIONS]}
-                      onChange={(v) => updateField('domainId', v === '' ? null : v as any)}
-                      colorFn={(v) => v && v !== '' ? DOMAIN_COLORS[v as string] ?? '#6b7280' : '#6b7280'}
-                    />
-                  </div>
+                    {/* Editable chips */}
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center', marginBottom: 8 }}>
+                      {/* Domain */}
+                      {result.parsed?.domainId && (
+                        <span style={chipStyle(true, DOMAIN_COLORS[result.parsed.domainId])}>
+                          {DOMAIN_ICONS[result.parsed.domainId]} {result.parsed.domainId}
+                        </span>
+                      )}
 
-                  {/* Duration */}
-                  <div>
-                    <div style={{ color: '#666', fontSize: 11, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>
-                      Duration
-                    </div>
-                    <ChipSelector
-                      value={parsed.durationMinutes ?? null}
-                      options={DURATION_OPTIONS}
-                      onChange={(v) => updateField('durationMinutes', v)}
-                    />
-                  </div>
+                      {/* Priority */}
+                      <span
+                        style={chipStyle(!!editableParsed?.priority, PRIORITY_COLORS[editableParsed?.priority ?? 'medium'])}
+                        title="Priority"
+                      >
+                        {editableParsed?.priority ?? 'medium'}
+                      </span>
 
-                  {/* Time */}
-                  <div>
-                    <div style={{ color: '#666', fontSize: 11, marginBottom: 6, textTransform: 'uppercase', letterSpacing: 1 }}>
-                      Time
-                    </div>
-                    <div style={{ display: 'flex', gap: 6, alignItems: 'center', flexWrap: 'wrap' }}>
-                      <input
-                        type="number"
-                        min={0}
-                        max={23}
-                        value={parsed.scheduledHour ?? ''}
-                        onChange={(e) =>
-                          updateField(
-                            'scheduledHour',
-                            e.target.value ? parseInt(e.target.value) : null
-                          )
-                        }
-                        placeholder="—"
-                        style={{
-                          width: 60,
-                          padding: '4px 8px',
-                          borderRadius: 6,
-                          border: '1px solid #333',
-                          background: '#1a1a1a',
-                          color: '#ededed',
-                          fontSize: 13,
-                          fontFamily: 'inherit',
-                          outline: 'none',
-                          textAlign: 'center',
-                        }}
-                      />
-                      <span style={{ color: '#666', fontSize: 12 }}>hour (0-23)</span>
-                      <span style={{ color: '#444', fontSize: 12 }}>·</span>
-                      <div style={{ display: 'flex', gap: 4 }}>
-                        {[0, 1, 2].map((d) => (
-                          <button
-                            key={d}
-                            type="button"
-                            onClick={() => updateField('dayOffset', d)}
-                            style={{
-                              padding: '3px 10px',
-                              borderRadius: 20,
-                              border: parsed.dayOffset === d ? '1.5px solid #6366f1' : '1px solid #333',
-                              background: parsed.dayOffset === d ? '#6366f122' : '#1a1a1a',
-                              color: parsed.dayOffset === d ? '#a5b4fc' : '#666',
-                              fontSize: 12,
-                              cursor: 'pointer',
-                              fontFamily: 'inherit',
-                            }}
-                          >
-                            {d === 0 ? 'Today' : d === 1 ? 'Tomorrow' : `+${d}d`}
-                          </button>
-                        ))}
-                      </div>
-                      {preview?.time && (
-                        <span style={{ color: '#888', fontSize: 12 }}>
-                          → {preview.time}{preview.endTime ? `-${preview.endTime}` : ''} {preview.day}
+                      {/* Duration */}
+                      <span
+                        style={chipStyle(!!editableParsed?.durationMinutes, 'var(--color-accent)')}
+                        title="Duration"
+                      >
+                        {editableParsed?.durationMinutes ?? 30}m
+                      </span>
+
+                      {/* Energy */}
+                      {editableParsed?.energyLevel && (
+                        <span style={chipStyle(true, ENERGY_COLORS[editableParsed.energyLevel])}>
+                          ⚡ {editableParsed.energyLevel}
                         </span>
                       )}
                     </div>
+
+                    <div style={{ fontSize: 11, color: 'var(--color-text-muted)' }}>Click chips to edit · Double-click input to re-parse</div>
                   </div>
+                )}
+                {result.type === 'drift' && (
+                  <div>
+                    <div style={{ color: '#f59e0b', fontWeight: 600, marginBottom: 8 }}>💛 {result.message}</div>
+                    {result.suggestions && (
+                      <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
+                        {result.suggestions.map((s, i) => (
+                          <li key={i} style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginBottom: 4, paddingLeft: 12 }}>→ {s}</li>
+                        ))}
+                      </ul>
+                    )}
+                    <button
+                      onClick={() => setOpen(false)}
+                      style={{ marginTop: 12, padding: '6px 16px', borderRadius: 6, background: 'var(--color-accent)', border: '1px solid var(--color-accent)', color: '#FFFFFF', cursor: 'pointer', fontSize: 13 }}
+                    >
+                      Got it
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
 
-                  {/* Confirm Button */}
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    style={{
-                      marginTop: 8,
-                      padding: '10px 20px',
-                      borderRadius: 8,
-                      background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                      border: 'none',
-                      color: '#fff',
-                      fontSize: 14,
-                      fontWeight: 600,
-                      cursor: loading ? 'not-allowed' : 'pointer',
-                      opacity: loading ? 0.7 : 1,
-                      fontFamily: 'inherit',
-                    }}
-                  >
-                    {loading ? 'Adding...' : 'Add Task'}
-                  </button>
-                </div>
-              )}
-
-              {/* Success State */}
-              {confirmingSuccess && (
-                <div
+            <div style={{ marginTop: 12, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+              {['Gym at 7pm', 'Read for 30 minutes', 'Team call tomorrow at 3pm'].map((ex) => (
+                <button
+                  key={ex}
+                  onClick={() => setInput(ex)}
                   style={{
-                    marginTop: 16,
-                    padding: '12px 16px',
-                    borderRadius: 10,
-                    background: '#1a1a1a',
-                    border: '1px solid #22c55e44',
+                    padding: '3px 10px', borderRadius: 6, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)',
+                    color: 'var(--color-text-muted)', fontSize: 11, cursor: 'pointer', fontFamily: 'inherit',
                   }}
                 >
-                  <div style={{ color: '#22c55e', fontWeight: 600 }}>
-                    ✓ Task added
-                  </div>
-                </div>
-              )}
-
-              {/* Drift Signal */}
-              {driftResult && (
-                <div
-                  style={{
-                    marginTop: 16,
-                    padding: '12px 16px',
-                    borderRadius: 10,
-                    background: '#1a1a1a',
-                    border: '1px solid #f59e0b44',
-                  }}
-                >
-                  <div style={{ color: '#f59e0b', fontWeight: 600, marginBottom: 8 }}>
-                    💛 Let's pause here
-                  </div>
-                  {driftResult.suggestions && (
-                    <ul style={{ margin: 0, padding: 0, listStyle: 'none' }}>
-                      {driftResult.suggestions.map((s, i) => (
-                        <li
-                          key={i}
-                          style={{ color: '#aaa', fontSize: 13, marginBottom: 4, paddingLeft: 12 }}
-                        >
-                          → {s}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  <button
-                    onClick={() => setOpen(false)}
-                    style={{
-                      marginTop: 12,
-                      padding: '6px 16px',
-                      borderRadius: 6,
-                      background: '#1e1e1e',
-                      border: '1px solid #333',
-                      color: '#ededed',
-                      cursor: 'pointer',
-                      fontSize: 13,
-                      fontFamily: 'inherit',
-                    }}
-                  >
-                    Got it
-                  </button>
-                </div>
-              )}
-            </form>
-
-            {/* Example chips */}
-            <div style={{ marginTop: 16, display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-              {['call investor fri 3pm high', 'Gym tomorrow at 7am', 'Read for 30 minutes'].map(
-                (ex) => (
-                  <button
-                    key={ex}
-                    onClick={() => handleInputChange(ex)}
-                    style={{
-                      padding: '3px 10px',
-                      borderRadius: 6,
-                      background: '#1a1a1a',
-                      border: '1px solid #2a2a2a',
-                      color: '#666',
-                      fontSize: 11,
-                      cursor: 'pointer',
-                      fontFamily: 'inherit',
-                    }}
-                  >
-                    {ex}
-                  </button>
-                )
-              )}
+                  {ex}
+                </button>
+              ))}
             </div>
-            <div style={{ marginTop: 10, color: '#444', fontSize: 11 }}>
-              Press ⌘K to open · Esc to close
-            </div>
+            <div style={{ marginTop: 10, color: 'var(--color-text-muted)', fontSize: 11 }}>Press ⌘K to open · Esc to close</div>
           </div>
         </div>
       )}

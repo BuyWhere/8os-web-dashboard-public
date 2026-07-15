@@ -1,15 +1,26 @@
 import type { Metadata } from 'next'
 import { ClerkProvider } from '@clerk/nextjs'
+<<<<<<< HEAD
+=======
+import { Inter } from 'next/font/google'
+>>>>>>> forge/main
 import { Suspense } from 'react'
-import { PostHogProvider } from '@/components/PostHogProvider'
+
+// Inter is the single typeface for the whole site (body + headings + wordmark).
+// Exposed globally as --font-sans on <html>; globals.css body reads it.
+const inter = Inter({ subsets: ['latin'], weight: ['400', '500', '600', '700'], variable: '--font-sans', display: 'swap' })
+// PostHogProvider moved to (dashboard)/layout.tsx — keeps PostHog SDK (~188 KiB)
+// off public marketing pages to improve Lighthouse perf on /, /features, etc.
 import { MetaPixel } from '@/components/MetaPixel'
 import { Header } from '@/components/Header'
 import { Footer } from '@/components/Footer'
+import { ThemeProvider } from '@/components/ThemeProvider'
+import { THEME_BOOT_SCRIPT } from '@/lib/theme'
 import './globals.css'
 
 export const metadata: Metadata = {
   title: '8os - Your Personalized Life Operating System',
-  description: 'A personalized operating system unique to you. Free. No credit card. Works in Telegram.',
+  description: 'A personalized operating system unique to you. Free. No credit card. Works in your browser.',
   keywords: ['personalized OS', 'productivity', 'life operating system', 'AI productivity', 'operating system for life'],
   authors: [{ name: '8os' }],
   creator: '8os',
@@ -26,7 +37,7 @@ export const metadata: Metadata = {
     url: 'https://8os.ai/',
     siteName: '8os',
     title: '8os - Your Personalized Life Operating System',
-    description: 'A personalized operating system unique to you. Free. No credit card. Works in Telegram.',
+    description: 'A personalized operating system unique to you. Free. No credit card. Works in your browser.',
     images: [
       {
         url: '/og-image.png',
@@ -40,7 +51,7 @@ export const metadata: Metadata = {
   twitter: {
     card: 'summary_large_image',
     title: '8os - Your Personalized Life Operating System',
-    description: 'A personalized operating system unique to you. Free. No credit card. Works in Telegram.',
+    description: 'A personalized operating system unique to you. Free. No credit card. Works in your browser.',
     images: ['/og-image.png'],
     creator: '@8os',
   },
@@ -100,6 +111,7 @@ export default function RootLayout({
       signInFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL ?? '/dashboard'}
       signUpFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL ?? '/onboarding'}
     >
+<<<<<<< HEAD
       <html lang="en" suppressHydrationWarning>
         <head>
           <script
@@ -109,6 +121,24 @@ export default function RootLayout({
         </head>
         <body suppressHydrationWarning>
           {/* Meta Pixel — fires PageView on every route change. Bails out when
+=======
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <head>
+        {/* No-flash theme boot, sets <html data-theme> synchronously from the
+            persisted choice + OS preference, BEFORE first paint. Must run
+            before any styled content renders. See src/lib/theme.ts. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+        />
+      </head>
+      <body>
+        {/* ThemeProvider wraps all chrome (Header/Footer) + content so the
+            whole tree can read/toggle the light/dark theme via useTheme(). */}
+        <ThemeProvider>
+          {/* Meta Pixel, fires PageView on every route change. Bails out when
+>>>>>>> forge/main
               NEXT_PUBLIC_META_PIXEL_ID is unset (local dev, pre-pixel deploys).
               See src/components/MetaPixel.tsx. */}
           <MetaPixel />
@@ -117,6 +147,7 @@ export default function RootLayout({
           </a>
           <Header />
           <div id="main-content" tabIndex={-1}>
+<<<<<<< HEAD
             <PostHogProvider>
               {children}
             </PostHogProvider>
@@ -124,6 +155,14 @@ export default function RootLayout({
           <Footer />
         </body>
       </html>
+=======
+            {children}
+          </div>
+          <Footer />
+        </ThemeProvider>
+      </body>
+    </html>
+>>>>>>> forge/main
     </ClerkProvider>
   )
 }

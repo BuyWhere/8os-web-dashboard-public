@@ -22,7 +22,7 @@ export default function GlobalError({
           margin: 0,
           fontFamily: 'system-ui, sans-serif',
           background: '#0a0a0a',
-          color: '#ededed',
+          color: 'var(--color-border)',
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
@@ -41,7 +41,7 @@ export default function GlobalError({
           onClick={reset}
           style={{
             padding: '0.5rem 1.25rem',
-            background: '#ededed',
+            background: 'var(--color-border)',
             color: '#0a0a0a',
             border: 'none',
             borderRadius: 6,

@@ -1,170 +1,147 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { jwtVerify, importSPKI } from 'jose'
+import { clerkMiddleware, createRouteMatcher } from '@clerk/nextjs/server'
+import type { NextFetchEvent, NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
-// Routes that require authentication — everything else is public
-const PROTECTED_PREFIXES = [
-  '/settings',
-  '/admin',
-  '/dashboard',
-  '/onboarding',
-]
+const CANONICAL = '8os.ai'
 
-// ─── Security Headers (Task 11) ───────────────────────────────────────────────
-
-const ALLOWED_ORIGIN = process.env.CORS_ALLOWED_ORIGIN ?? 'https://8os.ai'
-
-function applySecurityHeaders(res: NextResponse, req: NextRequest): NextResponse {
-  // HSTS — only over HTTPS in production
-  if (process.env.NODE_ENV === 'production') {
-    res.headers.set('Strict-Transport-Security', 'max-age=63072000; includeSubDomains; preload')
-  }
-
-  // Prevent clickjacking
-  res.headers.set('X-Frame-Options', 'DENY')
-
-  // Prevent MIME sniffing
-  res.headers.set('X-Content-Type-Options', 'nosniff')
-
-  // Referrer policy
-  res.headers.set('Referrer-Policy', 'strict-origin-when-cross-origin')
-
-  // Permissions policy — disable features we don't use
-  res.headers.set(
-    'Permissions-Policy',
-    'camera=(), microphone=(), geolocation=(), interest-cohort=()',
-  )
-
-  // Content Security Policy
+// ─── Content Security Policy ──────────────────────────────────────────────────
+// Allow Clerk, Cloudflare, PostHog, Flow AI (via api.8os.ai / orchestrator).
+// The Cloudflare Worker (8os-proxy) auto-augments CSP as a safety net, but the
+// origin should also be correct so deploys without the Worker still work.
+function applyCSP(res: NextResponse): NextResponse {
   const csp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline' 'unsafe-eval'", // unsafe-eval needed for Next.js dev
+    "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://clerk.8os.ai https://*.clerk.8os.ai https://*.clerk.accounts.dev https://*.clerk.com https://challenges.cloudflare.com https://static.cloudflareinsights.com",
     "style-src 'self' 'unsafe-inline'",
-    "img-src 'self' data: blob:",
+    "img-src 'self' data: blob: https://img.clerk.com https://clerk.8os.ai https://*.clerk.8os.ai",
     "font-src 'self'",
-    "connect-src 'self' https://api.deepseek.com https://us.i.posthog.com https://us-assets.i.posthog.com https://orchestrator-production-1643.up.railway.app https://api.8os.ai",
+    "connect-src 'self' https://clerk.8os.ai https://*.clerk.8os.ai https://*.clerk.accounts.dev https://clerk-telemetry.com https://us.i.posthog.com https://us-assets.i.posthog.com https://orchestrator-production-1643.up.railway.app https://api.8os.ai",
+    "worker-src 'self' blob:",
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",
   ].join('; ')
   res.headers.set('Content-Security-Policy', csp)
-
-  // CORS — whitelist 8os.ai only
-  const origin = req.headers.get('origin')
-  if (origin === ALLOWED_ORIGIN) {
-    res.headers.set('Access-Control-Allow-Origin', ALLOWED_ORIGIN)
-    res.headers.set('Access-Control-Allow-Credentials', 'true')
-    res.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, PATCH, DELETE, OPTIONS')
-    res.headers.set(
-      'Access-Control-Allow-Headers',
-      'Content-Type, Authorization, X-Requested-With',
-    )
+  // Keep users on the canonical host. The CF worker proxies to the origin with
+  // the raw *.up.railway.app Host, so redirects built from req.url (our explicit
+  // ones + Clerk's auth redirect to /login) get a Location pointing at the raw
+  // Railway domain — which strands the user there. Rewrite it back to 8os.ai.
+  // Output-only (never touches the incoming request host), so it can't trigger
+  // the x-middleware-rewrite → Railway 100:: "Error 1000" path.
+  const loc = res.headers.get('location')
+  if (loc && /\.up\.railway\.app/i.test(loc)) {
+    res.headers.set('location', loc.replace(/(?:https?:)?\/\/[^/]*\.up\.railway\.app/i, `https://${CANONICAL}`))
   }
-
   return res
 }
 
-// ─── Key cache ────────────────────────────────────────────────────────────────
+// Routes that require authentication
+const isProtectedRoute = createRouteMatcher([
+  '/dashboard(.*)',
+  '/onboarding(.*)',
+  '/settings(.*)',
+  '/admin(.*)',
+  '/api/onboarding(.*)',
+  '/api/user(.*)',
+  '/api/assistant(.*)',
+])
 
-let _publicKey: Awaited<ReturnType<typeof importSPKI>> | null = null
+// Routes that require admin role
+const isAdminRoute = createRouteMatcher(['/admin(.*)'])
 
-async function getPublicKey() {
-  if (_publicKey) return _publicKey
-  const pem = (process.env.JWT_PUBLIC_KEY ?? '').replace(/\\n/g, '\n')
-  if (!pem) return null
-  try {
-    _publicKey = await importSPKI(pem, 'RS256')
-    return _publicKey
-  } catch {
-    return null
+// Onboarding routes redirect to /signup instead of /login for better conversion
+// from public CTAs like "Generate My Life OS — Free"
+const isOnboardingRoute = createRouteMatcher(['/onboarding(.*)'])
+
+const clerk = clerkMiddleware(async (auth, req) => {
+  // Clerk v6: the middleware `auth` helper is async and its methods are called
+  // directly (await auth.protect()), NOT auth().protect() (that was Clerk v5 and
+  // throws "auth(...).protect is not a function" at runtime -> 500 on every
+  // protected route). protect() redirects unauthenticated users to the sign-in
+  // URL (NEXT_PUBLIC_CLERK_SIGN_IN_URL=/login) instead of 500-ing.
+  const loginUrl = new URL('/login', req.url).toString()
+  const signupUrl = new URL('/signup', req.url).toString()
+  if (isAdminRoute(req)) {
+    await auth.protect((has) => has({ role: 'org:admin' }), {
+      unauthenticatedUrl: loginUrl,
+    })
+  } else if (isOnboardingRoute(req)) {
+    // OS-3649: Public CTAs use "free" copy and link to /onboarding. Unauthenticated
+    // users should land on /signup (not /login) to preserve conversion intent.
+    await auth.protect({ unauthenticatedUrl: signupUrl })
+  } else if (isProtectedRoute(req)) {
+    // Clerk v6: bare protect() REWRITES signed-out users to a 404
+    // (x-clerk-auth-reason: protect-rewrite). Passing unauthenticatedUrl makes
+    // it a real redirect to /login instead. Authed users pass through; the QA
+    // X-QA-USER-ID path is unaffected (it never hits Clerk middleware protect).
+    await auth.protect({ unauthenticatedUrl: loginUrl })
   }
-}
+})
 
-// ─── Middleware ───────────────────────────────────────────────────────────────
-
-export async function middleware(req: NextRequest) {
+// The Cloudflare Worker (8os-proxy) proxies 8os.ai -> *.up.railway.app so Railway can route, which
+// makes the app (and Railway's own edge) see the Railway host. Clerk then builds its session-sync
+// handshake redirect_url against that host, so Clerk FAPI rejects the request with
+// `malformed_request_parameters`. Force the canonical host BEFORE Clerk reads it (this rewrites the
+// request the app sees — it does NOT issue a redirect, so it can't loop).
+export default function middleware(req: NextRequest, event: NextFetchEvent) {
   const { pathname } = req.nextUrl
 
-  // OS-1253 fix-forward (OS-1256): handle /en /zh /register at the edge
-  // with a proper 307+Location so the redirect cannot be intercepted by
-  // the global error boundary at build time. page.tsx stubs stay for
-  // build-time coverage; runtime traffic never reaches them.
+  // OS-1253 regression fix-forward (OS-3450): handle /en /zh /register at the
+  // edge BEFORE Clerk runs. Page-level `redirect()` in these routes is
+  // intercepted by Next.js build-time error handling and returned as
+  // `__next_error__` without a Location header. Issuing a real
+  // 307+Location at the edge is the only way to get a clean redirect.
   if (pathname === '/en' || pathname === '/zh') {
-    const res = NextResponse.redirect(new URL('/', req.url), 307)
-    return applySecurityHeaders(res, req)
+    return applyCSP(NextResponse.redirect(new URL('/', req.url), 307))
   }
   if (pathname === '/register') {
-    const res = NextResponse.redirect(new URL('/signup', req.url), 307)
-    return applySecurityHeaders(res, req)
+    return applyCSP(NextResponse.redirect(new URL('/signup', req.url), 307))
+  }
+  // OS-2618: redirect legacy /signin to /login
+  if (pathname === '/signin') {
+    return applyCSP(NextResponse.redirect(new URL('/login', req.url), 307))
+  }
+  // OS-3550: legacy/dead /famous prefetch target should canonicalize to
+  // the actual famous archetypes index, including RSC probes like
+  // /famous?_rsc=... that QA checks directly.
+  if (pathname === '/famous') {
+    return applyCSP(NextResponse.redirect(new URL('/archetypes/famous', req.url), 307))
   }
 
-  // Handle CORS preflight
-  if (req.method === 'OPTIONS') {
-    const preflight = new NextResponse(null, { status: 204 })
-    return applySecurityHeaders(preflight, req)
-  }
-
-  // Allow static assets and all API routes (API handlers manage their own auth)
-  if (
-    pathname.startsWith('/_next') ||
-    pathname.startsWith('/favicon') ||
-    pathname.startsWith('/api/')
-  ) {
-    const res = NextResponse.next()
-    return applySecurityHeaders(res, req)
-  }
-
-  // Only protect explicitly gated routes
-  const needsAuth = PROTECTED_PREFIXES.some((p) => pathname.startsWith(p))
-  if (!needsAuth) {
-    const res = NextResponse.next()
-    return applySecurityHeaders(res, req)
-  }
-
-  const token = req.cookies.get('access_token')?.value
-
-  if (!token) {
-    return NextResponse.redirect(new URL('/login?next=' + encodeURIComponent(pathname), req.url))
-  }
-
-  // Verify token
-  const publicKey = await getPublicKey()
-  if (publicKey) {
-    try {
-      await jwtVerify(token, publicKey, { issuer: '8os' })
-    } catch {
-      const refreshToken = req.cookies.get('refresh_token')?.value
-      if (!refreshToken) {
-        const res = NextResponse.redirect(new URL('/login?next=' + encodeURIComponent(pathname), req.url))
-        res.cookies.delete('access_token')
-        return res
-      }
-      const res = NextResponse.next()
-      res.headers.set('x-needs-refresh', '1')
-      return applySecurityHeaders(res, req)
-    }
-  }
-
-  // RBAC: protect admin paths
-  if (pathname.startsWith('/admin')) {
-    const pk = await getPublicKey()
-    if (pk) {
+  try {
+    const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || ''
+    if (host.endsWith('.up.railway.app')) {
       try {
-        const { payload } = await jwtVerify(token, pk, { issuer: '8os' })
-        if (payload.role !== 'admin') {
-          return NextResponse.redirect(new URL('/dashboard', req.url))
-        }
+        req.headers.set('x-forwarded-host', CANONICAL)
+        req.headers.set('x-forwarded-proto', 'https')
       } catch {
-        return NextResponse.redirect(new URL('/login', req.url))
+        /* headers may be immutable in some runtimes; nextUrl below is the primary fix */
+      }
+      try {
+        req.nextUrl.host = CANONICAL
+        req.nextUrl.protocol = 'https:'
+        req.nextUrl.port = ''
+      } catch {
+        /* ignore */
       }
     }
+  } catch {
+    /* never break the middleware chain */
   }
-
-  const res = NextResponse.next()
-  return applySecurityHeaders(res, req)
+  const res = clerk(req, event)
+  // Apply CSP to all responses (Clerk returns a NextResponse or Response)
+  if (res instanceof NextResponse) {
+    applyCSP(res)
+  }
+  return res
 }
 
 export const config = {
   matcher: [
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:png|jpg|jpeg|gif|webp|svg|ico|txt|xml|json)$).*)',
+    // Skip Next.js internals and static files, unless referenced in query params
+    '/((?!_next|[^?]*\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)',
+    // Always run for API routes + Clerk's auto-proxy path
+    '/(api|trpc)(.*)',
+    '/__clerk/:path*',
   ],
 }

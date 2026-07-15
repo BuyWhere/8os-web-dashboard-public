@@ -44,13 +44,10 @@ export interface BriefingData {
   archetype: UserArchetype;
   dailyInsight?: string;
   todaysFocus?: string[];
-  // Energy-hours removed in OS-2114. Briefing data now carries WorkPreferences via a separate field.
-  workPreferences?: {
-    workingWindowStart: number;
-    workingWindowEnd: number;
-    blockLengthMin: number;
-    batching: 'batch' | 'spread';
-    planningCadence: 'daily' | 'weekly' | 'biweekly';
+  energyHours?: {
+    optimal: string[];
+    okay: string[];
+    avoid: string[];
   };
 }
 

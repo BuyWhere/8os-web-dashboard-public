@@ -2,7 +2,7 @@ import type { Metadata } from 'next'
 
 export const metadata: Metadata = {
   title: 'Changelog | 8os.ai',
-  description: 'What has changed in 8os.ai — new features, improvements, and fixes across all versions.',
+  description: 'What has changed in 8os.ai, new features, improvements, and fixes across all versions.',
   keywords: ['8os changelog', '8os updates', '8os release notes'],
 }
 
@@ -87,20 +87,20 @@ const versions: Version[] = [
 const typeConfig: Record<ChangeType, { label: string; color: string; dot: string }> = {
   new: { label: 'New', color: '#22c55e', dot: '#22c55e' },
   improvement: { label: 'Improvement', color: '#38bdf8', dot: '#38bdf8' },
-  fix: { label: 'Fix', color: '#a855f7', dot: '#a855f7' },
+  fix: { label: 'Fix', color: 'var(--color-accent)', dot: 'var(--color-accent)' },
 }
 
 export default function ChangelogPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: '#e2e8f0' }}>
+    <div style={{ background: 'var(--color-bg-primary)', minHeight: '100vh', color: 'var(--color-border)' }}>
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Header */}
         <div style={{ marginBottom: '56px' }}>
-          <h1 style={{ fontSize: '42px', fontWeight: 700, color: '#f1f5f9', marginBottom: '12px' }}>
+          <h1 style={{ fontSize: '42px', fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: '12px' }}>
             Changelog
           </h1>
-          <p style={{ fontSize: '18px', color: '#64748b' }}>
-            New features, improvements, and fixes — in order of what shipped.
+          <p style={{ fontSize: '18px', color: 'var(--color-text-secondary)' }}>
+            New features, improvements, and fixes, in order of what shipped.
           </p>
 
           {/* Legend */}
@@ -108,7 +108,7 @@ export default function ChangelogPage() {
             {Object.entries(typeConfig).map(([key, val]) => (
               <div key={key} style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                 <div style={{ width: '8px', height: '8px', borderRadius: '50%', background: val.dot }} />
-                <span style={{ fontSize: '13px', color: '#94a3b8' }}>{val.label}</span>
+                <span style={{ fontSize: '13px', color: 'var(--color-text-muted)' }}>{val.label}</span>
               </div>
             ))}
           </div>
@@ -124,7 +124,7 @@ export default function ChangelogPage() {
               top: 0,
               bottom: 0,
               width: '1px',
-              background: 'linear-gradient(180deg, #3730a3, #1e1e2e)',
+              background: 'linear-gradient(180deg, #3730a3, var(--color-bg-card))',
             }}
           />
 
@@ -140,16 +140,16 @@ export default function ChangelogPage() {
                     width: '12px',
                     height: '12px',
                     borderRadius: '50%',
-                    background: '#7c3aed',
-                    border: '2px solid #080808',
-                    boxShadow: '0 0 0 2px #7c3aed40',
+                    background: 'var(--color-accent)',
+                    border: '2px solid var(--color-bg-primary)',
+                    boxShadow: '0 0 0 2px var(--color-accent)40',
                   }}
                 />
 
                 {/* Version header */}
                 <div style={{ marginBottom: '20px' }}>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: '14px', marginBottom: '4px' }}>
-                    <h2 style={{ fontSize: '22px', fontWeight: 700, color: '#f1f5f9' }}>{v.version}</h2>
+                    <h2 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-text-primary)' }}>{v.version}</h2>
                     <span style={{ fontSize: '14px', fontWeight: 500, color: '#a5b4fc' }}>{v.label}</span>
                   </div>
                   <time
@@ -163,8 +163,8 @@ export default function ChangelogPage() {
                 {/* Changes */}
                 <div
                   style={{
-                    background: '#0f0f0f',
-                    border: '1px solid #1e1e2e',
+                    background: 'var(--color-bg-primary)',
+                    border: '1px solid var(--color-bg-card)',
                     borderRadius: '12px',
                     padding: '20px 24px',
                   }}
@@ -181,7 +181,7 @@ export default function ChangelogPage() {
                             gap: '12px',
                             paddingBottom: i < v.changes.length - 1 ? '14px' : 0,
                             marginBottom: i < v.changes.length - 1 ? '14px' : 0,
-                            borderBottom: i < v.changes.length - 1 ? '1px solid #1e1e2e' : 'none',
+                            borderBottom: i < v.changes.length - 1 ? '1px solid var(--color-bg-card)' : 'none',
                           }}
                         >
                           <div
@@ -208,7 +208,7 @@ export default function ChangelogPage() {
                             >
                               {cfg.label}
                             </span>
-                            <span style={{ color: '#94a3b8', fontSize: '14px', lineHeight: 1.6 }}>
+                            <span style={{ color: 'var(--color-text-muted)', fontSize: '14px', lineHeight: 1.6 }}>
                               {change.text}
                             </span>
                           </div>

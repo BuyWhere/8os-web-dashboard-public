@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { authenticateAccessToken } from '@/lib/auth/authenticate'
+import { requireAuth } from '@/lib/auth/require-auth'
 import { prisma } from '@/lib/db/prisma'
 
 export async function GET(req: NextRequest) {
-  const auth = await authenticateAccessToken(req)
-  if (!auth) return NextResponse.json({ error: 'Unauthenticated' }, { status: 401 })
+  const auth = await requireAuth(req)
+  if (auth instanceof NextResponse) return auth
 
   const user = await prisma.user.findUnique({
-    where: { id: auth.payload.sub },
+    where: { id: auth.userId },
     select: {
       id: true,
       email: true,
@@ -25,5 +25,5 @@ export async function GET(req: NextRequest) {
     return NextResponse.json({ error: 'User not found' }, { status: 404 })
   }
 
-  return NextResponse.json({ user, sessionId: auth.payload.sessionId })
+  return NextResponse.json({ user, sessionId: auth.sessionId })
 }

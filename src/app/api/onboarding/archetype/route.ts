@@ -7,6 +7,7 @@ import { scoreQuiz } from '@/lib/quiz'
 import { calculateArchetype } from '@/lib/archetype'
 import type { QuizAnswers } from '@/lib/quiz'
 import { captureServerEvent } from '@/lib/analytics-server'
+import { seedOSConfigForUser } from '@/lib/os-seeder'
 
 // POST — run archetype calculation and persist result
 export async function POST(req: NextRequest) {
@@ -98,6 +99,44 @@ export async function POST(req: NextRequest) {
     day_element: bazi.dayElement,
   })
 
+  // ── Seed a starter goal/project/task tree so the new user lands on
+  //    a populated dashboard instead of an empty board. (OS-1892)
+  //
+  // Idempotent: skipped if user already has goals. Never throws — failure
+  // falls back to a TS-only seed so the dashboard is never empty.
+  const birthDateIso = `${String(year).padStart(4, '0')}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
+  let seedSummary
+  try {
+    seedSummary = await seedOSConfigForUser({
+      userId: auth.userId,
+      archetypeName: result.archetypeName,
+      archetypeId: result.archetypeId,
+      dominantElements: result.dominantElements,
+      dayElement: bazi.dayElement,
+      birthDate: birthDateIso,
+    })
+  } catch (err) {
+    // Seeding is best-effort — never block archetype completion.
+    console.error('[archetype] os-seeder failed:', err)
+    seedSummary = {
+      seeded: false,
+      skippedReason: 'seeder_failed',
+      goalsCreated: 0,
+      projectsCreated: 0,
+      tasksCreated: 0,
+      archetype: result.archetypeName,
+      element: bazi.dayElement,
+    }
+  }
+
+  captureServerEvent(auth.userId, 'os_seeded', {
+    seeded: seedSummary.seeded,
+    goals: seedSummary.goalsCreated,
+    projects: seedSummary.projectsCreated,
+    tasks: seedSummary.tasksCreated,
+    skipped_reason: seedSummary.skippedReason ?? null,
+  })
+
   return NextResponse.json({
     archetypeId: result.archetypeId,
     archetypeName: result.archetypeName,
@@ -112,6 +151,13 @@ export async function POST(req: NextRequest) {
       dayPolarity: bazi.dayPolarity,
       dominantElement: bazi.dominantElement,
       pillars: bazi.pillarsText,
+    },
+    seed: {
+      seeded: seedSummary.seeded,
+      goals: seedSummary.goalsCreated,
+      projects: seedSummary.projectsCreated,
+      tasks: seedSummary.tasksCreated,
+      skippedReason: seedSummary.skippedReason ?? null,
     },
   })
 }

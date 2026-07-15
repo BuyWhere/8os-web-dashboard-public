@@ -4,7 +4,7 @@ import type { Metadata } from 'next'
 export const metadata: Metadata = {
   title: 'Community | 8os.ai',
   description:
-    'The 8os.ai community — archetype groups, active discussions, and the coming forum. Find your element tribe.',
+    'The 8os.ai community, archetype groups, active discussions, and the coming forum. Find your element tribe.',
   keywords: ['8os community', 'BaZi community', 'archetype community', 'five elements community'],
 }
 
@@ -12,9 +12,9 @@ const groups = [
   {
     archetype: 'Strategic Commander',
     element: 'Metal',
-    color: '#94a3b8',
+    color: 'var(--color-text-muted)',
     bg: '#1a1f2e',
-    border: '#94a3b840',
+    border: 'var(--color-text-muted)40',
     members: '1,240+',
     description:
       'A group for Metal types who want to build better systems, make sharper decisions, and find others who value precision over noise.',
@@ -39,7 +39,7 @@ const groups = [
     border: '#22c55e40',
     members: '1,580+',
     description:
-      'The largest group — Wood types share habit stacks, long-game strategies, and compounding frameworks.',
+      'The largest group, Wood types share habit stacks, long-game strategies, and compounding frameworks.',
     activeTopics: ['Habit tracking', '1-year goal threads', 'Compounding strategies'],
   },
   {
@@ -86,7 +86,7 @@ const activeDiscussions = [
     lastActive: '1 day ago',
   },
   {
-    title: 'Fire burnout recovery — what actually worked',
+    title: 'Fire burnout recovery, what actually worked',
     archetype: 'Visionary Builder',
     replies: 52,
     lastActive: '6 hours ago',
@@ -106,24 +106,24 @@ const activeDiscussions = [
 ]
 
 const archetypeColors: Record<string, string> = {
-  'All elements': '#7c3aed',
+  'All elements': 'var(--color-accent)',
   'Nurturing Creative': '#38bdf8',
   'Steady Achiever': '#22c55e',
   'Visionary Builder': '#f97316',
   'Harmonizer Guardian': '#d97706',
-  'Strategic Commander': '#94a3b8',
+  'Strategic Commander': 'var(--color-text-muted)',
 }
 
 export default function CommunityPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: '#e2e8f0' }}>
+    <div style={{ background: 'var(--color-bg-primary)', minHeight: '100vh', color: 'var(--color-border)' }}>
       <div style={{ maxWidth: '900px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Header */}
         <div style={{ marginBottom: '56px' }}>
-          <h1 style={{ fontSize: '42px', fontWeight: 700, color: '#f1f5f9', marginBottom: '12px' }}>
+          <h1 style={{ fontSize: '42px', fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: '12px' }}>
             Community
           </h1>
-          <p style={{ fontSize: '18px', color: '#64748b', maxWidth: '560px', lineHeight: 1.65 }}>
+          <p style={{ fontSize: '18px', color: 'var(--color-text-secondary)', maxWidth: '560px', lineHeight: 1.65 }}>
             Five archetype groups. Active discussions. A place to find others who operate the way
             you do.
           </p>
@@ -131,7 +131,7 @@ export default function CommunityPage() {
 
         {/* Archetype Groups */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 600, color: '#f1f5f9', marginBottom: '24px' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '24px' }}>
             Archetype Groups
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
@@ -147,7 +147,7 @@ export default function CommunityPage() {
               >
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '12px', marginBottom: '12px' }}>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-                    <h3 style={{ fontSize: '17px', fontWeight: 600, color: '#f1f5f9' }}>{g.archetype}</h3>
+                    <h3 style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-text-primary)' }}>{g.archetype}</h3>
                     <span
                       style={{
                         background: `${g.color}20`,
@@ -161,10 +161,10 @@ export default function CommunityPage() {
                       {g.element}
                     </span>
                   </div>
-                  <span style={{ color: '#64748b', fontSize: '13px' }}>{g.members} members</span>
+                  <span style={{ color: 'var(--color-text-secondary)', fontSize: '13px' }}>{g.members} members</span>
                 </div>
 
-                <p style={{ color: '#94a3b8', fontSize: '14px', lineHeight: 1.65, marginBottom: '14px' }}>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '14px', lineHeight: 1.65, marginBottom: '14px' }}>
                   {g.description}
                 </p>
 
@@ -175,7 +175,7 @@ export default function CommunityPage() {
                       style={{
                         background: '#ffffff08',
                         border: '1px solid #ffffff10',
-                        color: '#94a3b8',
+                        color: 'var(--color-text-muted)',
                         padding: '4px 10px',
                         borderRadius: '6px',
                         fontSize: '12px',
@@ -192,13 +192,13 @@ export default function CommunityPage() {
 
         {/* Active Discussions */}
         <section style={{ marginBottom: '56px' }}>
-          <h2 style={{ fontSize: '22px', fontWeight: 600, color: '#f1f5f9', marginBottom: '24px' }}>
+          <h2 style={{ fontSize: '22px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '24px' }}>
             Active Discussions
           </h2>
           <div
             style={{
-              background: '#0f0f0f',
-              border: '1px solid #1e1e2e',
+              background: 'var(--color-bg-primary)',
+              border: '1px solid var(--color-bg-card)',
               borderRadius: '12px',
               overflow: 'hidden',
             }}
@@ -208,7 +208,7 @@ export default function CommunityPage() {
                 key={d.title}
                 style={{
                   padding: '18px 24px',
-                  borderBottom: i < activeDiscussions.length - 1 ? '1px solid #1e1e2e' : 'none',
+                  borderBottom: i < activeDiscussions.length - 1 ? '1px solid var(--color-bg-card)' : 'none',
                   display: 'flex',
                   justifyContent: 'space-between',
                   alignItems: 'center',
@@ -217,7 +217,7 @@ export default function CommunityPage() {
                 }}
               >
                 <div>
-                  <p style={{ color: '#f1f5f9', fontSize: '14px', fontWeight: 500, marginBottom: '4px' }}>
+                  <p style={{ color: 'var(--color-text-primary)', fontSize: '14px', fontWeight: 500, marginBottom: '4px' }}>
                     {d.title}
                   </p>
                   <span
@@ -234,7 +234,7 @@ export default function CommunityPage() {
                   </span>
                 </div>
                 <div style={{ textAlign: 'right' }}>
-                  <p style={{ color: '#94a3b8', fontSize: '13px' }}>{d.replies} replies</p>
+                  <p style={{ color: 'var(--color-text-muted)', fontSize: '13px' }}>{d.replies} replies</p>
                   <p style={{ color: '#475569', fontSize: '12px' }}>{d.lastActive}</p>
                 </div>
               </div>
@@ -245,7 +245,7 @@ export default function CommunityPage() {
         {/* Coming Soon: Forum */}
         <div
           style={{
-            background: '#0f0f1a',
+            background: 'var(--color-bg-card)',
             border: '1px dashed #3730a3',
             borderRadius: '16px',
             padding: '36px',
@@ -256,7 +256,7 @@ export default function CommunityPage() {
           <div
             style={{
               display: 'inline-block',
-              background: '#1e1b4b',
+              background: 'var(--color-bg-card)',
               color: '#a5b4fc',
               padding: '4px 14px',
               borderRadius: '9999px',
@@ -267,11 +267,11 @@ export default function CommunityPage() {
           >
             Coming Soon
           </div>
-          <h3 style={{ fontSize: '20px', fontWeight: 600, color: '#f1f5f9', marginBottom: '10px' }}>
+          <h3 style={{ fontSize: '20px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '10px' }}>
             The 8os Forum
           </h3>
-          <p style={{ color: '#94a3b8', fontSize: '15px', lineHeight: 1.65, maxWidth: '480px', margin: '0 auto 20px' }}>
-            A dedicated forum for each archetype group — with threads, goal accountability,
+          <p style={{ color: 'var(--color-text-muted)', fontSize: '15px', lineHeight: 1.65, maxWidth: '480px', margin: '0 auto 20px' }}>
+            A dedicated forum for each archetype group, with threads, goal accountability,
             weekly check-ins, and cross-element collaboration spaces. Launching with the v1.0 release.
           </p>
           <p style={{ color: '#475569', fontSize: '13px' }}>
@@ -284,7 +284,7 @@ export default function CommunityPage() {
           <Link
             href="/onboarding"
             style={{
-              background: '#7c3aed',
+              background: 'var(--color-accent)',
               color: '#fff',
               padding: '14px 36px',
               borderRadius: '8px',

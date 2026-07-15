@@ -15,6 +15,7 @@ const UpdateSchema = z.object({
   priority: z.enum(['high', 'medium', 'low']).optional(),
   scheduledAt: z.string().datetime().nullable().optional(),
   duration: z.number().int().min(5).max(480).optional(),
+  energyRequired: z.enum(['green', 'yellow', 'red']).optional(),
 })
 
 export async function GET(req: NextRequest, { params }: { params: { id: string } }) {

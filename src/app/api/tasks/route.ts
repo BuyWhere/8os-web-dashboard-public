@@ -16,6 +16,7 @@ const CreateTaskSchema = z.object({
   duration: z.number().int().min(5).max(480).default(60),
   priority: z.enum(['high', 'medium', 'low']).default('medium'),
   scheduledAt: z.string().datetime().optional().nullable(),
+  energyRequired: z.enum(['green', 'yellow', 'red']).default('green'),
   recurrence: z.enum(['none', 'daily', 'weekly', 'biweekly', 'monthly']).default('none'),
   recurrenceUntil: z.string().datetime().optional().nullable(),
 })
@@ -74,6 +75,7 @@ export async function POST(req: NextRequest) {
       priority: data.priority,
       scheduledAt,
       scheduledEnd,
+      energyRequired: data.energyRequired,
       recurrence: data.recurrence,
       recurrenceUntil: data.recurrenceUntil ? new Date(data.recurrenceUntil) : null,
     },

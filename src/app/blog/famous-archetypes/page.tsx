@@ -4,7 +4,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Famous Archetypes: How the Stars Built Success | 8os.ai',
   description:
-    "Success isn't random — it's patterned. Explore how celebrities and leaders express their Fire, Earth, Metal, Water, and Wood archetypes in their path to achievement.",
+    "Success isn't random, it's patterned. Explore how celebrities and leaders express their Fire, Earth, Metal, Water, and Wood archetypes in their path to achievement.",
   openGraph: {
     title: 'Famous Archetypes: How the Stars Built Success',
     description:
@@ -22,7 +22,7 @@ const jsonLd = {
   '@type': 'Article',
   headline: 'Famous Archetypes: How the Stars Built Success',
   description:
-    "Success isn't random — it's patterned. Explore how celebrities and leaders express their Fire, Earth, Metal, Water, and Wood archetypes in their path to achievement.",
+    "Success isn't random, it's patterned. Explore how celebrities and leaders express their Fire, Earth, Metal, Water, and Wood archetypes in their path to achievement.",
   author: { '@type': 'Organization', name: '8os.ai' },
   publisher: { '@type': 'Organization', name: '8os.ai', url: 'https://8os.ai' },
   datePublished: '2026-05-07',
@@ -49,7 +49,7 @@ export default function FamousArchetypesPage() {
 
           <h2 style={h2Style}>Fire Archetypes</h2>
           <p style={pStyle}><em>Aries, Leo, Sagittarius + Fire/Wood Daymasters</em></p>
-          <p style={pStyle}>Fire achieves through <strong>visibility, transformation, and spark</strong>. They burn bright and draw attention — but fire also destroys before it creates.</p>
+          <p style={pStyle}>Fire achieves through <strong>visibility, transformation, and spark</strong>. They burn bright and draw attention, but fire also destroys before it creates.</p>
           <div style={tableWrapperStyle}>
             <table style={tableStyle}>
               <thead>
@@ -93,7 +93,7 @@ export default function FamousArchetypesPage() {
               </tbody>
             </table>
           </div>
-          <p style={pStyle}><strong>Fire Lesson:</strong> Success comes through visibility, but fire must choose what to burn — and when.</p>
+          <p style={pStyle}><strong>Fire Lesson:</strong> Success comes through visibility, but fire must choose what to burn, and when.</p>
 
           <h2 style={h2Style}>Earth/Metal Archetypes</h2>
           <p style={pStyle}><em>Taurus, Virgo, Capricorn + Earth/Metal Daymasters</em></p>
@@ -145,7 +145,7 @@ export default function FamousArchetypesPage() {
 
           <h2 style={h2Style}>Water Archetypes</h2>
           <p style={pStyle}><em>Cancer, Scorpio, Pisces + Water/Wood Daymasters</em></p>
-          <p style={pStyle}>Water achieves through <strong>depth, intuition, and transformation</strong>. Water doesn&apos;t push — it flows and finds the cracks.</p>
+          <p style={pStyle}>Water achieves through <strong>depth, intuition, and transformation</strong>. Water doesn&apos;t push, it flows and finds the cracks.</p>
           <div style={tableWrapperStyle}>
             <table style={tableStyle}>
               <thead>
@@ -196,11 +196,11 @@ export default function FamousArchetypesPage() {
               </tbody>
             </table>
           </div>
-          <p style={pStyle}><strong>Water Lesson:</strong> Success comes through depth and authenticity — not through fitting in.</p>
+          <p style={pStyle}><strong>Water Lesson:</strong> Success comes through depth and authenticity, not through fitting in.</p>
 
           <h2 style={h2Style}>Air Archetypes</h2>
           <p style={pStyle}><em>Gemini, Libra, Aquarius + Metal/Water Daymasters</em></p>
-          <p style={pStyle}>Air achieves through <strong>connection, communication, and ideas</strong>. Air doesn&apos;t build structures — it creates networks.</p>
+          <p style={pStyle}>Air achieves through <strong>connection, communication, and ideas</strong>. Air doesn&apos;t build structures, it creates networks.</p>
           <div style={tableWrapperStyle}>
             <table style={tableStyle}>
               <thead>
@@ -237,15 +237,15 @@ export default function FamousArchetypesPage() {
               </tbody>
             </table>
           </div>
-          <p style={pStyle}><strong>Air Lesson:</strong> Success comes through connection and meaning — not through isolation or competition.</p>
+          <p style={pStyle}><strong>Air Lesson:</strong> Success comes through connection and meaning, not through isolation or competition.</p>
 
           <h2 style={h2Style}>The Pattern</h2>
-          <p style={pStyle}>Success isn&apos;t about <em>which</em> sign or <em>which</em> element — it&apos;s about <strong>alignment</strong>:</p>
+          <p style={pStyle}>Success isn&apos;t about <em>which</em> sign or <em>which</em> element, it&apos;s about <strong>alignment</strong>:</p>
           <ol style={olStyle}>
-            <li><strong>Self-awareness</strong> — Knowing your archetype and how you actually work</li>
-            <li><strong>Strategy alignment</strong> — Pursuing goals in ways that match your nature</li>
-            <li><strong>Timing alignment</strong> — Acting when cosmic weather supports your archetype</li>
-            <li><strong>Happiness alignment</strong> — Defining success in terms that actually satisfy you</li>
+            <li><strong>Self-awareness</strong>, Knowing your archetype and how you actually work</li>
+            <li><strong>Strategy alignment</strong>, Pursuing goals in ways that match your nature</li>
+            <li><strong>Timing alignment</strong>, Acting when cosmic weather supports your archetype</li>
+            <li><strong>Happiness alignment</strong>, Defining success in terms that actually satisfy you</li>
           </ol>
 
           <div style={ctaBoxStyle}>
@@ -262,21 +262,21 @@ const articleStyle: React.CSSProperties = {
   maxWidth: '720px',
   margin: '0 auto',
   padding: '4rem 2rem',
-  background: '#060608',
-  color: '#f8fafc',
+  background: 'var(--color-bg-primary)',
+  color: 'var(--color-text-primary)',
   minHeight: '100vh',
 };
 
 const headerStyle: React.CSSProperties = {
   marginBottom: '3rem',
   paddingBottom: '2rem',
-  borderBottom: '1px solid rgba(255,255,255,0.1)',
+  borderBottom: '1px solid var(--color-border)',
 };
 
 const backLinkStyle: React.CSSProperties = {
   display: 'inline-block',
   marginBottom: '1.5rem',
-  color: '#a78bfa',
+  color: 'var(--color-accent)',
   textDecoration: 'none',
   fontSize: '0.9rem',
 };
@@ -292,7 +292,7 @@ const h1Style: React.CSSProperties = {
 const metaStyle: React.CSSProperties = {
   margin: 0,
   fontSize: '0.9rem',
-  color: 'rgba(248,250,252,0.5)',
+  color: 'var(--color-text-secondary)',
 };
 
 const contentStyle: React.CSSProperties = {
@@ -304,31 +304,31 @@ const h2Style: React.CSSProperties = {
   margin: '2.5rem 0 1rem',
   fontSize: '1.5rem',
   letterSpacing: '-0.02em',
-  color: '#f8fafc',
+  color: 'var(--color-text-primary)',
 };
 
 const pStyle: React.CSSProperties = {
   margin: '0 0 1.25rem',
-  color: 'rgba(248,250,252,0.8)',
+  color: 'var(--color-text-secondary)',
 };
 
 const ulStyle: React.CSSProperties = {
   margin: '0 0 1.5rem',
   paddingLeft: '1.5rem',
-  color: 'rgba(248,250,252,0.8)',
+  color: 'var(--color-text-secondary)',
 };
 
 const olStyle: React.CSSProperties = {
   margin: '0 0 1.5rem',
   paddingLeft: '1.5rem',
-  color: 'rgba(248,250,252,0.8)',
+  color: 'var(--color-text-secondary)',
 };
 
 const tableWrapperStyle: React.CSSProperties = {
   overflowX: 'auto',
   margin: '1.5rem 0',
   borderRadius: '12px',
-  border: '1px solid rgba(255,255,255,0.1)',
+  border: '1px solid var(--color-border)',
 };
 
 const tableStyle: React.CSSProperties = {
@@ -344,40 +344,40 @@ const thStyle: React.CSSProperties = {
   fontWeight: 700,
   letterSpacing: '0.06em',
   textTransform: 'uppercase',
-  color: 'rgba(248,250,252,0.5)',
-  borderBottom: '1px solid rgba(255,255,255,0.1)',
-  background: 'rgba(255,255,255,0.03)',
+  color: 'var(--color-text-secondary)',
+  borderBottom: '1px solid var(--color-border)',
+  background: 'var(--color-bg-card)',
 };
 
 const tdStyle: React.CSSProperties = {
   padding: '0.75rem 0.85rem',
-  color: 'rgba(248,250,252,0.75)',
-  borderBottom: '1px solid rgba(255,255,255,0.05)',
+  color: 'var(--color-text-secondary)',
+  borderBottom: '1px solid var(--color-border)',
 };
 
 const ctaBoxStyle: React.CSSProperties = {
   margin: '3rem 0',
   padding: '2rem',
   borderRadius: '16px',
-  background: 'rgba(124,58,237,0.1)',
-  border: '1px solid rgba(124,58,237,0.3)',
+  background: 'var(--color-accent-soft)',
+  border: '1px solid var(--color-accent-soft)',
   textAlign: 'center',
 };
 
 const ctaTextStyle: React.CSSProperties = {
   margin: '0 0 1.25rem',
   fontSize: '1rem',
-  color: 'rgba(248,250,252,0.8)',
+  color: 'var(--color-text-secondary)',
 };
 
 const ctaButtonStyle: React.CSSProperties = {
   display: 'inline-block',
   padding: '0.9rem 1.75rem',
   borderRadius: '12px',
-  background: 'linear-gradient(135deg, #7c3aed 0%, #9333ea 100%)',
+  background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)',
   color: '#fff',
   fontWeight: 700,
   textDecoration: 'none',
   fontSize: '1rem',
-  boxShadow: '0 8px 24px rgba(124,58,237,0.4)',
+  boxShadow: '0 8px 24px var(--color-accent-soft)',
 };

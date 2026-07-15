@@ -4,7 +4,7 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Famous Archetypes: How the Stars Built Success | 8os.ai',
   description:
-    "Success isn't random — it's patterned. Explore how celebrities and leaders express their Fire, Earth, Metal, Water, and Wood archetypes in their path to achievement.",
+    "Success isn't random, it's patterned. Explore how celebrities and leaders express their Fire, Earth, Metal, Water, and Wood archetypes in their path to achievement.",
   openGraph: {
     title: 'Famous Archetypes: How the Stars Built Success',
     description:
@@ -22,7 +22,7 @@ const jsonLd = {
   '@type': 'Article',
   headline: 'Famous Archetypes: How the Stars Built Success',
   description:
-    "Success isn't random — it's patterned. Explore how celebrities and leaders express their Fire, Earth, Metal, Water, and Wood archetypes in their path to achievement.",
+    "Success isn't random, it's patterned. Explore how celebrities and leaders express their Fire, Earth, Metal, Water, and Wood archetypes in their path to achievement.",
   author: { '@type': 'Organization', name: '8os.ai' },
   publisher: { '@type': 'Organization', name: '8os.ai', url: 'https://8os.ai' },
   datePublished: '2026-05-07',
@@ -49,7 +49,7 @@ export default function FamousArchetypesPage() {
 
           <h2 style={h2Style}>Fire Archetypes</h2>
           <p style={pStyle}><em>Aries, Leo, Sagittarius + Fire/Wood Daymasters</em></p>
-          <p style={pStyle}>Fire achieves through <strong>visibility, transformation, and spark</strong>. They burn bright and draw attention — but fire also destroys before it creates.</p>
+          <p style={pStyle}>Fire achieves through <strong>visibility, transformation, and spark</strong>. They burn bright and draw attention, but fire also destroys before it creates.</p>
           <div style={tableWrapperStyle}>
             <table style={tableStyle}>
               <thead>
@@ -93,7 +93,7 @@ export default function FamousArchetypesPage() {
               </tbody>
             </table>
           </div>
-          <p style={pStyle}><strong>Fire Lesson:</strong> Success comes through visibility, but fire must choose what to burn — and when.</p>
+          <p style={pStyle}><strong>Fire Lesson:</strong> Success comes through visibility, but fire must choose what to burn, and when.</p>
 
           <h2 style={h2Style}>Earth/Metal Archetypes</h2>
           <p style={pStyle}><em>Taurus, Virgo, Capricorn + Earth/Metal Daymasters</em></p>
@@ -145,7 +145,7 @@ export default function FamousArchetypesPage() {
 
           <h2 style={h2Style}>Water Archetypes</h2>
           <p style={pStyle}><em>Cancer, Scorpio, Pisces + Water/Wood Daymasters</em></p>
-          <p style={pStyle}>Water achieves through <strong>depth, intuition, and transformation</strong>. Water doesn&apos;t push — it flows and finds the cracks.</p>
+          <p style={pStyle}>Water achieves through <strong>depth, intuition, and transformation</strong>. Water doesn&apos;t push, it flows and finds the cracks.</p>
           <div style={tableWrapperStyle}>
             <table style={tableStyle}>
               <thead>
@@ -196,11 +196,11 @@ export default function FamousArchetypesPage() {
               </tbody>
             </table>
           </div>
-          <p style={pStyle}><strong>Water Lesson:</strong> Success comes through depth and authenticity — not through fitting in.</p>
+          <p style={pStyle}><strong>Water Lesson:</strong> Success comes through depth and authenticity, not through fitting in.</p>
 
           <h2 style={h2Style}>Air Archetypes</h2>
           <p style={pStyle}><em>Gemini, Libra, Aquarius + Metal/Water Daymasters</em></p>
-          <p style={pStyle}>Air achieves through <strong>connection, communication, and ideas</strong>. Air doesn&apos;t build structures — it creates networks.</p>
+          <p style={pStyle}>Air achieves through <strong>connection, communication, and ideas</strong>. Air doesn&apos;t build structures, it creates networks.</p>
           <div style={tableWrapperStyle}>
             <table style={tableStyle}>
               <thead>
@@ -237,15 +237,15 @@ export default function FamousArchetypesPage() {
               </tbody>
             </table>
           </div>
-          <p style={pStyle}><strong>Air Lesson:</strong> Success comes through connection and meaning — not through isolation or competition.</p>
+          <p style={pStyle}><strong>Air Lesson:</strong> Success comes through connection and meaning, not through isolation or competition.</p>
 
           <h2 style={h2Style}>The Pattern</h2>
-          <p style={pStyle}>Success isn&apos;t about <em>which</em> sign or <em>which</em> element — it&apos;s about <strong>alignment</strong>:</p>
+          <p style={pStyle}>Success isn&apos;t about <em>which</em> sign or <em>which</em> element, it&apos;s about <strong>alignment</strong>:</p>
           <ol style={olStyle}>
-            <li><strong>Self-awareness</strong> — Knowing your archetype and how you actually work</li>
-            <li><strong>Strategy alignment</strong> — Pursuing goals in ways that match your nature</li>
-            <li><strong>Timing alignment</strong> — Acting when cosmic weather supports your archetype</li>
-            <li><strong>Happiness alignment</strong> — Defining success in terms that actually satisfy you</li>
+            <li><strong>Self-awareness</strong>, Knowing your archetype and how you actually work</li>
+            <li><strong>Strategy alignment</strong>, Pursuing goals in ways that match your nature</li>
+            <li><strong>Timing alignment</strong>, Acting when cosmic weather supports your archetype</li>
+            <li><strong>Happiness alignment</strong>, Defining success in terms that actually satisfy you</li>
           </ol>
 
           <div style={ctaBoxStyle}>
@@ -263,7 +263,7 @@ const articleStyle: React.CSSProperties = {
   margin: '0 auto',
   padding: '4rem 2rem',
   background: '#060608',
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
   minHeight: '100vh',
 };
 
@@ -304,7 +304,7 @@ const h2Style: React.CSSProperties = {
   margin: '2.5rem 0 1rem',
   fontSize: '1.5rem',
   letterSpacing: '-0.02em',
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
 };
 
 const pStyle: React.CSSProperties = {

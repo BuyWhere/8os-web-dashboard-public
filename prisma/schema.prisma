@@ -36,6 +36,7 @@ enum AffiliatePayoutStatus {
 
 model User {
   id                String    @id @default(uuid())
+  clerkUserId       String?   @unique
   email             String?   @unique
   phone             String?   @unique
   passwordHash      String?
@@ -61,7 +62,7 @@ model User {
   goals             Goal[]
   projects          OSProject[]
   tasks             OSTask[]
-  workPreferences   WorkPreferences?
+  energyProfile     EnergyProfile?
   calendarEvents    CalendarEvent[]
   activityLogs      ActivityLog[]
   settings          UserSettings?
@@ -69,6 +70,8 @@ model User {
   insightFeedback   InsightFeedback[]
   referralAttribution ReferralAttribution?
   affiliateConversions AffiliateConversion[]
+  assistantConversations AssistantConversation[]
+  journalEntries    JournalEntry[]
 
   @@map("users")
 }
@@ -157,6 +160,9 @@ model UserProfile {
   birthDateEncrypted  String    // ISO date, encrypted
   birthTimeEncrypted  String?   // HH:MM, encrypted; null if skipped
   birthTimezone       String?   // IANA tz, e.g. "Asia/Shanghai"
+  // E-0 (OS-2651): the user's CURRENT timezone (IANA) for all "today" math —
+  // daily pillar, task buckets, briefs. Distinct from birthTimezone.
+  timezone            String?
   birthLocationEncrypted String? // JSON {city,country,lat,lng}, encrypted
   gender              String    // "male" | "female" | "nonbinary"
   // BaZi computed fields (non-sensitive, stored plaintext)
@@ -205,6 +211,10 @@ model ArchetypeResult {
   calculationLog      Json     // full breakdown for future refinement
   isHybrid            Boolean  @default(false)
   hybridSecondary     String?  // secondary archetype if hybrid
+  // E-11 (backlog §5) — deterministic behavior tokens (nudge_frequency, brief_tone,
+  // task_granularity, scheduling_style, challenge_level). Additive jsonb, snake_case
+  // column added by 20260706130000_e11e12_character; @map since other cols are quoted camelCase.
+  behaviorTokens      Json?    @map("behavior_tokens")
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
 
@@ -283,9 +293,6 @@ enum GoalStatus {
   paused
   completed
   archived
-  planned
-  cancelled
-  achieved
 }
 
 enum TaskStatus {
@@ -316,14 +323,27 @@ model Goal {
   name        String
   definition  String
   checkMethod String     // binary | numeric | time | streak | milestone
-  checkConfig String     // JSON { unit?, target?, milestones? } — TEXT in prod
+  checkConfig Json       // { unit?, target?, milestones? }
   status      GoalStatus @default(active)
-  progress    String     @default("0") // TEXT in prod, stores numeric string 0.0 - 1.0
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  progress    Float      @default(0) // 0.0 - 1.0
 
-  user     User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  projects OSProject[]
+  // Paperclip multi-tenant columns (added via out-of-band migration)
+  companyId     String    @map("company_id")
+  title         String    @map("title")
+  description   String?   @map("description")
+  level         String    @default("task")  @map("level")
+  parentId      String?   @map("parent_id")
+  ownerAgentId  String?   @map("owner_agent_id")
+
+  // Time-horizon goals (added via 20260712114743_goal_horizons migration)
+  horizon       String    @default("yearly")
+  targetDate    DateTime? @map("target_date") @db.Date
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  user         User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  projects     OSProject[]
   activityLogs ActivityLog[]
 
   @@index([userId])
@@ -363,10 +383,15 @@ model OSTask {
   status           TaskStatus   @default(todo)
   scheduledAt      DateTime?    // null = unscheduled
   scheduledEnd     DateTime?    // derived from scheduledAt + duration
+  energyRequired   String       @default("green")  // green | yellow | red
   domainId         String?      // for NLP-created tasks
   recurrence       RecurrenceRule @default(none)
   recurrenceUntil  DateTime?
   completedAt      DateTime?
+  // E-12 (backlog §5) — per-task estimate + actual (minutes), added by
+  // 20260706130000_e11e12_character. Feed the estimation_bias EMA.
+  estimatedMinutes Int?         @map("estimated_minutes")
+  actualMinutes    Int?         @map("actual_minutes")
   createdAt        DateTime     @default(now())
   updatedAt        DateTime     @updatedAt
 
@@ -382,21 +407,17 @@ model OSTask {
   @@map("os_tasks")
 }
 
-// User-editable working preferences. Seeded from archetype; user can override any field.
-// Replaces the old "energy hours" / EnergyProfile concept (see OS-2114).
-model WorkPreferences {
-  userId             String   @id
-  workingWindowStart Int      // hour 0-23, e.g. 9
-  workingWindowEnd   Int      // hour 0-23, e.g. 17
-  blockLengthMin     Int      @default(50)  // default block length in minutes (25 / 50 / 90)
-  batching           String   @default("batch")  // 'batch' | 'spread'
-  planningCadence    String   @default("weekly")  // 'daily' | 'weekly' | 'biweekly'
-  updatedAt          DateTime @updatedAt
-  createdAt          DateTime @default(now())
+model EnergyProfile {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  // JSON: Record<number, "green"|"yellow"|"red"> — 0-23 hour index
+  hourMap   Json
+  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now())
 
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@map("work_preferences")
+  @@map("energy_profiles")
 }
 
 model CalendarEvent {
@@ -410,6 +431,14 @@ model CalendarEvent {
   allDay      Boolean   @default(false)
   domainId    String?
   color       String?
+  // Calendar v2 (additive; see migrations/*_calendar_v2). camelCase columns.
+  goalId             String?   // optional link to a Goal (name/domain read-only)
+  location           String?
+  googleEventId      String?   // mirrored event id in Google Calendar (2-way map)
+  googleCalendarId   String?   // which Google calendar (defaults primary on push)
+  recurrenceRule     String    @default("none") // none|daily|weekly|biweekly|monthly
+  recurrenceUntil    DateTime?
+  recurrenceParentId String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 
@@ -418,6 +447,8 @@ model CalendarEvent {
 
   @@index([userId])
   @@index([startAt])
+  @@index([userId, googleEventId])
+  @@index([goalId])
   @@map("calendar_events")
 }
 
@@ -447,6 +478,9 @@ model UserSettings {
   sidebarCollapsed   Boolean  @default(false)
   defaultCalendarView String  @default("week")     // day | week | month
   driftSensitivity   Float    @default(0.3)        // 0-1, higher = more sensitive
+  // Account-hub preferences (unified account hub build).
+  theme              String   @default("system")   // light | dark | system
+  firstDayOfWeek     Int      @default(1)           // 1 = Monday, 0 = Sunday
   updatedAt          DateTime @updatedAt
   createdAt          DateTime @default(now())
 
@@ -490,5 +524,368 @@ model InsightFeedback {
   @@map("insight_feedback")
 }
 
+// ─── Assistant Chat (OS-1739) ────────────────────────────────────────────────
+
+model AssistantConversation {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String?  // optional conversation title
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user     User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  messages AssistantMessage[]
+
+  @@index([userId])
+  @@map("assistant_conversations")
+}
+
+model AssistantMessage {
+  id             String   @id @default(uuid())
+  conversationId String
+  role           String   // "user" | "assistant" | "tool"
+  content        String?  @db.Text
+  toolCalls      Json?    // array of { id, name, arguments }
+  toolCallId     String?  // for tool result messages
+  toolName       String?  // for tool result messages
+  createdAt      DateTime @default(now())
+
+  conversation AssistantConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+
+  @@index([conversationId])
+  @@index([createdAt])
+  @@map("assistant_messages")
+}
+
+model JournalEntry {
+  id        String   @id @default(uuid())
+  userId    String
+  content   String   @db.Text
+  kind      String   @default("free") // 'free' | 'shutdown_reflection' | 'weekly_reflection' | 'gratitude'
+  mood      String?  // optional free-form mood label
+  entryDate DateTime @db.Date // the day the entry belongs to (not necessarily createdAt's day)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, entryDate])
+  @@map("journal_entries")
+}
+
 // ─── Relations additions to User ──────────────────────────────────────────────
 // (Prisma requires explicit back-relations — added via model extensions above)
+
+// ─── Alignment Engine (OS-2542 step 2) ────────────────────────────────────────
+// Attribution pipeline + attention ledger + user-stated goal priorities.
+// Deliberately relation-free: the FKs exist in SQL (see
+// prisma/migrations/20260702_alignment_engine) but declaring Prisma relations
+// here would require editing the existing User/Goal models — kept surgical.
+
+model GoalRanking {
+  userId    String
+  goalId    String
+  rank      Int // 1 = highest priority
+  updatedAt DateTime @updatedAt
+
+  @@id([userId, goalId])
+  @@map("goal_rankings")
+}
+
+model AlignmentAttribution {
+  id         String   @id @default(uuid())
+  userId     String
+  sourceType String // 'calendar' | 'task' | 'journal' | 'chat'
+  sourceId   String
+  sourceDate DateTime @db.Date
+  goalId     String? // null = attributed to no goal
+  weight     String   @default("unrelated") // 'direct' | 'supporting' | 'unrelated' | 'counter'
+  minutes    Int      @default(0) // calendar-event duration; 0 for other sources
+  rationale  String   @default("")
+  createdAt  DateTime @default(now())
+
+  // E-8 (backlog §4.3): corrections + confidence + classify-once cache key.
+  userOverride    Boolean @default(false) @map("user_override") // human correction — sticky, never re-classified
+  correctedGoalId String? @map("corrected_goal_id") // set by /api/alignment/correct; null override = "unaligned"
+  confidence      Float?  @db.Real // classifier self-reported confidence 0..1 (null for ground-truth)
+  cacheKey        String? @map("cache_key") // (title-hash, attendee-domains-hash, goal-set-version) — classify-once for recurring events
+
+  @@unique([sourceType, sourceId])
+  @@index([userId, sourceDate])
+  @@index([userId, cacheKey])
+  @@map("alignment_attributions")
+}
+
+model AttentionLedger {
+  id        String   @id @default(uuid())
+  userId    String
+  goalId    String? // null = the per-day "unaligned" bucket (see migration note)
+  day       DateTime @db.Date
+  minutes   Int      @default(0)
+  actions   Int      @default(0)
+  mentions  Int      @default(0)
+  updatedAt DateTime @updatedAt
+
+  @@index([userId, day])
+  @@map("attention_ledger")
+}
+
+// ─── Stripe billing (2026-07-03) ──────────────────────────────────────────────
+// One row per app user. Upserted by the Stripe webhook. Deliberately relation-
+// free (like the alignment-engine tables): the FK exists in SQL (see
+// prisma/migrations/20260703_subscriptions) — declaring a Prisma relation here
+// would require editing the User model. Prod DB has drift; never prisma migrate.
+model Subscription {
+  id                   String    @id @default(uuid())
+  userId               String    @unique
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  plan                 String    @default("free")  // "free" | "pro"
+  status               String    @default("none")  // "active" | "canceled" | "past_due" | "none"
+  currentPeriodEnd     DateTime?
+  priceId              String?
+  lifeReportPurchased  Boolean   @default(false)
+  updatedAt            DateTime  @updatedAt
+
+  @@index([stripeCustomerId])
+  @@index([stripeSubscriptionId])
+  @@map("subscriptions")
+}
+
+// Vision Board (OS-2126) — a living visual board of the future the user is
+// working toward, optionally linked to a Goal. One implicit board per user (no
+// board table). Relation-free like Subscription/alignment tables: the userId FK
+// is created in SQL (idempotent CREATE), not declared here — prod DB has drift,
+// never prisma migrate/db push.
+// E-1 (backlog §4.2) — external-signal ingestion. Relation-free like
+// VisionItem: tables are created by CREATE-only SQL
+// (prisma/migrations/20260704120000_e1_external_signals), columns snake_case
+// per the doc, mirrored here with @map. encryptedTokens = AES-256-GCM blob
+// (src/lib/encryption.ts, same key as birth data).
+model ExternalSignalSource {
+  id              String    @id @default(uuid())
+  userId          String    @map("user_id")
+  provider        String // google_calendar (first)
+  encryptedTokens String    @map("encrypted_tokens")
+  syncToken       String?   @map("sync_token")
+  status          String    @default("active") // active | error | revoked
+  lastSyncedAt    DateTime? @map("last_synced_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+
+  @@map("external_signal_sources")
+}
+
+model ExternalEvent {
+  id            String   @id @default(uuid())
+  userId        String   @map("user_id")
+  sourceId      String   @map("source_id")
+  externalId    String   @map("external_id")
+  icalUid       String?  @map("ical_uid")
+  title         String?
+  startsAt      DateTime @map("starts_at")
+  endsAt        DateTime @map("ends_at")
+  attendeesJson Json?    @map("attendees_json")
+  isDeleted     Boolean  @default(false) @map("is_deleted")
+  updatedAt     DateTime @default(now()) @map("updated_at")
+
+  @@unique([sourceId, externalId])
+  @@index([userId, startsAt])
+  @@map("external_events")
+}
+
+model VisionItem {
+  id        String   @id @default(uuid())
+  userId    String
+  title     String
+  note      String   @default("") @db.Text
+  imageUrl  String?
+  goalId    String?  // optional link to a Goal
+  category  String?  // e.g. career | health | relationships | lifestyle
+  position  Int      @default(0) // ordering within the board
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt      @map("updated_at")
+
+  @@index([userId])
+  @@map("vision_items")
+}
+
+// Channel layer (OS-2652) — web-inbox delivery records (the channel of record).
+// Relation-free like VisionItem/Subscription: the userId FK is created in SQL
+// (idempotent CREATE), not declared here — prod DB has drift, never
+// prisma migrate/db push. Columns are snake_case per the channel-layer spec.
+model InboxMessage {
+  id          String   @id @default(uuid())
+  userId      String   @map("user_id")
+  title       String?
+  body        String   @db.Text
+  actionsJson Json?    @map("actions_json")
+  meta        Json?
+  read        Boolean  @default(false)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  @@index([userId, createdAt(sort: Desc)])
+  @@map("inbox_messages")
+}
+
+// E-7 (backlog §5) — one-tap redirection proposals: the operable form of the
+// alignment verdict's redirection. Relation-free like InboxMessage: the table
+// is created by CREATE-only SQL (prisma/migrations/20260704150000_e7_redirections),
+// snake_case columns mirrored with @map. Never prisma migrate/db push.
+model RedirectionProposal {
+  id                String    @id @default(uuid())
+  userId            String    @map("user_id")
+  goalId            String    @map("goal_id")
+  rationale         String    @default("")
+  proposedSlotStart DateTime  @map("proposed_slot_start")
+  proposedSlotEnd   DateTime  @map("proposed_slot_end")
+  status            String    @default("open") // open | accepted | declined | expired
+  declineReason     String?   @map("decline_reason") // busy | wrong_goal | not_now
+  sourceKind        String    @default("alignment") @map("source_kind") // alignment | retro | brief
+  sourceRunId       String?   @map("source_run_id")
+  createdAt         DateTime  @default(now()) @map("created_at")
+  decidedAt         DateTime? @map("decided_at")
+
+  @@index([userId, status, createdAt(sort: Desc)])
+  @@map("redirection_proposals")
+}
+
+// E-3 heartbeat (backlog §3.4) — every scheduled agent run, the idempotency
+// guard and the cost audit trail. Relation-free like InboxMessage: FKs are
+// not declared (prod DB has drift — never prisma migrate / db push). Table
+// is created by CREATE-only SQL (prisma/migrations/20260704150000_e3_heartbeat).
+model AgentRun {
+  id             String    @id @default(uuid())
+  userId         String    @map("user_id")
+  kind           String // daily_brief|daily_shutdown|weekly|monthly|quarterly|annual|adhoc_nudge
+  idempotencyKey String    @unique @map("idempotency_key") // {userId}:{kind}:{localDate}
+  scheduledFor   DateTime  @map("scheduled_for")
+  startedAt      DateTime? @map("started_at")
+  finishedAt     DateTime? @map("finished_at")
+  status         String    @default("queued") // queued|running|done|failed|skipped
+  outputJson     Json?     @map("output_json")
+  tokenCostJson  Json?     @map("token_cost_json")
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  @@index([userId, kind, scheduledFor(sort: Desc)])
+  @@map("agent_runs")
+}
+
+// E-13 notification governance — per-user proactive-messaging prefs enforced
+// by src/lib/channels/governor.ts. prefs_json = per-playbook
+// { daily_brief: { enabled, hour, channel }, daily_shutdown: { ... } }.
+model NotificationPrefs {
+  userId      String    @id @map("user_id")
+  prefsJson   Json?     @map("prefs_json")
+  quietStart  String    @default("22:00") @map("quiet_start") // local "HH:MM"
+  quietEnd    String    @default("07:30") @map("quiet_end")
+  dailyCap    Int       @default(3) @map("daily_cap") // proactive msgs / local day
+  snoozeUntil DateTime? @map("snooze_until") // global snooze ("quiet week")
+  updatedAt   DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  @@map("notification_prefs")
+}
+
+// E-9 (backlog §5) — mood loop: the daily 1-tap mood + energy (1-5) capture
+// that closes the "value AND happiness" loop. Relation-free like InboxMessage /
+// RedirectionProposal: the user_id FK is logical only (prod DB drift — never
+// prisma migrate / db push). Table created by CREATE-only SQL
+// (prisma/migrations/20260706100000_e9_mood_logs). One row per (userId,
+// localDate) via a UNIQUE index — the shutdown ritual upserts, so re-logging the
+// same LOCAL day updates in place. snake_case columns mirrored with @map.
+model MoodLog {
+  id        String   @id @default(uuid())
+  userId    String   @map("user_id")
+  localDate DateTime @map("local_date") @db.Date // user's LOCAL civil date (E-0)
+  mood      Int?     @db.SmallInt // 1-5, null if only energy logged
+  energy    Int?     @db.SmallInt // 1-5, null if only mood logged
+  source    String? // shutdown | telegram | dev_seed
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([userId, localDate])
+  @@map("mood_logs")
+}
+
+// E-5 (backlog §3.2) — Life Memory layer: typed durable facts distilled nightly
+// from journal / chat / reflections (+ user-manual adds). Relation-free like
+// InboxMessage / RedirectionProposal: the user_id FK is logical only (prod DB
+// drift — never prisma migrate / db push). Table created by CREATE-only SQL
+// (prisma/migrations/20260706100000_e5e6_memory_commitments). snake_case columns
+// mirrored with @map. Merge bumps last_confirmed_at instead of duplicating;
+// contradictions set superseded_by. Deleting is a HARD delete (the user-visible
+// correction / GDPR surface at /dashboard/memory).
+model MemoryItem {
+  id               String    @id @default(uuid())
+  userId           String    @map("user_id")
+  kind             String // fact|preference|person|insight|event
+  content          String    @db.Text
+  salience         Int       @default(3) @db.SmallInt // 1-5
+  sourceKind       String?   @map("source_kind") // journal|chat|reflection|user_manual
+  sourceId         String?   @map("source_id")
+  pinned           Boolean   @default(false)
+  supersededBy     String?   @map("superseded_by")
+  createdAt        DateTime  @default(now()) @map("created_at")
+  lastConfirmedAt  DateTime  @default(now()) @map("last_confirmed_at")
+  lastReferencedAt DateTime? @map("last_referenced_at")
+
+  @@index([userId, kind, salience(sort: Desc)])
+  @@map("memory_items")
+}
+
+// E-6 (backlog §3.3) — Commitments: what the user said they'd do, so the agent
+// can follow up ON the day (done / renegotiate / drop). Extracted real-time from
+// chat (regex prefilter → Flow AI confirm) and in the nightly consolidation.
+// Relation-free like MemoryItem. status ∈ open|done|renegotiated|dropped. Feeding
+// the attention ledger as an `action` signal on completion is DEFERRED to E-8.
+model Commitment {
+  id         String    @id @default(uuid())
+  userId     String    @map("user_id")
+  content    String    @db.Text
+  dueDate    DateTime? @map("due_date") @db.Date
+  status     String    @default("open") // open|done|renegotiated|dropped
+  sourceKind String?   @map("source_kind") // journal|chat|reflection|user_manual|consolidation
+  sourceId   String?   @map("source_id")
+  goalId     String?   @map("goal_id")
+  dropReason String?   @map("drop_reason")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @default(now()) @updatedAt @map("updated_at")
+
+  @@index([userId, status, dueDate])
+  @@map("commitments")
+}
+
+// E-12 (backlog §5) — per-user per-goal-domain EMA planning-fallacy bias factor.
+// factor = EMA of (actual / estimated), clamped 0.5–3.0; findBestSlot pads a task's
+// estimate by this factor for its domain. Relation-free like the other Phase C/D/E
+// tables (user_id FK logical only). Table created by CREATE-only SQL
+// (prisma/migrations/20260706130000_e11e12_character). snake_case columns @map'd.
+model EstimationBias {
+  userId      String   @map("user_id")
+  domainId    String   @map("domain_id")
+  factor      Float    @default(1.0) @db.Real
+  sampleCount Int      @default(0) @map("sample_count")
+  updatedAt   DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@id([userId, domainId])
+  @@map("estimation_bias")
+}
+
+// §4.4 (backlog) — daily_user_stats: the nightly rollup powering the owner metrics
+// dashboard, weekly insights (E-9), and cheap PostHog funnels. One row per
+// (userId, localDate), UPSERTed by the heartbeat's daily_rollup run. Relation-free
+// like agent_runs / external_events (user_id FK logical only). Table created by
+// CREATE-only SQL (prisma/migrations/20260708053514_daily_user_stats). @map columns.
+model DailyUserStats {
+  userId           String   @map("user_id")
+  localDate        DateTime @map("local_date") @db.Date
+  trackedMinutes   Int      @default(0) @map("tracked_minutes")
+  passiveMinutes   Int      @default(0) @map("passive_minutes")
+  alignedShare     Float    @default(0) @map("aligned_share") @db.Real
+  ritualsCompleted Int      @default(0) @map("rituals_completed")
+  proactiveSent    Int      @default(0) @map("proactive_sent")
+  proactiveOpened  Int      @default(0) @map("proactive_opened")
+  updatedAt        DateTime @default(now()) @updatedAt @map("updated_at")
+
+  @@id([userId, localDate])
+  @@index([localDate])
+  @@map("daily_user_stats")
+}

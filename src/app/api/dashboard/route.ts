@@ -1,14 +1,22 @@
 /**
  * GET /api/dashboard
  * Returns all data needed to render the dashboard in one request:
- * user, archetype, goals w/ progress, today's tasks ordered by work prefs,
+ * user, archetype, goals w/ progress, today's tasks ordered by energy,
  * metrics, upcoming calendar events.
  */
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
 import { requireAuth } from '@/lib/auth/require-auth'
-import { orderTasksByWorkPrefs } from '@/lib/scheduling/engine'
-import { getWorkPreferences } from '@/lib/work-preferences'
+import { orderTasksByEnergyHours } from '@/lib/scheduling/engine'
+
+const DEFAULT_ENERGY: Record<number, 'green' | 'yellow' | 'red'> = Object.fromEntries(
+  Array.from({ length: 24 }, (_, i) => {
+    if (i >= 9 && i <= 11) return [i, 'green']
+    if (i >= 14 && i <= 16) return [i, 'green']
+    if ((i >= 6 && i <= 8) || (i >= 13 && i <= 17)) return [i, 'yellow']
+    return [i, 'red']
+  })
+)
 
 export async function GET(req: NextRequest) {
   const auth = await requireAuth(req)
@@ -20,7 +28,7 @@ export async function GET(req: NextRequest) {
   const todayEnd = new Date(now); todayEnd.setHours(23, 59, 59, 999)
   const weekEnd = new Date(now); weekEnd.setDate(weekEnd.getDate() + 7)
 
-  const [user, archetype, goalsRaw, todayTasksRaw, workPreferencesRow, settings, upcomingEvents, recentActivity] =
+  const [user, archetype, goalsRaw, todayTasksRaw, energyProfileRaw, settings, upcomingEvents, recentActivity] =
     await Promise.all([
       prisma.user.findUnique({
         where: { id: userId },
@@ -36,7 +44,7 @@ export async function GET(req: NextRequest) {
         where: { userId, scheduledAt: { gte: todayStart, lte: todayEnd }, status: { not: 'cancelled' } },
         orderBy: { scheduledAt: 'asc' },
       }),
-      getWorkPreferences(userId),
+      prisma.energyProfile.findUnique({ where: { userId } }),
       prisma.userSettings.findUnique({ where: { userId } }),
       prisma.calendarEvent.findMany({
         where: { userId, startAt: { gte: now, lte: weekEnd } },
@@ -51,14 +59,17 @@ export async function GET(req: NextRequest) {
       }),
     ])
 
-  // Order today's tasks by work preferences (working-window fit + priority)
-  const todayTasksOrdered = orderTasksByWorkPrefs(
+  const energyMap = (energyProfileRaw?.hourMap as Record<number, 'green' | 'yellow' | 'red'>) ?? DEFAULT_ENERGY
+
+  // Order today's tasks by energy hours
+  const todayTasksOrdered = orderTasksByEnergyHours(
     todayTasksRaw.map((t) => ({
       id: t.id,
       scheduledAt: t.scheduledAt,
+      energyRequired: t.energyRequired,
       priority: t.priority,
     })),
-    workPreferencesRow
+    energyMap
   )
   const todayTaskMap = new Map(todayTasksRaw.map((t) => [t.id, t]))
   const todayTasks = todayTasksOrdered.map((t) => todayTaskMap.get(t.id)!)
@@ -83,7 +94,7 @@ export async function GET(req: NextRequest) {
     goals: goalsRaw,
     todayTasks,
     backlog,
-    workPreferences: workPreferencesRow,
+    energyMap,
     settings,
     upcomingEvents,
     recentActivity,

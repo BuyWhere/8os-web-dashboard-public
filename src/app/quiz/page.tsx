@@ -3,9 +3,9 @@ import type { Metadata } from 'next'
 import { QuizCtaButton } from '@/components/QuizCtaButton'
 
 export const metadata: Metadata = {
-  title: 'BaZi Archetype Quiz — Discover Your Element | 8os.ai',
+  title: 'BaZi Archetype Quiz, Discover Your Element | 8os.ai',
   description:
-    'Take the free 8os archetype quiz. Discover your BaZi element — Metal, Water, Wood, Fire, or Earth — and get your personal operating system in 90 seconds.',
+    'Take the free 8os archetype quiz. Discover your BaZi element, Metal, Water, Wood, Fire, or Earth, and get your personal operating system in 90 seconds.',
   keywords: [
     'BaZi quiz',
     'archetype quiz',
@@ -18,17 +18,17 @@ export const metadata: Metadata = {
     canonical: '/quiz',
   },
   openGraph: {
-    title: 'BaZi Archetype Quiz — Discover Your Element | 8os.ai',
+    title: 'BaZi Archetype Quiz, Discover Your Element | 8os.ai',
     description:
-      'Take the free 8os archetype quiz. Discover your BaZi element — Metal, Water, Wood, Fire, or Earth — and get your personal operating system in 90 seconds.',
+      'Take the free 8os archetype quiz. Discover your BaZi element, Metal, Water, Wood, Fire, or Earth, and get your personal operating system in 90 seconds.',
     url: 'https://8os.ai/quiz',
     type: 'website',
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'BaZi Archetype Quiz — Discover Your Element | 8os.ai',
+    title: 'BaZi Archetype Quiz, Discover Your Element | 8os.ai',
     description:
-      'Take the free 8os archetype quiz. Discover your BaZi element — Metal, Water, Wood, Fire, or Earth — and get your personal operating system in 90 seconds.',
+      'Take the free 8os archetype quiz. Discover your BaZi element, Metal, Water, Wood, Fire, or Earth, and get your personal operating system in 90 seconds.',
   },
 }
 
@@ -36,7 +36,7 @@ const archetypes = [
   {
     name: 'Strategic Commander',
     element: 'Metal',
-    color: '#94a3b8',
+    color: 'var(--color-text-muted)',
     bg: '#1a1f2e',
     description: 'Decisive, systems-oriented, high standards. Transforms complexity into clarity.',
     icon: '⚙️',
@@ -84,12 +84,12 @@ const steps = [
   {
     number: '2',
     title: 'Answer 5 questions',
-    description: 'Short behavioral questions that calibrate your dominant element. Takes 60–90 seconds.',
+    description: 'Short behavioral questions that calibrate your dominant element. Takes 60-90 seconds.',
   },
   {
     number: '3',
     title: 'Get your archetype',
-    description: 'Receive your full archetype profile — traits, strategies, tools, and daily briefing.',
+    description: 'Receive your full archetype profile, traits, strategies, tools, and daily briefing.',
   },
 ]
 
@@ -104,7 +104,7 @@ const miniQA = [
   },
   {
     q: 'How is this different from MBTI or Enneagram?',
-    a: 'BaZi elements are timing-aware and goal-integrated. Your archetype comes with seasonal guidance, tool recommendations, and daily nudges — not just a description.',
+    a: 'BaZi elements are timing-aware and goal-integrated. Your archetype comes with seasonal guidance, tool recommendations, and daily nudges, not just a description.',
   },
   {
     q: 'Can I retake the quiz?',
@@ -114,21 +114,21 @@ const miniQA = [
 
 export default function QuizPage() {
   return (
-    <div style={{ background: '#080808', minHeight: '100vh', color: '#e2e8f0' }}>
+    <div style={{ background: 'var(--color-bg-primary)', minHeight: '100vh', color: 'var(--color-border)' }}>
       {/* Hero */}
       <div
         style={{
-          background: 'linear-gradient(180deg, #0f0a1e 0%, #080808 100%)',
+          background: 'linear-gradient(180deg, #0f0a1e 0%, var(--color-bg-primary) 100%)',
           padding: '80px 24px 64px',
           textAlign: 'center',
-          borderBottom: '1px solid #1e1b4b',
+          borderBottom: '1px solid var(--color-bg-card)',
         }}
       >
         <div style={{ maxWidth: '640px', margin: '0 auto' }}>
           <div
             style={{
               display: 'inline-block',
-              background: '#1e1b4b',
+              background: 'var(--color-bg-card)',
               color: '#a5b4fc',
               padding: '6px 16px',
               borderRadius: '9999px',
@@ -143,22 +143,22 @@ export default function QuizPage() {
             style={{
               fontSize: '46px',
               fontWeight: 700,
-              color: '#f1f5f9',
+              color: 'var(--color-text-primary)',
               lineHeight: 1.15,
               marginBottom: '20px',
             }}
           >
             Discover Your BaZi Archetype
           </h1>
-          <p style={{ fontSize: '18px', color: '#94a3b8', lineHeight: 1.65, marginBottom: '36px' }}>
-            Five elements. Five operating systems. The quiz reveals which one is yours — and gives
+          <p style={{ fontSize: '18px', color: 'var(--color-text-muted)', lineHeight: 1.65, marginBottom: '36px' }}>
+            Five elements. Five operating systems. The quiz reveals which one is yours, and gives
             you a complete system for goals, productivity, and timing.
           </p>
           <QuizCtaButton
             label="Take the Free Quiz →"
             style={{
-              background: '#7c3aed',
-              color: '#fff',
+              background: 'var(--color-accent)',
+              color: '#0d0b14',
               padding: '16px 40px',
               borderRadius: '10px',
               textDecoration: 'none',
@@ -177,7 +177,7 @@ export default function QuizPage() {
             style={{
               fontSize: '28px',
               fontWeight: 600,
-              color: '#f1f5f9',
+              color: 'var(--color-text-primary)',
               textAlign: 'center',
               marginBottom: '40px',
             }}
@@ -195,8 +195,8 @@ export default function QuizPage() {
               <div
                 key={step.number}
                 style={{
-                  background: '#0f0f0f',
-                  border: '1px solid #1e1e2e',
+                  background: 'var(--color-bg-primary)',
+                  border: '1px solid var(--color-bg-card)',
                   borderRadius: '12px',
                   padding: '28px 24px 24px',
                   textAlign: 'center',
@@ -207,7 +207,7 @@ export default function QuizPage() {
                   style={{
                     width: '44px',
                     height: '44px',
-                    background: '#7c3aed',
+                    background: 'var(--color-accent)',
                     borderRadius: '50%',
                     display: 'flex',
                     alignItems: 'center',
@@ -220,10 +220,10 @@ export default function QuizPage() {
                 >
                   {step.number}
                 </div>
-                <h3 style={{ fontSize: '16px', fontWeight: 600, color: '#f1f5f9', marginBottom: '8px' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '8px' }}>
                   {step.title}
                 </h3>
-                <p style={{ fontSize: '14px', color: '#64748b', lineHeight: 1.6 }}>
+                <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
                   {step.description}
                 </p>
               </div>
@@ -237,7 +237,7 @@ export default function QuizPage() {
             style={{
               fontSize: '28px',
               fontWeight: 600,
-              color: '#f1f5f9',
+              color: 'var(--color-text-primary)',
               textAlign: 'center',
               marginBottom: '8px',
             }}
@@ -247,7 +247,7 @@ export default function QuizPage() {
           <p
             style={{
               fontSize: '16px',
-              color: '#64748b',
+              color: 'var(--color-text-secondary)',
               textAlign: 'center',
               marginBottom: '36px',
             }}
@@ -271,7 +271,7 @@ export default function QuizPage() {
                 <div style={{ fontSize: '32px', flexShrink: 0 }}>{a.icon}</div>
                 <div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '6px' }}>
-                    <h3 style={{ fontSize: '17px', fontWeight: 600, color: '#f1f5f9' }}>{a.name}</h3>
+                    <h3 style={{ fontSize: '17px', fontWeight: 600, color: 'var(--color-text-primary)' }}>{a.name}</h3>
                     <span
                       style={{
                         background: `${a.color}20`,
@@ -285,7 +285,7 @@ export default function QuizPage() {
                       {a.element}
                     </span>
                   </div>
-                  <p style={{ fontSize: '14px', color: '#94a3b8', lineHeight: 1.5 }}>
+                  <p style={{ fontSize: '14px', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
                     {a.description}
                   </p>
                 </div>
@@ -300,7 +300,7 @@ export default function QuizPage() {
             style={{
               fontSize: '24px',
               fontWeight: 600,
-              color: '#f1f5f9',
+              color: 'var(--color-text-primary)',
               marginBottom: '24px',
             }}
           >
@@ -311,8 +311,8 @@ export default function QuizPage() {
               <details
                 key={i}
                 style={{
-                  background: '#0f0f0f',
-                  border: '1px solid #1e1e2e',
+                  background: 'var(--color-bg-primary)',
+                  border: '1px solid var(--color-bg-card)',
                   borderRadius: '10px',
                 }}
               >
@@ -321,7 +321,7 @@ export default function QuizPage() {
                     padding: '18px 24px',
                     fontSize: '15px',
                     fontWeight: 500,
-                    color: '#f1f5f9',
+                    color: 'var(--color-text-primary)',
                     cursor: 'pointer',
                     listStyle: 'none',
                   }}
@@ -331,10 +331,10 @@ export default function QuizPage() {
                 <div
                   style={{
                     padding: '0 24px 16px',
-                    color: '#94a3b8',
+                    color: 'var(--color-text-muted)',
                     fontSize: '14px',
                     lineHeight: 1.7,
-                    borderTop: '1px solid #1e1e2e',
+                    borderTop: '1px solid var(--color-bg-card)',
                     paddingTop: '14px',
                   }}
                 >
@@ -350,8 +350,8 @@ export default function QuizPage() {
           <QuizCtaButton
             label="Take the Free Archetype Quiz →"
             style={{
-              background: '#7c3aed',
-              color: '#fff',
+              background: 'var(--color-accent)',
+              color: '#0d0b14',
               padding: '16px 40px',
               borderRadius: '10px',
               textDecoration: 'none',
@@ -360,21 +360,21 @@ export default function QuizPage() {
               display: 'inline-block',
             }}
           />
-          {/* OS-1173: prelaunch /coming-soon cross-link on the quiz page. */}
+          {/* De-prelaunch: point the secondary quiz CTA at the free archetype reveal. */}
           <div style={{ marginTop: '1.5rem' }}>
             <a
-              href="/coming-soon"
+              href="/reveal"
               style={{
-                color: '#c4b5fd',
+                color: 'var(--color-accent)',
                 fontSize: '0.95rem',
                 textDecoration: 'none',
                 borderBottom: '1px solid rgba(196, 181, 253, 0.3)',
               }}
             >
-              Not ready? Reserve your spot for the July 7 launch →
+              Take the quiz →
             </a>
           </div>
-          <p style={{ color: '#64748b', fontSize: '13px', marginTop: '12px' }}>
+          <p style={{ color: 'var(--color-text-secondary)', fontSize: '13px', marginTop: '12px' }}>
             Free · No credit card · No birth time needed
           </p>
         </div>

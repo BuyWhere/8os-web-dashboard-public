@@ -15,39 +15,39 @@ import { calculateSunSign, SUN_SIGNS } from '../sun-sign'
 import { calculateBazi, STEMS } from '../bazi'
 import { calculateDayMasterStrength } from '../bazi-strength'
 import { scoreTimeQuiz, TIME_QUIZ_QUESTIONS, hourToShichen } from '../time-quiz'
-import { generateArchetype, generateTaskTemplates, SUN_SIGN_DASHBOARD_TOKENS, defaultWorkPreferences } from '../archie-engine'
+import { generateArchetype, generateTaskTemplates, SUN_SIGN_DASHBOARD_TOKENS } from '../archie-engine'
 
 // ─── Sun Sign Tests ───────────────────────────────────────────────────────────
 
 describe('Sun Sign Calculator', () => {
   const cases: [number, number, number, string][] = [
     // [month, day, expectedId, expectedSign]
-    [1,  1,  0,  'capricorn'],   // Jan 1 — Capricorn
-    [1, 19,  0,  'capricorn'],   // Jan 19 — still Capricorn
-    [1, 20,  1,  'aquarius'],    // Jan 20 — Aquarius starts
-    [2, 18,  1,  'aquarius'],    // Feb 18 — still Aquarius
-    [2, 19,  2,  'pisces'],      // Feb 19 — Pisces
-    [3, 20,  2,  'pisces'],      // Mar 20 — last day Pisces
-    [3, 21,  3,  'aries'],       // Mar 21 — Aries
-    [4, 19,  3,  'aries'],       // Apr 19 — still Aries
-    [4, 20,  4,  'taurus'],      // Apr 20 — Taurus
-    [5, 20,  4,  'taurus'],      // May 20 — last day Taurus
-    [5, 21,  5,  'gemini'],      // May 21 — Gemini
-    [6, 20,  5,  'gemini'],      // Jun 20 — last day Gemini
-    [6, 21,  6,  'cancer'],      // Jun 21 — Cancer
-    [7, 22,  6,  'cancer'],      // Jul 22 — last day Cancer
-    [7, 23,  7,  'leo'],         // Jul 23 — Leo
-    [8, 22,  7,  'leo'],         // Aug 22 — last day Leo
-    [8, 23,  8,  'virgo'],       // Aug 23 — Virgo
-    [9, 22,  8,  'virgo'],       // Sep 22 — last day Virgo
-    [9, 23,  9,  'libra'],       // Sep 23 — Libra
-    [10, 22, 9,  'libra'],       // Oct 22 — last day Libra
-    [10, 23, 10, 'scorpio'],     // Oct 23 — Scorpio
-    [11, 21, 10, 'scorpio'],     // Nov 21 — last day Scorpio
-    [11, 22, 11, 'sagittarius'], // Nov 22 — Sagittarius
-    [12, 21, 11, 'sagittarius'], // Dec 21 — last day Sagittarius
-    [12, 22, 0,  'capricorn'],   // Dec 22 — Capricorn
-    [12, 31, 0,  'capricorn'],   // Dec 31 — Capricorn
+    [1,  1,  0,  'capricorn'],   // Jan 1, Capricorn
+    [1, 19,  0,  'capricorn'],   // Jan 19, still Capricorn
+    [1, 20,  1,  'aquarius'],    // Jan 20, Aquarius starts
+    [2, 18,  1,  'aquarius'],    // Feb 18, still Aquarius
+    [2, 19,  2,  'pisces'],      // Feb 19, Pisces
+    [3, 20,  2,  'pisces'],      // Mar 20, last day Pisces
+    [3, 21,  3,  'aries'],       // Mar 21, Aries
+    [4, 19,  3,  'aries'],       // Apr 19, still Aries
+    [4, 20,  4,  'taurus'],      // Apr 20, Taurus
+    [5, 20,  4,  'taurus'],      // May 20, last day Taurus
+    [5, 21,  5,  'gemini'],      // May 21, Gemini
+    [6, 20,  5,  'gemini'],      // Jun 20, last day Gemini
+    [6, 21,  6,  'cancer'],      // Jun 21, Cancer
+    [7, 22,  6,  'cancer'],      // Jul 22, last day Cancer
+    [7, 23,  7,  'leo'],         // Jul 23, Leo
+    [8, 22,  7,  'leo'],         // Aug 22, last day Leo
+    [8, 23,  8,  'virgo'],       // Aug 23, Virgo
+    [9, 22,  8,  'virgo'],       // Sep 22, last day Virgo
+    [9, 23,  9,  'libra'],       // Sep 23, Libra
+    [10, 22, 9,  'libra'],       // Oct 22, last day Libra
+    [10, 23, 10, 'scorpio'],     // Oct 23, Scorpio
+    [11, 21, 10, 'scorpio'],     // Nov 21, last day Scorpio
+    [11, 22, 11, 'sagittarius'], // Nov 22, Sagittarius
+    [12, 21, 11, 'sagittarius'], // Dec 21, last day Sagittarius
+    [12, 22, 0,  'capricorn'],   // Dec 22, Capricorn
+    [12, 31, 0,  'capricorn'],   // Dec 31, Capricorn
   ]
 
   test.each(cases)('%i/%i → id=%i (%s)', (month, day, expectedId, expectedKey) => {
@@ -63,7 +63,7 @@ describe('Sun Sign Calculator', () => {
   })
 
   it('should not flag mid-sign births as cusp', () => {
-    const r = calculateSunSign(7, 1) // July 1 — Leo center
+    const r = calculateSunSign(7, 1) // July 1, Leo center
     expect(r.isCusp).toBe(false)
   })
 
@@ -135,7 +135,7 @@ describe('Day Master Strength Calculator', () => {
   })
 
   it('should include month support flag', () => {
-    const bazi = calculateBazi(1990, 5, 15) // May — Wood in partial season
+    const bazi = calculateBazi(1990, 5, 15) // May, Wood in partial season
     const result = calculateDayMasterStrength(bazi)
     expect(typeof result.monthSupport).toBe('boolean')
   })
@@ -198,7 +198,7 @@ describe('Time Quiz', () => {
 
 // ─── ARCHIE Engine — 50 Sample Profiles ──────────────────────────────────────
 
-describe('ARCHIE Engine — 50 Sample Profiles', () => {
+describe('ARCHIE Engine, 50 Sample Profiles', () => {
   interface SampleProfile {
     label: string
     birthDate: string
@@ -295,15 +295,13 @@ describe('ARCHIE Engine — 50 Sample Profiles', () => {
     expect(result.dashboardTokens.typography.heading).toBeTruthy()
     expect(result.dashboardTokens.coachingTone.exampleMessages).toHaveLength(3)
 
-    // Energy hours removed in OS-2114; replaced by defaultWorkPreferences(archetype).
-    // Verify the helper produces sane values for this personality code.
-    const wp = defaultWorkPreferences(result.personalityCode)
-    expect(wp.workingWindowStart).toBeGreaterThanOrEqual(0)
-    expect(wp.workingWindowEnd).toBeLessThanOrEqual(24)
-    expect(wp.workingWindowEnd).toBeGreaterThan(wp.workingWindowStart)
-    expect([25, 50, 90]).toContain(wp.blockLengthMin)
-    expect(['batch', 'spread']).toContain(wp.batching)
-    expect(['daily', 'weekly', 'biweekly']).toContain(wp.planningCadence)
+    // Energy hours valid
+    expect(result.energyHours.peak.length).toBeGreaterThan(0)
+    expect(result.energyHours.rest.length).toBeGreaterThan(0)
+    result.energyHours.peak.forEach(h => {
+      expect(h).toBeGreaterThanOrEqual(0)
+      expect(h).toBeLessThan(24)
+    })
 
     // Goal templates for all 6 domains
     const domains = ['career', 'wealth', 'health', 'relationships', 'learning', 'legacy']
@@ -338,7 +336,7 @@ describe('ARCHIE Engine — 50 Sample Profiles', () => {
     expect(r1.archetypeId).not.toBe(r3.archetypeId)
   })
 
-  it('should be deterministic — same input always produces same output', () => {
+  it('should be deterministic, same input always produces same output', () => {
     const input = { birthDate: '1990-06-15', personalityCode: 'ig' as const }
     const r1 = generateArchetype(input)
     const r2 = generateArchetype(input)

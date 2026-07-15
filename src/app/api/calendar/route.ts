@@ -32,7 +32,7 @@ export async function GET(req: NextRequest) {
       startAt: { gte: new Date(from) },
       endAt: { lte: new Date(to) },
     },
-    include: { task: { select: { id: true, name: true, status: true, priority: true } } },
+    include: { task: { select: { id: true, name: true, status: true, priority: true, energyRequired: true } } },
     orderBy: { startAt: 'asc' },
   })
 

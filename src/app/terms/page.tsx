@@ -2,7 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: 'Terms of Service — 8os',
+  title: 'Terms of Service, 8os',
   description: 'Terms governing your use of the 8os platform.',
 };
 
@@ -10,23 +10,23 @@ export default function TermsPage() {
   return (
     <main style={{
       minHeight: '100vh',
-      background: '#0a0a0a',
-      color: '#ededed',
+      background: 'var(--color-bg-primary)',
+      color: 'var(--color-border)',
       padding: '4rem 2rem',
     }}>
       <div style={{ maxWidth: '720px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: '#93c5fd', textDecoration: 'none', fontSize: '0.875rem' }}>
+        <Link href="/" style={{ color: 'var(--color-accent)', textDecoration: 'none', fontSize: '0.875rem' }}>
           ← Back to 8os
         </Link>
 
         <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '2rem', marginBottom: '0.5rem' }}>
           Terms of Service
         </h1>
-        <p style={{ color: '#666', marginBottom: '3rem' }}>Last updated: July 2026</p>
+        <p style={{ color: '#666', marginBottom: '3rem' }}>Last updated: May 2026</p>
 
         <div style={{ lineHeight: 1.8, color: '#ccc' }}>
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               1. Acceptance of Terms
             </h2>
             <p>
@@ -36,7 +36,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               2. Description of Service
             </h2>
             <p>
@@ -47,7 +47,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               3. User Accounts
             </h2>
             <p style={{ marginBottom: '1rem' }}>You are responsible for:</p>
@@ -60,7 +60,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               4. Acceptable Use
             </h2>
             <p style={{ marginBottom: '1rem' }}>You agree not to:</p>
@@ -73,7 +73,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               5. Intellectual Property
             </h2>
             <p>
@@ -84,7 +84,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               6. Disclaimers and Limitation of Liability
             </h2>
             <p style={{ marginBottom: '1rem' }}>
@@ -99,7 +99,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               7. Termination
             </h2>
             <p>
@@ -109,7 +109,7 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               8. Changes to Terms
             </h2>
             <p>
@@ -119,12 +119,12 @@ export default function TermsPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: '#ededed', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               9. Contact
             </h2>
             <p>
               For questions about these Terms, email{' '}
-              <a href="mailto:legal@8os.ai" style={{ color: '#667eea' }}>legal@8os.ai</a>.
+              <a href="mailto:legal@8os.ai" style={{ color: 'var(--color-accent)' }}>legal@8os.ai</a>.
             </p>
           </section>
         </div>

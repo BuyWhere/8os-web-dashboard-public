@@ -37,7 +37,7 @@ export function TelegramAuthButton({ mode = 'login', next = '/dashboard', onLink
   useEffect(() => {
     const botUsername = process.env.NEXT_PUBLIC_TELEGRAM_BOT_USERNAME
     if (!botUsername) {
-      console.warn('NEXT_PUBLIC_TELEGRAM_BOT_USERNAME is not set — Telegram button disabled')
+      console.warn('NEXT_PUBLIC_TELEGRAM_BOT_USERNAME is not set, Telegram button disabled')
       return
     }
 

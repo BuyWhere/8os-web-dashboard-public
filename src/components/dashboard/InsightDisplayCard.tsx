@@ -14,37 +14,37 @@ const ARCHETYPE_STYLES: Record<string, {
 }> = {
   pioneer: {
     icon: '◈',
-    accent: '#34d399',
-    glow: 'rgba(52, 211, 153, 0.18)',
-    background: 'linear-gradient(135deg, rgba(11, 26, 22, 0.98), rgba(9, 14, 18, 0.96))',
+    accent: 'var(--skin-color-primary, #34d399)',
+    glow: 'var(--skin-glow-primary, rgba(52, 211, 153, 0.18))',
+    background: 'var(--skin-gradient-card, linear-gradient(135deg, rgba(11, 26, 22, 0.98), rgba(9, 14, 18, 0.96)))',
     label: 'Momentum',
   },
   sage: {
     icon: '◌',
-    accent: '#60a5fa',
-    glow: 'rgba(96, 165, 250, 0.18)',
-    background: 'linear-gradient(135deg, rgba(10, 19, 34, 0.98), rgba(8, 12, 20, 0.96))',
+    accent: 'var(--skin-color-primary, #60a5fa)',
+    glow: 'var(--skin-glow-primary, rgba(96, 165, 250, 0.18))',
+    background: 'var(--skin-gradient-card, linear-gradient(135deg, rgba(10, 19, 34, 0.98), rgba(8, 12, 20, 0.96)))',
     label: 'Clarity',
   },
   catalyst: {
     icon: '✦',
-    accent: '#f97316',
-    glow: 'rgba(249, 115, 22, 0.2)',
-    background: 'linear-gradient(135deg, rgba(35, 16, 8, 0.98), rgba(20, 10, 8, 0.96))',
+    accent: 'var(--skin-color-primary, #f97316)',
+    glow: 'var(--skin-glow-primary, rgba(249, 115, 22, 0.2))',
+    background: 'var(--skin-gradient-card, linear-gradient(135deg, rgba(35, 16, 8, 0.98), rgba(20, 10, 8, 0.96)))',
     label: 'Charge',
   },
   architect: {
     icon: '▣',
-    accent: '#a78bfa',
-    glow: 'rgba(167, 139, 250, 0.2)',
-    background: 'linear-gradient(135deg, rgba(20, 15, 35, 0.98), rgba(12, 10, 22, 0.96))',
+    accent: 'var(--skin-color-primary, var(--color-accent))',
+    glow: 'var(--skin-glow-primary, rgba(167, 139, 250, 0.2))',
+    background: 'var(--skin-gradient-card, linear-gradient(135deg, rgba(20, 15, 35, 0.98), rgba(12, 10, 22, 0.96)))',
     label: 'Structure',
   },
   default: {
     icon: '◐',
-    accent: '#f59e0b',
-    glow: 'rgba(245, 158, 11, 0.18)',
-    background: 'linear-gradient(135deg, rgba(28, 22, 10, 0.98), rgba(12, 11, 8, 0.96))',
+    accent: 'var(--skin-color-primary, #f59e0b)',
+    glow: 'var(--skin-glow-primary, rgba(245, 158, 11, 0.18))',
+    background: 'var(--skin-gradient-card, linear-gradient(135deg, rgba(28, 22, 10, 0.98), rgba(12, 11, 8, 0.96)))',
     label: 'Signal',
   },
 }
@@ -179,7 +179,7 @@ export function InsightDisplayCard({
                 marginBottom: 10,
                 padding: '5px 10px',
                 borderRadius: 999,
-                background: 'rgba(255, 255, 255, 0.04)',
+                background: 'var(--color-bg-card)',
                 color: style.accent,
                 fontSize: 11,
                 fontWeight: 700,
@@ -190,17 +190,16 @@ export function InsightDisplayCard({
               <span>{style.icon}</span>
               <span>{style.label} insight</span>
             </div>
-            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 700, color: '#f5f5f5' }}>
+            <h2 style={{ margin: 0, fontSize: 20, fontWeight: 'var(--skin-typo-heading-weight)', color: 'var(--skin-color-text)' }}>
               Daily insight for {archetypeName}
             </h2>
-            <p style={{ margin: '6px 0 0', color: '#9ca3af', fontSize: 13 }}>
-              {new Date(date).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' })}
+            <p style={{ margin: '6px 0 0', color: 'var(--skin-color-text-secondary)', fontSize: 13 }}>
+              {formatInsightDate(date)}
             </p>
           </div>
 
           <div style={{ display: 'flex', alignItems: 'flex-start', gap: 8, flexWrap: 'wrap' }}>
             <Badge label={priorityStyle.label} color={priorityStyle.color} background={priorityStyle.background} />
-            {isFallback && <Badge label="Template fallback" color="#fdba74" background="rgba(124, 45, 18, 0.42)" />}
             {cached && <Badge label="Cached" color="#93c5fd" background="rgba(30, 58, 138, 0.36)" />}
           </div>
         </div>
@@ -209,11 +208,11 @@ export function InsightDisplayCard({
           style={{
             padding: '18px 18px 14px',
             borderRadius: 14,
-            background: 'rgba(255, 255, 255, 0.03)',
-            border: '1px solid rgba(255, 255, 255, 0.05)',
+            background: 'var(--color-bg-card)',
+            border: '1px solid var(--color-border)',
           }}
         >
-          <p style={{ margin: 0, color: '#e5e7eb', fontSize: 15, lineHeight: 1.7 }}>
+          <p style={{ margin: 0, color: 'var(--skin-color-text)', fontSize: 15, lineHeight: 1.7 }}>
             {expanded ? insight : collapsedText}
           </p>
 
@@ -248,10 +247,10 @@ export function InsightDisplayCard({
           }}
         >
           <div>
-            <div style={{ color: '#d1d5db', fontSize: 12, fontWeight: 600, marginBottom: 4 }}>
+            <div style={{ color: 'var(--skin-color-text-secondary)', fontSize: 12, fontWeight: 600, marginBottom: 4 }}>
               Why this priority
             </div>
-            <div style={{ color: '#9ca3af', fontSize: 12 }}>
+            <div style={{ color: 'var(--skin-color-text-muted)', fontSize: 12 }}>
               {priorityReason}
             </div>
           </div>
@@ -321,8 +320,8 @@ function FeedbackButton({
       onClick={onClick}
       style={{
         borderRadius: 999,
-        border: active ? '1px solid rgba(255, 255, 255, 0.22)' : '1px solid rgba(255, 255, 255, 0.08)',
-        background: active ? 'rgba(255, 255, 255, 0.1)' : 'rgba(255, 255, 255, 0.04)',
+        border: active ? '1px solid var(--color-text-secondary)' : '1px solid var(--color-border)',
+        background: active ? 'var(--color-border)' : 'var(--color-bg-card)',
         color: active ? '#f3f4f6' : '#9ca3af',
         padding: '8px 12px',
         fontSize: 12,
@@ -334,4 +333,26 @@ function FeedbackButton({
       {label}
     </button>
   )
+}
+
+/**
+ * Deterministic date label for the insight card.
+ *
+ * `date` is a plain calendar day string (YYYY-MM-DD). Passing it to
+ * `new Date(date)` parses it as UTC-midnight; formatting WITHOUT a fixed
+ * `timeZone` then uses the runtime's local zone — which is the server's zone
+ * during SSR and the browser's zone on hydration. When those differ the
+ * rendered weekday/day text diverges, producing React hydration errors
+ * (#418/#425 text-content mismatch) on the dashboard + briefing.
+ *
+ * Pinning `timeZone: 'UTC'` (matching how the string was parsed) makes the
+ * server and client emit byte-identical text, eliminating the mismatch.
+ */
+function formatInsightDate(date: string): string {
+  return new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', {
+    weekday: 'long',
+    month: 'long',
+    day: 'numeric',
+    timeZone: 'UTC',
+  })
 }

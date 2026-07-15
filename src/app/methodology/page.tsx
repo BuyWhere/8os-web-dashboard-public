@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: '8os Methodology — How We Bridge Two Ancient Systems',
+  title: '8os Methodology, How We Bridge Two Ancient Systems',
   description:
     'The synthesis engine that combines Western astrology and BaZi to create 120 unique archetypes. Why we start with your sun sign.',
 };
@@ -29,7 +29,7 @@ export default function MethodologyPage() {
       <div style={innerStyle}>
         <div style={headerStyle}>
           <p style={eyebrowStyle}>Methodology</p>
-          <h1 style={pageTitleStyle}>How We Bridge Two Ancient Systems — And Why We Start Where You Are</h1>
+          <h1 style={pageTitleStyle}>How We Bridge Two Ancient Systems, And Why We Start Where You Are</h1>
         </div>
 
         {/* Synthesis Engine */}
@@ -40,7 +40,7 @@ export default function MethodologyPage() {
             proprietary synthesis layer that maps your Western expression onto your BaZi structure.
           </p>
           <div style={flowchartStyle}>
-            <div style={flowNodeStyle('#a78bfa')}>User Input: Birth Date + Location</div>
+            <div style={flowNodeStyle('var(--color-accent)')}>User Input: Birth Date + Location</div>
             <div style={flowRowStyle}>
               <div style={flowBranchStyle}>
                 <div style={flowArrowStyle} />
@@ -56,15 +56,15 @@ export default function MethodologyPage() {
             <div style={flowRowStyle}>
               <div style={flowBranchStyle}>
                 <div style={flowArrowStyle} />
-                <div style={flowNodeStyle('rgba(255,255,255,0.1)')}>Archetype Expression</div>
+                <div style={flowNodeStyle('var(--color-border)')}>Archetype Expression</div>
               </div>
               <div style={flowBranchStyle}>
                 <div style={flowArrowStyle} />
-                <div style={flowNodeStyle('rgba(255,255,255,0.1)')}>Structural Capacity</div>
+                <div style={flowNodeStyle('var(--color-border)')}>Structural Capacity</div>
               </div>
             </div>
             <div style={flowArrowStyle} />
-            <div style={flowNodeStyle('#7c3aed')}>Archetype Synthesis Layer</div>
+            <div style={flowNodeStyle('var(--color-accent)')}>Archetype Synthesis Layer</div>
             <div style={flowArrowStyle} />
             <div style={flowNodeStyle('#5b21b6')}>Unified Profile + Goal Architecture</div>
             <div style={flowArrowStyle} />
@@ -81,7 +81,7 @@ export default function MethodologyPage() {
           <div style={problemFrameStyle}>
             <h3 style={h3Style}>The Barrier Problem</h3>
             <p style={bodyStyle}>
-              A full Western natal chart requires your <strong>exact birth time</strong> — down to the minute. This creates
+              A full Western natal chart requires your <strong>exact birth time</strong>, down to the minute. This creates
               three problems:
             </p>
             <div style={barrierGridStyle}>
@@ -98,7 +98,7 @@ export default function MethodologyPage() {
           <div style={solutionFrameStyle}>
             <h3 style={h3Style}>Our Solution: The Sun Sign Gateway</h3>
             <p style={bodyStyle}>
-              Your sun sign is your <strong>headline</strong> — accurate enough to be meaningful, accessible enough to be
+              Your sun sign is your <strong>headline</strong>, accurate enough to be meaningful, accessible enough to be
               shareable. It captures your core identity (ego, vitality, life force) without requiring sensitive data.
             </p>
             <p style={bodyStyle}>
@@ -172,8 +172,8 @@ export default function MethodologyPage() {
                 {MAPPING_TABLE.map(({ western, bazi, synthesis }, i) => (
                   <tr key={i} style={i % 2 === 0 ? trEvenStyle : {}}>
                     <td style={tdStyle}>{western}</td>
-                    <td style={{ ...tdStyle, color: '#a78bfa', fontFamily: 'monospace' }}>{bazi}</td>
-                    <td style={{ ...tdStyle, color: 'rgba(248, 250, 252, 0.65)' }}>{synthesis}</td>
+                    <td style={{ ...tdStyle, color: 'var(--color-accent)', fontFamily: 'monospace' }}>{bazi}</td>
+                    <td style={{ ...tdStyle, color: 'var(--color-text-secondary)' }}>{synthesis}</td>
                   </tr>
                 ))}
               </tbody>
@@ -198,51 +198,51 @@ export default function MethodologyPage() {
   );
 }
 
-const pageStyle: React.CSSProperties = { background: '#060608', color: '#f8fafc', minHeight: '100vh' };
+const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '1000px', margin: '0 auto', padding: '5rem 2rem' };
 const headerStyle: React.CSSProperties = { marginBottom: '4rem' };
-const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#a78bfa' };
+const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)' };
 const pageTitleStyle: React.CSSProperties = { margin: 0, fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.15, letterSpacing: '-0.03em' };
 const sectionStyle: React.CSSProperties = { marginBottom: '1rem' };
 const h2Style: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', letterSpacing: '-0.03em' };
 const h3Style: React.CSSProperties = { margin: '0 0 1rem', fontSize: '1.15rem', fontWeight: 700 };
-const bodyStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: '1rem', lineHeight: 1.75, color: 'rgba(248, 250, 252, 0.7)' };
-const dividerStyle: React.CSSProperties = { height: '1px', background: 'rgba(255, 255, 255, 0.08)', margin: '3rem 0' };
+const bodyStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: '1rem', lineHeight: 1.75, color: 'var(--color-text-secondary)' };
+const dividerStyle: React.CSSProperties = { height: '1px', background: 'var(--color-border)', margin: '3rem 0' };
 
-const flowchartStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', padding: '2rem', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: '16px' };
-const flowNodeStyle = (bg: string): React.CSSProperties => ({ padding: '0.75rem 1.5rem', borderRadius: '10px', background: bg, color: '#f8fafc', fontWeight: 600, fontSize: '0.9rem', textAlign: 'center', maxWidth: '340px', width: '100%' });
+const flowchartStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', padding: '2rem', background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: '16px' };
+const flowNodeStyle = (bg: string): React.CSSProperties => ({ padding: '0.75rem 1.5rem', borderRadius: '10px', background: bg, color: 'var(--color-text-primary)', fontWeight: 600, fontSize: '0.9rem', textAlign: 'center', maxWidth: '340px', width: '100%' });
 const flowRowStyle: React.CSSProperties = { display: 'flex', gap: '2rem', justifyContent: 'center', width: '100%' };
 const flowBranchStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' };
-const flowArrowStyle: React.CSSProperties = { width: '2px', height: '24px', background: 'rgba(255,255,255,0.2)' };
-const flowSubStyle: React.CSSProperties = { fontSize: '0.75rem', color: 'rgba(248,250,252,0.4)', textAlign: 'center' };
+const flowArrowStyle: React.CSSProperties = { width: '2px', height: '24px', background: 'var(--color-text-secondary)' };
+const flowSubStyle: React.CSSProperties = { fontSize: '0.75rem', color: 'var(--color-text-secondary)', textAlign: 'center' };
 
-const problemFrameStyle: React.CSSProperties = { padding: '2rem', borderRadius: '16px', border: '1px solid rgba(255,255,255,0.08)', marginBottom: '1.5rem' };
-const solutionFrameStyle: React.CSSProperties = { padding: '2rem', borderRadius: '16px', border: '1px solid rgba(124,58,237,0.2)', background: 'rgba(124,58,237,0.04)' };
+const problemFrameStyle: React.CSSProperties = { padding: '2rem', borderRadius: '16px', border: '1px solid var(--color-border)', marginBottom: '1.5rem' };
+const solutionFrameStyle: React.CSSProperties = { padding: '2rem', borderRadius: '16px', border: '1px solid var(--color-accent-soft)', background: 'var(--color-accent-soft)' };
 const barrierGridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem', marginTop: '1rem' };
-const barrierCardStyle: React.CSSProperties = { padding: '1.25rem', borderRadius: '12px', background: 'rgba(255,255,255,0.04)' };
-const barrierNumStyle: React.CSSProperties = { display: 'block', fontSize: '0.75rem', fontWeight: 800, color: '#a78bfa', marginBottom: '0.5rem', letterSpacing: '0.1em' };
+const barrierCardStyle: React.CSSProperties = { padding: '1.25rem', borderRadius: '12px', background: 'var(--color-bg-card)' };
+const barrierNumStyle: React.CSSProperties = { display: 'block', fontSize: '0.75rem', fontWeight: 800, color: 'var(--color-accent)', marginBottom: '0.5rem', letterSpacing: '0.1em' };
 const barrierTitleStyle: React.CSSProperties = { margin: '0 0 0.4rem', fontSize: '0.95rem', fontWeight: 700 };
-const barrierBodyStyle: React.CSSProperties = { margin: 0, fontSize: '0.85rem', lineHeight: 1.6, color: 'rgba(248,250,252,0.55)' };
+const barrierBodyStyle: React.CSSProperties = { margin: 0, fontSize: '0.85rem', lineHeight: 1.6, color: 'var(--color-text-secondary)' };
 const upgradePathStyle: React.CSSProperties = { marginTop: '1.5rem', padding: '1.25rem', borderRadius: '12px', background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.2)' };
-const upgradePathLabelStyle: React.CSSProperties = { margin: '0 0 0.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', color: '#a78bfa' };
-const upgradePathBodyStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', lineHeight: 1.65, color: 'rgba(248,250,252,0.65)' };
+const upgradePathLabelStyle: React.CSSProperties = { margin: '0 0 0.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--color-accent)' };
+const upgradePathBodyStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-text-secondary)' };
 
-const matrixWrapStyle: React.CSSProperties = { overflowX: 'auto', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' };
+const matrixWrapStyle: React.CSSProperties = { overflowX: 'auto', borderRadius: '12px', border: '1px solid var(--color-border)' };
 const matrixTableStyle: React.CSSProperties = { width: '100%', borderCollapse: 'collapse', fontSize: '0.75rem' };
-const matrixThStyle: React.CSSProperties = { padding: '0.6rem 0.5rem', textAlign: 'center', fontWeight: 600, color: 'rgba(248,250,252,0.4)', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)', whiteSpace: 'nowrap', fontSize: '0.7rem' };
-const matrixSignStyle: React.CSSProperties = { padding: '0.5rem 0.75rem', fontWeight: 600, color: 'rgba(248,250,252,0.7)', borderBottom: '1px solid rgba(255,255,255,0.05)', whiteSpace: 'nowrap' };
-const matrixCellStyle = (featured: boolean): React.CSSProperties => ({ padding: '0.5rem', textAlign: 'center', borderBottom: '1px solid rgba(255,255,255,0.04)', borderLeft: '1px solid rgba(255,255,255,0.04)', background: featured ? 'rgba(124,58,237,0.15)' : undefined });
-const featuredCellStyle: React.CSSProperties = { fontSize: '0.65rem', color: '#a78bfa', fontWeight: 700 };
-const emptyCellStyle: React.CSSProperties = { fontSize: '0.65rem', color: 'rgba(255,255,255,0.12)' };
+const matrixThStyle: React.CSSProperties = { padding: '0.6rem 0.5rem', textAlign: 'center', fontWeight: 600, color: 'var(--color-text-secondary)', borderBottom: '1px solid var(--color-border)', background: 'var(--color-bg-card)', whiteSpace: 'nowrap', fontSize: '0.7rem' };
+const matrixSignStyle: React.CSSProperties = { padding: '0.5rem 0.75rem', fontWeight: 600, color: 'var(--color-text-secondary)', borderBottom: '1px solid var(--color-border)', whiteSpace: 'nowrap' };
+const matrixCellStyle = (featured: boolean): React.CSSProperties => ({ padding: '0.5rem', textAlign: 'center', borderBottom: '1px solid var(--color-bg-card)', borderLeft: '1px solid var(--color-bg-card)', background: featured ? 'var(--color-accent-soft)' : undefined });
+const featuredCellStyle: React.CSSProperties = { fontSize: '0.65rem', color: 'var(--color-accent)', fontWeight: 700 };
+const emptyCellStyle: React.CSSProperties = { fontSize: '0.65rem', color: 'var(--color-border)' };
 
-const tableWrapStyle: React.CSSProperties = { overflowX: 'auto', borderRadius: '12px', border: '1px solid rgba(255,255,255,0.08)' };
+const tableWrapStyle: React.CSSProperties = { overflowX: 'auto', borderRadius: '12px', border: '1px solid var(--color-border)' };
 const tableStyle: React.CSSProperties = { width: '100%', borderCollapse: 'collapse', fontSize: '0.88rem' };
-const thStyle: React.CSSProperties = { padding: '0.85rem 1rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'rgba(248,250,252,0.4)', borderBottom: '1px solid rgba(255,255,255,0.08)', background: 'rgba(255,255,255,0.03)' };
-const trEvenStyle: React.CSSProperties = { background: 'rgba(255,255,255,0.02)' };
-const tdStyle: React.CSSProperties = { padding: '0.85rem 1rem', color: 'rgba(248,250,252,0.8)', borderBottom: '1px solid rgba(255,255,255,0.05)', verticalAlign: 'top' };
+const thStyle: React.CSSProperties = { padding: '0.85rem 1rem', textAlign: 'left', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.08em', textTransform: 'uppercase', color: 'var(--color-text-secondary)', borderBottom: '1px solid var(--color-border)', background: 'var(--color-bg-card)' };
+const trEvenStyle: React.CSSProperties = { background: 'var(--color-bg-card)' };
+const tdStyle: React.CSSProperties = { padding: '0.85rem 1rem', color: 'var(--color-text-secondary)', borderBottom: '1px solid var(--color-border)', verticalAlign: 'top' };
 
-const ctaSectionStyle: React.CSSProperties = { marginTop: '4rem', paddingTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.08)' };
+const ctaSectionStyle: React.CSSProperties = { marginTop: '4rem', paddingTop: '3rem', borderTop: '1px solid var(--color-border)' };
 const ctaTitleStyle: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: '1.75rem', letterSpacing: '-0.03em' };
 const ctaGroupStyle: React.CSSProperties = { display: 'flex', flexWrap: 'wrap', gap: '1rem', alignItems: 'center' };
-const primaryCtaStyle: React.CSSProperties = { display: 'inline-block', padding: '0.85rem 1.75rem', borderRadius: '12px', background: 'linear-gradient(135deg, #7c3aed 0%, #9333ea 100%)', color: '#fff', fontWeight: 700, textDecoration: 'none', boxShadow: '0 8px 24px rgba(124,58,237,0.4)' };
-const secondaryCtaStyle: React.CSSProperties = { display: 'inline-block', fontSize: '0.95rem', color: 'rgba(248,250,252,0.55)', textDecoration: 'none' };
+const primaryCtaStyle: React.CSSProperties = { display: 'inline-block', padding: '0.85rem 1.75rem', borderRadius: '12px', background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)', color: '#fff', fontWeight: 700, textDecoration: 'none', boxShadow: '0 8px 24px var(--color-accent-soft)' };
+const secondaryCtaStyle: React.CSSProperties = { display: 'inline-block', fontSize: '0.95rem', color: 'var(--color-text-secondary)', textDecoration: 'none' };

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { ARCHETYPES } from '@/lib/archetype'
 import { DashboardPageStyles, ErrorCard, LoadingMessage, SectionCard, SkeletonBlock } from './page-state'
+import { useArchetypeTheme } from '@/components/archetype'
 
 interface ArchetypeResponse {
   archetypeId: string
@@ -25,7 +26,7 @@ export function ArchetypeSkeleton() {
     <div style={{ display: 'grid', gap: 20 }}>
       <LoadingMessage>Loading your archetype profile...</LoadingMessage>
 
-      <SectionCard accent="#25253a" style={{ padding: '28px 32px' }}>
+      <SectionCard accent="var(--skin-color-border)" style={{ padding: '28px 32px' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 24 }}>
           <SkeletonBlock width={72} height={72} radius={20} />
           <div style={{ flex: 1 }}>
@@ -46,7 +47,7 @@ export function ArchetypeSkeleton() {
         <SkeletonBlock width={140} height={18} style={{ marginBottom: 20 }} />
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14 }}>
           {Array.from({ length: 3 }).map((_, index) => (
-            <div key={index} style={{ background: '#0d0d0d', borderRadius: 10, padding: '14px 16px' }}>
+            <div key={index} style={{ background: 'var(--color-bg-primary)', borderRadius: 10, padding: '14px 16px' }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 10 }}>
                 <SkeletonBlock width={84} height={12} />
                 <SkeletonBlock width={72} height={12} />
@@ -64,6 +65,7 @@ export function ArchetypeSkeleton() {
 export function ArchetypeContent() {
   const [state, setState] = useState<LoadState>({ status: 'loading' })
   const [requestKey, setRequestKey] = useState(0)
+  const { setArchetypeId: setSkinArchetypeId } = useArchetypeTheme()
 
   useEffect(() => {
     const controller = new AbortController()
@@ -95,6 +97,11 @@ export function ArchetypeContent() {
 
         const data = (await response.json()) as ArchetypeResponse
         setState({ status: 'ready', data })
+
+        // Sync the skin theme provider
+        if (data.archetypeId) {
+          setSkinArchetypeId(data.archetypeId)
+        }
       } catch (error) {
         if (controller.signal.aborted) return
         setState({
@@ -106,7 +113,7 @@ export function ArchetypeContent() {
 
     void load()
     return () => controller.abort()
-  }, [requestKey])
+  }, [requestKey, setSkinArchetypeId])
 
   if (state.status === 'loading') {
     return (
@@ -137,13 +144,21 @@ export function ArchetypeContent() {
         <DashboardPageStyles />
         <SectionCard style={{ padding: 40, textAlign: 'center' }}>
           <div style={{ fontSize: 40, marginBottom: 12 }}>🌀</div>
-          <div style={{ color: '#d4d4d8', marginBottom: 8, fontSize: 15 }}>Your archetype hasn&apos;t been calculated yet.</div>
-          <div style={{ color: '#737373', fontSize: 13, marginBottom: 20 }}>
+          <div style={{ color: 'var(--skin-color-text-secondary)', marginBottom: 8, fontSize: 15 }}>Your archetype hasn&apos;t been calculated yet.</div>
+          <div style={{ color: 'var(--skin-color-text-muted)', fontSize: 13, marginBottom: 20 }}>
             Complete the onboarding quiz to discover your personal operating style.
           </div>
           <Link
             href="/onboarding"
-            style={{ background: '#6366f1', color: '#fff', padding: '10px 20px', borderRadius: 8, textDecoration: 'none', fontSize: 14 }}
+            style={{
+              background: 'var(--skin-button-primary-bg)',
+              color: 'var(--skin-button-primary-text)',
+              padding: '10px 20px',
+              borderRadius: 'var(--skin-radius-button)',
+              textDecoration: 'none',
+              fontSize: 14,
+              fontWeight: 600,
+            }}
           >
             Start onboarding →
           </Link>
@@ -162,36 +177,36 @@ export function ArchetypeContent() {
       <div style={{ display: 'grid', gap: 20 }}>
         <div
           style={{
-            background: 'linear-gradient(135deg, #111 0%, #0d0d18 100%)',
-            border: `1px solid ${(archetypeDef?.color ?? '#6366f1')}33`,
-            borderRadius: 16,
+            background: 'var(--skin-gradient-card)',
+            border: '1px solid var(--skin-color-border)',
+            borderRadius: 'var(--skin-radius-card)',
             padding: '28px 32px',
             display: 'flex',
             alignItems: 'center',
             gap: 24,
           }}
         >
-          <div style={{ fontSize: 64 }}>{archetypeDef?.icon ?? '✨'}</div>
+          <div style={{ fontSize: 64, filter: 'drop-shadow(0 0 8px var(--skin-glow-primary))' }}>{archetypeDef?.icon ?? '✨'}</div>
           <div>
-            <div style={{ color: archetypeDef?.color ?? '#6366f1', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>
+            <div style={{ color: 'var(--skin-color-primary)', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 4 }}>
               Your Archetype
             </div>
-            <div style={{ fontWeight: 700, fontSize: 24, marginBottom: 4 }}>{data.archetypeName}</div>
-            <div style={{ color: '#888', fontSize: 14, fontStyle: 'italic', marginBottom: 10 }}>
+            <div style={{ fontWeight: 'var(--skin-typo-heading-weight)', fontSize: 24, marginBottom: 4 }}>{data.archetypeName}</div>
+            <div style={{ color: 'var(--skin-color-text-secondary)', fontSize: 14, fontStyle: 'italic', marginBottom: 10 }}>
               &ldquo;{archetypeDef?.tagline}&rdquo;
             </div>
-            <div style={{ color: '#666', fontSize: 13, maxWidth: 500 }}>{archetypeDef?.description}</div>
+            <div style={{ color: 'var(--skin-color-text-muted)', fontSize: 13, maxWidth: 500 }}>{archetypeDef?.description}</div>
             <div style={{ display: 'flex', gap: 12, marginTop: 14, flexWrap: 'wrap' }}>
-              <span style={{ background: '#1e1e2e', color: '#888', padding: '3px 10px', borderRadius: 5, fontSize: 11 }}>
+              <span style={{ background: 'var(--skin-color-badge-bg)', color: 'var(--skin-color-badge-text)', padding: '3px 10px', borderRadius: 5, fontSize: 11 }}>
                 Confidence {Math.round(data.confidence * 100)}%
               </span>
               {data.dominantElements.map((element) => (
-                <span key={element} style={{ background: '#1e1e2e', color: '#888', padding: '3px 10px', borderRadius: 5, fontSize: 11 }}>
+                <span key={element} style={{ background: 'var(--skin-color-badge-bg)', color: 'var(--skin-color-badge-text)', padding: '3px 10px', borderRadius: 5, fontSize: 11 }}>
                   {element} dominant
                 </span>
               ))}
               {data.isHybrid && (
-                <span style={{ background: '#f59e0b22', color: '#f59e0b', padding: '3px 10px', borderRadius: 5, fontSize: 11 }}>
+                <span style={{ background: 'var(--skin-color-badge-bg)', color: 'var(--skin-color-accent)', padding: '3px 10px', borderRadius: 5, fontSize: 11 }}>
                   Hybrid
                 </span>
               )}
@@ -201,22 +216,22 @@ export function ArchetypeContent() {
 
         {personalityVector && (
           <SectionCard>
-            <h2 style={{ margin: '0 0 20px', fontSize: 15, fontWeight: 600 }}>Personality Profile</h2>
+            <h2 style={{ margin: '0 0 20px', fontSize: 15, fontWeight: 'var(--skin-typo-heading-weight)' }}>Personality Profile</h2>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: 14 }}>
               {[
                 { key: 'systematic', label: 'Systematic', opposite: 'Intuitive', value: personalityVector.systematic ?? 0.5 },
                 { key: 'goalDriven', label: 'Goal-Driven', opposite: 'Process-Driven', value: personalityVector.goalDriven ?? 0.5 },
                 { key: 'futureFocused', label: 'Future-Focused', opposite: 'Present-Focused', value: personalityVector.futureFocused ?? 0.5 },
               ].map(({ key, label, opposite, value }) => (
-                <div key={key} style={{ background: '#0d0d0d', borderRadius: 10, padding: '14px 16px' }}>
+                <div key={key} style={{ background: 'var(--color-bg-primary)', borderRadius: 10, padding: '14px 16px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-                    <span style={{ fontSize: 12, color: '#888' }}>{opposite}</span>
-                    <span style={{ fontSize: 12, color: '#888' }}>{label}</span>
+                    <span style={{ fontSize: 12, color: 'var(--skin-color-text-muted)' }}>{opposite}</span>
+                    <span style={{ fontSize: 12, color: 'var(--skin-color-text-muted)' }}>{label}</span>
                   </div>
-                  <div style={{ height: 6, background: '#1a1a1a', borderRadius: 3, overflow: 'hidden' }}>
-                    <div style={{ height: '100%', width: `${value * 100}%`, background: archetypeDef?.color ?? '#6366f1', borderRadius: 3 }} />
+                  <div style={{ height: 6, background: 'var(--color-border)', borderRadius: 3, overflow: 'hidden' }}>
+                    <div style={{ height: '100%', width: `${value * 100}%`, background: 'var(--skin-color-primary)', borderRadius: 3 }} />
                   </div>
-                  <div style={{ textAlign: 'right', fontSize: 11, color: '#555', marginTop: 4 }}>
+                  <div style={{ textAlign: 'right', fontSize: 11, color: 'var(--skin-color-text-muted)', marginTop: 4 }}>
                     {Math.round(value * 100)}%
                   </div>
                 </div>
@@ -228,13 +243,29 @@ export function ArchetypeContent() {
         <div style={{ display: 'flex', gap: 12 }}>
           <Link
             href="/dashboard/archetype/compare"
-            style={{ background: '#1a1a1a', color: '#888', padding: '10px 18px', borderRadius: 8, textDecoration: 'none', fontSize: 13, border: '1px solid #222' }}
+            style={{
+              background: 'var(--skin-button-secondary-bg)',
+              color: 'var(--skin-button-secondary-text)',
+              padding: '10px 18px',
+              borderRadius: 'var(--skin-radius-button)',
+              textDecoration: 'none',
+              fontSize: 13,
+              border: '1px solid var(--skin-button-secondary-border)',
+            }}
           >
             Compare archetypes →
           </Link>
           <Link
             href="/onboarding/quiz"
-            style={{ background: '#1a1a1a', color: '#888', padding: '10px 18px', borderRadius: 8, textDecoration: 'none', fontSize: 13, border: '1px solid #222' }}
+            style={{
+              background: 'var(--skin-button-secondary-bg)',
+              color: 'var(--skin-button-secondary-text)',
+              padding: '10px 18px',
+              borderRadius: 'var(--skin-radius-button)',
+              textDecoration: 'none',
+              fontSize: 13,
+              border: '1px solid var(--skin-button-secondary-border)',
+            }}
           >
             Retake quiz →
           </Link>

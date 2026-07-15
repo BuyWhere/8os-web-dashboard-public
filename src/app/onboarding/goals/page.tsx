@@ -5,6 +5,17 @@ import { useRouter } from 'next/navigation'
 import { DOMAINS } from '@/lib/domains'
 import { getOnboardingState, saveOnboardingState } from '@/lib/storage'
 import type { DomainId } from '@/lib/types'
+import { OnboardingProgress } from '@/components/onboarding/OnboardingProgress'
+
+// ─── Warm-editorial tokens ──────────────────────────────────────────────────
+const CREAM = 'var(--color-bg-primary)'
+const WHITE = 'var(--color-bg-card)'
+const INK = 'var(--color-text-primary)'
+const WARM_GRAY = 'var(--color-text-secondary)'
+const MUTED = 'var(--color-text-muted)'
+const GOLD = 'var(--color-accent)'
+const HAIRLINE = 'var(--color-border)'
+const SERIF = 'var(--font-serif), Georgia, serif'
 
 export default function GoalsPage() {
   const router = useRouter()
@@ -35,44 +46,31 @@ export default function GoalsPage() {
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#080808',
+      background: CREAM,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
-      padding: '3rem 1.5rem',
+      padding: '3rem 1.5rem 5rem',
     }}>
-      {/* Header */}
-      <div style={{ maxWidth: 680, width: '100%', marginBottom: '3rem', textAlign: 'center' }}>
-        <div style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          gap: '0.5rem',
-          background: '#111',
-          border: '1px solid #1e1e1e',
-          borderRadius: '999px',
-          padding: '0.375rem 1rem',
-          marginBottom: '2rem',
-          fontSize: '0.75rem',
-          color: '#666',
-          letterSpacing: '0.1em',
-          textTransform: 'uppercase',
-        }}>
-          <span style={{ width: 6, height: 6, background: '#10b981', borderRadius: '50%', display: 'inline-block' }} />
-          Step 1 of 6 — Goal Domains
-        </div>
+      {/* Shared step indicator */}
+      <OnboardingProgress current="goals" />
 
+      {/* Header */}
+      <div style={{ maxWidth: 680, width: '100%', marginBottom: '2.5rem', textAlign: 'center' }}>
         <h1 style={{
-          fontSize: 'clamp(1.75rem, 5vw, 2.75rem)',
-          fontWeight: 700,
-          letterSpacing: '-0.03em',
+          fontFamily: SERIF,
+          fontSize: 'clamp(1.75rem, 5vw, 2.6rem)',
+          fontWeight: 500,
+          letterSpacing: '-0.02em',
           lineHeight: 1.1,
           marginBottom: '1rem',
-          color: '#ededed',
+          color: INK,
         }}>
-          What areas of your life<br />are you forging?
+          What areas of your life <br />are you focused on?
         </h1>
-        <p style={{ color: '#666', fontSize: '1rem', lineHeight: 1.6 }}>
-          Select 1–5 domains. Your OS will generate goals, projects, and tasks around them.
+        <p style={{ color: WARM_GRAY, fontSize: '1rem', lineHeight: 1.6, maxWidth: 460, margin: '0 auto' }}>
+          Pick 1-5 domains that matter most right now. Your OS builds goals, projects, and daily
+          tasks around exactly these, nothing you don&apos;t choose.
         </p>
       </div>
 
@@ -98,15 +96,15 @@ export default function GoalsPage() {
               onMouseLeave={() => setHovered(null)}
               style={{
                 position: 'relative',
-                background: isSelected ? `${domain.color}15` : isHovered ? '#141414' : '#0f0f0f',
-                border: `1px solid ${isSelected ? domain.color : isHovered ? '#2a2a2a' : '#1a1a1a'}`,
-                borderRadius: '12px',
+                background: isSelected ? `${domain.color}12` : WHITE,
+                border: `1px solid ${isSelected ? domain.color : isHovered ? 'var(--color-border)' : HAIRLINE}`,
+                borderRadius: '14px',
                 padding: '1.25rem',
                 cursor: 'pointer',
                 textAlign: 'left',
                 transition: 'all 0.15s ease',
                 transform: isSelected ? 'scale(1.02)' : 'scale(1)',
-                boxShadow: isSelected ? `0 0 20px ${domain.color}20` : 'none',
+                boxShadow: isSelected ? `0 6px 20px ${domain.color}22` : '0 1px 2px rgba(34,31,26,0.03)',
               }}
             >
               {/* Order badge */}
@@ -132,15 +130,16 @@ export default function GoalsPage() {
 
               <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{domain.icon}</div>
               <div style={{
-                fontSize: '1rem',
+                fontFamily: SERIF,
+                fontSize: '1.05rem',
                 fontWeight: 600,
-                color: isSelected ? domain.color : '#ededed',
+                color: isSelected ? domain.color : INK,
                 marginBottom: '0.25rem',
                 letterSpacing: '-0.01em',
               }}>
                 {domain.label}
               </div>
-              <div style={{ fontSize: '0.75rem', color: '#555', lineHeight: 1.4 }}>
+              <div style={{ fontSize: '0.78rem', color: WARM_GRAY, lineHeight: 1.45 }}>
                 {domain.description}
               </div>
             </button>
@@ -157,7 +156,7 @@ export default function GoalsPage() {
         maxWidth: 680,
         width: '100%',
       }}>
-        <div style={{ fontSize: '0.875rem', color: '#444' }}>
+        <div style={{ fontSize: '0.875rem', color: MUTED, fontWeight: 500 }}>
           {selected.length === 0
             ? 'Select at least 1 domain'
             : selected.length === 5
@@ -170,13 +169,13 @@ export default function GoalsPage() {
           disabled={selected.length === 0}
           style={{
             width: '100%',
-            padding: '0.875rem',
-            background: selected.length > 0 ? '#ededed' : '#1a1a1a',
-            color: selected.length > 0 ? '#080808' : '#333',
+            padding: '1rem',
+            background: selected.length > 0 ? GOLD : '#E3D8C4',
+            color: selected.length > 0 ? '#fff' : '#A99A82',
             border: 'none',
-            borderRadius: '10px',
-            fontSize: '0.9375rem',
-            fontWeight: 600,
+            borderRadius: '12px',
+            fontSize: '0.95rem',
+            fontWeight: 700,
             cursor: selected.length > 0 ? 'pointer' : 'not-allowed',
             transition: 'all 0.15s ease',
             letterSpacing: '-0.01em',

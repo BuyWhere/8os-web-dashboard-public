@@ -82,7 +82,7 @@ export default function CapricornGengMetalPage() {
           <h2 style={h2Style}>The Archetype Synthesis</h2>
           <p style={pStyle}><strong>Capricorn</strong> brings the <em>desire</em> for achievement, the <em>patience</em> for long-term thinking, and the <em>discipline</em> for sustained effort.</p>
           <p style={pStyle}><strong>庚 Metal</strong> brings the <em>clarity</em> to see what matters, the <em>authority</em> to make hard decisions, and the <em>precision</em> to execute flawlessly.</p>
-          <p style={pStyle}>Together: A goal-achiever who builds <strong>institutions, systems, and legacies</strong> — not just careers.</p>
+          <p style={pStyle}>Together: A goal-achiever who builds <strong>institutions, systems, and legacies</strong>, not just careers.</p>
 
           <h2 style={h2Style}>Goal Achievement Style</h2>
           <h3 style={h3Style}>How They Push Best</h3>
@@ -145,11 +145,11 @@ export default function CapricornGengMetalPage() {
 
           <h2 style={h2Style}>How to Work With This Archetype</h2>
           <ol style={olStyle}>
-            <li><strong>Accept that you build, not blaze</strong> — Your path is institutional, not revolutionary. Own it.</li>
-            <li><strong>Find the system worth building</strong> — Not all structures are worth your lifetime. Choose wisely.</li>
-            <li><strong>Protect your authority</strong> — You lead through competence and structure, not charisma. Build competence, then build around it.</li>
-            <li><strong>Time your reveals</strong> — Metal is hidden until sharp. But people need to see you to follow. Find the right moments for visibility.</li>
-            <li><strong>Rest in structure</strong> — Your element is refined through discipline, not through letting go. Your rest should still feel purposeful.</li>
+            <li><strong>Accept that you build, not blaze</strong>, Your path is institutional, not revolutionary. Own it.</li>
+            <li><strong>Find the system worth building</strong>, Not all structures are worth your lifetime. Choose wisely.</li>
+            <li><strong>Protect your authority</strong>, You lead through competence and structure, not charisma. Build competence, then build around it.</li>
+            <li><strong>Time your reveals</strong>, Metal is hidden until sharp. But people need to see you to follow. Find the right moments for visibility.</li>
+            <li><strong>Rest in structure</strong>, Your element is refined through discipline, not through letting go. Your rest should still feel purposeful.</li>
           </ol>
 
           <div style={ctaBoxStyle}>
@@ -167,7 +167,7 @@ const articleStyle: React.CSSProperties = {
   margin: '0 auto',
   padding: '4rem 2rem',
   background: '#060608',
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
   minHeight: '100vh',
 };
 
@@ -208,7 +208,7 @@ const h2Style: React.CSSProperties = {
   margin: '2.5rem 0 1rem',
   fontSize: '1.5rem',
   letterSpacing: '-0.02em',
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
 };
 
 const h3Style: React.CSSProperties = {

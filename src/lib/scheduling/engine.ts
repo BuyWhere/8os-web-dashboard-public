@@ -1,21 +1,16 @@
 /**
  * Scheduling Intelligence Engine
- *
- * Replaces the legacy "energy hours" model (OS-2114). Slots are now picked by:
- *   - Working-window fit (WorkPreferences.workingWindowStart/End)
- *   - Block-length fit (task.duration vs WorkPreferences.blockLengthMin)
- *   - Conflict-free
- *   - Earliest possible time
- *
- * No more `green/yellow/red` energy levels, no `energyMap`, no `energyRequired`.
+ * Finds energy-hour slots, avoids conflicts, supports recurring tasks.
  */
+
+export type EnergyLevel = 'green' | 'yellow' | 'red'
+export type EnergyMap = Record<number, EnergyLevel> // hour 0-23
 
 export interface ScheduledSlot {
   startAt: Date
   endAt: Date
-  inWorkingWindow: boolean
+  energyLevel: EnergyLevel
   conflictFree: boolean
-  blockFit: 'exact' | 'rounded' | 'over'
 }
 
 export interface ExistingEvent {
@@ -23,29 +18,22 @@ export interface ExistingEvent {
   endAt: Date
 }
 
-export interface WorkPreferencesLite {
-  workingWindowStart: number  // hour 0-23
-  workingWindowEnd: number    // hour 0-23
-  blockLengthMin: number      // preferred block length in minutes
-}
+const ENERGY_PRIORITY: Record<EnergyLevel, number> = { green: 3, yellow: 2, red: 1 }
 
 /**
  * Find the best available slot for a task within a date range.
- *
- * Prefers:
- *   1. Conflict-free slots inside the working window
- *   2. Slots that match (or round up to) the user's preferred block length
- *   3. Earliest time
+ * Prefers green hours, avoids conflicts, skips red hours for high-priority tasks.
  */
 export function findBestSlot(params: {
   durationMinutes: number
-  workPreferences: WorkPreferencesLite
+  energyRequired: EnergyLevel
+  energyMap: EnergyMap
   existingEvents: ExistingEvent[]
   searchFrom: Date
   searchDays?: number
 }): ScheduledSlot | null {
-  const { durationMinutes, workPreferences, existingEvents, searchFrom, searchDays = 7 } = params
-  const { workingWindowStart, workingWindowEnd, blockLengthMin } = workPreferences
+  const { durationMinutes, energyRequired, energyMap, existingEvents, searchFrom, searchDays = 7 } = params
+  const requiredPriority = ENERGY_PRIORITY[energyRequired]
 
   const candidates: ScheduledSlot[] = []
 
@@ -54,51 +42,32 @@ export function findBestSlot(params: {
     baseDate.setDate(baseDate.getDate() + dayOffset)
     baseDate.setHours(0, 0, 0, 0)
 
-    // Iterate at the user's preferred block cadence inside the working window.
-    // Start at workingWindowStart; if the requested duration fits before
-    // workingWindowEnd, that's a candidate.
-    const startHour = Math.max(0, Math.min(23, workingWindowStart))
-    const endHour = Math.max(0, Math.min(24, workingWindowEnd))
+    for (let hour = 6; hour <= 22; hour++) {
+      const slotEnergy = energyMap[hour] ?? 'red'
+      const slotPriority = ENERGY_PRIORITY[slotEnergy]
+      if (slotPriority < requiredPriority) continue
 
-    for (let hour = startHour; hour < endHour; hour++) {
       const startAt = new Date(baseDate)
       startAt.setHours(hour, 0, 0, 0)
       const endAt = new Date(startAt.getTime() + durationMinutes * 60 * 1000)
 
-      // Don't spill past the working window (allow at most blockLengthMin slack)
-      const dayEnd = new Date(baseDate)
-      dayEnd.setHours(endHour, 0, 0, 0)
-      if (endAt.getTime() - dayEnd.getTime() > blockLengthMin * 60 * 1000) continue
-
       // Skip if in the past
       if (startAt < searchFrom) continue
 
-      // Conflict check
+      // Check conflict
       const conflictFree = !existingEvents.some(
         (e) => startAt < e.endAt && endAt > e.startAt
       )
 
-      const blockFit: ScheduledSlot['blockFit'] =
-        durationMinutes === blockLengthMin ? 'exact'
-        : durationMinutes <= blockLengthMin ? 'rounded'
-        : 'over'
-
-      candidates.push({
-        startAt,
-        endAt,
-        inWorkingWindow: true,
-        conflictFree,
-        blockFit,
-      })
+      candidates.push({ startAt, endAt, energyLevel: slotEnergy, conflictFree })
     }
   }
 
-  // Sort: conflict-free first, exact block fit next, then earliest time
+  // Sort: conflict-free first, then by energy priority desc, then by time asc
   candidates.sort((a, b) => {
     if (a.conflictFree !== b.conflictFree) return a.conflictFree ? -1 : 1
-    const fitOrder = { exact: 0, rounded: 1, over: 2 } as const
-    const fitDelta = fitOrder[a.blockFit] - fitOrder[b.blockFit]
-    if (fitDelta !== 0) return fitDelta
+    const ePriority = ENERGY_PRIORITY[b.energyLevel] - ENERGY_PRIORITY[a.energyLevel]
+    if (ePriority !== 0) return ePriority
     return a.startAt.getTime() - b.startAt.getTime()
   })
 
@@ -136,45 +105,30 @@ export function generateRecurrences(params: {
 }
 
 /**
- * Order tasks for the dashboard "today" view.
- *
- * Replaces `orderTasksByEnergyHours`. Sorts by:
- *   - Tasks scheduled in the working window first
- *   - Then priority desc (high → medium → low)
- *   - Then by scheduled time asc (closest to now first)
- *   - Unscheduled tasks go last (preserves user's intent to plan them)
+ * Order tasks by energy-hour fit for today.
+ * Returns tasks sorted: green-hour tasks first, then yellow, then unscheduled.
  */
-export function orderTasksByWorkPrefs(
-  tasks: Array<{ id: string; scheduledAt: Date | null; priority: string }>,
-  workPreferences: WorkPreferencesLite
+export function orderTasksByEnergyHours(
+  tasks: Array<{ id: string; scheduledAt: Date | null; energyRequired: string; priority: string }>,
+  energyMap: EnergyMap
 ): typeof tasks {
   const now = new Date()
   const currentHour = now.getHours()
 
-  const priorityRank: Record<string, number> = { high: 3, medium: 2, low: 1 }
-
   return [...tasks].sort((a, b) => {
-    const aInWindow =
-      a.scheduledAt != null &&
-      a.scheduledAt.getHours() >= workPreferences.workingWindowStart &&
-      a.scheduledAt.getHours() < workPreferences.workingWindowEnd
-    const bInWindow =
-      b.scheduledAt != null &&
-      b.scheduledAt.getHours() >= workPreferences.workingWindowStart &&
-      b.scheduledAt.getHours() < workPreferences.workingWindowEnd
-    if (aInWindow !== bInWindow) return aInWindow ? -1 : 1
+    // Completed-first not needed here (filter before calling)
+    const aHour = a.scheduledAt?.getHours() ?? -1
+    const bHour = b.scheduledAt?.getHours() ?? -1
+    const aEnergy = aHour >= 0 ? (energyMap[aHour] ?? 'red') : 'red'
+    const bEnergy = bHour >= 0 ? (energyMap[bHour] ?? 'red') : 'red'
 
-    const aPriority = priorityRank[a.priority] ?? 0
-    const bPriority = priorityRank[b.priority] ?? 0
+    const aPriority = ENERGY_PRIORITY[aEnergy as EnergyLevel]
+    const bPriority = ENERGY_PRIORITY[bEnergy as EnergyLevel]
     if (aPriority !== bPriority) return bPriority - aPriority
 
-    if (a.scheduledAt && b.scheduledAt) {
-      const aDist = Math.abs(a.scheduledAt.getHours() - currentHour)
-      const bDist = Math.abs(b.scheduledAt.getHours() - currentHour)
-      return aDist - bDist
-    }
-    if (a.scheduledAt) return -1
-    if (b.scheduledAt) return 1
-    return 0
+    // Closer to current hour wins
+    const aDist = aHour >= 0 ? Math.abs(aHour - currentHour) : 999
+    const bDist = bHour >= 0 ? Math.abs(bHour - currentHour) : 999
+    return aDist - bDist
   })
 }

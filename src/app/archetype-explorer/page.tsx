@@ -1,5 +1,5 @@
 import { redirect } from 'next/navigation';
 
-export default function ArchetypeExplorerRedirectPage() {
+export default function ArchetypeExplorerRedirect() {
   redirect('/archetypes/explorer');
 }

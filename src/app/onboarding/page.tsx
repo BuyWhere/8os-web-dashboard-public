@@ -1,40 +1,33 @@
-'use client'
+/**
+ * /onboarding — entry point.
+ *
+ * New users land here after sign-up (Clerk forceRedirectUrl) and from marketing
+ * CTAs. The functional, persisting onboarding wizard begins at /onboarding/birth
+ * (birth → quiz → archetype → goals → define → projects → tasks → dashboard), so
+ * this route simply funnels users into it. The previous standalone all-in-one
+ * screen here was a non-persisting preview mock; redirecting to /onboarding/birth
+ * ensures every new user gets the real, data-backed flow.
+ *
+ * If the user has already completed onboarding, redirect to dashboard.
+ */
+import { redirect } from 'next/navigation'
+import { currentUser } from '@clerk/nextjs/server'
+import { prisma } from '@/lib/db/prisma'
 
-// Legacy single-page wizard has been removed. The hardcoded archetype
-// ("The Commander") was a credibility risk — see OS-2091.
-//
-// This route now bounces the visitor straight into the real multi-step
-// onboarding flow, which computes the archetype via /api/onboarding/birth
-// → /api/onboarding/archetype (verified: returns hybrid_explorer, etc.).
-//
-// Real flow: /onboarding/birth → /onboarding/quiz → /onboarding/archetype
-//            → /onboarding/goals → /onboarding/define → /onboarding/projects
+export default async function OnboardingIndex() {
+  const clerkUser = await currentUser()
 
-import { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+  if (clerkUser) {
+    // Check if user has already completed onboarding
+    const dbUser = await prisma.user.findUnique({
+      where: { clerkUserId: clerkUser.id },
+      select: { onboardingDone: true },
+    })
 
-export default function OnboardingIndex() {
-  const router = useRouter()
+    if (dbUser?.onboardingDone) {
+      redirect('/dashboard')
+    }
+  }
 
-  useEffect(() => {
-    router.replace('/onboarding/birth')
-  }, [router])
-
-  return (
-    <main
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        minHeight: '100vh',
-        padding: '2rem',
-        textAlign: 'center',
-        background: 'linear-gradient(180deg, #0a0a0a 0%, #111 100%)',
-        color: '#888',
-      }}
-    >
-      <p>Loading onboarding…</p>
-    </main>
-  )
+  redirect('/onboarding/birth')
 }

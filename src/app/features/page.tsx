@@ -3,7 +3,7 @@ import type { Metadata } from 'next';
 import { SidebarNav } from '@/components/SidebarNav';
 
 export const metadata: Metadata = {
-  title: 'Features — 8os',
+  title: 'Features, 8os',
   description: 'Discover the features that make 8os the most personalized productivity system on Earth.',
 };
 
@@ -21,7 +21,7 @@ const features = [
   {
     icon: '🎯',
     title: 'Goal & Project Management',
-    desc: 'Set goals across life domains — Career, Wealth, Health, Relationships, Learning, Legacy — and track progress over time.',
+    desc: 'Set goals across life domains, Career, Wealth, Health, Relationships, Learning, Legacy, and track progress over time.',
   },
   {
     icon: '📅',
@@ -109,14 +109,14 @@ export default function FeaturesPage() {
             <Link href="/onboarding" style={{
               display: 'inline-block',
               padding: '1rem 2rem',
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)',
               borderRadius: '12px',
               color: '#fff',
               textDecoration: 'none',
               fontSize: '1rem',
               fontWeight: 700,
             }}>
-              Generate My Life OS — Free
+              Generate My Life OS, Free
             </Link>
           </section>
         </main>

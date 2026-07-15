@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: '8os Philosophy — You Are On a Path. You Control the Journey.',
+  title: '8os Philosophy, You Are On a Path. You Control the Journey.',
   description:
     'Agency over fate, happiness through authentic achievement, and the two-languages hypothesis. The core philosophy behind 8os.ai.',
 };
@@ -21,7 +21,7 @@ export default function PhilosophyPage() {
           <div style={thesisNumberStyle}>01</div>
           <h2 style={thesisTitleStyle}>Agency Over Fate</h2>
           <p style={thesisLeadStyle}>
-            This is not about whether you are lucky or unlucky. You are on a given path — your archetype, your
+            This is not about whether you are lucky or unlucky. You are on a given path, your archetype, your
             structure, your tendencies. <strong>But you control the journey and the destination.</strong> Your star sign
             and BaZi don&apos;t dictate outcomes. They dictate <em>how</em> and <em>when</em>.
           </p>
@@ -49,7 +49,7 @@ export default function PhilosophyPage() {
           </p>
           <p style={thesisBodyStyle}>
             Our position:{' '}
-            <strong>Push yourself to achieve what matters to you — in the way that suits you, so it makes you happy.</strong>
+            <strong>Push yourself to achieve what matters to you, in the way that suits you, so it makes you happy.</strong>
           </p>
           <div style={examplesGridStyle}>
             {HAPPINESS_EXAMPLES.map(({ archetype, method }) => (
@@ -61,7 +61,7 @@ export default function PhilosophyPage() {
           </div>
           <p style={thesisBodyStyle}>
             8os.ai doesn&apos;t just track your goals. It tracks whether your <em>method</em> aligns with your{' '}
-            <em>nature</em> — because success that feels wrong isn&apos;t success.
+            <em>nature</em>, because success that feels wrong isn&apos;t success.
           </p>
         </section>
 
@@ -146,7 +146,7 @@ const HAPPINESS_EXAMPLES = [
 const AGENCY_POINTS = [
   {
     label: 'No deterministic predictions',
-    body: 'We don\'t say "you will get married in 2027." We say "your relationship pillar is active in 2027 — optimal for commitment if you choose it."',
+    body: 'We don\'t say "you will get married in 2027." We say "your relationship pillar is active in 2027, optimal for commitment if you choose it."',
   },
   {
     label: 'Goal-native architecture',
@@ -163,8 +163,8 @@ const AGENCY_POINTS = [
 ];
 
 const pageStyle: React.CSSProperties = {
-  background: '#060608',
-  color: '#f8fafc',
+  background: 'var(--color-bg-primary)',
+  color: 'var(--color-text-primary)',
   minHeight: '100vh',
 };
 
@@ -184,7 +184,7 @@ const eyebrowStyle: React.CSSProperties = {
   fontWeight: 700,
   letterSpacing: '0.14em',
   textTransform: 'uppercase',
-  color: '#a78bfa',
+  color: 'var(--color-accent)',
 };
 
 const pageTitleStyle: React.CSSProperties = {
@@ -214,38 +214,38 @@ const thesisTitleStyle: React.CSSProperties = {
   margin: 0,
   fontSize: 'clamp(1.5rem, 3vw, 2rem)',
   letterSpacing: '-0.03em',
-  color: '#f8fafc',
+  color: 'var(--color-text-primary)',
 };
 
 const thesisLeadStyle: React.CSSProperties = {
   margin: 0,
   fontSize: '1.1rem',
   lineHeight: 1.7,
-  color: 'rgba(248, 250, 252, 0.85)',
+  color: 'var(--color-text-secondary)',
 };
 
 const thesisBodyStyle: React.CSSProperties = {
   margin: 0,
   fontSize: '1rem',
   lineHeight: 1.75,
-  color: 'rgba(248, 250, 252, 0.65)',
+  color: 'var(--color-text-secondary)',
 };
 
 const quoteStyle: React.CSSProperties = {
   margin: 0,
   padding: '1.25rem 1.5rem',
-  borderLeft: '3px solid #7c3aed',
+  borderLeft: '3px solid var(--color-accent)',
   fontSize: '1.05rem',
   lineHeight: 1.65,
   fontStyle: 'italic',
-  color: '#f8fafc',
-  background: 'rgba(124, 58, 237, 0.06)',
+  color: 'var(--color-text-primary)',
+  background: 'var(--color-accent-soft)',
   borderRadius: '0 12px 12px 0',
 };
 
 const dividerStyle: React.CSSProperties = {
   height: '1px',
-  background: 'rgba(255, 255, 255, 0.08)',
+  background: 'var(--color-border)',
   margin: '3rem 0',
 };
 
@@ -258,22 +258,22 @@ const examplesGridStyle: React.CSSProperties = {
 const exampleCardStyle: React.CSSProperties = {
   padding: '1.5rem',
   borderRadius: '14px',
-  border: '1px solid rgba(255, 255, 255, 0.08)',
-  background: 'rgba(255, 255, 255, 0.03)',
+  border: '1px solid var(--color-border)',
+  background: 'var(--color-bg-card)',
 };
 
 const exampleArchetypeStyle: React.CSSProperties = {
   margin: '0 0 0.5rem',
   fontSize: '0.85rem',
   fontWeight: 700,
-  color: '#a78bfa',
+  color: 'var(--color-accent)',
 };
 
 const exampleMethodStyle: React.CSSProperties = {
   margin: 0,
   fontSize: '0.9rem',
   lineHeight: 1.65,
-  color: 'rgba(248, 250, 252, 0.65)',
+  color: 'var(--color-text-secondary)',
 };
 
 const twoColStyle: React.CSSProperties = {
@@ -286,7 +286,7 @@ const langCardStyle: React.CSSProperties = {
   padding: '1.75rem',
   borderRadius: '16px',
   border: '1px solid rgba(167, 139, 250, 0.2)',
-  background: 'rgba(124, 58, 237, 0.05)',
+  background: 'var(--color-accent-soft)',
 };
 
 const langLabelStyle: React.CSSProperties = {
@@ -295,7 +295,7 @@ const langLabelStyle: React.CSSProperties = {
   fontWeight: 700,
   letterSpacing: '0.1em',
   textTransform: 'uppercase',
-  color: '#a78bfa',
+  color: 'var(--color-accent)',
 };
 
 const langRoleStyle: React.CSSProperties = {
@@ -303,49 +303,49 @@ const langRoleStyle: React.CSSProperties = {
   fontSize: '1.4rem',
   fontWeight: 800,
   letterSpacing: '-0.03em',
-  color: '#f8fafc',
+  color: 'var(--color-text-primary)',
 };
 
 const langDescStyle: React.CSSProperties = {
   margin: 0,
   fontSize: '0.9rem',
   lineHeight: 1.7,
-  color: 'rgba(248, 250, 252, 0.65)',
+  color: 'var(--color-text-secondary)',
 };
 
 const agencyListStyle: React.CSSProperties = {
   display: 'flex',
   flexDirection: 'column',
   gap: '0',
-  border: '1px solid rgba(255, 255, 255, 0.08)',
+  border: '1px solid var(--color-border)',
   borderRadius: '16px',
   overflow: 'hidden',
 };
 
 const agencyItemStyle: React.CSSProperties = {
   padding: '1.5rem',
-  borderBottom: '1px solid rgba(255, 255, 255, 0.06)',
+  borderBottom: '1px solid var(--color-border)',
 };
 
 const agencyLabelStyle: React.CSSProperties = {
   margin: '0 0 0.4rem',
   fontSize: '0.88rem',
   fontWeight: 700,
-  color: '#f8fafc',
+  color: 'var(--color-text-primary)',
 };
 
 const agencyBodyStyle: React.CSSProperties = {
   margin: 0,
   fontSize: '0.9rem',
   lineHeight: 1.65,
-  color: 'rgba(248, 250, 252, 0.55)',
+  color: 'var(--color-text-secondary)',
   fontStyle: 'italic',
 };
 
 const ctaSectionStyle: React.CSSProperties = {
   marginTop: '4rem',
   paddingTop: '3rem',
-  borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+  borderTop: '1px solid var(--color-border)',
 };
 
 const ctaLabelStyle: React.CSSProperties = {
@@ -354,7 +354,7 @@ const ctaLabelStyle: React.CSSProperties = {
   fontWeight: 700,
   letterSpacing: '0.14em',
   textTransform: 'uppercase',
-  color: '#a78bfa',
+  color: 'var(--color-accent)',
 };
 
 const ctaTitleStyle: React.CSSProperties = {
@@ -374,16 +374,16 @@ const primaryCtaStyle: React.CSSProperties = {
   display: 'inline-block',
   padding: '0.85rem 1.75rem',
   borderRadius: '12px',
-  background: 'linear-gradient(135deg, #7c3aed 0%, #9333ea 100%)',
+  background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)',
   color: '#fff',
   fontWeight: 700,
   textDecoration: 'none',
-  boxShadow: '0 8px 24px rgba(124, 58, 237, 0.4)',
+  boxShadow: '0 8px 24px var(--color-accent-soft)',
 };
 
 const secondaryCtaStyle: React.CSSProperties = {
   display: 'inline-block',
   fontSize: '0.95rem',
-  color: 'rgba(248, 250, 252, 0.55)',
+  color: 'var(--color-text-secondary)',
   textDecoration: 'none',
 };

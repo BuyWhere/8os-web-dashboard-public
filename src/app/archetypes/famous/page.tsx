@@ -2,14 +2,14 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 export const metadata: Metadata = {
-  title: 'Famous Archetypes — 8os.ai | See Who Shares Your Blueprint',
+  title: 'Famous Archetypes, 8os.ai | See Who Shares Your Blueprint',
   description:
     'Discover which celebrities, leaders, and innovators share your BaZi archetype across the 8os operating styles and compare the patterns behind their public edge.',
   alternates: {
     canonical: '/archetypes/famous',
   },
   openGraph: {
-    title: 'Famous Archetypes — 8os.ai | See Who Shares Your Blueprint',
+    title: 'Famous Archetypes, 8os.ai | See Who Shares Your Blueprint',
     description:
       'Discover which celebrities, leaders, and innovators share your BaZi archetype across the 8os operating styles and compare the patterns behind their public edge.',
     url: 'https://8os.ai/archetypes/famous',
@@ -17,7 +17,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Famous Archetypes — 8os.ai | See Who Shares Your Blueprint',
+    title: 'Famous Archetypes, 8os.ai | See Who Shares Your Blueprint',
     description:
       'Discover which celebrities, leaders, and innovators share your BaZi archetype across the 8os operating styles and compare the patterns behind their public edge.',
   },
@@ -88,7 +88,7 @@ const FAMOUS_ARCHETYPES: FamousPerson[] = [
   { name: 'Serena Williams', born: '1981-09-26', knownFor: 'Tennis champion', archetype: 'steady_achiever', element: 'Metal', trait: '23 titles built on unglamorous reps' },
   { name: 'Roger Federer', born: '1981-08-08', knownFor: 'Tennis champion', archetype: 'steady_achiever', element: 'Metal', trait: 'Grace through discipline, longevity by design' },
   { name: 'Kobe Bryant', born: '1978-08-23', knownFor: 'NBA champion, entrepreneur', archetype: 'steady_achiever', element: 'Earth', trait: 'Mamba mentality: 4 AM is the advantage' },
-  { name: 'David Goggins', born: '1975-02-17', knownFor: 'Author, athlete', archetype: 'steady_achiever', element: 'Wood', trait: 'The 40% rule — you\'re never truly done' },
+  { name: 'David Goggins', born: '1975-02-17', knownFor: 'Author, athlete', archetype: 'steady_achiever', element: 'Wood', trait: 'The 40% rule, you\'re never truly done' },
   { name: 'Marie Curie', born: '1867-11-07', knownFor: 'Nobel laureate (Physics, Chemistry)', archetype: 'steady_achiever', element: 'Fire', trait: 'Stubborn precision, two-Nobel persistence' },
   { name: 'Ray Dalio', born: '1949-08-08', knownFor: 'Bridgewater, investor', archetype: 'steady_achiever', element: 'Earth', trait: 'Principles-first, radical transparency' },
   { name: 'Charlie Munger', born: '1924-01-01', knownFor: 'Vice chairman, Berkshire', archetype: 'steady_achiever', element: 'Earth', trait: 'Mental models, invert always invert' },
@@ -104,7 +104,7 @@ const FAMOUS_ARCHETYPES: FamousPerson[] = [
   { name: 'Catherine the Great', born: '1729-05-02', knownFor: 'Empress of Russia', archetype: 'strategic_commander', element: 'Metal', trait: 'Enlightened autocrat, empire-builder through intellect' },
   { name: 'Winston Churchill', born: '1874-11-30', knownFor: 'UK Prime Minister', archetype: 'strategic_commander', element: 'Metal', trait: 'Defiance as strategy, words as weapons' },
   { name: 'Condoleezza Rice', born: '1954-11-14', knownFor: 'US Secretary of State', archetype: 'strategic_commander', element: 'Wood', trait: 'Disciplined intellect, geopolitical precision' },
-  { name: 'Marc Andreessen', born: '1971-07-09', knownFor: 'Andreessen Horowitz', archetype: 'strategic_commander', element: 'Fire', trait: 'Software is eating the world — before anyone agreed' },
+  { name: 'Marc Andreessen', born: '1971-07-09', knownFor: 'Andreessen Horowitz', archetype: 'strategic_commander', element: 'Fire', trait: 'Software is eating the world, before anyone agreed' },
   { name: 'Peter Thiel', born: '1967-10-11', knownFor: 'PayPal, Palantir, investor', archetype: 'strategic_commander', element: 'Metal', trait: 'Contrarian theses, zero-to-one thinking' },
   { name: 'Genghis Khan', born: '1162-04-16', knownFor: 'Mongol Empire founder', archetype: 'strategic_commander', element: 'Metal', trait: 'Adaptive strategy, meritocracy at scale' },
   { name: 'Ursula von der Leyen', born: '1958-10-08', knownFor: 'European Commission President', archetype: 'strategic_commander', element: 'Earth', trait: 'Continental systems thinker, quiet authority' },
@@ -129,14 +129,14 @@ const FAMOUS_ARCHETYPES: FamousPerson[] = [
   // ─── Harmonizer Guardian — additional ───
   { name: 'Abraham Lincoln', born: '1809-02-12', knownFor: '16th US President', archetype: 'harmonizer_guardian', element: 'Water', trait: 'Malice toward none, charity for all' },
   { name: 'Eleanor Roosevelt', born: '1884-10-11', knownFor: 'First Lady, UN diplomat', archetype: 'harmonizer_guardian', element: 'Earth', trait: 'The future belongs to those who believe in their dreams' },
-  { name: 'Archbishop Desmond Tutu', born: '1931-10-07', knownFor: 'Anti-apartheid activist, Archbishop', archetype: 'harmonizer_guardian', element: 'Fire', trait: 'Ubuntu — I am because we are' },
+  { name: 'Archbishop Desmond Tutu', born: '1931-10-07', knownFor: 'Anti-apartheid activist, Archbishop', archetype: 'harmonizer_guardian', element: 'Fire', trait: 'Ubuntu, I am because we are' },
   { name: 'Jane Goodall', born: '1934-04-03', knownFor: 'Primatologist, conservationist', archetype: 'harmonizer_guardian', element: 'Wood', trait: 'Patient witness, advocacy rooted in love' },
   { name: 'Malala Yousafzai', born: '1997-07-12', knownFor: 'Education activist, Nobel laureate', archetype: 'harmonizer_guardian', element: 'Fire', trait: 'One child, one teacher, one pen can change the world' },
-  { name: 'Bernie Sanders', born: '1941-09-08', knownFor: 'US Senator, democratic socialist', archetype: 'harmonizer_guardian', element: 'Metal', trait: 'Not me, us — consistency across six decades' },
+  { name: 'Bernie Sanders', born: '1941-09-08', knownFor: 'US Senator, democratic socialist', archetype: 'harmonizer_guardian', element: 'Metal', trait: 'Not me, us, consistency across six decades' },
   { name: 'Aung San Suu Kyi', born: '1945-06-19', knownFor: 'Myanmar democracy leader', archetype: 'harmonizer_guardian', element: 'Wood', trait: 'Non-violence as moral clarity, house arrest as resolve' },
   { name: 'Yuval Noah Harari', born: '1976-02-24', knownFor: 'Sapiens author, historian', archetype: 'harmonizer_guardian', element: 'Water', trait: 'Zoomed-out perspective as moral responsibility' },
-  { name: 'Fred Hampton', born: '1948-08-30', knownFor: 'Black Panther Party chairman', archetype: 'harmonizer_guardian', element: 'Fire', trait: 'Rainbow coalition — unity across difference' },
-  { name: 'Greta Thunberg', born: '2003-01-03', knownFor: 'Climate activist', archetype: 'harmonizer_guardian', element: 'Metal', trait: 'How dare you — clarity without compromise' },
+  { name: 'Fred Hampton', born: '1948-08-30', knownFor: 'Black Panther Party chairman', archetype: 'harmonizer_guardian', element: 'Fire', trait: 'Rainbow coalition, unity across difference' },
+  { name: 'Greta Thunberg', born: '2003-01-03', knownFor: 'Climate activist', archetype: 'harmonizer_guardian', element: 'Metal', trait: 'How dare you, clarity without compromise' },
   { name: 'Bryan Stevenson', born: '1959-11-14', knownFor: 'Just Mercy author, lawyer', archetype: 'harmonizer_guardian', element: 'Earth', trait: 'Proximity as justice, proximity as love' },
   { name: 'Simone Weil', born: '1909-02-03', knownFor: 'Philosopher, mystic', archetype: 'harmonizer_guardian', element: 'Water', trait: 'Attention is the rarest and purest form of generosity' },
 
@@ -144,8 +144,8 @@ const FAMOUS_ARCHETYPES: FamousPerson[] = [
   { name: 'Michael Jordan', born: '1963-02-17', knownFor: 'NBA champion, entrepreneur', archetype: 'steady_achiever', element: 'Fire', trait: 'Talent is God-given; will is self-made' },
   { name: 'Ichiro Suzuki', born: '1973-10-22', knownFor: 'MLB Hall of Fame outfielder', archetype: 'steady_achiever', element: 'Water', trait: '3,000 hits built one swing at a time' },
   { name: 'Cal Newport', born: '1982-06-28', knownFor: 'Deep Work author', archetype: 'steady_achiever', element: 'Metal', trait: 'Deliberate practice; deep work as currency' },
-  { name: 'Angela Duckworth', born: '1970-07-18', knownFor: 'Grit author, psychologist', archetype: 'steady_achiever', element: 'Wood', trait: 'Grit — passion and perseverance over time' },
-  { name: 'Jocko Willink', born: '1971-09-08', knownFor: 'Navy SEAL, Extreme Ownership author', archetype: 'steady_achiever', element: 'Metal', trait: 'Discipline equals freedom — not a slogan, a system' },
+  { name: 'Angela Duckworth', born: '1970-07-18', knownFor: 'Grit author, psychologist', archetype: 'steady_achiever', element: 'Wood', trait: 'Grit, passion and perseverance over time' },
+  { name: 'Jocko Willink', born: '1971-09-08', knownFor: 'Navy SEAL, Extreme Ownership author', archetype: 'steady_achiever', element: 'Metal', trait: 'Discipline equals freedom, not a slogan, a system' },
   { name: 'Pat Riley', born: '1945-03-20', knownFor: 'NBA coach, 5x champion', archetype: 'steady_achiever', element: 'Earth', trait: 'Excellence is the gradual result of always striving to do better' },
   { name: 'Cristiano Ronaldo', born: '1985-02-05', knownFor: 'Football GOAT contender', archetype: 'steady_achiever', element: 'Fire', trait: 'Your love for what you do must be bigger than the fear of failure' },
   { name: 'Naomi Osaka', born: '1997-10-16', knownFor: '4x Grand Slam champion', archetype: 'steady_achiever', element: 'Water', trait: 'Mental health is the foundation, not the obstacle' },
@@ -159,7 +159,7 @@ const ARCHETYPE_META: Record<ArchetypeId, { label: string; element: string; tagl
     label: 'Strategic Commander',
     element: 'Metal / Wood',
     tagline: 'Decisive. Visionary. Built to lead.',
-    color: '#a78bfa',
+    color: 'var(--color-accent)',
     bg: 'rgba(167,139,250,0.08)',
   },
   nurturing_creative: {
@@ -263,31 +263,31 @@ export default function FamousArchetypesPage() {
   );
 }
 
-const pageStyle: React.CSSProperties = { background: '#060608', color: '#f8fafc', minHeight: '100vh' };
+const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '1100px', margin: '0 auto', padding: '4rem 1.5rem' };
 const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '4rem' };
-const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: '#a78bfa' };
+const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)' };
 const pageTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.1, letterSpacing: '-0.04em' };
-const pageDescStyle: React.CSSProperties = { margin: '0 0 1.75rem', fontSize: '1rem', lineHeight: 1.65, color: 'rgba(248,250,252,0.6)', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' };
-const ctaBtnStyle: React.CSSProperties = { display: 'inline-block', padding: '0.85rem 1.75rem', borderRadius: '12px', background: 'linear-gradient(135deg, #7c3aed 0%, #9333ea 100%)', color: '#fff', fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none', boxShadow: '0 8px 24px rgba(124,58,237,0.4)' };
+const pageDescStyle: React.CSSProperties = { margin: '0 0 1.75rem', fontSize: '1rem', lineHeight: 1.65, color: 'var(--color-text-secondary)', maxWidth: '500px', marginLeft: 'auto', marginRight: 'auto' };
+const ctaBtnStyle: React.CSSProperties = { display: 'inline-block', padding: '0.85rem 1.75rem', borderRadius: '12px', background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)', color: '#fff', fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none', boxShadow: '0 8px 24px var(--color-accent-soft)' };
 
 const sectionStyle: React.CSSProperties = { marginBottom: '2.5rem', padding: '2rem', borderRadius: '20px', border: '1px solid' };
 const sectionHeaderStyle: React.CSSProperties = { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem', gap: '1rem', flexWrap: 'wrap' };
 const sectionTitleStyle: React.CSSProperties = { margin: '0 0 0.2rem', fontSize: '1.4rem', fontWeight: 800 };
-const sectionElementStyle: React.CSSProperties = { margin: '0 0 0.3rem', fontSize: '0.8rem', fontWeight: 600, color: 'rgba(248,250,252,0.4)' };
-const sectionTaglineStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', color: 'rgba(248,250,252,0.6)', fontStyle: 'italic' };
+const sectionElementStyle: React.CSSProperties = { margin: '0 0 0.3rem', fontSize: '0.8rem', fontWeight: 600, color: 'var(--color-text-secondary)' };
+const sectionTaglineStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', color: 'var(--color-text-secondary)', fontStyle: 'italic' };
 const countBadgeStyle: React.CSSProperties = { padding: '0.3rem 0.75rem', borderRadius: '999px', fontSize: '0.78rem', fontWeight: 700, flexShrink: 0 };
 
 const gridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '0.85rem' };
-const cardStyle: React.CSSProperties = { padding: '1rem', borderRadius: '12px', background: 'rgba(0,0,0,0.25)', border: '1px solid rgba(255,255,255,0.06)', display: 'flex', flexDirection: 'column', gap: '0.5rem' };
+const cardStyle: React.CSSProperties = { padding: '1rem', borderRadius: '12px', background: 'rgba(0,0,0,0.25)', border: '1px solid var(--color-border)', display: 'flex', flexDirection: 'column', gap: '0.5rem' };
 const cardHeaderStyle: React.CSSProperties = { display: 'flex', alignItems: 'center', gap: '0.65rem' };
-const avatarStyle: React.CSSProperties = { width: '36px', height: '36px', borderRadius: '50%', background: 'rgba(124,58,237,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: 700, flexShrink: 0 };
+const avatarStyle: React.CSSProperties = { width: '36px', height: '36px', borderRadius: '50%', background: 'var(--color-accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '1rem', fontWeight: 700, flexShrink: 0 };
 const nameStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', fontWeight: 700, lineHeight: 1.3 };
-const bornStyle: React.CSSProperties = { margin: 0, fontSize: '0.72rem', color: 'rgba(248,250,252,0.35)' };
+const bornStyle: React.CSSProperties = { margin: 0, fontSize: '0.72rem', color: 'var(--color-text-secondary)' };
 const elementBadgeStyle: React.CSSProperties = { marginLeft: 'auto', fontSize: '1rem', flexShrink: 0 };
-const knownForStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'rgba(248,250,252,0.45)', lineHeight: 1.4 };
-const traitStyle: React.CSSProperties = { margin: 0, fontSize: '0.82rem', color: 'rgba(248,250,252,0.7)', lineHeight: 1.5, fontStyle: 'italic' };
+const knownForStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', lineHeight: 1.4 };
+const traitStyle: React.CSSProperties = { margin: 0, fontSize: '0.82rem', color: 'var(--color-text-secondary)', lineHeight: 1.5, fontStyle: 'italic' };
 
-const bottomCtaStyle: React.CSSProperties = { textAlign: 'center', padding: '3.5rem 2rem', borderRadius: '24px', border: '1px solid rgba(124,58,237,0.2)', background: 'rgba(124,58,237,0.06)', marginTop: '2rem' };
+const bottomCtaStyle: React.CSSProperties = { textAlign: 'center', padding: '3.5rem 2rem', borderRadius: '24px', border: '1px solid var(--color-accent-soft)', background: 'var(--color-accent-soft)', marginTop: '2rem' };
 const bottomTitleStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', letterSpacing: '-0.04em' };
-const bottomDescStyle: React.CSSProperties = { margin: '0 0 1.75rem', fontSize: '1rem', color: 'rgba(248,250,252,0.6)' };
+const bottomDescStyle: React.CSSProperties = { margin: '0 0 1.75rem', fontSize: '1rem', color: 'var(--color-text-secondary)' };

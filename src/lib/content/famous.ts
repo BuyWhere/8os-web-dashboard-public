@@ -722,7 +722,7 @@ const profiles: FamousProfile[] = [
     knownFor: 'Author, athlete',
     archetype: 'steady_achiever',
     element: 'Wood',
-    trait: 'The 40% rule — you are never truly done',
+    trait: 'The 40% rule, you are never truly done',
     quote: 'Stay hard.',
     whyTheyEmbody: "Goggins' Wood element gives him relentless growth. His Steady Achiever nature proves that comfort is the enemy of excellence.",
   },

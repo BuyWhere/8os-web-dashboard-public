@@ -1,0 +1,32 @@
+diff --git a/node_modules/@clerk/nextjs/dist/cjs/utils/mergeNextClerkPropsWithEnv.js b/node_modules/@clerk/nextjs/dist/cjs/utils/mergeNextClerkPropsWithEnv.js
+index 05c83f8..d11b621 100644
+--- a/node_modules/@clerk/nextjs/dist/cjs/utils/mergeNextClerkPropsWithEnv.js
++++ b/node_modules/@clerk/nextjs/dist/cjs/utils/mergeNextClerkPropsWithEnv.js
+@@ -39,8 +39,9 @@ const mergeNextClerkPropsWithEnv = (props) => {
+     signUpForceRedirectUrl: props.signUpForceRedirectUrl || process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL || "",
+     signInFallbackRedirectUrl: props.signInFallbackRedirectUrl || process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL || "",
+     signUpFallbackRedirectUrl: props.signUpFallbackRedirectUrl || process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL || "",
+-    afterSignInUrl: props.afterSignInUrl || process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL || "",
+-    afterSignUpUrl: props.afterSignUpUrl || process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL || "",
++    // OS-3318: stripped deprecated props to prevent Clerk SDK deprecation warnings.
++    // afterSignInUrl: props.afterSignInUrl || process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL || "",
++    // afterSignUpUrl: props.afterSignUpUrl || process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL || "",
+     newSubscriptionRedirectUrl: props.newSubscriptionRedirectUrl || process.env.NEXT_PUBLIC_CLERK_CHECKOUT_CONTINUE_URL || "",
+     telemetry: (_a = props.telemetry) != null ? _a : {
+       disabled: (0, import_underscore.isTruthy)(process.env.NEXT_PUBLIC_CLERK_TELEMETRY_DISABLED),
+diff --git a/node_modules/@clerk/nextjs/dist/esm/utils/mergeNextClerkPropsWithEnv.js b/node_modules/@clerk/nextjs/dist/esm/utils/mergeNextClerkPropsWithEnv.js
+index 1e7e9a0..ce779d1 100644
+--- a/node_modules/@clerk/nextjs/dist/esm/utils/mergeNextClerkPropsWithEnv.js
++++ b/node_modules/@clerk/nextjs/dist/esm/utils/mergeNextClerkPropsWithEnv.js
+@@ -17,8 +17,9 @@ const mergeNextClerkPropsWithEnv = (props) => {
+     signUpForceRedirectUrl: props.signUpForceRedirectUrl || process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL || "",
+     signInFallbackRedirectUrl: props.signInFallbackRedirectUrl || process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL || "",
+     signUpFallbackRedirectUrl: props.signUpFallbackRedirectUrl || process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL || "",
+-    afterSignInUrl: props.afterSignInUrl || process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL || "",
+-    afterSignUpUrl: props.afterSignUpUrl || process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL || "",
++    // OS-3318: stripped deprecated props to prevent Clerk SDK deprecation warnings.
++    // afterSignInUrl: props.afterSignInUrl || process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_IN_URL || "",
++    // afterSignUpUrl: props.afterSignUpUrl || process.env.NEXT_PUBLIC_CLERK_AFTER_SIGN_UP_URL || "",
+     newSubscriptionRedirectUrl: props.newSubscriptionRedirectUrl || process.env.NEXT_PUBLIC_CLERK_CHECKOUT_CONTINUE_URL || "",
+     telemetry: (_a = props.telemetry) != null ? _a : {
+       disabled: isTruthy(process.env.NEXT_PUBLIC_CLERK_TELEMETRY_DISABLED),

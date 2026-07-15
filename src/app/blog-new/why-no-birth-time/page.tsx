@@ -4,11 +4,11 @@ import Link from 'next/link';
 export const metadata: Metadata = {
   title: 'Why We Don\'t Ask for Your Birth Time | 8os.ai',
   description:
-    'Most astrology apps demand your exact birth time. We don\'t — because 80% of the insight comes from your birth date alone. Here\'s why less data gives you more clarity.',
+    'Most astrology apps demand your exact birth time. We don\'t, because 80% of the insight comes from your birth date alone. Here\'s why less data gives you more clarity.',
   openGraph: {
     title: 'Why We Don\'t Ask for Your Birth Time',
     description:
-      'Birth time is biometrically identifying. We get 80% of the insight from your birth date — no sensitive data required.',
+      'Birth time is biometrically identifying. We get 80% of the insight from your birth date, no sensitive data required.',
     type: 'article',
     url: 'https://8os.ai/blog/why-no-birth-time',
   },
@@ -26,7 +26,7 @@ const jsonLd = {
       name: 'Do I need my exact birth time for astrology?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'No. 80% of meaningful astrological insight comes from your birth date (year, month, day). Your sun sign captures your core identity; your BaZi Daymaster adds structural depth. Exact birth time (for hour pillar) is an optional upgrade — never required to start.',
+        text: 'No. 80% of meaningful astrological insight comes from your birth date (year, month, day). Your sun sign captures your core identity; your BaZi Daymaster adds structural depth. Exact birth time (for hour pillar) is an optional upgrade, never required to start.',
       },
     },
     {
@@ -34,7 +34,7 @@ const jsonLd = {
       name: 'What does birth time affect in astrology?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: 'Birth time determines your Hour Pillar (the fourth pillar in BaZi) and the houses in your Western chart. The Hour Pillar reveals hidden talents and how you present to the world. Houses in Western astrology show which life areas are most prominent. But your Daymaster (from birth day) is the most important factor in goal achievement — and it requires no birth time.',
+        text: 'Birth time determines your Hour Pillar (the fourth pillar in BaZi) and the houses in your Western chart. The Hour Pillar reveals hidden talents and how you present to the world. Houses in Western astrology show which life areas are most prominent. But your Daymaster (from birth day) is the most important factor in goal achievement, and it requires no birth time.',
       },
     },
     {
@@ -42,7 +42,7 @@ const jsonLd = {
       name: 'Is 8os.ai less accurate without my birth time?',
       acceptedAnswer: {
         '@type': 'Answer',
-        text: '8os.ai focuses on goal achievement and daily alignment — areas where your Daymaster (birth day) and sun sign are the primary drivers. The hour pillar adds nuance about hidden talents and social presentation, but it\'s not essential for the core experience. You can add birth time later for deeper precision, but it\'s never required.',
+        text: '8os.ai focuses on goal achievement and daily alignment, areas where your Daymaster (birth day) and sun sign are the primary drivers. The hour pillar adds nuance about hidden talents and social presentation, but it\'s not essential for the core experience. You can add birth time later for deeper precision, but it\'s never required.',
       },
     },
   ],
@@ -76,8 +76,8 @@ export default function WhyNoBirthTimePage() {
           <p style={pStyle}>A full chart with 12 houses and 20 aspects is data paralysis. You get stuck in analysis before you take action.</p>
 
           <h2 style={h2Style}>Our Philosophy: Start With What You Know</h2>
-          <p style={pStyle}>Your sun sign captures your <strong>core identity</strong> — your vitality, your ego, your life force. It&apos;s accurate enough to be meaningful. It&apos;s accessible enough to be shareable. It doesn&apos;t require sensitive data.</p>
-          <p style={pStyle}>Then we layer BaZi — which <em>does</em> use your birth date (not time) for Year, Month, and Day pillars. The Day Pillar (your core self) is the most important anyway.</p>
+          <p style={pStyle}>Your sun sign captures your <strong>core identity</strong>, your vitality, your ego, your life force. It&apos;s accurate enough to be meaningful. It&apos;s accessible enough to be shareable. It doesn&apos;t require sensitive data.</p>
+          <p style={pStyle}>Then we layer BaZi, which <em>does</em> use your birth date (not time) for Year, Month, and Day pillars. The Day Pillar (your core self) is the most important anyway.</p>
 
           <h2 style={h2Style}>What You Get Without Birth Time</h2>
           <p style={pStyle}><strong>8os.ai delivers without birth time:</strong></p>
@@ -109,10 +109,10 @@ export default function WhyNoBirthTimePage() {
           <h2 style={h2Style}>Why This Matters for Goals</h2>
           <p style={pStyle}>When you start with accessible data:</p>
           <ol style={olStyle}>
-            <li><strong>You act sooner</strong> — No waiting to find your birth certificate</li>
-            <li><strong>You share freely</strong> — Tell friends, family, partners about your archetype</li>
-            <li><strong>You focus on work that matters</strong> — The insights you have are actionable</li>
-            <li><strong>You upgrade when ready</strong> — Add depth as you see value</li>
+            <li><strong>You act sooner</strong>, No waiting to find your birth certificate</li>
+            <li><strong>You share freely</strong>, Tell friends, family, partners about your archetype</li>
+            <li><strong>You focus on work that matters</strong>, The insights you have are actionable</li>
+            <li><strong>You upgrade when ready</strong>, Add depth as you see value</li>
           </ol>
 
           <h2 style={h2Style}>The Bottom Line</h2>
@@ -134,7 +134,7 @@ const articleStyle: React.CSSProperties = {
   margin: '0 auto',
   padding: '4rem 2rem',
   background: '#060608',
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
   minHeight: '100vh',
 };
 
@@ -175,7 +175,7 @@ const h2Style: React.CSSProperties = {
   margin: '2.5rem 0 1rem',
   fontSize: '1.5rem',
   letterSpacing: '-0.02em',
-  color: '#f8fafc',
+  color: 'var(--color-bg-secondary)',
 };
 
 const h3Style: React.CSSProperties = {

@@ -30,9 +30,9 @@ export async function POST(req: NextRequest) {
   // Guard: encryption must be configured before we accept any birth data
   const encKey = process.env.ENCRYPTION_KEY
   if (!encKey || encKey.length !== 64) {
-    console.error('[birth] ENCRYPTION_KEY misconfigured — length:', encKey?.length ?? 0)
+    console.error('[birth] ENCRYPTION_KEY misconfigured, length:', encKey?.length ?? 0)
     return NextResponse.json(
-      { error: 'Service temporarily unavailable — encryption not configured' },
+      { error: 'Service temporarily unavailable, encryption not configured' },
       { status: 503 },
     )
   }

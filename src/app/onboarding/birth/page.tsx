@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { getDayMaster, STEM_NAMES_EN, STEM_ELEMENT, STEM_POLARITY } from '@/lib/bazi'
 import type { Stem } from '@/lib/bazi'
+import { OnboardingProgress } from '@/components/onboarding/OnboardingProgress'
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -32,11 +33,11 @@ function parseLocationFromText(text: string): LocationResult | null {
 // ─── Constants ────────────────────────────────────────────────────────────────
 
 const ELEMENT_COLORS: Record<string, string> = {
-  wood: '#22c55e',
-  fire: '#f97316',
-  earth: '#d97706',
-  metal: '#94a3b8',
-  water: '#3b82f6',
+  wood: '#4F7A52',
+  fire: '#B5502F',
+  earth: 'var(--color-accent)',
+  metal: 'var(--color-text-muted)',
+  water: '#3E6B8C',
 }
 
 const ELEMENT_ICONS: Record<string, string> = {
@@ -54,6 +55,17 @@ const MONTHS = [
   'July', 'August', 'September', 'October', 'November', 'December',
 ]
 
+// ─── Warm-editorial tokens ──────────────────────────────────────────────────
+const CREAM = 'var(--color-bg-primary)'
+const WHITE = 'var(--color-bg-card)'
+const INK = 'var(--color-text-primary)'
+const WARM_GRAY = 'var(--color-text-secondary)'
+const MUTED = 'var(--color-text-muted)'
+const GOLD = 'var(--color-accent)'
+const GOLD_DARK = 'var(--color-accent)'
+const HAIRLINE = 'var(--color-border)'
+const SERIF = 'var(--font-serif), Georgia, serif'
+
 // ─── Component ────────────────────────────────────────────────────────────────
 
 export default function BirthPage() {
@@ -68,7 +80,6 @@ export default function BirthPage() {
   const [timeKnown, setTimeKnown] = useState(false)
   const [hour, setHour] = useState<number>(12)
   const [minute, setMinute] = useState<number>(0)
-  const [amPm, setAmPm] = useState<'AM' | 'PM'>('PM')
 
   // Timezone — auto-detect
   const [timezone, setTimezone] = useState<string>('')
@@ -165,12 +176,7 @@ export default function BirthPage() {
     setError('')
 
     const birthDate = `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`
-    const birthTime = timeKnown ? (() => {
-      let h = hour
-      if (amPm === 'PM' && h !== 12) h += 12
-      if (amPm === 'AM' && h === 12) h = 0
-      return `${String(h).padStart(2, '0')}:${String(minute).padStart(2, '0')}`
-    })() : null
+    const birthTime = timeKnown ? `${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')}` : null
     const parsedLocation = location ?? (locationQuery ? parseLocationFromText(locationQuery) : null)
 
     try {
@@ -211,16 +217,16 @@ export default function BirthPage() {
 
   // ─── UI ────────────────────────────────────────────────────────────────────
 
-  const dmColor = dayMasterStem ? ELEMENT_COLORS[STEM_ELEMENT[dayMasterStem]] : '#333'
+  const dmColor = dayMasterStem ? ELEMENT_COLORS[STEM_ELEMENT[dayMasterStem]] : GOLD
   const dmElement = dayMasterStem ? STEM_ELEMENT[dayMasterStem] : null
   const dmPolarity = dayMasterStem ? STEM_POLARITY[dayMasterStem] : null
 
   const inputStyle = {
-    padding: '0.75rem 1rem',
-    background: '#0f0f0f',
-    border: '1px solid #1e1e1e',
+    padding: '0.85rem 1rem',
+    background: WHITE,
+    border: `1px solid ${HAIRLINE}`,
     borderRadius: '10px',
-    color: '#ededed',
+    color: INK,
     fontSize: '0.9375rem',
     outline: 'none',
     boxSizing: 'border-box' as const,
@@ -230,7 +236,7 @@ export default function BirthPage() {
     ...inputStyle,
     cursor: 'pointer',
     appearance: 'none' as const,
-    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23666' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`,
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23B08637' d='M6 8L1 3h10z'/%3E%3C/svg%3E")`,
     backgroundRepeat: 'no-repeat',
     backgroundPosition: 'right 0.75rem center',
     paddingRight: '2.5rem',
@@ -238,18 +244,18 @@ export default function BirthPage() {
 
   const labelStyle = {
     display: 'block' as const,
-    fontSize: '0.75rem',
-    color: '#666',
+    fontSize: '0.72rem',
+    color: MUTED,
     marginBottom: '0.5rem',
-    letterSpacing: '0.08em',
+    letterSpacing: '0.1em',
     textTransform: 'uppercase' as const,
-    fontWeight: 600,
+    fontWeight: 700,
   }
 
   return (
     <div style={{
       minHeight: '100vh',
-      background: '#080808',
+      background: CREAM,
       display: 'flex',
       flexDirection: 'column',
       alignItems: 'center',
@@ -257,33 +263,21 @@ export default function BirthPage() {
     }}>
       <div style={{ maxWidth: 560, width: '100%' }}>
 
-        {/* Step badge */}
-        <div style={{ marginBottom: '2.5rem' }}>
-          <div style={{
-            display: 'inline-flex',
-            alignItems: 'center',
-            gap: '0.5rem',
-            background: '#111',
-            border: '1px solid #1e1e1e',
-            borderRadius: '999px',
-            padding: '0.375rem 1rem',
-            fontSize: '0.75rem',
-            color: '#666',
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-          }}>
-            <span style={{ width: 6, height: 6, background: '#10b981', borderRadius: '50%', display: 'inline-block' }} />
-            Birth Chart
-          </div>
-        </div>
+        {/* Shared step indicator */}
+        <OnboardingProgress current="birth" />
 
         {/* Headline */}
-        <h1 style={{ fontSize: '2rem', fontWeight: 700, color: '#ededed', letterSpacing: '-0.03em', marginBottom: '0.5rem' }}>
+        <h1 style={{ fontFamily: SERIF, fontSize: '2.1rem', fontWeight: 500, color: INK, letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '0.6rem' }}>
           When were you born?
         </h1>
-        <p style={{ color: '#555', marginBottom: '2.5rem', lineHeight: 1.6 }}>
-          Your birth data anchors your personalized OS. We use BaZi — the Chinese Four-Pillar system — to map your energetic blueprint.
+        <p style={{ color: WARM_GRAY, marginBottom: '2.5rem', lineHeight: 1.6, fontSize: '1rem' }}>
+          We use your exact birth moment to compute your BaZi chart, the Chinese Four-Pillar
+          system that maps your natural energy. It stays private, encrypted, and is used only to
+          personalize your OS.
         </p>
+
+        {/* Card wrapper */}
+        <div style={{ background: WHITE, border: `1px solid ${HAIRLINE}`, borderRadius: '16px', padding: '1.75rem 1.5rem' }}>
 
         {/* Date picker */}
         <section style={{ marginBottom: '2rem' }}>
@@ -325,7 +319,7 @@ export default function BirthPage() {
 
           {/* Year range hint */}
           {(year < 1920 || year > 2026) && (
-            <p style={{ color: '#f97316', fontSize: '0.8rem', marginTop: '0.4rem' }}>
+            <p style={{ color: '#B5502F', fontSize: '0.8rem', marginTop: '0.4rem' }}>
               Year must be between 1920 and 2026
             </p>
           )}
@@ -335,8 +329,8 @@ export default function BirthPage() {
         {dayMasterStem && dmElement && dmPolarity && (
           <div style={{
             padding: '1.25rem',
-            background: `${dmColor}10`,
-            border: `1px solid ${dmColor}30`,
+            background: `${dmColor}12`,
+            border: `1px solid ${dmColor}40`,
             borderRadius: '12px',
             marginBottom: '2rem',
             display: 'flex',
@@ -345,13 +339,13 @@ export default function BirthPage() {
           }}>
             <div style={{ fontSize: '2rem' }}>{ELEMENT_ICONS[dmElement]}</div>
             <div>
-              <div style={{ fontSize: '0.7rem', color: dmColor, letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+              <div style={{ fontSize: '0.68rem', color: dmColor, letterSpacing: '0.12em', textTransform: 'uppercase', marginBottom: '0.25rem', fontWeight: 700 }}>
                 Day Master Preview
               </div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 700, color: '#ededed', letterSpacing: '-0.02em' }}>
-                {dayMasterStem} — {STEM_NAMES_EN[dayMasterStem]}
+              <div style={{ fontFamily: SERIF, fontSize: '1.25rem', fontWeight: 600, color: INK, letterSpacing: '-0.01em' }}>
+                {dayMasterStem}, {STEM_NAMES_EN[dayMasterStem]}
               </div>
-              <div style={{ fontSize: '0.85rem', color: '#666', marginTop: '0.1rem' }}>
+              <div style={{ fontSize: '0.85rem', color: WARM_GRAY, marginTop: '0.1rem' }}>
                 {dmPolarity.charAt(0).toUpperCase() + dmPolarity.slice(1)} {dmElement.charAt(0).toUpperCase() + dmElement.slice(1)}
               </div>
             </div>
@@ -365,8 +359,9 @@ export default function BirthPage() {
             <button
               onClick={() => setTimeKnown(t => !t)}
               style={{
-                fontSize: '0.75rem',
-                color: timeKnown ? '#10b981' : '#555',
+                fontSize: '0.78rem',
+                fontWeight: 600,
+                color: timeKnown ? GOLD : WARM_GRAY,
                 background: 'transparent',
                 border: 'none',
                 cursor: 'pointer',
@@ -378,57 +373,33 @@ export default function BirthPage() {
           </div>
 
           {timeKnown ? (
-            <div>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: '0.75rem' }}>
-                <div>
-                  <label style={{ ...labelStyle, marginBottom: '0.35rem' }}>Hour</label>
-                  <select
-                    value={hour}
-                    onChange={e => setHour(Number(e.target.value))}
-                    style={selectStyle}
-                    aria-label="Hour"
-                  >
-                    {Array.from({ length: 12 }, (_, i) => i + 1).map(h => (
-                      <option key={h} value={h}>{h}</option>
-                    ))}
-                  </select>
-                </div>
-                <div>
-                  <label style={{ ...labelStyle, marginBottom: '0.35rem' }}>AM / PM</label>
-                  <select
-                    value={amPm}
-                    onChange={e => setAmPm(e.target.value as 'AM' | 'PM')}
-                    style={selectStyle}
-                    aria-label="AM or PM"
-                  >
-                    <option value="AM">AM</option>
-                    <option value="PM">PM</option>
-                  </select>
-                </div>
-                <div>
-                  <label style={{ ...labelStyle, marginBottom: '0.35rem' }}>Minute</label>
-                  <select
-                    value={minute}
-                    onChange={e => setMinute(Number(e.target.value))}
-                    style={selectStyle}
-                    aria-label="Minute"
-                  >
-                    {[0, 15, 30, 45].map(m => (
-                      <option key={m} value={m}>{String(m).padStart(2, '0')}</option>
-                    ))}
-                  </select>
-                </div>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
+              <div>
+                <label style={{ ...labelStyle, marginBottom: '0.35rem' }}>Hour</label>
+                <select value={hour} onChange={e => setHour(Number(e.target.value))} style={selectStyle}>
+                  {Array.from({ length: 24 }, (_, i) => (
+                    <option key={i} value={i}>{String(i).padStart(2, '0')}:00</option>
+                  ))}
+                </select>
+              </div>
+              <div>
+                <label style={{ ...labelStyle, marginBottom: '0.35rem' }}>Minute</label>
+                <select value={minute} onChange={e => setMinute(Number(e.target.value))} style={selectStyle}>
+                  {[0, 15, 30, 45].map(m => (
+                    <option key={m} value={m}>{String(m).padStart(2, '0')}</option>
+                  ))}
+                </select>
               </div>
             </div>
           ) : (
-            <p style={{ color: '#444', fontSize: '0.85rem', padding: '0.75rem 1rem', background: '#0a0a0a', border: '1px solid #1a1a1a', borderRadius: '10px' }}>
-              Defaulting to 12:00 noon — add your birth time for more precise results
+            <p style={{ color: WARM_GRAY, fontSize: '0.85rem', padding: '0.85rem 1rem', background: CREAM, border: `1px solid ${HAIRLINE}`, borderRadius: '10px', margin: 0, lineHeight: 1.5 }}>
+              We&apos;ll use 12:00 noon for now, add your exact birth time for a more precise chart.
             </p>
           )}
 
           {/* Timezone */}
           {timezone && (
-            <p style={{ color: '#444', fontSize: '0.75rem', marginTop: '0.5rem' }}>
+            <p style={{ color: MUTED, fontSize: '0.75rem', marginTop: '0.5rem' }}>
               Timezone auto-detected: {timezone}
             </p>
           )}
@@ -438,30 +409,33 @@ export default function BirthPage() {
         <section style={{ marginBottom: '2rem' }}>
           <label style={labelStyle}>Gender</label>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '0.75rem' }}>
-            {GENDER_OPTIONS.map(g => (
-              <button
-                key={g.id}
-                onClick={() => setGender(g.id)}
-                style={{
-                  padding: '0.875rem',
-                  background: gender === g.id ? '#10b98120' : '#0f0f0f',
-                  border: `1px solid ${gender === g.id ? '#10b981' : '#1e1e1e'}`,
-                  borderRadius: '10px',
-                  color: gender === g.id ? '#10b981' : '#666',
-                  cursor: 'pointer',
-                  fontSize: '0.9rem',
-                  fontWeight: 600,
-                  transition: 'all 0.15s',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  alignItems: 'center',
-                  gap: '0.25rem',
-                }}
-              >
-                <span style={{ fontSize: '1.25rem' }}>{g.icon}</span>
-                <span>{g.label}</span>
-              </button>
-            ))}
+            {GENDER_OPTIONS.map(g => {
+              const active = gender === g.id
+              return (
+                <button
+                  key={g.id}
+                  onClick={() => setGender(g.id)}
+                  style={{
+                    padding: '0.875rem',
+                    background: active ? `${GOLD}14` : WHITE,
+                    border: `1px solid ${active ? GOLD : HAIRLINE}`,
+                    borderRadius: '10px',
+                    color: active ? GOLD_DARK : WARM_GRAY,
+                    cursor: 'pointer',
+                    fontSize: '0.9rem',
+                    fontWeight: 600,
+                    transition: 'all 0.15s',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    gap: '0.25rem',
+                  }}
+                >
+                  <span style={{ fontSize: '1.25rem' }}>{g.icon}</span>
+                  <span>{g.label}</span>
+                </button>
+              )
+            })}
           </div>
         </section>
 
@@ -490,10 +464,10 @@ export default function BirthPage() {
               disabled={locationLoading}
               style={{
                 padding: '0.75rem 1rem',
-                background: '#0f0f0f',
-                border: '1px solid #1e1e1e',
+                background: WHITE,
+                border: `1px solid ${HAIRLINE}`,
                 borderRadius: '10px',
-                color: '#555',
+                color: WARM_GRAY,
                 cursor: locationLoading ? 'wait' : 'pointer',
                 fontSize: '1rem',
                 whiteSpace: 'nowrap',
@@ -503,20 +477,20 @@ export default function BirthPage() {
               {locationLoading ? '...' : '📍'}
             </button>
           </div>
-          {locationError && <p style={{ color: '#f97316', fontSize: '0.8rem', marginTop: '0.4rem' }}>{locationError}</p>}
+          {locationError && <p style={{ color: '#B5502F', fontSize: '0.8rem', marginTop: '0.4rem' }}>{locationError}</p>}
           {location && (
-            <p style={{ color: '#10b981', fontSize: '0.8rem', marginTop: '0.4rem' }}>
+            <p style={{ color: '#4F7A52', fontSize: '0.8rem', marginTop: '0.4rem', fontWeight: 600 }}>
               ✓ {location.city}, {location.country}
               {location.lat && location.lng ? ` (${location.lat.toFixed(2)}, ${location.lng.toFixed(2)})` : ''}
             </p>
           )}
-          <p style={{ color: '#333', fontSize: '0.75rem', marginTop: '0.35rem' }}>
-            Optional — used to refine timezone and seasonal calculations
+          <p style={{ color: MUTED, fontSize: '0.75rem', marginTop: '0.35rem' }}>
+            Optional, used to refine timezone and seasonal calculations
           </p>
         </section>
 
         {/* GDPR */}
-        <section style={{ marginBottom: '2rem' }}>
+        <section style={{ marginBottom: '1.75rem' }}>
           <div
             onClick={() => setGdprAccepted(v => !v)}
             style={{
@@ -524,8 +498,8 @@ export default function BirthPage() {
               alignItems: 'flex-start',
               gap: '0.875rem',
               padding: '1rem',
-              background: '#0a0a0a',
-              border: `1px solid ${gdprAccepted ? '#10b98130' : '#1e1e1e'}`,
+              background: CREAM,
+              border: `1px solid ${gdprAccepted ? `${GOLD}55` : HAIRLINE}`,
               borderRadius: '10px',
               cursor: 'pointer',
             }}
@@ -533,18 +507,18 @@ export default function BirthPage() {
             <div style={{
               width: 18,
               height: 18,
-              border: `1.5px solid ${gdprAccepted ? '#10b981' : '#333'}`,
+              border: `1.5px solid ${gdprAccepted ? GOLD : '#C7BBA6'}`,
               borderRadius: '4px',
-              background: gdprAccepted ? '#10b981' : 'transparent',
+              background: gdprAccepted ? GOLD : 'transparent',
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
               flexShrink: 0,
               marginTop: '0.1rem',
             }}>
-              {gdprAccepted && <span style={{ color: '#000', fontSize: '0.75rem', fontWeight: 700 }}>✓</span>}
+              {gdprAccepted && <span style={{ color: '#fff', fontSize: '0.75rem', fontWeight: 700 }}>✓</span>}
             </div>
-            <p style={{ fontSize: '0.8rem', color: '#555', lineHeight: 1.6, margin: 0 }}>
+            <p style={{ fontSize: '0.8rem', color: WARM_GRAY, lineHeight: 1.6, margin: 0 }}>
               I consent to 8os storing my birth data securely. This data is encrypted at rest with AES-256 and is used solely to compute my personalized operating system. I can request deletion at any time.
             </p>
           </div>
@@ -552,7 +526,7 @@ export default function BirthPage() {
 
         {/* Error */}
         {error && (
-          <div style={{ padding: '0.75rem 1rem', background: '#f9731610', border: '1px solid #f9731640', borderRadius: '10px', color: '#f97316', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
+          <div style={{ padding: '0.75rem 1rem', background: '#B5502F12', border: '1px solid #B5502F40', borderRadius: '10px', color: '#B5502F', fontSize: '0.875rem', marginBottom: '1.5rem' }}>
             {error}
           </div>
         )}
@@ -564,8 +538,8 @@ export default function BirthPage() {
           style={{
             width: '100%',
             padding: '1rem',
-            background: canSubmit ? '#ededed' : '#1a1a1a',
-            color: canSubmit ? '#080808' : '#333',
+            background: canSubmit ? GOLD : '#E3D8C4',
+            color: canSubmit ? '#fff' : '#A99A82',
             border: 'none',
             borderRadius: '12px',
             fontSize: '1rem',
@@ -575,10 +549,15 @@ export default function BirthPage() {
             transition: 'all 0.15s',
           }}
         >
-          {submitting ? 'Calculating your chart...' : 'Continue to Quiz →'}
+          {submitting ? 'Calculating your chart...' : 'Continue to the quiz →'}
         </button>
+        {!canSubmit && (
+          <p style={{ textAlign: 'center', color: MUTED, fontSize: '0.75rem', marginTop: '0.7rem' }}>
+            {!gender ? 'Select a gender and accept the consent to continue' : 'Accept the consent above to continue'}
+          </p>
+        )}
+        </div>
       </div>
     </div>
   )
 }
-

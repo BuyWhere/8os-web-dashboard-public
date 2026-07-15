@@ -1,4 +1,4 @@
-import type { OnboardingState, DomainId, GoalDefinition, Project, OSTask, WorkPreferences } from './types'
+import type { OnboardingState, DomainId, GoalDefinition, Project, OSTask, EnergyHourConfig } from './types'
 
 const KEY = '8os_onboarding'
 
@@ -32,16 +32,18 @@ function defaultState(): OnboardingState {
     archetypeName: 'The Builder',
     projects: [],
     tasks: [],
-    workPreferences: defaultWorkPreferences(),
+    energyHours: defaultEnergyHours(),
   }
 }
 
-function defaultWorkPreferences(): WorkPreferences {
-  return {
-    workingWindowStart: 9,
-    workingWindowEnd: 17,
-    blockLengthMin: 50,
-    batching: 'batch',
-    planningCadence: 'weekly',
+function defaultEnergyHours(): EnergyHourConfig {
+  const hours: Record<number, 'green' | 'yellow' | 'red'> = {}
+  for (let i = 0; i < 24; i++) {
+    if (i >= 9 && i <= 11) hours[i] = 'green'
+    else if (i >= 6 && i <= 8) hours[i] = 'yellow'
+    else if (i >= 14 && i <= 16) hours[i] = 'green'
+    else if (i >= 13 && i <= 17) hours[i] = 'yellow'
+    else hours[i] = 'red'
   }
+  return { hours }
 }

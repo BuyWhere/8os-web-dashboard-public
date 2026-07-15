@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "prisma generate && next build",
-    "postinstall": "prisma generate",
+    "postinstall": "patch-package && prisma generate",
     "start": "next start",
     "lint": "next lint",
     "test": "jest --passWithNoTests",
@@ -16,6 +16,7 @@
     "test:e2e:ui": "playwright test --ui"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.16.0",
     "@prisma/adapter-pg": "^7.8.0",
     "@prisma/client": "^7.8.0",
     "@sentry/nextjs": "^10.51.0",
@@ -38,6 +39,8 @@
     "react": "^18",
     "react-dom": "^18",
     "speakeasy": "^2.0.0",
+    "stripe": "^17.7.0",
+    "svix": "^1.61.0",
     "uuid": "^14.0.0",
     "zod": "^4.4.3"
   },

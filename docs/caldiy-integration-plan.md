@@ -166,3 +166,38 @@ src/components/caldiy/             # React components
 ---
 
 *Document updated as part of OS-78: Cal.diy API scout + integration plan*
+
+---
+
+## Implementation Status (Updated: 2026-06-25 — OS-1736)
+
+### Code Complete
+- [x] Cal.diy bookings proxy route: `src/app/api/cal-diy/bookings/route.ts`
+- [x] Cal.diy event types route: `src/app/api/cal-diy/event-types/route.ts`
+- [x] Assistant scheduling endpoint: `src/app/api/assistant/cal-diy/schedule/route.ts` (returns 501 — Cal.diy API v2 doesn't expose direct booking creation)
+- [x] Calendar page merged Cal.diy bookings: `src/app/(dashboard)/calendar/page.tsx`
+- [x] Cal.diy bookings appear with `#3b82f6` color and `caldiy-` id prefix
+- [x] CalendarView/CalendarMini receive merged events — no component changes needed
+
+### Blocked: Railway Deployment
+- [ ] Deploy `cal-diy` service on Railway (image: `calcom/cal.com:latest`)
+- [ ] Configure `NEXT_PUBLIC_CALDIY_URL` and `CALDIY_API_KEY` env vars
+- [ ] Add env vars to frontend Railway service
+- [ ] End-to-end verification
+
+**Child issue:** OS-1742 — Railway deployment
+
+### Architecture
+The integration uses a **merge pattern**: the server component in `page.tsx` fetches both Prisma calendar events and Cal.diy bookings, maps Cal.diy bookings to the `CalendarEvent` shape, and passes the merged array to `CalendarView`. No component-level changes were needed — the components already accept a generic events array.
+
+### Files
+```
+src/app/api/cal-diy/bookings/route.ts         (new — bookings proxy)
+src/app/api/cal-diy/event-types/route.ts      (new — event types listing)
+src/app/api/assistant/cal-diy/schedule/route.ts (new — assistant endpoint)
+src/app/(dashboard)/calendar/page.tsx         (modified — Cal.diy merge)
+src/lib/caldiy/client.ts                      (pre-existing — used as-is)
+src/types/caldiy.ts                           (pre-existing — used as-is)
+docs/caldiy-integration-plan.md               (this file)
+.env.caldiy.example                           (pre-existing — deployment reference)
+```

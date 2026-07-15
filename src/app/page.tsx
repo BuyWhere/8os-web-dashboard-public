@@ -1,715 +1,703 @@
-import Link from 'next/link'
-import Testimonials from '@/components/landing/Testimonials'
-import WaitlistForm from '@/components/landing/WaitlistForm'
-import UpcomingBookings from '@/components/landing/UpcomingBookings'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import LandingHeader from '@/components/landing/LandingHeader'
 
-// Landing page — server component. Interactive islands (testimonial rotation,
-// waitlist form, cal.diy bookings) live in their own client components so the
-// static content (hero, features, how-it-works, journal, footer) is fully
-// server-rendered for SEO and SSR snippet quality. See OS-1056.
-export default function Home() {
+// Editorial serif for headlines + clean sans for body. Loaded via
+// next/font/google (built into Next 14 — no dependency change). Exposed as
+// CSS variables scoped to the landing wrapper so the rest of the app is
+// unaffected.
+const fraunces = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  style: ['normal', 'italic'],
+  variable: '--font-serif',
+  display: 'swap',
+})
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600'],
+  variable: '--font-sans',
+  display: 'swap',
+})
+
+export const metadata: Metadata = {
+  title: '8os: Right goal, right season',
+  description:
+    'Your real BaZi archetype, operated daily. 8os computes your archetype and decade-to-daily timing, then runs your goals and calendar around it, driven by an AI assistant. A life OS, not a horoscope.',
+  alternates: { canonical: '/' },
+  openGraph: {
+    type: 'website',
+    url: 'https://8os.ai/',
+    siteName: '8os',
+    title: '8os: Right goal, right season',
+    description:
+      'Your real BaZi archetype, operated daily. The planner that knows when to push.',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: '8os' }],
+    locale: 'en_US',
+  },
+}
+
+// Palette — warm light / editorial
+const INK = 'var(--color-text-primary)'
+const GRAY = 'var(--color-text-secondary)'
+const CREAM = 'var(--color-bg-primary)'
+const SURFACE = 'var(--color-bg-card)'
+const GOLD = '#8A6728' // OS-2712: darkened for WCAG AA (4.69:1 gold-on-cream, 5.18:1 white-on-gold)
+const HAIRLINE = 'var(--color-border)'
+const OXBLOOD = 'var(--color-accent-2)'
+const MAXW = 1120
+
+// ── Small SVG chart motif — a simple four-pillar BaZi glyph, tasteful ──
+function ChartMotif() {
   return (
-    <main
+    <svg
+      viewBox="0 0 320 320"
+      width="100%"
+      height="100%"
+      role="img"
+      aria-label="Four pillars chart motif"
+      style={{ display: 'block' }}
+    >
+      <circle cx="160" cy="160" r="150" fill="none" stroke={HAIRLINE} strokeWidth="1.5" />
+      <circle cx="160" cy="160" r="110" fill="none" stroke={HAIRLINE} strokeWidth="1.5" />
+      {/* four pillars */}
+      {[0, 1, 2, 3].map((i) => {
+        const x = 70 + i * 60
+        const h = [120, 168, 96, 140][i]
+        return (
+          <g key={i}>
+            <rect
+              x={x - 12}
+              y={230 - h}
+              width="24"
+              height={h}
+              rx="6"
+              fill={i === 1 ? GOLD : 'none'}
+              stroke={GOLD}
+              strokeWidth="1.5"
+              opacity={i === 1 ? 0.9 : 0.55}
+            />
+            <circle cx={x} cy={230 - h - 14} r="5" fill={i === 1 ? OXBLOOD : GOLD} opacity="0.8" />
+          </g>
+        )
+      })}
+      <line x1="46" y1="230" x2="274" y2="230" stroke={INK} strokeWidth="1.5" opacity="0.5" />
+      <text
+        x="160"
+        y="272"
+        textAnchor="middle"
+        fontSize="15"
+        letterSpacing="6"
+        fill={GRAY}
+        fontFamily="var(--font-serif), serif"
+      >
+        八字
+      </text>
+    </svg>
+  )
+}
+
+const HOW_STEPS = [
+  {
+    n: '01',
+    title: 'Enter your birth details',
+    body: 'Date and place of birth. That is all we need to compute the four pillars of your chart.',
+  },
+  {
+    n: '02',
+    title: 'Meet your archetype',
+    body: 'We render your real BaZi chart, one of 17,280 configurations, and translate it into a working archetype you can act on.',
+  },
+  {
+    n: '03',
+    title: 'Set your goals',
+    body: 'Tell the assistant what you are working toward. It turns intentions into concrete goals, tasks and a schedule.',
+  },
+  {
+    n: '04',
+    title: 'Let the OS operate daily',
+    body: 'Each day 8os reads your timing and tells you where to spend attention, and, honestly, when to push and when to hold.',
+  },
+]
+
+const FEATURES = [
+  {
+    title: 'The archetype engine',
+    body: 'Your chart resolved to a specific archetype, not a sun sign. 17,280 configurations, computed from your four pillars.',
+  },
+  {
+    title: 'Decade-to-day timing',
+    body: 'Luck pillars flow from decade to year to month to day. 8os tracks all four layers so guidance reflects the season you are actually in.',
+  },
+  {
+    title: 'The Alignment Engine',
+    body: 'A running check on whether your attention is on the right goal for this season, and a nudge when it drifts.',
+  },
+  {
+    title: 'An assistant that acts',
+    body: 'Not a chatbot that talks. It creates goals, breaks them into tasks, and lays them onto your schedule for you.',
+  },
+  {
+    title: 'Daily & weekly rituals',
+    body: 'Short, repeatable check-ins that keep the plan alive between big decisions, tuned to how you operate.',
+  },
+  {
+    title: 'Memory that learns you',
+    body: 'The OS remembers what worked, what you avoided, and what moved the needle, so guidance gets sharper over time.',
+  },
+]
+
+export default function Home() {
+  const serif = 'var(--font-serif), Georgia, serif'
+  const sans = 'var(--font-sans), system-ui, -apple-system, sans-serif'
+
+  return (
+    <div
+      className={`${fraunces.variable} ${inter.variable}`}
       style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'flex-start',
+        background: CREAM,
+        color: INK,
+        fontFamily: sans,
         minHeight: '100vh',
-        padding: '4rem 2rem 2rem',
-        textAlign: 'center',
-        background: 'var(--color-bg-primary)',
+        // Counteract the global body padding-top (fixed dark header space):
+        // our own header sits at the very top of this wrapper.
+        marginTop: 'calc(-1 * var(--header-height))',
       }}
     >
-      <div style={{ maxWidth: '720px', width: '100%' }}>
-        <div
-          style={{
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            fontSize: '0.875rem',
-            fontWeight: 600,
-            letterSpacing: '0.1em',
-            textTransform: 'uppercase',
-            marginBottom: '1rem',
-          }}
-        >
-          Personalized Operating System
-        </div>
+      <LandingHeader />
 
-        <h1
-          style={{
-            fontSize: '3.5rem',
-            fontWeight: 800,
-            letterSpacing: '-0.03em',
-            marginBottom: '1rem',
-            background: 'linear-gradient(135deg, #fff 0%, #999 100%)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            backgroundClip: 'text',
-            lineHeight: 1.1,
-          }}
-        >
-          Generate Your Life OS in 90 Seconds
-        </h1>
-
-        <p
-          style={{
-            fontSize: '1.25rem',
-            color: '#aaa',
-            marginBottom: '1.5rem',
-            lineHeight: 1.6,
-          }}
-        >
-          Free. No credit card. Works in Telegram.
-        </p>
-
-        <nav
-          aria-label="Page navigation"
-          style={{
-            display: 'flex',
-            gap: '1rem',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            marginBottom: '2rem',
-          }}
-        >
-          <Link
-            href="#waitlist"
-            style={{
-              padding: '1rem 2rem',
-              fontSize: '1.125rem',
-              fontWeight: 700,
-              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-              border: 'none',
-              borderRadius: '12px',
-              color: '#fff',
-              cursor: 'pointer',
-              transition: 'transform 0.2s, opacity 0.2s',
-              boxShadow: '0 4px 20px rgba(102, 126, 234, 0.4)',
-              textDecoration: 'none',
-            }}
-          >
-            Get Started
-          </Link>
-          {/* OS-1173: cross-link to the prelaunch /coming-soon landing page so
-              visitors who want a focused reserve flow (with the affiliate
-              opt-in) have a clear next step beyond the in-page waitlist. */}
-          <Link
-            href="/coming-soon"
-            aria-label="Reserve your spot for the July 7 launch"
-            style={{
-              fontSize: '0.9375rem',
-              fontWeight: 500,
-              color: '#888',
-              textDecoration: 'none',
-              padding: '1rem 0.5rem',
-              transition: 'color 0.2s',
-            }}
-          >
-            or{' '}
-            <span style={{ color: '#c4b5fd', textDecoration: 'underline', textUnderlineOffset: '3px' }}>
-              reserve your spot
-            </span>
-          </Link>
-        </nav>
-
-        <div
-          style={{
-            display: 'flex',
-            gap: '2rem',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            marginBottom: '3rem',
-          }}
-        >
-          {[
-            { label: '38M+', sublabel: 'Configurations' },
-            { label: 'Based on', sublabel: 'BaZi' },
-            { label: 'AI', sublabel: 'Powered' },
-          ].map((badge) => (
-            <div
-              key={badge.sublabel}
-              style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}
-            >
-              <span
-                style={{
-                  fontSize: '1.25rem',
-                  fontWeight: 700,
-                  color: '#667eea',
-                }}
-              >
-                {badge.label}
-              </span>
-              <span
-                style={{
-                  fontSize: '0.875rem',
-                  color: '#888',
-                }}
-              >
-                {badge.sublabel}
-              </span>
-            </div>
-          ))}
-        </div>
-
-        <div
-          style={{
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: '16px',
-            padding: '2rem',
-            backdropFilter: 'blur(10px)',
-            marginBottom: '3rem',
-          }}
-        >
-          <div
-            style={{
-              fontSize: '2rem',
-              fontWeight: 800,
-              color: '#667eea',
-              marginBottom: '0.5rem',
-            }}
-          >
-            247 OS generated today
-          </div>
-          <p
-            style={{
-              fontSize: '0.875rem',
-              color: '#666',
-            }}
-          >
-            Join thousands who&apos;ve already built their personal operating system
-          </p>
-        </div>
-
-        <div
-          style={{
-            display: 'flex',
-            gap: '2rem',
-            justifyContent: 'center',
-            flexWrap: 'wrap',
-            marginBottom: '3rem',
-          }}
-        >
-          {[
-            { title: 'Adaptive AI', desc: 'Learns your patterns' },
-            { title: 'Unified Workspace', desc: 'All your tools in one' },
-            { title: 'Privacy First', desc: 'Your data stays yours' },
-            { title: 'Scheduling', desc: 'Built-in Cal.diy integration' },
-          ].map((feature) => (
-            <div key={feature.title} style={{ textAlign: 'center' }}>
-              <div
-                style={{
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  color: '#667eea',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                  marginBottom: '0.25rem',
-                }}
-              >
-                {feature.title}
-              </div>
-              <div
-                style={{
-                  fontSize: '0.875rem',
-                  color: '#666',
-                }}
-              >
-                {feature.desc}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div
-          id="how-it-works"
-          style={{
-            background: 'rgba(255,255,255,0.03)',
-            border: '1px solid rgba(255,255,255,0.08)',
-            borderRadius: '16px',
-            padding: '3rem 2rem',
-            backdropFilter: 'blur(10px)',
-            marginBottom: '3rem',
-          }}
-        >
-          <h2
-            style={{
-              fontSize: '2rem',
-              fontWeight: 700,
-              marginBottom: '2rem',
-              color: '#fff',
-            }}
-          >
-            How It Works
-          </h2>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))',
-              gap: '2rem',
-            }}
-          >
-            {[
-              {
-                step: '1',
-                title: 'Enter Your Birth Date',
-                desc: 'BaZi analysis based on your exact birth details',
-              },
-              {
-                step: '2',
-                title: 'Answer 10 Questions',
-                desc: 'Quick personality quiz to understand your work style',
-              },
-              {
-                step: '3',
-                title: 'Get Your Archetype',
-                desc: 'AI-powered OS tailored to how you operate',
-              },
-              {
-                step: '4',
-                title: 'Set Your Goals',
-                desc: 'Define what matters and let the system adapt to you',
-              },
-            ].map((item) => (
-              <div
-                key={item.step}
-                style={{
-                  padding: '1.5rem',
-                  background: 'rgba(0,0,0,0.3)',
-                  borderRadius: '12px',
-                  textAlign: 'center',
-                }}
-              >
-                <div
-                  style={{
-                    width: '40px',
-                    height: '40px',
-                    borderRadius: '50%',
-                    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    margin: '0 auto 1rem',
-                    fontSize: '1.25rem',
-                    fontWeight: 700,
-                  }}
-                >
-                  {item.step}
-                </div>
-                <h3
-                  style={{
-                    fontSize: '1rem',
-                    fontWeight: 600,
-                    marginBottom: '0.5rem',
-                    color: '#fff',
-                  }}
-                >
-                  {item.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: '0.875rem',
-                    color: '#888',
-                    lineHeight: 1.5,
-                  }}
-                >
-                  {item.desc}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div
-          style={{
-            marginBottom: '3rem',
-          }}
-        >
-          <p
-            style={{
-              textAlign: 'center',
-              fontSize: '0.75rem',
-              fontWeight: 600,
-              color: '#666',
-              textTransform: 'uppercase',
-              letterSpacing: '0.1em',
-              marginBottom: '1.5rem',
-            }}
-          >
-            As Seen On
-          </p>
-          <div
-            style={{
-              display: 'flex',
-              gap: '3rem',
-              justifyContent: 'center',
-              flexWrap: 'wrap',
-              marginBottom: '3rem',
-            }}
-          >
-            {[
-              { name: 'TechCrunch', initials: 'TC' },
-              { name: 'Product Hunt', initials: 'PH' },
-              { name: 'Indie Hackers', initials: 'IH' },
-              { name: 'Hacker News', initials: 'HN' },
-            ].map((logo) => (
-              <div
-                key={logo.name}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: '0.5rem',
-                  opacity: 0.5,
-                }}
-              >
-                <div
-                  style={{
-                    width: '32px',
-                    height: '32px',
-                    borderRadius: '6px',
-                    background: 'rgba(255,255,255,0.1)',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    fontSize: '0.75rem',
-                    fontWeight: 700,
-                    color: '#888',
-                  }}
-                >
-                  {logo.initials}
-                </div>
-                <span
-                  style={{
-                    fontSize: '0.875rem',
-                    fontWeight: 600,
-                    color: '#666',
-                  }}
-                >
-                  {logo.name}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <div
-          id="articles"
-          style={{ width: '100%', marginBottom: '3rem', textAlign: 'left' }}
-        >
-          <h2
-            style={{
-              fontSize: '1.5rem',
-              fontWeight: 700,
-              marginBottom: '0.375rem',
-              color: '#fff',
-            }}
-          >
-            From the 8os Journal
-          </h2>
-          <p
-            style={{
-              fontSize: '0.875rem',
-              color: 'var(--color-text-muted)',
-              marginBottom: '1.5rem',
-            }}
-          >
-            Insights on productivity, BaZi, and building your Life OS.
-          </p>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))',
-              gap: '1.25rem',
-            }}
-          >
-            {[
-              {
-                tag: 'BaZi',
-                title: 'Why Your Birth Chart Predicts Your Productivity Style',
-                excerpt:
-                  'Ancient Chinese metaphysics encoded in 38 million+ configurations — and what that means for how you work best.',
-                readTime: '5 min read',
-                accent: '#667eea',
-              },
-              {
-                tag: 'AI & Systems',
-                title: 'Building a Life Operating System with AI',
-                excerpt:
-                  'The principles behind a personalized OS that adapts to your energy, goals, and daily rhythm instead of fighting them.',
-                readTime: '7 min read',
-                accent: '#764ba2',
-              },
-              {
-                tag: 'Productivity',
-                title: 'The Myth of the Universal Morning Routine',
-                excerpt:
-                  "Why the 5 AM club works for some people and destroys others — and how to find your real peak hours.",
-                readTime: '4 min read',
-                accent: '#22c55e',
-              },
-            ].map((article) => (
-              <div
-                key={article.title}
-                style={{
-                  background: 'var(--color-bg-card)',
-                  border: '1px solid var(--color-border)',
-                  borderRadius: '12px',
-                  padding: '1.5rem',
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.75rem',
-                  transition: 'border-color 0.2s',
-                }}
-              >
-                <span
-                  style={{
-                    fontSize: '0.6875rem',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: '0.08em',
-                    color: article.accent,
-                  }}
-                >
-                  {article.tag}
-                </span>
-                <h3
-                  style={{
-                    fontSize: '0.9375rem',
-                    fontWeight: 600,
-                    color: '#fff',
-                    margin: 0,
-                    lineHeight: 1.4,
-                  }}
-                >
-                  {article.title}
-                </h3>
-                <p
-                  style={{
-                    fontSize: '0.8125rem',
-                    color: 'var(--color-text-secondary)',
-                    lineHeight: 1.6,
-                    margin: 0,
-                    flexGrow: 1,
-                  }}
-                >
-                  {article.excerpt}
-                </p>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    marginTop: 'auto',
-                  }}
-                >
-                  <span
-                    style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}
-                  >
-                    {article.readTime}
-                  </span>
-                  <span
-                    style={{
-                      fontSize: '0.75rem',
-                      color: article.accent,
-                      fontWeight: 500,
-                    }}
-                  >
-                    Coming soon →
-                  </span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        <Testimonials />
-
-        <WaitlistForm />
-
-        <UpcomingBookings />
-      </div>
-
-      <footer
+      {/* ─────────────────────────── HERO ─────────────────────────── */}
+      <section
         style={{
-          width: '100%',
-          borderTop: '1px solid rgba(255,255,255,0.07)',
-          marginTop: '4rem',
-          padding: '3rem 2rem',
-          color: '#555',
-          fontSize: '0.875rem',
+          maxWidth: MAXW,
+          margin: '0 auto',
+          padding: '5.5rem 1.5rem 4rem',
         }}
       >
-        <div style={{ maxWidth: '720px', margin: '0 auto' }}>
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))',
-              gap: '2rem',
-              marginBottom: '2.5rem',
-            }}
-          >
-            <div>
-              <div
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'minmax(0, 1.35fr) minmax(0, 1fr)',
+            gap: '3.5rem',
+            alignItems: 'center',
+          }}
+          className="hero-grid"
+        >
+          <div>
+            <span
+              style={{
+                display: 'inline-block',
+                fontSize: '0.8125rem',
+                fontWeight: 600,
+                letterSpacing: '0.14em',
+                textTransform: 'uppercase',
+                color: GOLD,
+                marginBottom: '1.5rem',
+              }}
+            >
+              A life OS, not a horoscope
+            </span>
+            <h1
+              style={{
+                fontFamily: serif,
+                fontWeight: 500,
+                fontSize: 'clamp(2.75rem, 6vw, 4.5rem)',
+                lineHeight: 1.05,
+                letterSpacing: '-0.02em',
+                margin: '0 0 1.25rem',
+                color: INK,
+              }}
+            >
+              Right goal, right season.
+              <span
                 style={{
-                  fontWeight: 700,
-                  color: '#ededed',
-                  marginBottom: '0.75rem',
-                  fontSize: '1rem',
+                  display: 'block',
+                  fontStyle: 'italic',
+                  color: GRAY,
+                  fontWeight: 400,
                 }}
               >
-                8os
+                The planner that knows when to push.
+              </span>
+            </h1>
+            <p
+              style={{
+                fontSize: '1.1875rem',
+                lineHeight: 1.6,
+                color: GRAY,
+                maxWidth: '34rem',
+                margin: '0 0 2.25rem',
+              }}
+            >
+              8os computes your real BaZi archetype and your decade-to-daily
+              timing, then operates your goals and calendar around it, guided
+              by an AI assistant that actually does the work.
+            </p>
+            <a
+              href="/signup"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                padding: '0.9rem 1.75rem',
+                background: GOLD,
+                color: '#FFFFFF',
+                fontWeight: 600,
+                fontSize: '1rem',
+                borderRadius: '10px',
+                textDecoration: 'none',
+                boxShadow: '0 6px 20px rgba(176, 134, 55, 0.28)',
+              }}
+            >
+              Get started
+            </a>
+          </div>
+
+          <div
+            className="hero-motif"
+            style={{
+              background: SURFACE,
+              border: `1px solid ${HAIRLINE}`,
+              borderRadius: '20px',
+              padding: '2rem',
+              boxShadow: '0 24px 60px rgba(34, 31, 26, 0.06)',
+            }}
+          >
+            <ChartMotif />
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────── HOW IT WORKS ─────────────────────── */}
+      <section
+        id="how"
+        style={{
+          maxWidth: MAXW,
+          margin: '0 auto',
+          padding: '4rem 1.5rem',
+          scrollMarginTop: '90px',
+        }}
+      >
+        <SectionHead
+          eyebrow="How it works"
+          title="From birth chart to daily action."
+          serif={serif}
+        />
+        <div
+          className="cards-4"
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: '1.25rem',
+            marginTop: '2.5rem',
+          }}
+        >
+          {HOW_STEPS.map((s) => (
+            <div
+              key={s.n}
+              style={{
+                background: SURFACE,
+                border: `1px solid ${HAIRLINE}`,
+                borderRadius: '16px',
+                padding: '1.75rem 1.5rem',
+              }}
+            >
+              <div
+                style={{
+                  fontFamily: serif,
+                  fontSize: '1.5rem',
+                  color: GOLD,
+                  marginBottom: '1rem',
+                }}
+              >
+                {s.n}
               </div>
-              <p style={{ lineHeight: 1.6, color: '#555' }}>
-                A personalized operating system unique to every person on Earth.
+              <h3
+                style={{
+                  fontFamily: serif,
+                  fontWeight: 600,
+                  fontSize: '1.1875rem',
+                  margin: '0 0 0.6rem',
+                  color: INK,
+                  lineHeight: 1.25,
+                }}
+              >
+                {s.title}
+              </h3>
+              <p style={{ fontSize: '0.9375rem', lineHeight: 1.6, color: GRAY, margin: 0 }}>
+                {s.body}
               </p>
             </div>
-            <div>
-              <div
-                style={{
-                  fontWeight: 600,
-                  color: '#999',
-                  marginBottom: '0.75rem',
-                  fontSize: '0.75rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.08em',
-                }}
-              >
-                Product
-              </div>
-              <ul
-                style={{
-                  listStyle: 'none',
-                  padding: 0,
-                  margin: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.5rem',
-                }}
-              >
-                <li>
-                  <Link
-                    href="/features"
-                    style={{ color: '#666', textDecoration: 'none' }}
-                  >
-                    Features
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/onboarding"
-                    style={{ color: '#666', textDecoration: 'none' }}
-                  >
-                    Get Started
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <div
-                style={{
-                  fontWeight: 600,
-                  color: '#999',
-                  marginBottom: '0.75rem',
-                  fontSize: '0.75rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.08em',
-                }}
-              >
-                Learn
-              </div>
-              <ul
-                style={{
-                  listStyle: 'none',
-                  padding: 0,
-                  margin: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.5rem',
-                }}
-              >
-                <li>
-                  <Link
-                    href="/blog"
-                    style={{ color: '#666', textDecoration: 'none' }}
-                  >
-                    Blog
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/archetypes/explorer"
-                    style={{ color: '#666', textDecoration: 'none' }}
-                  >
-                    Archetype Explorer
-                  </Link>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <div
-                style={{
-                  fontWeight: 600,
-                  color: '#999',
-                  marginBottom: '0.75rem',
-                  fontSize: '0.75rem',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.08em',
-                }}
-              >
-                Company
-              </div>
-              <ul
-                style={{
-                  listStyle: 'none',
-                  padding: 0,
-                  margin: 0,
-                  display: 'flex',
-                  flexDirection: 'column',
-                  gap: '0.5rem',
-                }}
-              >
-                <li>
-                  <Link
-                    href="/contact"
-                    style={{ color: '#666', textDecoration: 'none' }}
-                  >
-                    Contact
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/privacy"
-                    style={{ color: '#666', textDecoration: 'none' }}
-                  >
-                    Privacy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/terms"
-                    style={{ color: '#666', textDecoration: 'none' }}
-                  >
-                    Terms
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ───────────────────────── FEATURES ───────────────────────── */}
+      <section
+        id="features"
+        style={{
+          background: SURFACE,
+          borderTop: `1px solid ${HAIRLINE}`,
+          borderBottom: `1px solid ${HAIRLINE}`,
+          scrollMarginTop: '72px',
+        }}
+      >
+        <div style={{ maxWidth: MAXW, margin: '0 auto', padding: '4.5rem 1.5rem' }}>
+          <SectionHead
+            eyebrow="What it does"
+            title="A system that runs your goals, not a reading."
+            serif={serif}
+          />
           <div
+            className="cards-3"
             style={{
-              borderTop: '1px solid rgba(255,255,255,0.05)',
-              paddingTop: '1.5rem',
-              color: '#444',
-              fontSize: '0.8rem',
+              display: 'grid',
+              gridTemplateColumns: 'repeat(3, 1fr)',
+              gap: '2rem 2.5rem',
+              marginTop: '2.75rem',
             }}
           >
-            © 2026 8os. All rights reserved.
+            {FEATURES.map((f) => (
+              <div key={f.title}>
+                <div
+                  style={{
+                    width: '2.25rem',
+                    height: '2px',
+                    background: GOLD,
+                    marginBottom: '1.1rem',
+                  }}
+                />
+                <h3
+                  style={{
+                    fontFamily: serif,
+                    fontWeight: 600,
+                    fontSize: '1.25rem',
+                    margin: '0 0 0.65rem',
+                    color: INK,
+                  }}
+                >
+                  {f.title}
+                </h3>
+                <p style={{ fontSize: '0.9375rem', lineHeight: 1.65, color: GRAY, margin: 0 }}>
+                  {f.body}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ─────────────────────── FREE REVEAL BAND ─────────────────── */}
+      <section style={{ maxWidth: MAXW, margin: '0 auto', padding: '4.5rem 1.5rem' }}>
+        <div
+          style={{
+            background: CREAM,
+            border: `1px solid ${HAIRLINE}`,
+            borderRadius: '20px',
+            padding: 'clamp(2rem, 5vw, 3.25rem)',
+            display: 'flex',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: '1.5rem',
+          }}
+        >
+          <div style={{ maxWidth: '38rem' }}>
+            <h2
+              style={{
+                fontFamily: serif,
+                fontWeight: 500,
+                fontSize: 'clamp(1.75rem, 4vw, 2.5rem)',
+                lineHeight: 1.1,
+                margin: '0 0 0.75rem',
+                color: INK,
+              }}
+            >
+              See your archetype, free, no signup.
+            </h2>
+            <p style={{ fontSize: '1.0625rem', lineHeight: 1.6, color: GRAY, margin: 0 }}>
+              Enter your birth date and get a real taste of your chart in under a
+              minute. No account required.
+            </p>
+          </div>
+          <a
+            href="/reveal"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              padding: '0.9rem 1.75rem',
+              background: INK,
+              color: CREAM,
+              fontWeight: 600,
+              fontSize: '1rem',
+              borderRadius: '10px',
+              textDecoration: 'none',
+              whiteSpace: 'nowrap',
+            }}
+          >
+            Reveal my archetype →
+          </a>
+        </div>
+      </section>
+
+      {/* ───────────────────────── PRICING TEASER ─────────────────── */}
+      <section
+        style={{
+          borderTop: `1px solid ${HAIRLINE}`,
+          background: SURFACE,
+        }}
+      >
+        <div
+          style={{
+            maxWidth: MAXW,
+            margin: '0 auto',
+            padding: '4.5rem 1.5rem',
+            textAlign: 'center',
+          }}
+        >
+          <span
+            style={{
+              display: 'inline-block',
+              fontSize: '0.8125rem',
+              fontWeight: 600,
+              letterSpacing: '0.14em',
+              textTransform: 'uppercase',
+              color: GOLD,
+              marginBottom: '1rem',
+            }}
+          >
+            Pricing
+          </span>
+          <h2
+            style={{
+              fontFamily: serif,
+              fontWeight: 500,
+              fontSize: 'clamp(1.9rem, 4.5vw, 2.75rem)',
+              lineHeight: 1.1,
+              margin: '0 0 1rem',
+              color: INK,
+            }}
+          >
+            Start free. Go Pro for{' '}
+            <span style={{ color: OXBLOOD }}>$18/mo</span>.
+          </h2>
+          <p
+            style={{
+              fontSize: '1.0625rem',
+              lineHeight: 1.6,
+              color: GRAY,
+              maxWidth: '34rem',
+              margin: '0 auto 2rem',
+            }}
+          >
+            Explore your archetype for free. Pro unlocks the full daily OS, the
+            assistant, timing, alignment and memory working together.
+          </p>
+          <a
+            href="/pricing"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              padding: '0.9rem 1.75rem',
+              border: `1px solid ${INK}`,
+              color: INK,
+              fontWeight: 600,
+              fontSize: '1rem',
+              borderRadius: '10px',
+              textDecoration: 'none',
+            }}
+          >
+            See pricing
+          </a>
+        </div>
+      </section>
+
+      {/* ───────────────────────────  FOOTER  ─────────────────────── */}
+      <footer
+        style={{
+          background: CREAM,
+          borderTop: `1px solid ${HAIRLINE}`,
+        }}
+      >
+        <div
+          style={{
+            maxWidth: MAXW,
+            margin: '0 auto',
+            padding: '3.5rem 1.5rem 2.5rem',
+          }}
+        >
+          <div
+            className="footer-grid"
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1.6fr 1fr 1fr',
+              gap: '2.5rem',
+            }}
+          >
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.9rem' }}>
+                <Mark size={26} />
+                <span style={{ fontFamily: serif, fontSize: '1.4rem', fontWeight: 600, color: INK }}>
+                  8os
+                </span>
+              </div>
+              <p style={{ fontSize: '0.9375rem', lineHeight: 1.65, color: GRAY, maxWidth: '22rem', margin: 0 }}>
+                A life OS built on your real BaZi chart. Right goal, right
+                season, the planner that knows when to push.
+              </p>
+              <p style={{ fontSize: '0.875rem', color: GRAY, marginTop: '1.25rem' }}>
+                <a href="mailto:hello@8os.ai" style={{ color: OXBLOOD, textDecoration: 'none', fontWeight: 500 }}>
+                  hello@8os.ai
+                </a>
+              </p>
+            </div>
+
+            <FooterCol
+              serif={serif}
+              heading="Product"
+              links={[
+                { href: '/features', label: 'Features' },
+                { href: '/pricing', label: 'Pricing' },
+                { href: '/reveal', label: 'Reveal' },
+              ]}
+            />
+            <FooterCol
+              serif={serif}
+              heading="Company"
+              links={[
+                { href: '/blog', label: 'Blog' },
+                { href: '/contact', label: 'Contact' },
+                { href: '/privacy', label: 'Privacy' },
+                { href: '/terms', label: 'Terms' },
+              ]}
+            />
+          </div>
+
+          <div
+            style={{
+              marginTop: '3rem',
+              paddingTop: '1.5rem',
+              borderTop: `1px solid ${HAIRLINE}`,
+              fontSize: '0.8125rem',
+              color: GRAY,
+            }}
+          >
+            © {new Date().getFullYear()} 8os. All rights reserved.
           </div>
         </div>
       </footer>
-    </main>
+
+      {/* Responsive rules scoped to the landing */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+          @media (max-width: 900px) {
+            .hero-grid { grid-template-columns: 1fr !important; }
+            .hero-motif { max-width: 360px; }
+            .cards-4 { grid-template-columns: repeat(2, 1fr) !important; }
+            .cards-3 { grid-template-columns: repeat(2, 1fr) !important; }
+            .footer-grid { grid-template-columns: 1fr 1fr !important; }
+          }
+          @media (max-width: 560px) {
+            .cards-4 { grid-template-columns: 1fr !important; }
+            .cards-3 { grid-template-columns: 1fr !important; }
+            .footer-grid { grid-template-columns: 1fr !important; }
+          }
+        `,
+        }}
+      />
+    </div>
+  )
+}
+
+// ── Shared section header ──
+function SectionHead({
+  eyebrow,
+  title,
+  serif,
+}: {
+  eyebrow: string
+  title: string
+  serif: string
+}) {
+  return (
+    <div style={{ maxWidth: '40rem' }}>
+      <span
+        style={{
+          display: 'inline-block',
+          fontSize: '0.8125rem',
+          fontWeight: 600,
+          letterSpacing: '0.14em',
+          textTransform: 'uppercase',
+          color: '#8A6728', // OS-2712: WCAG AA
+          marginBottom: '0.9rem',
+        }}
+      >
+        {eyebrow}
+      </span>
+      <h2
+        style={{
+          fontFamily: serif,
+          fontWeight: 500,
+          fontSize: 'clamp(1.9rem, 4.5vw, 2.75rem)',
+          lineHeight: 1.1,
+          letterSpacing: '-0.01em',
+          margin: 0,
+          color: 'var(--color-text-primary)',
+        }}
+      >
+        {title}
+      </h2>
+    </div>
+  )
+}
+
+function FooterCol({
+  heading,
+  links,
+  serif,
+}: {
+  heading: string
+  links: { href: string; label: string }[]
+  serif: string
+}) {
+  return (
+    <div>
+      <div
+        style={{
+          fontSize: '0.75rem',
+          fontWeight: 700,
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          color: 'var(--color-text-secondary)',
+          marginBottom: '1rem',
+        }}
+      >
+        {heading}
+      </div>
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
+        {links.map((l) => (
+          <li key={l.href}>
+            <a
+              href={l.href}
+              style={{ fontSize: '0.9375rem', color: 'var(--color-text-primary)', textDecoration: 'none' }}
+            >
+              {l.label}
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
+
+// The wordmark glyph — an "8" formed with an inner spark tying to 八字.
+export function Mark({ size = 24 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true">
+      <circle cx="16" cy="10.5" r="6" stroke="#8A6728" strokeWidth="2" />
+      <circle cx="16" cy="21.5" r="6.5" stroke="#221F1A" strokeWidth="2" />
+      <path d="M16 6.5 L16 14.5 M12.5 10.5 L19.5 10.5" stroke="var(--color-accent-2)" strokeWidth="1.6" strokeLinecap="round" />
+    </svg>
   )
 }

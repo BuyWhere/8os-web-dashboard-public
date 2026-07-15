@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import type { Project, OSTask } from '@/lib/types'
+import { createChatCompletion } from '@/lib/flow-ai'
 
 interface GenerateTasksRequest {
   projects: Project[]
@@ -11,11 +12,12 @@ export async function POST(req: NextRequest) {
   const body: GenerateTasksRequest = await req.json()
   const { projects, archetype, archetypeName } = body
 
-  const apiKey = process.env.ANTHROPIC_API_KEY || process.env.ARCHIE_API_KEY
-
-  if (apiKey) {
+  // Per BUILD-DIRECTIVE, all LLM inference goes through Flow AI (our own
+  // OpenAI-compatible inference product) via @/lib/flow-ai, which reads
+  // FLOW_AI_API_KEY internally.
+  if (process.env.FLOW_AI_API_KEY) {
     try {
-      const result = await generateWithClaude(projects, archetype, archetypeName, apiKey)
+      const result = await generateWithFlowAI(projects, archetype, archetypeName)
       return NextResponse.json({ tasks: result })
     } catch (e) {
       console.error('ARCHIE task generation failed, using smart defaults:', e)
@@ -26,15 +28,14 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ tasks })
 }
 
-async function generateWithClaude(
+async function generateWithFlowAI(
   projects: Project[],
   archetype: string,
-  archetypeName: string,
-  apiKey: string
+  archetypeName: string
 ): Promise<OSTask[]> {
   const accepted = projects.filter(p => p.accepted)
   const projectsText = accepted.map((p, i) =>
-    `${i + 1}. [${p.domainId}] "${p.name}" (${p.estimatedDuration}) — ${p.description}`
+    `${i + 1}. [${p.domainId}] "${p.name}" (${p.estimatedDuration}), ${p.description}`
   ).join('\n')
 
   const prompt = `You are ARCHIE, the adaptive intelligence engine of 8OS.
@@ -50,7 +51,7 @@ Return ONLY a valid JSON array:
 [
   {
     "id": "unique-id",
-    "projectId": "must match one of the project names — use slugified project name",
+    "projectId": "must match one of the project names, use slugified project name",
     "name": "Specific action verb + object",
     "duration": "e.g. 45 min, 2 hours",
     "priority": "high|medium|low",
@@ -63,26 +64,16 @@ Rules:
 - Tasks start with action verbs (Write, Schedule, Build, Research, Call, etc.)
 - Duration reflects realistic time investment
 - Priority: high = critical path, medium = important, low = nice to have
-- suggestedSchedule should fit the user's working window and block length preferences
+- suggestedSchedule should match the user's archetype energy pattern
 - Return 15-30 tasks total`
 
-  const response = await fetch('https://api.anthropic.com/v1/messages', {
-    method: 'POST',
-    headers: {
-      'x-api-key': apiKey,
-      'anthropic-version': '2023-06-01',
-      'content-type': 'application/json',
-    },
-    body: JSON.stringify({
-      model: 'claude-haiku-4-5-20251001',
-      max_tokens: 3000,
-      messages: [{ role: 'user', content: prompt }],
-    }),
-  })
+  const completion = await createChatCompletion(
+    [{ role: 'user', content: prompt }],
+    { tool_choice: 'none', max_tokens: 3000 },
+  )
 
-  if (!response.ok) throw new Error(`Anthropic API ${response.status}`)
-  const data = await response.json()
-  const text = data.content[0].text
+  const text = completion.choices?.[0]?.message?.content
+  if (!text) throw new Error('Flow AI returned empty content')
 
   const jsonMatch = text.match(/\[[\s\S]*\]/)
   if (!jsonMatch) throw new Error('No JSON in response')

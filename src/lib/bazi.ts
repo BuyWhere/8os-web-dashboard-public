@@ -163,7 +163,7 @@ export function calculateBazi(
   year: number,
   month: number,
   day: number,
-  hour?: number,   // 0–23, optional
+  hour?: number,   // 0-23, optional
   minute?: number, // reserved, not used in pillar calc
 ): BaziResult {
   const yp = yearPillar(year)

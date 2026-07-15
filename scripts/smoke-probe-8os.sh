@@ -265,8 +265,12 @@ probe "OS-1144 /api/auth/google defensive 307"   GET  "$BASE_URL/api/auth/google
 header_probe "OS-1199 /api/auth/google Location is Google consent" \
   GET "$BASE_URL/api/auth/google" Location '^https://accounts\.google\.com/'
 
-# OS-1173: coming-soon landing page must serve a 200.
-probe "OS-1173 /coming-soon 200"                 GET  "$BASE_URL/coming-soon"                     '^200$'
+# OS-1173: coming-soon was the prelaunch landing page (retired 2026-07-09,
+# see next.config.js redirects() and src/app/coming-soon/page.tsx). It now
+# bounces to /signup with a 307; the probe asserts the redirect target so a
+# regression that 500s or redirects to the wrong page (e.g. /) is caught.
+header_probe "OS-1173 /coming-soon Location is /signup" \
+  GET "$BASE_URL/coming-soon" Location '^/signup$'
 
 # OS-1208: affiliates landing page (parent issue OS-1219 cites this as
 # one of the regression signals — Vex's deploy on alex/os-1137-meta-pixel

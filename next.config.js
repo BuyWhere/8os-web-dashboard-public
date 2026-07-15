@@ -1,5 +1,7 @@
 // @ts-check
 
+const ORCHESTRATOR_URL = process.env.NEXT_PUBLIC_API_URL || process.env.ORCHESTRATOR_URL || 'https://orchestrator-production-1643.up.railway.app';
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
@@ -11,6 +13,24 @@ const nextConfig = {
   // .wasm file is resolved from node_modules at runtime (not from a bundled path).
   experimental: {
     serverComponentsExternalPackages: ['@prisma/client', '@prisma/adapter-pg'],
+  },
+  // OS-1752: removed the /waitlist/stats → orchestrator rewrite.
+  // The orchestrator has no /waitlist/stats route (returns 500).
+  // A public Next.js route handler at src/app/waitlist/stats/route.ts
+  // now serves the stats directly from the database.
+
+  // De-prelaunch: the product is LIVE. /coming-soon was a stale
+  // "reserve for July 7, 2026" page; retire it by redirecting to /signup.
+  async redirects() {
+    return [
+      { source: '/coming-soon', destination: '/signup', permanent: false },
+      // OS-2618: legacy Clerk auth paths → canonical routes. Belt-and-suspenders
+      // alongside the middleware redirect (next.config runs at the edge before
+      // Clerk, so /signin never 404s even if middleware matcher misses it).
+      { source: '/signin', destination: '/login', permanent: false },
+      { source: '/sign-in', destination: '/login', permanent: false },
+      { source: '/sign-up', destination: '/signup', permanent: false },
+    ]
   },
 }
 

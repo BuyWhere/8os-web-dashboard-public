@@ -69,6 +69,7 @@ export async function POST(req: NextRequest) {
       priority: result.priority ?? 'medium',
       scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
       scheduledEnd: scheduledEnd ? new Date(scheduledEnd) : null,
+      energyRequired: result.priority === 'high' ? 'green' : 'yellow',
     },
   })
 

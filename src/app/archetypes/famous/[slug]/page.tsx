@@ -23,20 +23,20 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   }
   
   return {
-    title: `${profile.name} — Famous Archetype | 8os.ai`,
+    title: `${profile.name}, Famous Archetype | 8os.ai`,
     description: `Discover ${profile.name}'s BaZi archetype: ${profile.archetype.replace('_', ' ')}. ${profile.trait}`,
     alternates: {
       canonical: `/archetypes/famous/${profile.slug}`,
     },
     openGraph: {
-      title: `${profile.name} — Famous Archetype | 8os.ai`,
+      title: `${profile.name}, Famous Archetype | 8os.ai`,
       description: `Discover ${profile.name}'s BaZi archetype: ${profile.archetype.replace('_', ' ')}. ${profile.trait}`,
       url: `https://8os.ai/archetypes/famous/${profile.slug}`,
       type: 'article',
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${profile.name} — Famous Archetype | 8os.ai`,
+      title: `${profile.name}, Famous Archetype | 8os.ai`,
       description: `Discover ${profile.name}'s BaZi archetype: ${profile.archetype.replace('_', ' ')}. ${profile.trait}`,
     },
   };
@@ -47,7 +47,7 @@ const ARCHETYPE_META = {
     label: 'Strategic Commander',
     element: 'Metal / Wood',
     tagline: 'Decisive. Visionary. Built to lead.',
-    color: '#a78bfa',
+    color: 'var(--color-accent)',
     bg: 'rgba(167,139,250,0.08)',
   },
   nurturing_creative: {
@@ -94,7 +94,7 @@ export default async function FamousProfilePage({ params }: Props) {
   return (
     <div style={pageStyle}>
       <div style={innerStyle}>
-        <Link href="/famous" style={backLinkStyle}>← Back to Famous Archetypes</Link>
+        <Link href="/archetypes/famous" style={backLinkStyle}>← Back to Famous Archetypes</Link>
         
         <header style={headerStyle}>
           <div style={avatarStyle}>{profile.name.charAt(0)}</div>
@@ -146,26 +146,26 @@ export default async function FamousProfilePage({ params }: Props) {
   );
 }
 
-const pageStyle: React.CSSProperties = { background: '#060608', color: '#f8fafc', minHeight: '100vh' };
+const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '700px', margin: '0 auto', padding: '3rem 1.5rem' };
-const backLinkStyle: React.CSSProperties = { display: 'inline-block', marginBottom: '2rem', color: 'rgba(248,250,252,0.6)', textDecoration: 'none', fontSize: '0.9rem' };
+const backLinkStyle: React.CSSProperties = { display: 'inline-block', marginBottom: '2rem', color: 'var(--color-text-secondary)', textDecoration: 'none', fontSize: '0.9rem' };
 const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '3rem' };
-const avatarStyle: React.CSSProperties = { width: '80px', height: '80px', borderRadius: '50%', background: 'rgba(124,58,237,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', fontWeight: 700, margin: '0 auto 1.5rem' };
+const avatarStyle: React.CSSProperties = { width: '80px', height: '80px', borderRadius: '50%', background: 'var(--color-accent-soft)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2.5rem', fontWeight: 700, margin: '0 auto 1.5rem' };
 const nameStyle: React.CSSProperties = { margin: '0 0 0.5rem', fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 800, letterSpacing: '-0.04em' };
-const bornStyle: React.CSSProperties = { margin: 0, fontSize: '1rem', color: 'rgba(248,250,252,0.6)' };
+const bornStyle: React.CSSProperties = { margin: 0, fontSize: '1rem', color: 'var(--color-text-secondary)' };
 const badgesStyle: React.CSSProperties = { display: 'flex', gap: '0.75rem', justifyContent: 'center', marginTop: '1.5rem', flexWrap: 'wrap' };
 const badgeStyle: React.CSSProperties = { padding: '0.4rem 1rem', borderRadius: '999px', fontSize: '0.85rem', fontWeight: 600 };
-const elementBadgeStyle: React.CSSProperties = { padding: '0.4rem 1rem', borderRadius: '999px', fontSize: '0.85rem', fontWeight: 600, background: 'rgba(255,255,255,0.1)', color: 'rgba(248,250,252,0.8)' };
+const elementBadgeStyle: React.CSSProperties = { padding: '0.4rem 1rem', borderRadius: '999px', fontSize: '0.85rem', fontWeight: 600, background: 'var(--color-border)', color: 'var(--color-text-secondary)' };
 
 const contentStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: '1.5rem' };
 const sectionStyle: React.CSSProperties = { padding: '1.5rem', borderRadius: '16px', border: '1px solid' };
-const sectionTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: '1.1rem', fontWeight: 700, color: 'rgba(248,250,252,0.9)' };
-const traitStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', color: 'rgba(248,250,252,0.8)', fontStyle: 'italic', lineHeight: 1.6 };
-const quoteStyle: React.CSSProperties = { margin: 0, fontSize: '1.2rem', color: 'rgba(248,250,252,0.9)', fontStyle: 'italic', lineHeight: 1.6, borderLeft: '3px solid rgba(124,58,237,0.5)', paddingLeft: '1.5rem' };
-const descriptionStyle: React.CSSProperties = { margin: 0, fontSize: '1rem', color: 'rgba(248,250,252,0.7)', lineHeight: 1.7 };
-const elementDetailStyle: React.CSSProperties = { margin: '0.5rem 0 0', fontSize: '0.9rem', color: 'rgba(248,250,252,0.5)' };
+const sectionTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: '1.1rem', fontWeight: 700, color: 'var(--color-text-secondary)' };
+const traitStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', color: 'var(--color-text-secondary)', fontStyle: 'italic', lineHeight: 1.6 };
+const quoteStyle: React.CSSProperties = { margin: 0, fontSize: '1.2rem', color: 'var(--color-text-secondary)', fontStyle: 'italic', lineHeight: 1.6, borderLeft: '3px solid var(--color-accent-soft)', paddingLeft: '1.5rem' };
+const descriptionStyle: React.CSSProperties = { margin: 0, fontSize: '1rem', color: 'var(--color-text-secondary)', lineHeight: 1.7 };
+const elementDetailStyle: React.CSSProperties = { margin: '0.5rem 0 0', fontSize: '0.9rem', color: 'var(--color-text-secondary)' };
 
-const ctaStyle: React.CSSProperties = { textAlign: 'center', padding: '3rem 2rem', borderRadius: '24px', border: '1px solid rgba(124,58,237,0.2)', background: 'rgba(124,58,237,0.06)', marginTop: '2rem' };
+const ctaStyle: React.CSSProperties = { textAlign: 'center', padding: '3rem 2rem', borderRadius: '24px', border: '1px solid var(--color-accent-soft)', background: 'var(--color-accent-soft)', marginTop: '2rem' };
 const ctaTitleStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: 'clamp(1.5rem, 4vw, 2rem)', fontWeight: 800, letterSpacing: '-0.03em' };
-const ctaDescStyle: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: '1rem', color: 'rgba(248,250,252,0.6)' };
-const ctaBtnStyle: React.CSSProperties = { display: 'inline-block', padding: '0.85rem 1.75rem', borderRadius: '12px', background: 'linear-gradient(135deg, #7c3aed 0%, #9333ea 100%)', color: '#fff', fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none', boxShadow: '0 8px 24px rgba(124,58,237,0.4)' };
+const ctaDescStyle: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: '1rem', color: 'var(--color-text-secondary)' };
+const ctaBtnStyle: React.CSSProperties = { display: 'inline-block', padding: '0.85rem 1.75rem', borderRadius: '12px', background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)', color: '#fff', fontWeight: 700, fontSize: '0.95rem', textDecoration: 'none', boxShadow: '0 8px 24px var(--color-accent-soft)' };

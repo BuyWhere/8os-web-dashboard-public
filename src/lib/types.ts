@@ -43,17 +43,12 @@ export interface OSTask {
   accepted: boolean
 }
 
-// ─── Work Preferences ─────────────────────────────────────────────────────────
+// ─── Energy Hours ─────────────────────────────────────────────────────────────
 
-export type BatchingStyle = 'batch' | 'spread'
-export type PlanningCadence = 'daily' | 'weekly' | 'biweekly'
+export type EnergyLevel = 'green' | 'yellow' | 'red'
 
-export interface WorkPreferences {
-  workingWindowStart: number  // hour 0-23
-  workingWindowEnd: number    // hour 0-23
-  blockLengthMin: number      // 25 / 50 / 90
-  batching: BatchingStyle
-  planningCadence: PlanningCadence
+export interface EnergyHourConfig {
+  hours: Record<number, EnergyLevel>  // 0-23 hour index → energy level
 }
 
 // ─── Onboarding State ─────────────────────────────────────────────────────────
@@ -65,7 +60,7 @@ export interface OnboardingState {
   archetypeName: string
   projects: Project[]
   tasks: OSTask[]
-  workPreferences?: WorkPreferences
+  energyHours: EnergyHourConfig
   completedAt?: string
 }
 
