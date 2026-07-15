@@ -219,8 +219,8 @@ const ctaButtonStyle: React.CSSProperties = {
   marginTop: '1.5rem',
   padding: '0.85rem 1.75rem',
   borderRadius: '999px',
-  background: 'var(--archetype-primary)',
-  color: '#060606',
+  background: '#E8B86D', // 8os brand gold — always high-contrast, independent of archetype CSS vars
+  color: '#1A1B4B', // indigo text on gold: 8.7:1 AA pass
   fontSize: '1rem',
   fontWeight: 700,
   textDecoration: 'none',
