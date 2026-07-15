@@ -40,7 +40,7 @@ export const LOOKUP_KEYS: Record<PlanKey, string> = {
 
 /** Expected unit amounts (cents) — used by the QA probe and as a sanity guard. */
 export const EXPECTED_AMOUNTS: Record<PlanKey, number> = {
-  pro_monthly: 1600, // $16 / mo
+  pro_monthly: 1800, // $18 / mo
   pro_yearly: 11900, // $119 / yr
   life_report: 5900, // $59 one-time
 }
