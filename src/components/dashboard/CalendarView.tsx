@@ -98,6 +98,9 @@ function eventTextColor(color: string): string {
   return EVENT_TEXT_COLORS[color] ?? color
 }
 
+/** Dark ink text for use on gold/accent backgrounds (WCAG AA on both #B08637 and #C79A48). */
+const DARK_ON_ACCENT = '#221F1A'
+
 const ENERGY_BG: Record<EnergyLevel, string> = {
   green: 'rgba(34,197,94,0.06)',
   yellow: 'rgba(245,158,11,0.06)',
@@ -445,7 +448,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <button
               onClick={() => openCreate(defaultCreateStart(currentDate, view))}
-              style={{ ...btnStyle, background: 'var(--color-accent)', color: '#fff', border: 'none', fontWeight: 600 }}
+              style={{ ...btnStyle, background: 'var(--color-accent)', color: DARK_ON_ACCENT, border: 'none', fontWeight: 600 }}
             >
               + New event
             </button>
@@ -457,7 +460,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
                   style={{
                     ...btnStyle,
                     background: view === v ? 'var(--color-accent)' : 'var(--color-bg-primary)',
-                    color: view === v ? '#fff' : 'var(--color-text-secondary)',
+                    color: view === v ? DARK_ON_ACCENT : 'var(--color-text-secondary)',
                     textTransform: 'capitalize',
                   }}
                 >
@@ -500,7 +503,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
                 style={{
                   flexShrink: 0,
                   padding: '8px 14px', borderRadius: 8,
-                  background: 'var(--color-accent)', color: '#fff',
+                  background: 'var(--color-accent)', color: DARK_ON_ACCENT,
                   fontSize: 13, fontWeight: 600, textDecoration: 'none',
                 }}
               >
@@ -573,7 +576,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
                 width: '100%', padding: '7px 0', borderRadius: 6, marginBottom: 10,
                 background: schedulingAll ? 'var(--color-bg-primary)' : 'var(--color-accent)',
                 border: 'none',
-                color: schedulingAll ? 'var(--color-text-muted)' : '#fff',
+                color: schedulingAll ? 'var(--color-text-muted)' : DARK_ON_ACCENT,
                 fontSize: 12, fontWeight: 600, cursor: schedulingAll ? 'default' : 'pointer', fontFamily: 'inherit',
               }}
             >
@@ -883,7 +886,7 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
                           if (s.size === 0) return // keep at least one weekday
                           set('recurrenceRule', `days:${Array.from(s).sort((a, b) => a - b).join(',')}` as RecurrenceRule)
                         }}
-                        style={{ width: 32, height: 32, borderRadius: '50%', flexShrink: 0, cursor: 'pointer', fontSize: 12, fontWeight: 600, border: `1px solid ${on ? 'var(--color-accent)' : 'var(--color-border)'}`, background: on ? 'var(--color-accent)' : 'transparent', color: on ? '#fff' : 'var(--color-text-secondary)' }}>
+                        style={{ width: 32, height: 32, borderRadius: '50%', flexShrink: 0, cursor: 'pointer', fontSize: 12, fontWeight: 600, border: `1px solid ${on ? 'var(--color-accent)' : 'var(--color-border)'}`, background: on ? 'var(--color-accent)' : 'transparent', color: on ? DARK_ON_ACCENT : 'var(--color-text-secondary)' }}>
                         {lbl}
                       </button>
                     )
@@ -917,7 +920,7 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
               ) : <span />}
               <div style={{ display: 'flex', gap: 8 }}>
                 <button onClick={onClose} style={btnStyle}>Cancel</button>
-                <button onClick={save} disabled={saving} style={{ ...btnStyle, background: 'var(--color-accent)', color: '#fff', border: 'none', fontWeight: 600 }}>
+                <button onClick={save} disabled={saving} style={{ ...btnStyle, background: 'var(--color-accent)', color: DARK_ON_ACCENT, border: 'none', fontWeight: 600 }}>
                   {saving ? 'Saving…' : form.mode === 'create' ? 'Create' : 'Save'}
                 </button>
               </div>
@@ -1193,7 +1196,7 @@ function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, 
           return (
             <div key={i} style={{ padding: '10px 8px', textAlign: 'center', borderLeft: '1px solid var(--color-border)' }}>
               <div style={{ fontSize: 10, color: 'var(--color-text-muted)' }}>{WEEKDAYS_SHORT[(d.getDay() - firstDay + 7) % 7]}</div>
-              <div style={{ width: 28, height: 28, borderRadius: '50%', margin: '2px auto 0', background: isToday ? 'var(--color-accent)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, color: isToday ? '#fff' : 'var(--color-text-primary)', fontWeight: isToday ? 700 : 400 }}>{d.getDate()}</div>
+              <div style={{ width: 28, height: 28, borderRadius: '50%', margin: '2px auto 0', background: isToday ? 'var(--color-accent)' : 'transparent', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, color: isToday ? DARK_ON_ACCENT : 'var(--color-text-primary)', fontWeight: isToday ? 700 : 400 }}>{d.getDate()}</div>
             </div>
           )
         })}
