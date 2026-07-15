@@ -22,6 +22,16 @@ function applyCSP(res: NextResponse): NextResponse {
     "form-action 'self'",
   ].join('; ')
   res.headers.set('Content-Security-Policy', csp)
+  // Keep users on the canonical host. The CF worker proxies to the origin with
+  // the raw *.up.railway.app Host, so redirects built from req.url (our explicit
+  // ones + Clerk's auth redirect to /login) get a Location pointing at the raw
+  // Railway domain — which strands the user there. Rewrite it back to 8os.ai.
+  // Output-only (never touches the incoming request host), so it can't trigger
+  // the x-middleware-rewrite → Railway 100:: "Error 1000" path.
+  const loc = res.headers.get('location')
+  if (loc && /\.up\.railway\.app/i.test(loc)) {
+    res.headers.set('location', loc.replace(/(?:https?:)?\/\/[^/]*\.up\.railway\.app/i, `https://${CANONICAL}`))
+  }
   return res
 }
 

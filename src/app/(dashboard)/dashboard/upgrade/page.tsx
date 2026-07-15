@@ -1,7 +1,7 @@
 /**
  * /dashboard/upgrade — authed upgrade page.
  *
- * Shows Free / Pro ($16/mo, $119/yr) / Full BaZi Life Report ($59) and POSTs to
+ * Shows Free / Pro ($18/mo, $119/yr) / Full BaZi Life Report ($59) and POSTs to
  * /api/stripe/checkout to start a Stripe Checkout Session. Archetype-skinned via
  * the same CSS custom properties the rest of the dashboard uses. Soft-sell only —
  * no feature is hard-gated yet.
@@ -155,7 +155,7 @@ export default function UpgradePage() {
             <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 13 }}>The full live OS</p>
           </div>
           <div style={{ fontSize: 34, fontWeight: 800 }}>
-            {yearly ? '$119' : '$16'}
+            {yearly ? '$119' : '$18'}
             <span style={{ fontSize: 14, fontWeight: 400, color: 'var(--color-text-secondary)' }}> {yearly ? '/year' : '/month'}</span>
           </div>
           <ul style={{ margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: 8, flex: 1 }}>

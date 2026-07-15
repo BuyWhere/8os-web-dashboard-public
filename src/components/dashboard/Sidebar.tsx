@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import { Inter } from 'next/font/google'
 import { useSidebarDrawer, closeSidebarDrawer } from '@/lib/ui/sidebarDrawer'
 import { AccountMenu } from '@/components/AccountMenu'
+import { DOMAIN_COLORS } from '@/lib/domain-colors'
 
 // Editorial serif for the wordmark — matches the landing.
 const fraunces = Inter({ subsets: ['latin'], weight: ['600'], variable: '--font-serif-side', display: 'swap' })
@@ -63,11 +64,6 @@ const NAV_GROUPS: NavGroup[] = [
   // under the profile-avatar dropdown (AccountMenu) — the single account hub —
   // so there is no duplicate sidebar entry point.
 ]
-
-const DOMAIN_COLORS: Record<string, string> = {
-  career: '#3F6C8E', wealth: 'var(--color-accent)', health: '#4F7A52',
-  relationships: '#B5652F', learning: '#3E8494', legacy: '#7E5A94',
-}
 
 interface Goal { id: string; domainId: string; name: string; progress: number }
 interface Props { goals?: Goal[]; initialCollapsed?: boolean }
@@ -160,8 +156,10 @@ export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
         )}
       </div>
 
-      {/* Grouped nav */}
-      <nav style={{ padding: '10px 0', flex: 1, overflowY: 'auto' }}>
+      {/* Grouped nav. minHeight:0 lets this flex child actually shrink + scroll
+          instead of pushing REFLECT/GROW down into the "Your goals" + account
+          footers (the P0 overlap on card-dense pages). */}
+      <nav style={{ padding: '10px 0', flex: 1, minHeight: 0, overflowY: 'auto' }}>
         {NAV_GROUPS.map((group) => (
           <div key={group.label} style={{ marginBottom: 12 }}>
             {!collapsed && (

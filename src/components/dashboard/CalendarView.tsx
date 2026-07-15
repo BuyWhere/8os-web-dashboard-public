@@ -84,13 +84,6 @@ const EVENT_TEXT_COLORS: Record<string, string> = {
   '#8b5cf6': '#3b0764', // dark violet on violet
   '#f59e0b': '#78350f', // dark amber on amber
   '#7A3B2E': '#450a0a', // dark red on brown-red
-  // Domain colour fallbacks
-  '#6366f1': '#1e1b4b', // career
-  '#f59e0b': '#78350f', // wealth
-  '#22c55e': '#14532d', // health
-  '#ec4899': '#831843', // relationships
-  '#3b82f6': '#1e3a8a', // learning
-  '#8b5cf6': '#3b0764', // legacy
 }
 
 /** Returns a WCAG-compliant dark text colour for any event colour value. */
@@ -323,8 +316,8 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
   }, [])
 
   const energy = energyMap ?? DEFAULT_ENERGY
-  const weekDays = useMemo(() => getWeekDays(currentDate, firstDay), [currentDate])
-  const monthDays = useMemo(() => getMonthDays(currentDate.getFullYear(), currentDate.getMonth(), firstDay), [currentDate])
+  const weekDays = useMemo(() => getWeekDays(currentDate, firstDay), [currentDate, firstDay])
+  const monthDays = useMemo(() => getMonthDays(currentDate.getFullYear(), currentDate.getMonth(), firstDay), [currentDate, firstDay])
   const todayKey = dayKey(new Date())
 
   const goalById = useMemo(() => new Map(goals.map((g) => [g.id, g])), [goals])
@@ -561,7 +554,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
         </div>
       </div>
 
-      {/* Unscheduled tasks sidebar */}
+      {/* Unscheduled tasks sidebar — bottom padding accounts for the floating Coach pill (52px tall + 24px from bottom) */}
       {unscheduledTasks.length > 0 && (
         <div style={{ width: isMobile ? '100%' : 220, borderLeft: isMobile ? 'none' : '1px solid var(--color-border)', borderTop: isMobile ? '1px solid var(--color-border)' : 'none', background: 'var(--color-bg-primary)', padding: '16px 14px 84px', overflowY: 'auto', flexShrink: 0, maxHeight: isMobile ? '46vh' : undefined }}>
           <div style={{ fontSize: 11, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 12 }}>
@@ -592,9 +585,9 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
             <div key={t.id} style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 8, padding: '10px 12px', marginBottom: 8 }}>
               <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{t.name}</div>
               <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 6 }}>
-                <span style={{ fontSize: 10, color: 'var(--color-text-muted)' }}>{t.duration}m</span>
-                <span style={{ fontSize: 10, color: t.priority === 'high' ? '#ef4444' : t.priority === 'medium' ? '#f59e0b' : '#22c55e' }}>{t.priority}</span>
-                {t.domainId && <span style={{ fontSize: 10, color: DOMAIN_COLORS[t.domainId] }}>{t.domainId}</span>}
+                <span style={{ fontSize: 11, fontWeight: 500, color: '#555555' }}>{t.duration}m</span>
+                <span style={{ fontSize: 11, fontWeight: 600, color: t.priority === 'high' ? '#c0392b' : t.priority === 'medium' ? '#b45309' : '#15803d' }}>{t.priority}</span>
+                {t.domainId && <span style={{ fontSize: 11, fontWeight: 600, color: DOMAIN_COLORS[t.domainId] }}>{t.domainId}</span>}
               </div>
               {/* Compact per-task action, sits under the task name, so it's
                   clearly "schedule THIS task" rather than a wall of identical
@@ -606,7 +599,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
                 style={{
                   width: '100%', padding: '4px 0', borderRadius: 5,
                   background: (scheduling === t.id || schedulingAll) ? 'var(--color-bg-primary)' : 'transparent',
-                  border: '1px solid var(--color-accent)44',
+                  border: '1px solid var(--color-border-strong)',
                   color: (scheduling === t.id || schedulingAll) ? 'var(--color-text-muted)' : 'var(--skin-color-badge-text)',
                   fontSize: 11, cursor: (scheduling === t.id || schedulingAll) ? 'default' : 'pointer', fontFamily: 'inherit',
                 }}
