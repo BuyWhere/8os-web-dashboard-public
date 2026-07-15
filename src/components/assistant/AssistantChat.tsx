@@ -419,7 +419,12 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
       {/* Messages / capture body */}
       {mode === 'chat' ? (
         <div style={{ flex: 1, overflowY: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 12, background: CREAM }}>
-          {messages.map((message) => (
+          {messages.filter((message) => (
+            // Never show raw tool-output ('tool' role = internal JSON) or empty
+            // assistant plumbing messages — only real conversation.
+            message.role !== 'tool' &&
+            !(message.role === 'assistant' && !message.content?.trim() && !(message.toolCalls && message.toolCalls.length))
+          )).map((message) => (
             <div key={message.id} style={{ display: 'flex', justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start' }}>
               <div style={{ maxWidth: '86%', borderRadius: 14,
                 borderTopRightRadius: message.role === 'user' ? 4 : 14,

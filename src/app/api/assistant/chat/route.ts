@@ -59,17 +59,40 @@ export async function POST(request: NextRequest) {
     // from stale task data and file everything to the wrong day).
     const fullUser = await prisma.user.findUnique({ where: { id: user.id } })
     const osConfig = (fullUser?.osConfig as any) || {}
-    const userSettings = await prisma.userSettings.findUnique({ where: { userId: user.id } }).catch(() => null)
-    const timezone = (userSettings as any)?.timezone || (osConfig?.timezone as string) || 'UTC'
+    // Canonical timezone lives on UserProfile (auto-captured by Settings→Preferences),
+    // read via getUserTimezone (defaults Asia/Singapore). This is the SAME source the
+    // rest of the OS uses for "today" math.
+    const { getUserTimezone } = await import('@/lib/user-time')
+    const timezone = await getUserTimezone(user.id)
     const firstName =
       (fullUser as any)?.firstName ||
       (fullUser as any)?.name ||
       (fullUser?.email ? fullUser.email.split('@')[0] : undefined)
     const personalizedPrompt = buildPersonalizedPrompt(osConfig, { now: new Date(), timezone, firstName })
 
+    // Live-state snapshot — inject the user's REAL goals + open-task count up front so
+    // the Coach always sees the full picture (it used to be blind to paused goals and
+    // would claim it couldn't see them / act on the wrong ones / narrate fake actions).
+    const [liveGoals, openTaskCount] = await Promise.all([
+      prisma.goal.findMany({
+        where: { userId: user.id, status: { in: ['active', 'paused'] } },
+        select: { id: true, name: true, status: true, horizon: true },
+        orderBy: { createdAt: 'asc' },
+        take: 150,
+      }),
+      prisma.oSTask.count({ where: { userId: user.id, status: { in: ['todo', 'in_progress'] } } }),
+    ])
+    const snapshot =
+      `\n\n## The user's current goals (LIVE — this is their full list; never say you can't see their goals)\n` +
+      (liveGoals.length === 0
+        ? 'No goals yet.'
+        : liveGoals.map((g) => `- [${g.id}] "${g.name}" — ${g.status}, ${g.horizon}`).join('\n')) +
+      `\n\nOpen tasks: ${openTaskCount} (call get_tasks for details). When you update, schedule, or delete something, use these EXACT ids. To remove a goal/task the user created by mistake, call delete_goal / delete_task. NEVER paste raw JSON or tool output into your reply — summarise in plain language.`
+    const systemPrompt = personalizedPrompt + snapshot
+
     // Build message history
     const messages: ChatMessage[] = [
-      { role: 'system', content: personalizedPrompt },
+      { role: 'system', content: systemPrompt },
       ...conversation.messages.map((msg) => ({
         role: msg.role as 'user' | 'assistant' | 'tool',
         content: msg.content,

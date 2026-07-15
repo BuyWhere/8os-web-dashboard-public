@@ -42,6 +42,8 @@ type ToolName =
   | 'create_calendar_event'
   | 'get_archetype_info'
   | 'get_energy_hours'
+  | 'delete_goal'
+  | 'delete_task'
 
 const DOMAIN_IDS = ['career', 'wealth', 'health', 'relationships', 'learning', 'legacy'] as const
 type DomainId = (typeof DOMAIN_IDS)[number]
@@ -94,6 +96,10 @@ export async function executeTool(
       return createGoal(userId, args)
     case 'update_goal':
       return updateGoal(userId, args.goalId, args.updates)
+    case 'delete_goal':
+      return deleteGoal(userId, args.goalId)
+    case 'delete_task':
+      return deleteTask(userId, args.taskId)
     case 'get_projects':
       return getProjects(userId, args.goalId, args.domainId)
     case 'create_project':
@@ -124,10 +130,20 @@ export async function executeTool(
 // ─── Goals ──────────────────────────────────────────────────────────────────
 
 async function getGoals(userId: string, domainId?: string, status?: string) {
+  // Visibility fix: the Coach must see ALL the user's live goals, not just active.
+  // Default returns active + paused (paused is where Focus-Mode-capped and
+  // bulk-created goals land — the Coach used to be blind to them). `all` includes
+  // archived; a specific status filters to just that one.
+  const statusWhere =
+    status === 'all'
+      ? {}
+      : status
+        ? { status: status as any }
+        : { status: { in: ['active', 'paused'] as any } }
   const goals = await prisma.goal.findMany({
     where: {
       userId,
-      status: (status as any) || 'active',
+      ...statusWhere,
       ...(domainId ? { domainId } : {}),
     },
     include: { projects: { include: { tasks: true } } },
@@ -140,11 +156,33 @@ async function getGoals(userId: string, domainId?: string, status?: string) {
       name: g.name,
       definition: g.definition,
       checkMethod: g.checkMethod,
+      horizon: (g as any).horizon,
       status: g.status,
       progress: g.progress,
       projectCount: g.projects.length,
     })),
   }
+}
+
+/** Remove a goal the user created by mistake — archived (hidden from their goals,
+ *  recoverable), not hard-deleted, so no work is lost. */
+async function deleteGoal(userId: string, goalId: string) {
+  const goal = await prisma.goal.findFirst({ where: { id: goalId, userId } })
+  if (!goal) throw new Error(`Goal not found: ${goalId}`)
+  await prisma.goal.update({ where: { id: goalId }, data: { status: 'archived' } })
+  await prisma.activityLog
+    .create({ data: { userId, goalId, action: 'goal_archived', metadata: { name: goal.name, via: 'assistant' } } })
+    .catch(() => {})
+  return { success: true, archived: { id: goalId, name: goal.name } }
+}
+
+/** Permanently delete a task the user created by mistake, plus any calendar event. */
+async function deleteTask(userId: string, taskId: string) {
+  const task = await prisma.oSTask.findFirst({ where: { id: taskId, userId } })
+  if (!task) throw new Error(`Task not found: ${taskId}`)
+  await prisma.calendarEvent.deleteMany({ where: { taskId } }).catch(() => {})
+  await prisma.oSTask.delete({ where: { id: taskId } })
+  return { success: true, deleted: { id: taskId, name: task.name } }
 }
 
 async function createGoal(userId: string, args: Record<string, any>) {

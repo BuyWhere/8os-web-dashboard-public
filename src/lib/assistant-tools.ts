@@ -113,7 +113,7 @@ export const ASSISTANT_TOOLS: Tool[] = [
     type: 'function',
     function: {
       name: 'get_goals',
-      description: 'Get all goals for the user, optionally filtered by domain',
+      description: "Get the user's goals. By default returns all LIVE goals (active + paused). Note: the current live goals are already listed in your system context, so you usually do NOT need to call this — use it to refresh, filter by domain, or see archived goals.",
       parameters: {
         type: 'object',
         properties: {
@@ -122,7 +122,41 @@ export const ASSISTANT_TOOLS: Tool[] = [
             description: 'Optional domain filter: career, wealth, health, relationships, learning, legacy',
             enum: ['career', 'wealth', 'health', 'relationships', 'learning', 'legacy'],
           },
+          status: {
+            type: 'string',
+            description: "Which goals to return. Defaults to active+paused (all live goals). 'archived' shows removed goals; 'all' shows everything.",
+            enum: ['active', 'paused', 'archived', 'all'],
+          },
         },
+      },
+    },
+  },
+  // Delete / remove (for mistakenly-created items)
+  {
+    type: 'function',
+    function: {
+      name: 'delete_goal',
+      description: "Remove a goal the user no longer wants (e.g. one created by mistake). Archives it so it disappears from their goals; recoverable, no work lost. Pass the exact goalId from your system context or get_goals.",
+      parameters: {
+        type: 'object',
+        properties: {
+          goalId: { type: 'string', description: 'The exact id of the goal to remove.' },
+        },
+        required: ['goalId'],
+      },
+    },
+  },
+  {
+    type: 'function',
+    function: {
+      name: 'delete_task',
+      description: 'Permanently delete a task the user no longer wants (e.g. created by mistake), removing it and any calendar event. Pass the exact taskId from get_tasks.',
+      parameters: {
+        type: 'object',
+        properties: {
+          taskId: { type: 'string', description: 'The exact id of the task to delete.' },
+        },
+        required: ['taskId'],
       },
     },
   },
