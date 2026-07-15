@@ -132,6 +132,7 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
   const [captureNote, setCaptureNote] = useState<string | null>(null)
   const [micSupported, setMicSupported] = useState(false)
   const [isRecording, setIsRecording] = useState(false)
+  const [bootstrapped, setBootstrapped] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const recognitionRef = useRef<AnySpeechRecognition | null>(null)
@@ -151,14 +152,43 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [messages])
 
+  // On open, resume the most recent conversation if it was active in the last 24h
+  // so the user sees a continuous record when they click in and out of the Coach.
+  // Falls through to the welcome greeting (below) when there's nothing recent.
   useEffect(() => {
-    if (messages.length === 0 && !conversationId) {
+    let cancelled = false
+    ;(async () => {
+      try {
+        const res = await fetch('/api/assistant/conversations')
+        if (res.ok && !cancelled) {
+          const data = await res.json()
+          const latest = (data.conversations || [])[0]
+          const ts = latest?.updatedAt ? new Date(latest.updatedAt).getTime() : 0
+          if (latest?.id && Date.now() - ts < 24 * 60 * 60 * 1000) {
+            const r2 = await fetch(`/api/assistant/conversations/${latest.id}`)
+            if (r2.ok && !cancelled) {
+              const d2 = await r2.json()
+              if ((d2.messages || []).length > 0) {
+                setMessages(d2.messages)
+                setConversationId(latest.id)
+              }
+            }
+          }
+        }
+      } catch { /* ignore — welcome greeting will show */ }
+      if (!cancelled) setBootstrapped(true)
+    })()
+    return () => { cancelled = true }
+  }, [])
+
+  useEffect(() => {
+    if (bootstrapped && messages.length === 0 && !conversationId) {
       setMessages([{
         id: 'welcome', role: 'assistant',
         content: "Hi, I'm your 8os Coach. I can shape your goals, projects, tasks, and calendar around your archetype, or just capture a quick thought.\n\nWhat's on your mind?",
       }])
     }
-  }, [conversationId, messages.length])
+  }, [bootstrapped, conversationId, messages.length])
 
   const loadConversations = useCallback(async () => {
     setIsLoadingHistory(true)

@@ -54,10 +54,18 @@ export async function POST(request: NextRequest) {
       })
     }
 
-    // Build personalized system prompt with user's archetype
+    // Build personalized system prompt with user's archetype + CURRENT date so
+    // the Coach resolves "today"/"tomorrow" correctly (it used to guess the date
+    // from stale task data and file everything to the wrong day).
     const fullUser = await prisma.user.findUnique({ where: { id: user.id } })
     const osConfig = (fullUser?.osConfig as any) || {}
-    const personalizedPrompt = buildPersonalizedPrompt(osConfig)
+    const userSettings = await prisma.userSettings.findUnique({ where: { userId: user.id } }).catch(() => null)
+    const timezone = (userSettings as any)?.timezone || (osConfig?.timezone as string) || 'UTC'
+    const firstName =
+      (fullUser as any)?.firstName ||
+      (fullUser as any)?.name ||
+      (fullUser?.email ? fullUser.email.split('@')[0] : undefined)
+    const personalizedPrompt = buildPersonalizedPrompt(osConfig, { now: new Date(), timezone, firstName })
 
     // Build message history
     const messages: ChatMessage[] = [
@@ -71,7 +79,8 @@ export async function POST(request: NextRequest) {
       { role: 'user', content: message },
     ]
 
-    // Save user message
+    // Save user message + bump the conversation so "most recent" ordering and the
+    // Coach's auto-resume-on-reopen reflect real activity, not just creation time.
     await prisma.assistantMessage.create({
       data: {
         conversationId: conversation.id,
@@ -79,12 +88,16 @@ export async function POST(request: NextRequest) {
         content: message,
       },
     })
+    await prisma.assistantConversation.update({
+      where: { id: conversation.id },
+      data: { updatedAt: new Date() },
+    }).catch(() => {})
 
     // Create streaming response
     const encoder = new TextEncoder()
     const stream = new ReadableStream({
       async start(controller) {
-        const MAX_ROUNDS = 5
+        const MAX_ROUNDS = 8
 
         // Read one streamed completion; enqueue content deltas to the client and
         // accumulate any tool calls. Returns { content, toolCalls }.

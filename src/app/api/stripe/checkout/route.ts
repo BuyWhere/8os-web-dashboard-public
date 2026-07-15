@@ -64,36 +64,56 @@ export async function POST(req: NextRequest) {
     const priceId = await resolvePriceId(plan)
     const mode = PLAN_MODE[plan]
 
-    // Resolve (or create) the Stripe Customer for this user.
-    let customerId = await getStoredCustomerId(userId)
-    if (!customerId) {
-      // Pull the user's email for a friendlier Stripe dashboard.
-      const user = await prisma.user.findUnique({
-        where: { id: userId },
-        select: { email: true },
-      })
+    // Pull the user's email for a friendlier Stripe dashboard.
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { email: true },
+    })
+    const createFreshCustomer = async (): Promise<string> => {
       const customer = await stripe.customers.create({
         email: user?.email ?? undefined,
         metadata: { appUserId: userId },
       })
-      customerId = customer.id
-      await storeCustomerId(userId, customerId)
+      await storeCustomerId(userId, customer.id)
+      return customer.id
     }
 
-    const session = await stripe.checkout.sessions.create({
-      mode,
-      customer: customerId,
-      // Do NOT set payment_method_types — let Stripe pick dynamically.
-      line_items: [{ price: priceId, quantity: 1 }],
-      success_url: `${SITE_URL}/dashboard?upgraded=1`,
-      cancel_url: `${SITE_URL}/dashboard/upgrade?canceled=1`,
-      client_reference_id: userId,
-      metadata: { appUserId: userId, plan },
-      ...(mode === 'subscription'
-        ? { subscription_data: { metadata: { appUserId: userId, plan } } }
-        : { payment_intent_data: { metadata: { appUserId: userId, plan } } }),
-      allow_promotion_codes: true,
-    })
+    // Resolve (or create) the Stripe Customer for this user.
+    let customerId = (await getStoredCustomerId(userId)) || (await createFreshCustomer())
+
+    const buildSessionParams = (cid: string) => {
+      return {
+        mode,
+        customer: cid,
+        // Do NOT set payment_method_types — let Stripe pick dynamically.
+        line_items: [{ price: priceId, quantity: 1 }],
+        success_url: `${SITE_URL}/dashboard?upgraded=1`,
+        cancel_url: `${SITE_URL}/dashboard/upgrade?canceled=1`,
+        client_reference_id: userId,
+        metadata: { appUserId: userId, plan },
+        ...(mode === 'subscription'
+          ? { subscription_data: { metadata: { appUserId: userId, plan } } }
+          : { payment_intent_data: { metadata: { appUserId: userId, plan } } }),
+        allow_promotion_codes: true,
+      }
+    }
+
+    let session
+    try {
+      session = await stripe.checkout.sessions.create(buildSessionParams(customerId))
+    } catch (err: any) {
+      // A customer id stored from a DIFFERENT Stripe mode (test↔live migration) or
+      // a deleted customer 404s as `resource_missing` / "No such customer". Discard
+      // the stale id, mint a fresh live customer, and retry ONCE so checkout self-heals.
+      const code = err?.code || err?.raw?.code
+      const msg = String(err?.message || '')
+      if (code === 'resource_missing' || /no such customer/i.test(msg)) {
+        customerId = await createFreshCustomer()
+        session = await stripe.checkout.sessions.create(buildSessionParams(customerId))
+      } else {
+        throw err
+      }
+    }
 
     if (!session.url) {
       return NextResponse.json({ error: 'Stripe returned no checkout URL.' }, { status: 502 })

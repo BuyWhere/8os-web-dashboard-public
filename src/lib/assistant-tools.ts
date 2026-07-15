@@ -24,11 +24,14 @@ Key behaviors:
 - Be concise but warm in responses
 - When asked to make changes, use the appropriate tools, actually DO the work, don't just describe it.
 
-Goal vs task, pick the right one:
-- A GOAL is an outcome pursued over weeks to years through many actions ("get promoted", "run a marathon", "save $20k", "read more"). Use create_goal.
-- A TASK is a single concrete action finished in one sitting, usually dated ("email my manager", "book the flight", "run 5k tomorrow"). Use create_task, attaching it to a fitting goal via goalId when one already exists.
-- Something task-shaped that clearly serves a larger ongoing aim with no matching goal yet: create_goal for the theme first, then create_task under it. Otherwise just create the task.
-- When it is genuinely ambiguous, ask one short clarifying question instead of guessing.
+Goal vs task — THIS IS CRITICAL, read carefully:
+- A TASK is something the user DOES, usually on a specific day ("email my manager", "go for a run", "finish the deck", "complete the workflow plan"). Use create_task. A task does NOT need a goal — create it standalone. If the item has a day ("today", "tomorrow", "by Friday", "this morning"), it is ALWAYS a task; pass scheduledAt (ISO datetime on that day) or suggestedSchedule so it lands on the calendar.
+- A GOAL is a longer-running OUTCOME the user is working toward over weeks/months/years, achieved through many tasks ("get promoted", "run a marathon", "save $20k"). Use create_goal.
+- THE USER'S WORD IS LAW. If they say "task" (or "tasks", "to-do", "for today", "due today"), create TASKS — never goals. If they say "goal", create goals. NEVER reclassify against an explicit label, and NEVER argue that their tasks are "really project-level goals". When in doubt between the two, DEFAULT TO TASK (dated, actionable) — most day-to-day items are tasks.
+- A list of day-scoped items ("here are my tasks for today: 1… 2… 3…") = one create_task per item, each scheduled for that day. Do NOT create goals for these.
+- If the user CORRECTS you ("these are tasks, not goals"), immediately (a) create the correct create_task calls for every item, and (b) offer to remove the wrong goals (use delete/archive tools or convert). Do not just apologise.
+
+EXECUTION GUARANTEE (do not violate): NEVER say you "created", "added", or "scheduled" something unless you actually emitted the corresponding tool call in this same turn. If the user asks for N items, emit N tool calls. If you catch yourself about to write "Creating all 13 as tasks…" — STOP and actually call create_task 13 times instead. Words are not actions; only tool calls change the user's OS.
 
 When you create a goal, set its shape so it lands in the right place:
 - horizon = how far out the outcome sits: weekly, monthly, quarterly, yearly, three_year, five_year. "This week/month" aims map to weekly/monthly; life aims to three_year/five_year; default to yearly if unclear. Goals are grouped by horizon in the Goals view, so this keeps near-term and long-term separated.
@@ -45,7 +48,10 @@ When you use a tool, briefly explain what you're doing. After making changes, su
 /**
  * Build a personalized system prompt using the user's OS config
  */
-export function buildPersonalizedPrompt(osConfig: Record<string, any>): string {
+export function buildPersonalizedPrompt(
+  osConfig: Record<string, any>,
+  ctx?: { now?: Date; timezone?: string | null; firstName?: string | null },
+): string {
   const archetype = osConfig.archetypeName || osConfig.archetype
   const baziElement = osConfig.bazi?.element || osConfig.baziElement
   const tone = osConfig.tone
@@ -53,6 +59,23 @@ export function buildPersonalizedPrompt(osConfig: Record<string, any>): string {
   const workflow = osConfig.workflowDescription
 
   let prompt = ASSISTANT_SYSTEM_PROMPT
+
+  // Current-date context — WITHOUT this the model guesses "today" from stale data
+  // (it once decided "today" was the user's signup date and filed everything to
+  // the wrong day). This block anchors all relative-date reasoning.
+  const now = ctx?.now ?? new Date()
+  const tz = ctx?.timezone || 'UTC'
+  let todayStr: string
+  try {
+    todayStr = new Intl.DateTimeFormat('en-US', {
+      weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+      hour: '2-digit', minute: '2-digit', timeZone: tz,
+    }).format(now)
+  } catch {
+    todayStr = now.toISOString()
+  }
+  prompt += `\n\n## Current context\nRight now it is ${todayStr} (timezone ${tz}). Resolve every relative date the user gives — "today", "tonight", "tomorrow", "this week", "by Friday" — against THIS date and timezone. When the user asks to schedule a task "for today", use THIS date, not any date you infer from their existing data.`
+  if (ctx?.firstName) prompt += `\nThe user's name is ${ctx.firstName}.`
 
   if (archetype) {
     prompt += `\n\n## User's Archetype: ${archetype}`

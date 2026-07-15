@@ -85,7 +85,7 @@ export async function createChatCompletion(
       'Authorization': `Bearer ${FLOW_AI_API_KEY}`,
     },
     body: JSON.stringify({
-      model: options.model || 'gpt-4o',
+      model: options.model || 'auto',
       messages,
       tools: options.tools,
       tool_choice: options.tool_choice || 'auto',
@@ -122,7 +122,7 @@ export async function createStreamingChatCompletion(
       'Authorization': `Bearer ${FLOW_AI_API_KEY}`,
     },
     body: JSON.stringify({
-      model: options.model || 'gpt-4o',
+      model: options.model || 'auto',
       messages,
       tools: options.tools,
       tool_choice: options.tool_choice || 'auto',
