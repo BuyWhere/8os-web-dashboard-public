@@ -114,7 +114,7 @@ const miniQA = [
 
 export default function QuizPage() {
   return (
-    <div style={{ background: 'var(--color-bg-primary)', minHeight: '100vh', color: 'var(--color-border)' }}>
+    <div style={{ background: 'var(--color-bg-primary)', color: 'var(--color-border)' }}>
       {/* Hero */}
       <div
         style={{
