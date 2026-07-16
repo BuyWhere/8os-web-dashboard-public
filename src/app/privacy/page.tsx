@@ -26,7 +26,7 @@ export default function PrivacyPage() {
 
         <div style={{ lineHeight: 1.8, color: 'var(--color-text-secondary)' }}>
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               1. Information We Collect
             </h2>
             <p style={{ marginBottom: '1rem' }}>
@@ -42,7 +42,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               2. How We Use Your Information
             </h2>
             <p style={{ marginBottom: '1rem' }}>We use the information we collect to:</p>
@@ -56,7 +56,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               3. Data Sharing
             </h2>
             <p style={{ marginBottom: '1rem' }}>
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               4. Data Retention
             </h2>
             <p>
@@ -81,7 +81,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               5. Security
             </h2>
             <p>
@@ -92,7 +92,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               6. Your Rights
             </h2>
             <p style={{ marginBottom: '1rem' }}>Depending on your location, you may have the right to:</p>
@@ -110,7 +110,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               7. Contact
             </h2>
             <p>
