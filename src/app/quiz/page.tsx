@@ -189,6 +189,7 @@ export default function QuizPage() {
               display: 'grid',
               gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))',
               gap: '24px',
+              alignContent: 'start',
             }}
           >
             {steps.map((step) => (
@@ -199,7 +200,9 @@ export default function QuizPage() {
                   border: '1px solid var(--color-bg-card)',
                   borderRadius: '12px',
                   padding: '28px 24px 24px',
-                  textAlign: 'center',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
                 }}
               >
                 <div
@@ -214,15 +217,15 @@ export default function QuizPage() {
                     margin: '0 auto 16px',
                     fontSize: '18px',
                     fontWeight: 700,
-                    color: '#0d0b14',
+                    color: '#fff',
                   }}
                 >
                   {step.number}
                 </div>
-                <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '8px' }}>
+                <h3 style={{ fontSize: '16px', fontWeight: 600, color: 'var(--color-text-primary)', marginBottom: '8px', textAlign: 'center' }}>
                   {step.title}
                 </h3>
-                <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.6 }}>
+                <p style={{ fontSize: '14px', color: 'var(--color-text-secondary)', lineHeight: 1.6, textAlign: 'center', margin: 0 }}>
                   {step.description}
                 </p>
               </div>
