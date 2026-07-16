@@ -70,11 +70,17 @@ const clerk = clerkMiddleware(async (auth, req) => {
     // users should land on /signup (not /login) to preserve conversion intent.
     await auth.protect({ unauthenticatedUrl: signupUrl })
   } else if (isProtectedRoute(req)) {
-    // Clerk v6: bare protect() REWRITES signed-out users to a 404
-    // (x-clerk-auth-reason: protect-rewrite). Passing unauthenticatedUrl makes
-    // it a real redirect to /login instead. Authed users pass through; the QA
-    // X-QA-USER-ID path is unaffected (it never hits Clerk middleware protect).
-    await auth.protect({ unauthenticatedUrl: loginUrl })
+    // QA/API probes: API routes carrying the X-QA-USER-ID header skip the Clerk
+    // redirect and fall through to the route's requireAuth, which only honours
+    // the header for existing @qa.8os.ai accounts (same trust model as
+    // src/lib/memory/qa-auth.ts). Lets automated QA exercise /api/assistant etc.
+    const isQaApiProbe = req.nextUrl.pathname.startsWith('/api/') && !!req.headers.get('x-qa-user-id')
+    if (!isQaApiProbe) {
+      // Clerk v6: bare protect() REWRITES signed-out users to a 404
+      // (x-clerk-auth-reason: protect-rewrite). Passing unauthenticatedUrl makes
+      // it a real redirect to /login instead. Authed users pass through.
+      await auth.protect({ unauthenticatedUrl: loginUrl })
+    }
   }
 })
 

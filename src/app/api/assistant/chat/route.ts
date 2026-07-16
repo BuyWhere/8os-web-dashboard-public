@@ -5,13 +5,10 @@
 
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
-import {
-  createStreamingChatCompletion,
-  parseStreamChunk,
-  ChatMessage,
-  StreamChunk,
-} from '@/lib/flow-ai'
-import { ASSISTANT_TOOLS, ASSISTANT_SYSTEM_PROMPT, buildPersonalizedPrompt } from '@/lib/assistant-tools'
+import { streamText, tool, jsonSchema, type CoreMessage } from 'ai'
+import { createOpenAI } from '@ai-sdk/openai'
+import { type ChatMessage } from '@/lib/flow-ai'
+import { ASSISTANT_TOOLS, buildPersonalizedPrompt } from '@/lib/assistant-tools'
 import { executeTool } from '@/lib/assistant-tool-executor'
 import { requireAuth } from '@/lib/auth/require-auth'
 import { assembleAgentContext } from '@/lib/agent-context'
@@ -57,14 +54,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Message is required' }, { status: 400 })
     }
 
-    // Get or create conversation
-    let conversation
-    if (conversationId) {
-      conversation = await prisma.assistantConversation.findUnique({
-        where: { id: conversationId, userId: user.id },
-        include: { messages: { orderBy: { createdAt: 'asc' } } },
-      })
-    }
+    // Get or create conversation (single-expression init so TS keeps the type
+    // through the streaming closures below).
+    let conversation = conversationId
+      ? await prisma.assistantConversation.findUnique({
+          where: { id: conversationId, userId: user.id },
+          include: { messages: { orderBy: { createdAt: 'asc' } } },
+        })
+      : null
 
     if (!conversation) {
       conversation = await prisma.assistantConversation.create({
@@ -72,6 +69,8 @@ export async function POST(request: NextRequest) {
         include: { messages: true },
       })
     }
+    // Snapshot for the streaming closures (TS can't narrow the `let` in there).
+    const convoId: string = conversation.id
 
     // Build personalized system prompt with user's archetype + CURRENT date so
     // the Coach resolves "today"/"tomorrow" correctly (it used to guess the date
@@ -186,178 +185,167 @@ export async function POST(request: NextRequest) {
       data: { updatedAt: new Date() },
     }).catch(() => {})
 
-    // Create streaming response
+    // ── AI SDK harness ────────────────────────────────────────────────────
+    // The tool loop, assistant/tool message threading, and stream parsing are
+    // owned by the Vercel AI SDK (streamText + maxSteps). The hand-rolled loop
+    // this replaces produced orphaned tool_calls, dropped batches, and
+    // narration loops — that entire bug class now lives in a maintained harness.
+    const flow = createOpenAI({
+      baseURL: 'https://api.flowaiapi.com/v1',
+      apiKey: process.env.FLOW_AI_API_KEY || '',
+      compatibility: 'compatible', // Flow AI is OpenAI-compatible, not OpenAI
+    })
+
+    // Our stored history (OpenAI wire shape) → SDK CoreMessages.
+    const coreHistory: CoreMessage[] = []
+    for (const m of history) {
+      if (m.role === 'user') {
+        coreHistory.push({ role: 'user', content: m.content || '' })
+      } else if (m.role === 'assistant') {
+        if (m.tool_calls && m.tool_calls.length > 0) {
+          const parts: any[] = []
+          if (m.content) parts.push({ type: 'text', text: m.content })
+          for (const tc of m.tool_calls) {
+            let args: any = {}
+            try { args = JSON.parse(tc.function.arguments || '{}') } catch { /* keep {} */ }
+            parts.push({ type: 'tool-call', toolCallId: tc.id, toolName: tc.function.name, args })
+          }
+          coreHistory.push({ role: 'assistant', content: parts })
+        } else {
+          coreHistory.push({ role: 'assistant', content: m.content || '' })
+        }
+      } else if (m.role === 'tool' && m.tool_call_id) {
+        let result: any = m.content
+        try { result = JSON.parse(m.content || '') } catch { /* keep string */ }
+        coreHistory.push({
+          role: 'tool',
+          content: [{ type: 'tool-result', toolCallId: m.tool_call_id, toolName: m.name || 'tool', result }],
+        })
+      }
+    }
+    const coreMessages: CoreMessage[] = [
+      { role: 'system', content: systemPrompt },
+      ...coreHistory,
+      { role: 'user', content: message },
+    ]
+
+    // Execution tracking for the anti-narration verification.
+    let anyToolCalled = false
+    let mutatingCalled = false
+    void mutatingCalled
+
+    // Our OpenAI-format tool defs → SDK tools (same schemas via jsonSchema; the
+    // SAME executeTool runs them, tz-aware and userId-scoped).
+    const sdkTools: Record<string, any> = {}
+    for (const t of ASSISTANT_TOOLS) {
+      const name = t.function.name
+      sdkTools[name] = tool({
+        description: t.function.description,
+        parameters: jsonSchema(t.function.parameters as any),
+        execute: async (args: any) => {
+          let payload: any
+          try {
+            payload = await executeTool(name as any, args ?? {}, user.id, timezone)
+          } catch (error) {
+            payload = { error: `Tool execution failed: ${error instanceof Error ? error.message : 'Unknown error'}` }
+          }
+          anyToolCalled = true
+          if (MUTATING_TOOLS.has(name) && !(payload && payload.error)) mutatingCalled = true
+          return payload
+        },
+      })
+    }
+
     const encoder = new TextEncoder()
     const stream = new ReadableStream({
       async start(controller) {
-        const MAX_ROUNDS = 8
+        const send = (obj: Record<string, unknown>) =>
+          controller.enqueue(encoder.encode(`data: ${JSON.stringify(obj)}\n\n`))
 
-        // Read one streamed completion; enqueue content deltas to the client and
-        // accumulate any tool calls. Returns { content, toolCalls }.
-        async function streamOneRound(roundMessages: ChatMessage[], forceTool = false) {
-          const response = await createStreamingChatCompletion(roundMessages, {
-            // The Coach is the flagship AGENTIC surface: pin the strong tier, not
-            // cost-routed 'auto' (which lands on deepseek-*-flash and, in long
-            // tool-heavy conversations, narrates "I'll do it" without emitting tool
-            // calls). Everything else keeps using 'auto'.
-            model: 'flow-1',
-            tools: ASSISTANT_TOOLS,
-            // On the anti-narration corrective round, REQUIRE a tool call so the
-            // model can't just re-narrate.
-            tool_choice: forceTool ? 'required' : 'auto',
-          })
-          const reader = response.getReader()
-          const decoder = new TextDecoder()
-          let buffer = ''
-          let content = ''
-          const toolCalls: { id: string; name: string; arguments: string }[] = []
-
-          while (true) {
-            const { done, value } = await reader.read()
-            if (done) break
-            buffer += decoder.decode(value, { stream: true })
-            const lines = buffer.split('\n')
-            buffer = lines.pop() || ''
-            for (const line of lines) {
-              const chunk = parseStreamChunk(line)
-              if (!chunk) continue
-              const delta = chunk.choices[0]?.delta
-              if (!delta) continue
-
-              if (delta.content) {
-                content += delta.content
-                controller.enqueue(
-                  encoder.encode(`data: ${JSON.stringify({ type: 'content', content: delta.content })}\n\n`)
-                )
-              }
-
-              if (delta.tool_calls) {
-                for (const tc of delta.tool_calls) {
-                  if (tc.id) {
-                    toolCalls.push({ id: tc.id, name: tc.function?.name || '', arguments: tc.function?.arguments || '' })
-                  } else if (tc.index !== undefined && toolCalls[tc.index]) {
-                    if (tc.function?.arguments) toolCalls[tc.index].arguments += tc.function.arguments
-                    if (tc.function?.name && !toolCalls[tc.index].name) toolCalls[tc.index].name = tc.function.name
-                  } else if (tc.function?.arguments && toolCalls.length > 0) {
-                    // Fallback: append to the most recent tool call when no index is provided.
-                    toolCalls[toolCalls.length - 1].arguments += tc.function.arguments
-                  }
+        /** One SDK run: streams to the client (existing wire protocol), persists
+         *  each step in the same DB shape as before, returns final text +
+         *  generated messages for threading a follow-up phase. */
+        async function runPhase(
+          msgs: CoreMessage[],
+          toolChoice: 'auto' | 'required',
+          maxSteps: number,
+        ): Promise<{ text: string; responseMessages: CoreMessage[] }> {
+          let round = 0
+          const result = streamText({
+            model: flow.chat('flow-1'),
+            messages: msgs,
+            tools: sdkTools,
+            toolChoice,
+            maxSteps,
+            temperature: 0.7,
+            onStepFinish: async ({ text, toolCalls, toolResults }) => {
+              // Persist in the exact shape the history rebuilder expects.
+              try {
+                if (text || toolCalls.length > 0) {
+                  await prisma.assistantMessage.create({
+                    data: {
+                      conversationId: convoId,
+                      role: 'assistant',
+                      content: text || null,
+                      ...(toolCalls.length > 0
+                        ? { toolCalls: toolCalls.map((tc) => ({ id: tc.toolCallId, name: tc.toolName, arguments: JSON.stringify(tc.args ?? {}) })) }
+                        : {}),
+                    },
+                  })
                 }
-              }
+                for (const tr of toolResults) {
+                  await prisma.assistantMessage.create({
+                    data: {
+                      conversationId: convoId,
+                      role: 'tool',
+                      content: JSON.stringify((tr as any).result ?? null),
+                      toolCallId: tr.toolCallId,
+                      toolName: tr.toolName,
+                    },
+                  })
+                }
+              } catch (e) { console.error('[assistant/chat] step persist failed:', e) }
+            },
+          })
+
+          for await (const part of result.fullStream) {
+            if (part.type === 'text-delta') {
+              send({ type: 'content', content: part.textDelta })
+            } else if (part.type === 'tool-call') {
+              send({ type: 'tool_start', round, toolCalls: [{ id: part.toolCallId, name: part.toolName }] })
+            } else if (part.type === 'tool-result') {
+              send({ type: 'tool_complete', round })
+            } else if (part.type === 'step-finish') {
+              round++
+            } else if (part.type === 'error') {
+              throw (part as any).error instanceof Error ? (part as any).error : new Error(String((part as any).error))
             }
           }
-          return { content, toolCalls }
+          const steps = await result.steps
+          const response = await result.response
+          return { text: steps[steps.length - 1]?.text ?? '', responseMessages: response.messages as CoreMessage[] }
         }
 
         try {
-          // Running message list threaded across tool rounds.
-          const running: ChatMessage[] = [...messages]
-          let mutatingCalled = false // did any tool that changes the OS actually run?
-          let anyToolCalled = false  // did ANY tool run this turn (incl. reads)?
-          let guardUsed = false      // anti-narration corrective round fired once
-          let forceNext = false      // force a tool call on the next round (guard)
+          // Phase 1 — the normal turn.
+          const p1 = await runPhase(coreMessages, 'auto', 10)
 
-          for (let round = 0; round < MAX_ROUNDS; round++) {
-            const { content, toolCalls } = await streamOneRound(running, forceNext)
-            forceNext = false
-
-            // No tool calls → this is the final assistant turn.
-            if (toolCalls.length === 0) {
-              // Anti-narration guard: the model either CLAIMED it did something, or
-              // PROMISED to do something ("let me review…") — but no tool has run at
-              // all this turn. Both are pure narration; force one corrective round
-              // where a tool call is REQUIRED.
-              const narrated =
-                (!mutatingCalled && CLAIMS_ACTION.test(content)) ||
-                (!anyToolCalled && PROMISES_ACTION.test(content))
-              if (narrated && !guardUsed) {
-                guardUsed = true
-                running.push({ role: 'assistant', content })
-                running.push({
-                  role: 'system',
-                  content:
-                    'STOP. You told the user you did (or are about to do) something, but you called NO tool, so nothing actually happened. Call the correct tools NOW — to read, call get_tasks/get_calendar_events/get_goals; to change, use the exact ids from context and the BULK tools delete_goals/convert_goals_to_tasks for batches. Never announce work without doing it in the same turn.',
-                })
-                forceNext = true // next round MUST emit a tool call
-                continue
-              }
-              await prisma.assistantMessage.create({
-                data: { conversationId: conversation.id, role: 'assistant', content },
-              })
-              break
-            }
-
-            // Tool calls requested — notify client, persist, execute, feed back.
-            controller.enqueue(
-              encoder.encode(`data: ${JSON.stringify({ type: 'tool_start', round, toolCalls: toolCalls.map(tc => ({ id: tc.id, name: tc.name })) })}\n\n`)
-            )
-
-            await prisma.assistantMessage.create({
-              data: {
-                conversationId: conversation.id,
-                role: 'assistant',
-                content: content || null,
-                toolCalls: toolCalls.map(tc => ({ id: tc.id, name: tc.name, arguments: tc.arguments })),
+          // Anti-narration verification: the model claimed or promised action but
+          // ran ZERO tools → one corrective pass where a tool call is REQUIRED for
+          // exactly one step (then auto to finish up and summarise honestly).
+          if (!anyToolCalled && (CLAIMS_ACTION.test(p1.text) || PROMISES_ACTION.test(p1.text))) {
+            send({ type: 'content', content: '\n\n' })
+            const guardBase: CoreMessage[] = [
+              ...coreMessages,
+              ...p1.responseMessages,
+              {
+                role: 'system',
+                content:
+                  'STOP. You told the user you did (or are about to do) something, but you called NO tool, so nothing actually happened. Call the correct tools NOW — to read, use get_tasks/get_calendar_events/get_goals; to change, use the exact ids from context and the BULK tools delete_goals/convert_goals_to_tasks for batches. Then report honestly what you actually did.',
               },
-            })
-
-            // Add the assistant tool-call turn to the running history.
-            running.push({
-              role: 'assistant',
-              content: content || null,
-              tool_calls: toolCalls.map(tc => ({ id: tc.id, type: 'function' as const, function: { name: tc.name, arguments: tc.arguments } })),
-            })
-
-            // Execute each tool call and append tool results.
-            for (const tc of toolCalls) {
-              let resultPayload: any
-              try {
-                const args = tc.arguments ? JSON.parse(tc.arguments) : {}
-                resultPayload = await executeTool(tc.name as any, args, user.id, timezone)
-              } catch (error) {
-                resultPayload = { error: `Tool execution failed: ${error instanceof Error ? error.message : 'Unknown error'}` }
-              }
-              anyToolCalled = true
-              if (MUTATING_TOOLS.has(tc.name) && !(resultPayload && resultPayload.error)) mutatingCalled = true
-              const resultStr = JSON.stringify(resultPayload)
-              running.push({ role: 'tool', content: resultStr, tool_call_id: tc.id, name: tc.name })
-              await prisma.assistantMessage.create({
-                data: { conversationId: conversation.id, role: 'tool', content: resultStr, toolCallId: tc.id, toolName: tc.name },
-              }).catch(() => {})
-            }
-
-            controller.enqueue(
-              encoder.encode(`data: ${JSON.stringify({ type: 'tool_complete', round })}\n\n`)
-            )
-
-            // If this was the last allowed round, force a final no-tools summary
-            // so the user always gets a closing message.
-            if (round === MAX_ROUNDS - 1) {
-              const finalResp = await createStreamingChatCompletion(running, { model: 'flow-1', tool_choice: 'none' })
-              const finalReader = finalResp.getReader()
-              const finalDecoder = new TextDecoder()
-              let finalBuf = ''
-              let finalContent = ''
-              while (true) {
-                const { done, value } = await finalReader.read()
-                if (done) break
-                finalBuf += finalDecoder.decode(value, { stream: true })
-                const flines = finalBuf.split('\n')
-                finalBuf = flines.pop() || ''
-                for (const line of flines) {
-                  const chunk = parseStreamChunk(line)
-                  const d = chunk?.choices[0]?.delta
-                  if (d?.content) {
-                    finalContent += d.content
-                    controller.enqueue(encoder.encode(`data: ${JSON.stringify({ type: 'content', content: d.content })}\n\n`))
-                  }
-                }
-              }
-              await prisma.assistantMessage.create({
-                data: { conversationId: conversation.id, role: 'assistant', content: finalContent },
-              })
-            }
-            // else: loop again — the model sees the tool results and may call more tools.
+            ]
+            const p2a = await runPhase(guardBase, 'required', 1)
+            await runPhase([...guardBase, ...p2a.responseMessages], 'auto', 8)
           }
 
           // Learn from this turn — non-blocking (Railway's process is long-lived,
@@ -370,14 +358,10 @@ export async function POST(request: NextRequest) {
             void consolidateUser(user.id).catch(() => {})
           }
 
-          controller.enqueue(
-            encoder.encode(`data: ${JSON.stringify({ type: 'done', conversationId: conversation.id })}\n\n`)
-          )
+          send({ type: 'done', conversationId: conversation.id })
         } catch (error) {
           console.error('Chat error:', error)
-          controller.enqueue(
-            encoder.encode(`data: ${JSON.stringify({ type: 'error', error: error instanceof Error ? error.message : 'Unknown error' })}\n\n`)
-          )
+          send({ type: 'error', error: error instanceof Error ? error.message : 'Unknown error' })
         } finally {
           controller.close()
         }
