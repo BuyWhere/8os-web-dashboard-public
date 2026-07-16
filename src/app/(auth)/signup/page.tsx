@@ -99,8 +99,15 @@ export default function SignupPage() {
         .signup-auth .cl-formFieldOptionalText { color: ${LINK_DARK} !important; }
         .signup-auth .cl-socialButtonsBlockButton { border-color: ${BORDER} !important; border: 1px solid ${BORDER} !important; }
         .signup-auth .cl-formFieldHintText,
-        .signup-auth .cl-footerActionLink,
-        .signup-auth .cl-formButtonPrimary { color: ${LINK_DARK} !important; }
+        .signup-auth .cl-footerActionLink { color: ${LINK_DARK} !important; }
+        /* OS-3867 button: ensure black text on gold bg wins specificity battle.
+           #000 on #B08637 = 6.48:1 ✓. Clerk may apply background via
+           colorPrimary or its own gradient — defeat all of them. */
+        .signup-auth .cl-formButtonPrimary {
+          color: #000000 !important;
+          background-color: #B08637 !important;
+          background: #B08637 !important;
+        }
         @media (max-width: 860px) {
           .signup-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; padding-top: 2.5rem !important; }
           .signup-pitch { max-width: 100% !important; text-align: center; }

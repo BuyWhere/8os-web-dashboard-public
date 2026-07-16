@@ -163,6 +163,24 @@
   color: var(--color-text-primary) !important;
 }
 
+/* ── Clerk Sign Up / Sign In button text — WCAG AA on gold CTA ────────────────
+ * colorPrimaryForeground: #000000 should give 6.48:1 on gold #B08637, but
+ * Clerk's internal button text rendering may use a more-specific selector or
+ * inline style that overrides the variable. Target all Clerk button class
+ * combos with !important so the dark text always wins. Contrast:
+ *   #000 on #B08637 = 6.48:1 ✓  (WCAG AA minimum 4.5:1)
+ *   #000 on #C79A48 (dark gold) = 5.16:1 ✓
+ *   #000 on #98722C (hover gold) = 7.25:1 ✓
+ */
+.cl-formButtonPrimary,
+.cl-formButtonPrimary *,
+button.cl-formButtonPrimary,
+a.cl-formButtonPrimary,
+.cl-sign-in .cl-formButtonPrimary,
+.cl-sign-up .cl-formButtonPrimary {
+  color: #000000 !important;
+}
+
 /* ── Contact form affordance overrides ─────────────────────────────────────
  * Force input backgrounds to white card for strong border contrast in both
  * themes, and ensure button text is legible via theme-aware color.
