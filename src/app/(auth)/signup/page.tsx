@@ -11,9 +11,9 @@ export const dynamic = "force-dynamic"
 const BG = "#F7F3EC"    // cream, --color-bg-primary
 const CARD = "#FFFFFF"  // white card, --color-bg-card
 const INK = "#221F1A"   // ink, --color-text-primary
-const MUTED = "#6B6257" // warm gray, --color-text-secondary
+const MUTED = "#221F1A" // dark for WCAG links (was #6B6257, 5.47:1 but Clerk uses for footer)
 const GOLD = "#B08637"  // 8os gold accent
-const BORDER = "#E7DFD2"
+const BORDER = "#767676" // dark gray for WCAG input borders (was #E7DFD2, 1.46:1 fails)
 
 const BENEFITS = [
   { icon: "◐", title: "Your real BaZi archetype", body: "Not a horoscope, a decoded operating profile from your birth chart." },
@@ -66,7 +66,7 @@ export default function SignupPage() {
                 colorText: INK,
                 colorTextSecondary: MUTED,
                 colorPrimary: GOLD,
-                colorPrimaryForeground: "#FFFFFF",
+                colorPrimaryForeground: INK, // dark text on gold for WCAG (was #FFFFFF, 2.49:1 fails)
                 colorNeutral: BORDER,
                 colorInput: CARD,
                 colorInputForeground: INK,
@@ -78,6 +78,8 @@ export default function SignupPage() {
                 formButtonPrimary: { minHeight: "44px", fontSize: "15px" },
                 socialButtonsBlockButton: { minHeight: "44px" },
                 formFieldInput: { minHeight: "44px" },
+                formFieldLabel: { color: INK }, // dark label for WCAG
+                footerActionLink: { color: INK, fontWeight: 600 }, // dark "Sign in" link for WCAG
               },
             }}
           />

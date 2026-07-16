@@ -15,9 +15,9 @@ export const dynamic = "force-dynamic"
 const BG = "#F7F3EC"   // cream, matches :root --color-bg-primary
 const CARD = "#FFFFFF"  // white card surface, matches --color-bg-card
 const INK = "#221F1A"   // ink, matches --color-text-primary
-const MUTED = "#6B6257" // warm gray, matches --color-text-secondary
+const MUTED = "#221F1A" // dark for WCAG links (was #6B6257)
 const GOLD = "#B08637"  // 8os gold accent, 4.69:1 on cream
-const BORDER = "#E7DFD2" // hairline
+const BORDER = "#767676" // dark gray for WCAG input borders (was #E7DFD2, 1.46:1 fails)
 
 export default function LoginPage() {
   return (
@@ -43,7 +43,7 @@ export default function LoginPage() {
             colorTextSecondary: MUTED,
             // Brand
             colorPrimary: GOLD,
-            colorPrimaryForeground: "#FFFFFF",
+            colorPrimaryForeground: INK, // dark text on gold for WCAG (was #FFFFFF)
             // Borders & dividers
             colorNeutral: BORDER,
             // Inputs: light surface, dark text
@@ -57,6 +57,8 @@ export default function LoginPage() {
               border: `1px solid ${BORDER}`,
               boxShadow: "0 4px 24px rgba(34,31,26,0.06)",
             },
+            formFieldLabel: { color: INK }, // dark label for WCAG
+            footerActionLink: { color: INK, fontWeight: 600 }, // dark "Sign up" link for WCAG
           },
         }}
       />
