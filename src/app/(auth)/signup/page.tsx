@@ -24,8 +24,17 @@ const BENEFITS = [
 export default function SignupPage() {
   return (
     <main style={{ minHeight: "100vh", background: BG, color: INK }}>
-      <div className="signup-grid" style={{ maxWidth: 1080, margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "start", gap: "3rem", padding: "6rem 1.5rem 3rem" }}>
-        {/* Left, product context */}
+      {/* OS-3873: maxWidth 1120 + horizontal padding 2rem matches Header's grid
+          container exactly. Header uses `maxWidth: 1120px` + `padding: 0 2rem`;
+          if signup used different values, the header brand sat at one x-position
+          and hero text at another (12px offset at 1440x900), and the Log in
+          button extended further right than the signup card edge. Matching
+          both values makes the columns align to the same vertical grid lines.
+          `alignItems: start` keeps hero copy top-aligned with the Clerk card. */}
+      <div className="signup-grid" style={{ maxWidth: 1120, margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "start", gap: "3rem", padding: "6rem 2rem 2rem" }}>
+        {/* Left, product context. The 8os wordmark lives in the global Header, so
+            we don't repeat it here — it would compete with the header and split
+            attention across two brand marks on the same page. */}
         <section className="signup-pitch" style={{ maxWidth: 460 }}>
           <h1 style={{ fontFamily: "var(--font-serif-header), Georgia, serif", fontSize: "2rem", lineHeight: 1.15, fontWeight: 600, margin: "0 0 0.75rem" }}>
             Build your personalized Life OS
