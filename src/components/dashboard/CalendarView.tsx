@@ -89,25 +89,12 @@ const EVENT_TEXT_COLORS: Record<string, string> = {
   '#f59e0b': '#78350f', // dark amber on amber
   '#7A3B2E': '#450a0a', // dark red on brown-red
 }
-// LIGHT text for DARK mode — the color+'22' tint sits on a dark surface, so the
-// light-mode dark text was invisible (dark-on-dark). This was the "all calendar/
-// task items show blank in dark mode" bug.
-const EVENT_TEXT_COLORS_DARK: Record<string, string> = {
-  '#B08637': '#e9cfa0',
-  '#6366f1': '#c7d2fe',
-  '#22c55e': '#bbf7d0',
-  '#ec4899': '#fbcfe8',
-  '#3b82f6': '#bfdbfe',
-  '#8b5cf6': '#ddd6fe',
-  '#f59e0b': '#fde68a',
-  '#7A3B2E': '#fecaca',
-}
-
-/** Theme-aware, WCAG-legible text colour for an event's colour. Reads the active
- *  theme (data-theme on <html>) at render so titles are visible in BOTH modes. */
+/** LIGHT-mode text colour for an event's colour (WCAG on the color+'22' tint).
+ *  DARK mode is handled purely in CSS (globals.css `[data-theme='dark'] .cal-event-text`)
+ *  — do NOT detect the theme in JS here: the page is server-rendered without a
+ *  theme and React does not patch mismatched inline styles on hydration, which is
+ *  exactly how the invisible dark-on-dark text bug happened. */
 function eventTextColor(color: string): string {
-  const dark = typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'dark'
-  if (dark) return EVENT_TEXT_COLORS_DARK[color] ?? '#EDE7DD'
   return EVENT_TEXT_COLORS[color] ?? color
 }
 
@@ -621,7 +608,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
             <div key={t.id} style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 8, padding: '10px 12px', marginBottom: 8 }}>
               <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{t.name}</div>
               <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 6 }}>
-                <span style={{ fontSize: 11, fontWeight: 500, color: '#555555' }}>{t.duration}m</span>
+                <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--color-text-secondary)' }}>{t.duration}m</span>
                 <span style={{ fontSize: 11, fontWeight: 600, color: t.priority === 'high' ? '#c0392b' : t.priority === 'medium' ? '#b45309' : '#15803d' }}>{t.priority}</span>
                 {t.domainId && <span style={{ fontSize: 11, fontWeight: 600, color: DOMAIN_COLORS[t.domainId] }}>{t.domainId}</span>}
               </div>
@@ -1028,7 +1015,7 @@ function MonthView({ days, events, todayKey, onEventClick, onDayClick, firstDay 
               {dayEvents.slice(0, 3).map((e) => {
                 const c = eventColor(e)
                 return (
-                  <div key={e.id} onClick={(ev) => { ev.stopPropagation(); onEventClick(e) }} style={{
+                  <div key={e.id} className="cal-event-text" onClick={(ev) => { ev.stopPropagation(); onEventClick(e) }} style={{
                     padding: '2px 6px', borderRadius: 3, marginBottom: 2, cursor: 'pointer',
                     background: c + '22', color: eventTextColor(c), fontSize: 10, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis',
                     borderLeft: `2px solid ${c}`,
@@ -1145,11 +1132,11 @@ function EventBlock({ e, ghost, onClick, onDragStart, onResizeStart, dense, col 
       }}
       title={`${e.title}${e.location ? ' · ' + e.location : ''}`}
     >
-      <div style={{ fontSize: 11, fontWeight: 600, color: eventTextColor(color), whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+      <div className="cal-event-text" style={{ fontSize: 11, fontWeight: 600, color: eventTextColor(color), whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
         {e.recurrenceRule !== 'none' && '↻ '}{e.title}
       </div>
       {height > 34 && (
-        <div style={{ fontSize: 10, color: eventTextColor(color) + 'cc' }}>{fmtTime(new Date(e.startAt))} - {fmtTime(new Date(e.endAt))}</div>
+        <div className="cal-event-sub" style={{ fontSize: 10, color: eventTextColor(color) + 'cc' }}>{fmtTime(new Date(e.startAt))} - {fmtTime(new Date(e.endAt))}</div>
       )}
       {draggable && (
         <div onMouseDown={(ev) => onResizeStart(ev, e)} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 7, cursor: 'ns-resize' }} title="Drag to resize">
@@ -1239,7 +1226,7 @@ function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, 
             <div key={i} style={{ borderLeft: '1px solid var(--color-border)', padding: 2 }}>
               {allDayForDay(events, d).map((e) => {
                 const c = eventColor(e)
-                return <div key={e.id} onClick={() => onEventClick(e)} style={{ background: c + '22', color: eventTextColor(c), borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 10, padding: '1px 5px', marginBottom: 2, cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{e.title}</div>
+                return <div key={e.id} className="cal-event-text" onClick={() => onEventClick(e)} style={{ background: c + '22', color: eventTextColor(c), borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 10, padding: '1px 5px', marginBottom: 2, cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{e.title}</div>
               })}
             </div>
           ))}
@@ -1379,7 +1366,7 @@ function DayView({ day, events, energy, onSlotCreate, onEventClick, onEventDrag,
         <div style={{ display: 'grid', gridTemplateColumns: '56px 1fr', borderBottom: '1px solid var(--color-border)', padding: '2px 0' }}>
           <div style={{ fontSize: 9, color: 'var(--color-text-muted)', textAlign: 'right', paddingRight: 6, paddingTop: 4 }}>all-day</div>
           <div style={{ padding: 2 }}>
-            {allDay.map((e) => { const c = eventColor(e); return <div key={e.id} onClick={() => onEventClick(e)} style={{ background: c + '22', color: eventTextColor(c), borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 11, padding: '2px 6px', marginBottom: 2, cursor: 'pointer' }}>{e.title}</div> })}
+            {allDay.map((e) => { const c = eventColor(e); return <div key={e.id} className="cal-event-text" onClick={() => onEventClick(e)} style={{ background: c + '22', color: eventTextColor(c), borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 11, padding: '2px 6px', marginBottom: 2, cursor: 'pointer' }}>{e.title}</div> })}
           </div>
         </div>
       )}

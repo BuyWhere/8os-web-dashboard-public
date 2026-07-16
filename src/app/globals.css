@@ -351,3 +351,16 @@ body:has(.app-sidebar) main:not(.cal-main) {
 .theme-hybrid-explorer {
   /* These are snapshots; runtime ArchetypeThemeProvider takes precedence. */
 }
+
+/* ── Calendar event text: theme-correct via CSS (NOT JS) ─────────────────────
+   The event tint (color+'22') sits on the page bg, so in dark mode the card is
+   dark and text must be LIGHT. This was previously computed in JS at render,
+   which broke under SSR/hydration (React keeps the server's inline style), so
+   dark mode showed invisible dark-on-dark text. CSS reacts to [data-theme]
+   immediately and always wins (!important beats the inline light-mode color). */
+[data-theme='dark'] .cal-event-text {
+  color: #F2EDE4 !important;
+}
+[data-theme='dark'] .cal-event-sub {
+  color: rgba(242, 237, 228, 0.75) !important;
+}

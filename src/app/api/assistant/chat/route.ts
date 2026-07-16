@@ -31,6 +31,8 @@ const MUTATING_TOOLS = new Set([
   'create_calendar_event',
 ])
 const CLAIMS_ACTION = /\b(create|created|add|added|delete|deleted|remove|removed|archive|archived|schedul|mov(?:e|ed)|updat|convert|set up|mark(?:ed)?|log(?:ged)?)\b/i
+/** "Let me review/check/fetch…" style promises — announcing work instead of doing it. */
+const PROMISES_ACTION = /\b(let me|i'?ll|i will|i am going to|executing|fetching|checking|reviewing|looking (at|into)|going to|one sweep|right now)\b/i
 
 /**
  * POST /api/assistant/chat
@@ -133,15 +135,40 @@ export async function POST(request: NextRequest) {
     const baziDoctrine = selectBaziDoctrine(message)
     const systemPrompt = personalizedPrompt + '\n\n' + PLATFORM_KNOWLEDGE + plays + brain + baziDoctrine + snapshot
 
-    // Build message history
+    // Build message history. THREE rules, each a hard-won bug fix:
+    //  1. Assistant messages MUST carry their persisted tool_calls — omitting them
+    //     leaves every stored tool result as an ORPHANED `tool` message (invalid
+    //     per the OpenAI tool contract). That malformed history is what made the
+    //     Coach flail/narrate in long conversations, regardless of model.
+    //  2. Cap the window (last 40) and start it at a `user` message so we never
+    //     open mid tool-sequence.
+    //  3. Truncate giant old tool payloads — they bloat context without value.
+    const windowRaw = conversation.messages.slice(-40)
+    let winStart = 0
+    while (winStart < windowRaw.length && windowRaw[winStart].role !== 'user') winStart++
+    const history: ChatMessage[] = windowRaw.slice(winStart).map((msg) => {
+      const m: ChatMessage = {
+        role: msg.role as 'user' | 'assistant' | 'tool',
+        content:
+          msg.role === 'tool' && msg.content && msg.content.length > 3000
+            ? msg.content.slice(0, 3000) + '…[truncated]'
+            : msg.content,
+      }
+      const calls = msg.toolCalls as unknown as Array<{ id: string; name: string; arguments?: string }> | null
+      if (msg.role === 'assistant' && Array.isArray(calls) && calls.length > 0) {
+        m.tool_calls = calls.map((tc) => ({
+          id: tc.id,
+          type: 'function' as const,
+          function: { name: tc.name, arguments: typeof tc.arguments === 'string' ? tc.arguments : JSON.stringify(tc.arguments ?? {}) },
+        }))
+      }
+      if (msg.toolCallId) m.tool_call_id = msg.toolCallId
+      if (msg.toolName) m.name = msg.toolName
+      return m
+    })
     const messages: ChatMessage[] = [
       { role: 'system', content: systemPrompt },
-      ...conversation.messages.map((msg) => ({
-        role: msg.role as 'user' | 'assistant' | 'tool',
-        content: msg.content,
-        tool_call_id: msg.toolCallId || undefined,
-        name: msg.toolName || undefined,
-      })),
+      ...history,
       { role: 'user', content: message },
     ]
 
@@ -226,6 +253,7 @@ export async function POST(request: NextRequest) {
           // Running message list threaded across tool rounds.
           const running: ChatMessage[] = [...messages]
           let mutatingCalled = false // did any tool that changes the OS actually run?
+          let anyToolCalled = false  // did ANY tool run this turn (incl. reads)?
           let guardUsed = false      // anti-narration corrective round fired once
           let forceNext = false      // force a tool call on the next round (guard)
 
@@ -235,16 +263,20 @@ export async function POST(request: NextRequest) {
 
             // No tool calls → this is the final assistant turn.
             if (toolCalls.length === 0) {
-              // Anti-narration guard: if the model CLAIMS it did something but no
-              // mutating tool ran this whole turn, it hallucinated the action. Give
-              // it exactly one corrective round (with tools) to actually do it.
-              if (!mutatingCalled && !guardUsed && CLAIMS_ACTION.test(content)) {
+              // Anti-narration guard: the model either CLAIMED it did something, or
+              // PROMISED to do something ("let me review…") — but no tool has run at
+              // all this turn. Both are pure narration; force one corrective round
+              // where a tool call is REQUIRED.
+              const narrated =
+                (!mutatingCalled && CLAIMS_ACTION.test(content)) ||
+                (!anyToolCalled && PROMISES_ACTION.test(content))
+              if (narrated && !guardUsed) {
                 guardUsed = true
                 running.push({ role: 'assistant', content })
                 running.push({
                   role: 'system',
                   content:
-                    'STOP. You just told the user you created/added/updated/scheduled/deleted something, but you called NO tool this turn, so nothing actually changed in their OS. If the user asked for a change, call the correct tools NOW to really perform it (use the exact ids from context, and the BULK tools delete_goals/convert_goals_to_tasks for batches). If no change was needed, rewrite your reply so it does not claim any action was taken.',
+                    'STOP. You told the user you did (or are about to do) something, but you called NO tool, so nothing actually happened. Call the correct tools NOW — to read, call get_tasks/get_calendar_events/get_goals; to change, use the exact ids from context and the BULK tools delete_goals/convert_goals_to_tasks for batches. Never announce work without doing it in the same turn.',
                 })
                 forceNext = true // next round MUST emit a tool call
                 continue
@@ -285,6 +317,7 @@ export async function POST(request: NextRequest) {
               } catch (error) {
                 resultPayload = { error: `Tool execution failed: ${error instanceof Error ? error.message : 'Unknown error'}` }
               }
+              anyToolCalled = true
               if (MUTATING_TOOLS.has(tc.name) && !(resultPayload && resultPayload.error)) mutatingCalled = true
               const resultStr = JSON.stringify(resultPayload)
               running.push({ role: 'tool', content: resultStr, tool_call_id: tc.id, name: tc.name })

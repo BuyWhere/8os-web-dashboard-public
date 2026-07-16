@@ -76,7 +76,9 @@ export async function POST(req: NextRequest) {
       { role: 'system', content: system },
       { role: 'user', content },
     ]
-    const resp = await createChatCompletion(messages, { model: 'auto', temperature: 0.2, max_tokens: 1200 })
+    // Strong tier: extraction quality is the whole product here — cheap flash
+    // models under-extract (miss tasks/events) and mangle the JSON.
+    const resp = await createChatCompletion(messages, { model: 'flow-1', temperature: 0.2, max_tokens: 1200 })
     const raw = resp?.choices?.[0]?.message?.content || '{}'
     const jsonStr = raw.slice(raw.indexOf('{'), raw.lastIndexOf('}') + 1)
     ex = JSON.parse(jsonStr)
