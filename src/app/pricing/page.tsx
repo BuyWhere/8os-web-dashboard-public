@@ -310,8 +310,8 @@ const featureCheckStyle = (included: boolean): React.CSSProperties => ({ flexShr
 const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', paddingTop: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' };
 const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600 };
 const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--color-text-secondary)' };
-const tierCtaStyle: React.CSSProperties = { display: 'block', textAlign: 'center', padding: '0.8rem', borderRadius: '10px', background: 'var(--color-border)', border: '1px solid var(--color-border)', color: 'var(--color-text-primary)', fontWeight: 700, textDecoration: 'none', fontSize: '0.9rem' };
-const tierCtaHighlightedStyle: React.CSSProperties = { background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)', border: 'none', boxShadow: '0 6px 20px var(--color-accent-soft)' };
+const tierCtaStyle: React.CSSProperties = { display: 'block', textAlign: 'center', padding: '0.8rem', borderRadius: '10px', background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.3)', color: 'var(--color-accent)', fontWeight: 700, textDecoration: 'none', fontSize: '0.9rem', transition: 'background 0.2s, border-color 0.2s' };
+const tierCtaHighlightedStyle: React.CSSProperties = { background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)', border: 'none', color: '#fff', boxShadow: '0 6px 20px var(--color-accent-soft)' };
 
 const tableSection: React.CSSProperties = { marginBottom: '4rem' };
 const sectionTitleStyle: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', letterSpacing: '-0.03em' };

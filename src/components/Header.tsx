@@ -218,8 +218,32 @@ export function Header() {
           ))}
         </nav>
 
+        {/* CTA — shown on archetype SEO pages so organic visitors have an immediate
+            conversion path. Persists across all viewport sizes. */}
+        {pathname.startsWith('/archetypes/') && (
+          <Link
+            href="/onboarding"
+            style={{
+              display: 'inline-flex',
+              alignItems: 'center',
+              background: 'var(--color-accent)',
+              color: '#fff',
+              padding: '8px 18px',
+              borderRadius: 8,
+              textDecoration: 'none',
+              fontWeight: 700,
+              fontSize: '0.875rem',
+              whiteSpace: 'nowrap',
+              flexShrink: 0,
+            }}
+          >
+            Get Started →
+          </Link>
+        )}
+
         {/* Auth actions. Single primary CTA removed per OS-2515 — "Get started" in
-            hero is the sole primary CTA. Log in remains as a secondary nav link. */}
+            hero is the sole primary CTA. On archetype pages the CTA above is the
+            conversion path; this remains only for Log in on other pages. */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <ClerkLoading>
             <Link

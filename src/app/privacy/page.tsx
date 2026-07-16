@@ -11,7 +11,7 @@ export default function PrivacyPage() {
     <main style={{
       minHeight: '100vh',
       background: 'var(--color-bg-primary)',
-      color: 'var(--color-border)',
+      color: 'var(--color-text-primary)',
       padding: '4rem 2rem',
     }}>
       <div style={{ maxWidth: '720px', margin: '0 auto' }}>
@@ -22,11 +22,11 @@ export default function PrivacyPage() {
         <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '2rem', marginBottom: '0.5rem' }}>
           Privacy Policy
         </h1>
-        <p style={{ color: '#666', marginBottom: '3rem' }}>Last updated: May 2026</p>
+        <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem' }}>Last updated: May 2026</p>
 
-        <div style={{ lineHeight: 1.8, color: '#ccc' }}>
+        <div style={{ lineHeight: 1.8, color: 'var(--color-text-secondary)' }}>
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               1. Information We Collect
             </h2>
             <p style={{ marginBottom: '1rem' }}>
@@ -42,7 +42,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               2. How We Use Your Information
             </h2>
             <p style={{ marginBottom: '1rem' }}>We use the information we collect to:</p>
@@ -56,7 +56,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               3. Data Sharing
             </h2>
             <p style={{ marginBottom: '1rem' }}>
@@ -70,7 +70,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               4. Data Retention
             </h2>
             <p>
@@ -81,7 +81,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               5. Security
             </h2>
             <p>
@@ -92,7 +92,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               6. Your Rights
             </h2>
             <p style={{ marginBottom: '1rem' }}>Depending on your location, you may have the right to:</p>
@@ -110,7 +110,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               7. Contact
             </h2>
             <p>

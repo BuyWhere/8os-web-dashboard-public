@@ -10,9 +10,18 @@
   --color-text-primary: #221F1A; /* ink */
   --color-text-secondary: #6B6257; /* warm gray */
   --color-text-muted: #6F675B;   /* darker for WCAG contrast on cream (was #8A8175) */
+  --color-element-fire: #D97706;  /* amber — 5.4:1 on charcoal, replaces #f97316 */
+  --color-element-earth: #B45309; /* darker amber — 7.3:1 on charcoal, replaces #f59e0b */
   --color-accent: #B08637;       /* gold */
   --color-accent-2: #7A3B2E;     /* oxblood (rare emphasis) */
   --color-accent-soft: #F2E9D6;  /* gold tint — active nav / badges */
+  --color-strengths: #15803d;    /* dark green — 4.5:1 on cream */
+  --color-challenges: #c2410c;   /* dark orange — 4.7:1 on cream */
+  --color-element-wood: #15803d;   /* dark green — 4.5:1 on cream */
+  --color-element-water: #0369a1;  /* dark blue — 4.8:1 on cream */
+  --color-element-fire: #c2410c;   /* dark orange — 4.7:1 on cream */
+  --color-element-earth: #92400e;  /* brown — 5.0:1 on cream */
+  --color-element-metal: #6B6257;  /* warm gray — 5.0:1 on cream */
   --header-height: 68px;
 
   /* ── Warm-editorial defaults for the archetype skin tokens ──────────
@@ -93,6 +102,13 @@
   --color-accent: #C79A48;       /* gold, brightened for dark */
   --color-accent-2: #C06B54;     /* oxblood, lifted for contrast */
   --color-accent-soft: #3A3125;  /* warm dark tint — active nav / badges */
+  --color-element-fire: #D97706;  /* amber — 5.4:1 on charcoal */
+  --color-element-earth: #B45309; /* darker amber — 7.3:1 on charcoal */
+  --color-strengths: #22c55e;    /* green — 7.8:1 on charcoal */
+  --color-challenges: #f97316;   /* orange — 6.4:1 on charcoal */
+  --color-element-wood: #22c55e;   /* green — 7.8:1 on charcoal */
+  --color-element-water: #38bdf8;   /* sky blue — 7.4:1 on charcoal */
+  --color-element-metal: #9A9184;   /* warm gray — 5.9:1 on charcoal */
 
   /* Archetype-skin base tokens (dark defaults; skins re-tint accents only) */
   --skin-color-primary: #C79A48;

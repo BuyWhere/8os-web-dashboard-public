@@ -35,7 +35,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'capricorn-ren-water': {
     slug: 'capricorn-ren-water',
-    sign: 'Capricorn', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Capricorn', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Strategist Who Sees What Others Miss',
     description: 'Capricorn × Ren Water creates a rare combination: Capricorn\'s structural ambition carried by Water\'s deep perception and synthesis capacity. You don\'t just plan, you sense what the plan misses. You see around corners that purely analytical thinkers hit head-on.',
@@ -47,7 +47,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'aquarius-bing-fire': {
     slug: 'aquarius-bing-fire',
-    sign: 'Aquarius', element: 'Fire', elementEmoji: '🔥', elementColor: '#f97316',
+    sign: 'Aquarius', element: 'Fire', elementEmoji: '🔥', elementColor: 'var(--color-element-fire)',
     archetype: 'Visionary Builder', archetypeSlug: 'visionary-builder',
     tagline: 'The Revolutionary Who Builds the Future',
     description: 'Aquarius × Bing Fire is one of the most iconoclastic combinations in the system. Aquarius\'s systems-level thinking about human progress meets Bing Fire\'s warmth, visibility, and magnetic leadership energy. This archetype doesn\'t just have a vision, it broadcasts it at a frequency that moves people.',
@@ -59,7 +59,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'aquarius-gui-water': {
     slug: 'aquarius-gui-water',
-    sign: 'Aquarius', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Aquarius', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Innovator Who Feels the System',
     description: 'Aquarius × Gui Water is the most quietly radical combination in the system. Aquarius sees systemic patterns; Gui Water feels them. You don\'t just understand what needs to change, you sense the emotional and relational undercurrents that make change possible or impossible.',
@@ -83,7 +83,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'cancer-ding-fire': {
     slug: 'cancer-ding-fire',
-    sign: 'Cancer', element: 'Fire', elementEmoji: '🔥', elementColor: '#f97316',
+    sign: 'Cancer', element: 'Fire', elementEmoji: '🔥', elementColor: 'var(--color-element-fire)',
     archetype: 'Visionary Builder', archetypeSlug: 'visionary-builder',
     tagline: 'The Heart-Led Builder',
     description: 'Cancer × Ding Fire (the candle flame, intimate and warm) is the most emotionally connected Visionary Builder. You don\'t just inspire from a stage, you inspire in the room, in the conversation, in the moment. Your vision is felt before it\'s understood.',
@@ -95,7 +95,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'gemini-yi-wood': {
     slug: 'gemini-yi-wood',
-    sign: 'Gemini', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Gemini', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Adaptive Builder',
     description: 'Gemini × Yi Wood (the vine, flexible and persistent) is the most versatile Steady Achiever. Gemini\'s multi-channel curiosity gives Yi Wood\'s patient growth remarkable range. You build momentum across many domains simultaneously without losing the thread of any.',
@@ -107,7 +107,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'leo-bing-fire': {
     slug: 'leo-bing-fire',
-    sign: 'Leo', element: 'Fire', elementEmoji: '🔥', elementColor: '#f97316',
+    sign: 'Leo', element: 'Fire', elementEmoji: '🔥', elementColor: 'var(--color-element-fire)',
     archetype: 'Visionary Builder', archetypeSlug: 'visionary-builder',
     tagline: 'The Sun That Draws Everyone In',
     description: 'Leo × Bing Fire (the sun, broad and radiant) is the most naturally magnetic combination in the system. Both Leo and Bing Fire share the same fundamental quality: they radiate outward, draw attention without effort, and warm everything in their proximity.',
@@ -119,7 +119,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'taurus-wu-earth': {
     slug: 'taurus-wu-earth',
-    sign: 'Taurus', element: 'Earth', elementEmoji: '⛰️', elementColor: '#d97706',
+    sign: 'Taurus', element: 'Earth', elementEmoji: '⛰️', elementColor: 'var(--color-element-earth)',
     archetype: 'Harmonizer Guardian', archetypeSlug: 'harmonizer-guardian',
     tagline: 'The Mountain That Everything Rests On',
     description: 'Taurus × Wu Earth (the mountain, massive and stable) is the most grounding combination in the system. Double Earth energy creates extraordinary stability, not passive, but load-bearing. You don\'t just hold ground; you are the ground others build on.',
@@ -131,7 +131,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'virgo-ji-earth': {
     slug: 'virgo-ji-earth',
-    sign: 'Virgo', element: 'Earth', elementEmoji: '⛰️', elementColor: '#d97706',
+    sign: 'Virgo', element: 'Earth', elementEmoji: '⛰️', elementColor: 'var(--color-element-earth)',
     archetype: 'Harmonizer Guardian', archetypeSlug: 'harmonizer-guardian',
     tagline: 'The Craftsperson Who Holds the Standard',
     description: 'Virgo × Ji Earth (the fertile field, productive and nurturing) is the most quality-oriented Harmonizer Guardian. You don\'t just maintain stability, you improve it, refine it, and ensure it serves its purpose precisely.',
@@ -143,7 +143,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'scorpio-jia-wood': {
     slug: 'scorpio-jia-wood',
-    sign: 'Scorpio', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Scorpio', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Deep Root That Cannot Be Pulled',
     description: 'Scorpio × Jia Wood (the great tree, tall and rooted) is the most tenacious combination in the system. Scorpio\'s intensity amplifies Jia Wood\'s upward growth drive into something almost unstoppable. You don\'t just grow, you grow through resistance.',
@@ -155,7 +155,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'sagittarius-jia-wood': {
     slug: 'sagittarius-jia-wood',
-    sign: 'Sagittarius', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Sagittarius', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Explorer Who Actually Arrives',
     description: 'Sagittarius × Jia Wood is the most far-ranging Steady Achiever. Sagittarius\'s philosophical hunger meets Jia Wood\'s steady upward growth into a rare synthesis: someone who explores widely AND builds something enduring from what they find.',
@@ -167,7 +167,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'pisces-gui-water': {
     slug: 'pisces-gui-water',
-    sign: 'Pisces', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Pisces', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Visionary Who Feels the Future',
     description: 'Pisces × Gui Water is perhaps the most intuitive combination in the system. Pisces dissolves boundaries; Gui Water condenses and clarifies. Together, they produce someone who can inhabit multiple realities simultaneously, sensing patterns, possibilities, and emotional undercurrents that others cannot access.',
@@ -179,7 +179,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'libra-yi-wood': {
     slug: 'libra-yi-wood',
-    sign: 'Libra', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Libra', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Harmoniser Who Builds Beauty',
     description: 'Libra × Yi Wood is the most aesthetically attuned of the five archetypes. Libra\'s drive for harmony and balance combines with Yi Wood\'s flexible, relationship-oriented energy to create someone who builds through connection, beauty, and collaborative momentum.',
@@ -191,7 +191,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'aries-ding-fire': {
     slug: 'aries-ding-fire',
-    sign: 'Aries', element: 'Fire', elementEmoji: '🔥', elementColor: '#f97316',
+    sign: 'Aries', element: 'Fire', elementEmoji: '🔥', elementColor: 'var(--color-element-fire)',
     archetype: 'Visionary Builder', archetypeSlug: 'visionary-builder',
     tagline: 'The Pioneer Who Ignites Action',
     description: 'Aries × Ding Fire is one of the most action-oriented combinations in the system. Aries\' drive to initiate meets Ding Fire\'s steady, focused warmth, producing someone who doesn\'t just start things, but sustains the flame long enough to see them through.',
@@ -203,7 +203,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'taurus-gui-water': {
     slug: 'taurus-gui-water',
-    sign: 'Taurus', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Taurus', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Deep Builder Who Lasts',
     description: 'Taurus × Gui Water is one of the most enduring combinations. Taurus\'s patience and sensory attunement combine with Gui Water\'s depth and perception to produce someone who builds with extraordinary care, slowly, intentionally, and with a quality that outlasts trends.',
@@ -215,7 +215,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'leo-wu-earth': {
     slug: 'leo-wu-earth',
-    sign: 'Leo', element: 'Earth', elementEmoji: '🏔️', elementColor: '#f59e0b',
+    sign: 'Leo', element: 'Earth', elementEmoji: '🏔️', elementColor: 'var(--color-element-earth)',
     archetype: 'Harmonizer Guardian', archetypeSlug: 'harmonizer-guardian',
     tagline: 'The Generous Leader Who Holds It Together',
     description: 'Leo × Wu Earth is a rare combination of charisma and gravitas. Leo\'s warmth, creativity, and natural leadership meets Wu Earth\'s immovable solidity and capacity to hold space for others. The result is a leader people follow not just because they\'re magnetic, but because they feel genuinely safe.',
@@ -227,7 +227,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'scorpio-ren-water': {
     slug: 'scorpio-ren-water',
-    sign: 'Scorpio', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Scorpio', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Transformer Who Sees Everything',
     description: 'Scorpio × Ren Water is the most penetrating combination in the system. Scorpio\'s intensity, depth, and transformative drive meets Ren Water\'s expansive, oceanic perceptual range. Nothing is hidden from this archetype, not in organisations, not in people, not in systems.',
@@ -239,7 +239,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'gemini-bing-fire': {
     slug: 'gemini-bing-fire',
-    sign: 'Gemini', element: 'Fire', elementEmoji: '🔥', elementColor: '#f97316',
+    sign: 'Gemini', element: 'Fire', elementEmoji: '🔥', elementColor: 'var(--color-element-fire)',
     archetype: 'Visionary Builder', archetypeSlug: 'visionary-builder',
     tagline: 'The Networked Spark',
     description: 'Gemini × Bing Fire is the most communicatively electric combination in the system. Gemini\'s intellectual range, speed, and social agility meets Bing Fire\'s radiant warmth and visibility. Ideas don\'t just form here, they broadcast.',
@@ -251,7 +251,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'virgo-ren-water': {
     slug: 'virgo-ren-water',
-    sign: 'Virgo', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Virgo', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Systems Thinker Who Flows',
     description: 'Virgo × Ren Water is the most analytically precise Water archetype. Virgo\'s discernment and attention to process meets Ren Water\'s sweeping intelligence and strategic perception, producing someone who is both a systems architect and a deep synthesiser.',
@@ -263,7 +263,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'capricorn-ji-earth': {
     slug: 'capricorn-ji-earth',
-    sign: 'Capricorn', element: 'Earth', elementEmoji: '🏔️', elementColor: '#f59e0b',
+    sign: 'Capricorn', element: 'Earth', elementEmoji: '🏔️', elementColor: 'var(--color-element-earth)',
     archetype: 'Harmonizer Guardian', archetypeSlug: 'harmonizer-guardian',
     tagline: 'The Steadfast Architect of Systems',
     description: 'Capricorn × Ji Earth is one of the most quietly powerful combinations in the system. Capricorn provides relentless upward drive and structural discipline; Ji Earth (fertile, productive soil) provides the patient, nurturing capacity to make things grow. Where Geng Metal Capricorn cuts through, Ji Earth Capricorn builds from the ground up, carefully, comprehensively, and with a long-horizon vision that others mistake for slowness.',
@@ -275,7 +275,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'aquarius-jia-wood': {
     slug: 'aquarius-jia-wood',
-    sign: 'Aquarius', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Aquarius', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Visionary Grower',
     description: 'Aquarius × Jia Wood is the most principled of the Steady Achievers. Aquarius sees what the future should look like; Jia Wood (the great tree, patient and upward-growing) provides the structural spine to grow toward it without losing direction. This archetype combines progressive intellectual vision with steady, cumulative execution.',
@@ -287,7 +287,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'aries-yi-wood': {
     slug: 'aries-yi-wood',
-    sign: 'Aries', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Aries', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Fast Starter Who Finishes',
     description: 'Aries × Yi Wood is a dynamic tension that produces real results. Aries brings initiation energy and fearless first-mover instinct; Yi Wood (the vine, flexible and persistent) provides the adaptive persistence that keeps growth going after the launch excitement fades. Most Aries archetypes start fast and disengage at the grind. Yi Wood catches them and keeps them growing.',
@@ -299,7 +299,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'cancer-gui-water': {
     slug: 'cancer-gui-water',
-    sign: 'Cancer', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Cancer', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Deep Nurturer',
     description: 'Cancer × Gui Water is the most emotionally attuned combination in the system. Cancer\'s protective, caring instinct meets Gui Water\'s condensing depth and perceptive sensitivity, producing someone whose emotional intelligence is not just empathic, but genuinely diagnostic. You don\'t just feel what others feel; you understand the root of it.',
@@ -311,7 +311,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'cancer-wu-earth': {
     slug: 'cancer-wu-earth',
-    sign: 'Cancer', element: 'Earth', elementEmoji: '🏔️', elementColor: '#f59e0b',
+    sign: 'Cancer', element: 'Earth', elementEmoji: '🏔️', elementColor: 'var(--color-element-earth)',
     archetype: 'Harmonizer Guardian', archetypeSlug: 'harmonizer-guardian',
     tagline: 'The Protective Anchor',
     description: 'Cancer × Wu Earth is the most protective combination in the system. Cancer\'s instinct to shelter and nurture meets Wu Earth\'s immovable, load-bearing stability. Where others worry, you organise. Where others feel exposed, you become the structure that holds everyone together, the mountain that absorbs the storm.',
@@ -323,7 +323,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'leo-jia-wood': {
     slug: 'leo-jia-wood',
-    sign: 'Leo', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Leo', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Growing Light',
     description: 'Leo × Jia Wood is a compelling combination of visibility and patient ambition. Leo needs to shine and be seen; Jia Wood (the great tree) grows steadily upward over years. Together, they produce someone who accumulates influence and stature over time, not through one brilliant moment, but through the consistent quality of their presence and output.',
@@ -347,7 +347,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'libra-gui-water': {
     slug: 'libra-gui-water',
-    sign: 'Libra', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Libra', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Empathic Diplomat',
     description: 'Libra × Gui Water is the most relationally attuned combination in the system. Libra\'s drive for harmony, balance, and aesthetic beauty meets Gui Water\'s condensing depth and quiet perceptiveness. You don\'t just create harmony, you sense where disharmony lives before it surfaces, and you work at that level.',
@@ -359,7 +359,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'scorpio-gui-water': {
     slug: 'scorpio-gui-water',
-    sign: 'Scorpio', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Scorpio', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Quiet Transformer',
     description: 'Scorpio × Gui Water is the most inwardly powerful combination in the system. Scorpio\'s depth, intensity, and transformative capacity meets Gui Water\'s condensing sensitivity and quiet perception. Where Scorpio × Ren Water is oceanic in range, Scorpio × Gui Water is concentrated, like rain that finds the cracks in stone and reshapes from within.',
@@ -371,7 +371,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'sagittarius-bing-fire': {
     slug: 'sagittarius-bing-fire',
-    sign: 'Sagittarius', element: 'Fire', elementEmoji: '🔥', elementColor: '#f97316',
+    sign: 'Sagittarius', element: 'Fire', elementEmoji: '🔥', elementColor: 'var(--color-element-fire)',
     archetype: 'Visionary Builder', archetypeSlug: 'visionary-builder',
     tagline: 'The Expansive Illuminator',
     description: 'Sagittarius × Bing Fire is one of the most inspiring combinations in the system. Sagittarius\'s philosophical scope and love of truth meets Bing Fire\'s radiant, sun-like warmth and broadcast energy. You don\'t just see the horizon, you light it up for everyone around you, making the future feel not just possible but inevitable.',
@@ -395,7 +395,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'taurus-jia-wood': {
     slug: 'taurus-jia-wood',
-    sign: 'Taurus', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Taurus', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Patient Builder',
     description: "Taurus × Jia Wood is the most grounded Steady Achiever. Taurus's sensory attunement, patience, and accumulative instinct meets Jia Wood's steady upward growth drive, producing someone who builds slowly, deliberately, and with extraordinary staying power. You are not the fastest, but what you build is real and it lasts.",
@@ -407,7 +407,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'sagittarius-gui-water': {
     slug: 'sagittarius-gui-water',
-    sign: 'Sagittarius', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Sagittarius', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Wandering Depth-Finder',
     description: "Sagittarius × Gui Water is the most philosophically attuned Nurturing Creative. Sagittarius seeks truth across vast terrain; Gui Water condenses, feels, and perceives with exquisite sensitivity. The result is someone who travels widely, in ideas, experience, and sometimes place, and returns transformed, carrying insight others cannot access any other way.",
@@ -419,7 +419,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'pisces-jia-wood': {
     slug: 'pisces-jia-wood',
-    sign: 'Pisces', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Pisces', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Dreamer Who Grows',
     description: "Pisces × Jia Wood is the most creative Steady Achiever. Pisces dissolves into imagination, feeling, and boundless possibility; Jia Wood (the great tree) provides the structural spine that turns those visions into something real. Without Jia Wood, Pisces drifts. Without Pisces, Jia Wood can lack soul. Together, they produce a creative builder whose work has both roots and wings.",
@@ -431,7 +431,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'pisces-bing-fire': {
     slug: 'pisces-bing-fire',
-    sign: 'Pisces', element: 'Fire', elementEmoji: '🔥', elementColor: '#f97316',
+    sign: 'Pisces', element: 'Fire', elementEmoji: '🔥', elementColor: 'var(--color-element-fire)',
     archetype: 'Visionary Builder', archetypeSlug: 'visionary-builder',
     tagline: 'The Radiant Mystic',
     description: "Pisces × Bing Fire is the most spiritually luminous combination in the system. Pisces accesses what cannot be named; Bing Fire broadcasts at full warmth and visibility. Together, they produce someone whose creative and spiritual vision is not just felt but transmitted, lighting up rooms, changing minds, moving people in ways that resist rational explanation.",
@@ -455,7 +455,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'capricorn-bing-fire': {
     slug: 'capricorn-bing-fire',
-    sign: 'Capricorn', element: 'Fire', elementEmoji: '🔥', elementColor: '#f97316',
+    sign: 'Capricorn', element: 'Fire', elementEmoji: '🔥', elementColor: 'var(--color-element-fire)',
     archetype: 'Visionary Builder', archetypeSlug: 'visionary-builder',
     tagline: 'The Ambitious Illuminator',
     description: "Capricorn × Bing Fire is one of the rarest combinations in the system, Capricorn's mountainous ambition and long-range discipline meets Bing Fire's radiant warmth and magnetic visibility. Where Capricorn alone can appear cold and instrumental, Bing Fire adds a genuine warmth and inspirational quality that makes this archetype both impressive and approachable.",
@@ -467,7 +467,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'aquarius-wu-earth': {
     slug: 'aquarius-wu-earth',
-    sign: 'Aquarius', element: 'Earth', elementEmoji: '🏔️', elementColor: '#f59e0b',
+    sign: 'Aquarius', element: 'Earth', elementEmoji: '🏔️', elementColor: 'var(--color-element-earth)',
     archetype: 'Harmonizer Guardian', archetypeSlug: 'harmonizer-guardian',
     tagline: 'The Grounded Revolutionary',
     description: "Aquarius × Wu Earth is one of the most stable change-agents in the system. Aquarius sees what needs to fundamentally change; Wu Earth provides the immovable groundedness to carry that change through without being swept away by opposition or volatility. You are the rare reformer who survives long enough to see the reform succeed.",
@@ -479,7 +479,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'aries-gui-water': {
     slug: 'aries-gui-water',
-    sign: 'Aries', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Aries', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Fast-Moving Empath',
     description: "Aries × Gui Water is one of the most surprising combinations, Aries acts first; Gui Water feels first. Together, they produce someone who initiates boldly AND absorbs deeply, oscillating between fearless action and profound sensitivity. The challenge is that these modes can feel mutually exclusive. The gift is that they are not.",
@@ -491,7 +491,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'cancer-jia-wood': {
     slug: 'cancer-jia-wood',
-    sign: 'Cancer', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Cancer', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Nurturing Builder',
     description: "Cancer × Jia Wood is the most caring Steady Achiever. Cancer's protective, emotionally attuned nature meets Jia Wood's upward growth ambition, producing someone who builds not for personal glory but for those they love and serve. The work is always in service of something larger than the self: family, community, legacy.",
@@ -515,7 +515,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'gemini-ji-earth': {
     slug: 'gemini-ji-earth',
-    sign: 'Gemini', element: 'Earth', elementEmoji: '🏔️', elementColor: '#f59e0b',
+    sign: 'Gemini', element: 'Earth', elementEmoji: '🏔️', elementColor: 'var(--color-element-earth)',
     archetype: 'Harmonizer Guardian', archetypeSlug: 'harmonizer-guardian',
     tagline: 'The Versatile Steward',
     description: "Gemini × Ji Earth is one of the most surprising Harmonizer Guardians. Gemini's curious, multi-channel range meets Ji Earth's (fertile soil) careful, productive nurturing energy, producing someone who sustains and supports from a position of remarkable intellectual breadth. You don't just hold the space; you enrich it with ideas, connections, and adaptable care.",
@@ -527,7 +527,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'leo-gui-water': {
     slug: 'leo-gui-water',
-    sign: 'Leo', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Leo', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Warm Depth-Finder',
     description: "Leo × Gui Water is one of the most emotionally complex combinations in the system. Leo radiates outward with warmth, creativity, and visible leadership; Gui Water perceives inward with exquisite sensitivity and depth. The tension between these forces, visibility and depth, expression and perception, is the source of both the greatest challenge and the greatest creative gift.",
@@ -539,7 +539,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'virgo-yi-wood': {
     slug: 'virgo-yi-wood',
-    sign: 'Virgo', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Virgo', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Refined Growth Architect',
     description: "Virgo × Yi Wood is the most carefully constructed Steady Achiever. Virgo's discernment and quality obsession meets Yi Wood's (the vine) flexible, adaptive persistence, producing someone who improves continuously while maintaining forward momentum. You don't just grow; you grow correctly, pruning what isn't working and strengthening what is.",
@@ -551,7 +551,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'libra-ding-fire': {
     slug: 'libra-ding-fire',
-    sign: 'Libra', element: 'Fire', elementEmoji: '🔥', elementColor: '#f97316',
+    sign: 'Libra', element: 'Fire', elementEmoji: '🔥', elementColor: 'var(--color-element-fire)',
     archetype: 'Visionary Builder', archetypeSlug: 'visionary-builder',
     tagline: 'The Harmonious Inspirer',
     description: "Libra × Ding Fire (the candle flame, intimate and warm) is the most aesthetically and interpersonally beautiful Visionary Builder. Libra's drive for harmony and balance meets Ding Fire's steady, close-range warmth, producing a leader who inspires not through spectacle, but through the quality of presence and the elegance of their vision.",
@@ -563,7 +563,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'scorpio-ding-fire': {
     slug: 'scorpio-ding-fire',
-    sign: 'Scorpio', element: 'Fire', elementEmoji: '🔥', elementColor: '#f97316',
+    sign: 'Scorpio', element: 'Fire', elementEmoji: '🔥', elementColor: 'var(--color-element-fire)',
     archetype: 'Visionary Builder', archetypeSlug: 'visionary-builder',
     tagline: 'The Intense Transformer',
     description: "Scorpio × Ding Fire is one of the most psychologically powerful Visionary Builders. Scorpio's transformative depth, intensity, and penetrating perception meets Ding Fire's sustained, focused warmth, producing someone whose vision is not just inspiring but genuinely alchemical. Things change in your presence in ways that cannot always be explained.",
@@ -575,7 +575,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'sagittarius-yi-wood': {
     slug: 'sagittarius-yi-wood',
-    sign: 'Sagittarius', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Sagittarius', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Philosophical Explorer Who Lands',
     description: "Sagittarius × Yi Wood is the most wide-ranging Steady Achiever. Sagittarius ranges across philosophical horizons; Yi Wood (the vine) adapts and grows wherever it finds purchase. Together, they produce someone who travels intellectually and experientially far from where they started, and builds something meaningful at each stopping point along the way.",
@@ -587,7 +587,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'pisces-wu-earth': {
     slug: 'pisces-wu-earth',
-    sign: 'Pisces', element: 'Earth', elementEmoji: '🏔️', elementColor: '#f59e0b',
+    sign: 'Pisces', element: 'Earth', elementEmoji: '🏔️', elementColor: 'var(--color-element-earth)',
     archetype: 'Harmonizer Guardian', archetypeSlug: 'harmonizer-guardian',
     tagline: 'The Compassionate Anchor',
     description: "Pisces × Wu Earth is one of the most unexpectedly stable combinations in the system. Pisces dissolves into feeling, imagination, and boundless empathy; Wu Earth (the mountain) provides immovable, load-bearing groundedness. The result: a Harmonizer Guardian who can hold enormous emotional and psychic complexity without being swept away by it. The ocean, held by bedrock.",
@@ -599,7 +599,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'aries-wu-earth': {
     slug: 'aries-wu-earth',
-    sign: 'Aries', element: 'Earth', elementEmoji: '🏔️', elementColor: '#f59e0b',
+    sign: 'Aries', element: 'Earth', elementEmoji: '🏔️', elementColor: 'var(--color-element-earth)',
     archetype: 'Harmonizer Guardian', archetypeSlug: 'harmonizer-guardian',
     tagline: 'The Steady Warrior',
     description: "Aries × Wu Earth is one of the most paradoxical and powerful combinations in the system. Aries launches with fearless initiation energy; Wu Earth provides the immovable, load-bearing foundation that catches the impact. Most Aries archetypes are all launch. This one lands, and holds. You act boldly, but the mountain beneath you means you never get swept away by your own momentum.",
@@ -611,7 +611,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'cancer-ren-water': {
     slug: 'cancer-ren-water',
-    sign: 'Cancer', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Cancer', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Strategic Nurturer',
     description: "Cancer × Ren Water is the most strategically perceptive Nurturing Creative. Cancer's deep care and protective instinct meets Ren Water's (the great river, expansive and strategic) sweeping perception and intelligence. You don't just nurture from feeling, you read systems, anticipate patterns, and position people for success with a strategic awareness most caregivers never develop.",
@@ -623,7 +623,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'capricorn-yi-wood': {
     slug: 'capricorn-yi-wood',
-    sign: 'Capricorn', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Capricorn', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Resilient Climber',
     description: "Capricorn × Yi Wood (the vine) is one of the most surprisingly flexible Steady Achievers. Capricorn provides the mountain, structured ambition, long-range discipline, the will to ascend. Yi Wood provides the vine that finds its path upward regardless of what is in the way. This archetype does not just push through obstacles; it grows around them, always arriving eventually.",
@@ -635,7 +635,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'aquarius-ding-fire': {
     slug: 'aquarius-ding-fire',
-    sign: 'Aquarius', element: 'Fire', elementEmoji: '🔥', elementColor: '#f97316',
+    sign: 'Aquarius', element: 'Fire', elementEmoji: '🔥', elementColor: 'var(--color-element-fire)',
     archetype: 'Visionary Builder', archetypeSlug: 'visionary-builder',
     tagline: 'The Intimate Revolutionary',
     description: "Aquarius × Ding Fire (the candle flame, warm and close-range) is the most personally connecting Visionary Builder in the system. Aquarius operates from systems-level principle; Ding Fire warms through intimate, one-on-one presence. The result: someone who holds genuinely radical vision AND builds it through relationships, not broadcasts, changing minds one meaningful conversation at a time.",
@@ -647,7 +647,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'pisces-ren-water': {
     slug: 'pisces-ren-water',
-    sign: 'Pisces', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Pisces', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Oceanic Visionary',
     description: "Pisces × Ren Water is the most expansively perceptive combination in the system. Pisces dissolves all boundaries; Ren Water (the great river and ocean) spans vast territory with strategic intelligence. Together, they produce someone whose consciousness is genuinely enormous, capable of perceiving patterns across scale, holding multiple realities, and synthesising what others cannot even begin to gather.",
@@ -659,7 +659,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'taurus-ding-fire': {
     slug: 'taurus-ding-fire',
-    sign: 'Taurus', element: 'Fire', elementEmoji: '🔥', elementColor: '#f97316',
+    sign: 'Taurus', element: 'Fire', elementEmoji: '🔥', elementColor: 'var(--color-element-fire)',
     archetype: 'Visionary Builder', archetypeSlug: 'visionary-builder',
     tagline: 'The Warm Craftsperson',
     description: "Taurus × Ding Fire is one of the most sensuously compelling Visionary Builders. Taurus's deep connection to material quality, beauty, and patient accumulation meets Ding Fire's steady, intimate warmth, producing someone whose vision is not abstract but embodied. You don't describe the future you're building; you build a room, a meal, a piece of music, a relationship that makes people feel it.",
@@ -671,7 +671,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'gemini-ren-water': {
     slug: 'gemini-ren-water',
-    sign: 'Gemini', element: 'Water', elementEmoji: '🌊', elementColor: '#38bdf8',
+    sign: 'Gemini', element: 'Water', elementEmoji: '🌊', elementColor: 'var(--color-element-water)',
     archetype: 'Nurturing Creative', archetypeSlug: 'nurturing-creative',
     tagline: 'The Wide-Ranging Intelligence',
     description: "Gemini × Ren Water is the most intellectually expansive Nurturing Creative. Gemini's multi-channel curiosity and rapid synthesis meets Ren Water's strategic, sweeping perception and intelligence. The result: someone who gathers knowledge from everywhere, synthesises it across domains, and channels it toward genuine understanding, making the complex legible for others.",
@@ -683,7 +683,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'leo-yi-wood': {
     slug: 'leo-yi-wood',
-    sign: 'Leo', element: 'Wood', elementEmoji: '🌿', elementColor: '#22c55e',
+    sign: 'Leo', element: 'Wood', elementEmoji: '🌿', elementColor: 'var(--color-element-wood)',
     archetype: 'Steady Achiever', archetypeSlug: 'steady-achiever',
     tagline: 'The Radiant Grower',
     description: "Leo × Yi Wood is the most creatively alive Steady Achiever. Leo needs to be seen and to inspire; Yi Wood (the vine) grows continuously, adapts, and finds light wherever it exists. Together, they produce someone who builds a creative reputation over a career, not through one defining moment but through continuous, high-quality output that accumulates into something remarkable.",
@@ -695,7 +695,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'virgo-wu-earth': {
     slug: 'virgo-wu-earth',
-    sign: 'Virgo', element: 'Earth', elementEmoji: '🏔️', elementColor: '#f59e0b',
+    sign: 'Virgo', element: 'Earth', elementEmoji: '🏔️', elementColor: 'var(--color-element-earth)',
     archetype: 'Harmonizer Guardian', archetypeSlug: 'harmonizer-guardian',
     tagline: 'The Steady Standard-Keeper',
     description: "Virgo × Wu Earth is the most durably reliable Harmonizer Guardian. Virgo's analytical precision and service orientation meets Wu Earth's immovable, load-bearing stability, producing someone who does not just maintain standards, but becomes the standard. Others navigate by you. Teams anchor to you. The question is never whether the work will be done correctly; it is whether you will let others do it at all.",
@@ -707,7 +707,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'libra-wu-earth': {
     slug: 'libra-wu-earth',
-    sign: 'Libra', element: 'Earth', elementEmoji: '🏔️', elementColor: '#f59e0b',
+    sign: 'Libra', element: 'Earth', elementEmoji: '🏔️', elementColor: 'var(--color-element-earth)',
     archetype: 'Harmonizer Guardian', archetypeSlug: 'harmonizer-guardian',
     tagline: 'The Grounded Peacemaker',
     description: "Libra × Wu Earth is the most stable Harmonizer Guardian. Libra's drive for balance, fairness, and relational harmony meets Wu Earth's immovable groundedness, producing someone whose capacity to hold the center of a group or organisation is extraordinary. Conflicts come to you because they find resolution there. You are the mountain that everyone orients around.",
@@ -719,7 +719,7 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
   'scorpio-wu-earth': {
     slug: 'scorpio-wu-earth',
-    sign: 'Scorpio', element: 'Earth', elementEmoji: '🏔️', elementColor: '#f59e0b',
+    sign: 'Scorpio', element: 'Earth', elementEmoji: '🏔️', elementColor: 'var(--color-element-earth)',
     archetype: 'Harmonizer Guardian', archetypeSlug: 'harmonizer-guardian',
     tagline: 'The Immovable Transformer',
     description: "Scorpio × Wu Earth is the most enduring combination in the system. Scorpio's transformative intensity and penetrating depth meets Wu Earth's immovable, mountain-like stability, producing someone who transforms what they touch while remaining completely unshakeable themselves. You are the eye of the storm: everything changes around you; you do not move.",
@@ -788,9 +788,9 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
       <ArchetypeRevealedTracker archetype={slug} />
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
 
-        {/* Breadcrumb */}
-        <div style={{ marginBottom: 32, display: 'flex', gap: 8, alignItems: 'center', fontSize: 13, color: 'var(--color-text-secondary)' }}>
-          <Link href="/archetypes" style={{ color: '#6e40c9', textDecoration: 'none' }}>Archetypes</Link>
+        {/* Breadcrumb — text-muted passes WCAG AA on both dark (5.74:1) and light (5.04:1) */}
+        <div style={{ marginBottom: 32, display: 'flex', gap: 8, alignItems: 'center', fontSize: 13, color: 'var(--color-text-muted)' }}>
+          <Link href="/archetypes" style={{ color: 'var(--color-accent)', textDecoration: 'none' }}>Archetypes</Link>
           <span>›</span>
           <span>{p.sign}</span>
           <span>›</span>
@@ -810,29 +810,29 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
           <h1 style={{ fontSize: 40, fontWeight: 900, letterSpacing: '-0.02em', marginBottom: 8, color: 'var(--color-text-primary)', lineHeight: 1.1 }}>
             {p.sign} × {p.element}
           </h1>
-          <p style={{ fontSize: 20, color: p.elementColor, fontWeight: 600, marginBottom: 16 }}>{p.tagline}</p>
+          <p style={{ fontSize: 20, color: 'var(--color-text-muted)', fontWeight: 600, marginBottom: 16 }}>{p.tagline}</p>
           <p style={{ color: 'var(--color-text-muted)', fontSize: 16, lineHeight: 1.7 }}>{p.description}</p>
         </div>
 
         {/* Strengths + Challenges */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
           <div style={{ background: 'var(--color-bg-primary)', border: '1px solid #1e1e1e', borderRadius: 12, padding: 24 }}>
-            <h2 style={{ fontSize: 15, fontWeight: 700, color: '#22c55e', marginBottom: 14 }}>Strengths</h2>
+            <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-accent)', marginBottom: 14 }}>Strengths</h2>
             <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
               {p.strengths.map((s, i) => (
                 <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                  <span style={{ color: '#22c55e', flexShrink: 0, marginTop: 2 }}>✓</span>
+                  <span style={{ color: 'var(--color-accent)', flexShrink: 0, marginTop: 2 }}>✓</span>
                   <span style={{ color: 'var(--color-text-muted)', fontSize: 14, lineHeight: 1.5 }}>{s}</span>
                 </li>
               ))}
             </ul>
           </div>
           <div style={{ background: 'var(--color-bg-primary)', border: '1px solid #1e1e1e', borderRadius: 12, padding: 24 }}>
-            <h2 style={{ fontSize: 15, fontWeight: 700, color: '#f97316', marginBottom: 14 }}>Challenges</h2>
+            <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-challenges)', marginBottom: 14 }}>Challenges</h2>
             <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
               {p.challenges.map((c, i) => (
                 <li key={i} style={{ display: 'flex', gap: 10, alignItems: 'flex-start' }}>
-                  <span style={{ color: '#f97316', flexShrink: 0, marginTop: 2 }}>△</span>
+                  <span style={{ color: 'var(--color-challenges)', flexShrink: 0, marginTop: 2 }}>△</span>
                   <span style={{ color: 'var(--color-text-muted)', fontSize: 14, lineHeight: 1.5 }}>{c}</span>
                 </li>
               ))}
