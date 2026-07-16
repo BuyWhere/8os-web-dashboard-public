@@ -24,7 +24,7 @@ const BENEFITS = [
 export default function SignupPage() {
   return (
     <main style={{ minHeight: "100vh", background: BG, color: INK }}>
-      <div className="signup-grid" style={{ maxWidth: 1080, margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "start", gap: "3rem", padding: "5rem 1.5rem 3rem" }}>
+      <div className="signup-grid" style={{ maxWidth: 1080, margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "start", gap: "3rem", padding: "6rem 1.5rem 3rem" }}>
         {/* Left, product context */}
         <section className="signup-pitch" style={{ maxWidth: 460 }}>
           <h1 style={{ fontFamily: "var(--font-serif-header), Georgia, serif", fontSize: "2rem", lineHeight: 1.15, fontWeight: 600, margin: "0 0 0.75rem" }}>
