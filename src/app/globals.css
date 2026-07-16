@@ -15,6 +15,7 @@
   --color-accent: #B08637;       /* gold */
   --color-accent-hover: #98722C; /* darker gold — hover state */
   --color-accent-border: #7A5A1E; /* WCAG-AA dark border for inputs — 6.8:1 on cream */
+  --color-accent-gradient: linear-gradient(135deg, #B08637 0%, #8A6514 100%); /* gold gradient — 6.5:1 on cream */
   --color-on-accent: #fff;       /* button text on gold bg — 3.33:1 light / 12.27:1 dark */
   --color-accent-2: #7A3B2E;     /* oxblood (rare emphasis) */
   --color-accent-soft: #F2E9D6;  /* gold tint — active nav / badges */
@@ -105,6 +106,7 @@
   --color-accent: #C79A48;       /* gold, brightened for dark */
   --color-accent-hover: #A67F30; /* darker gold — hover state */
   --color-accent-border: #9A7A3A; /* WCAG-AA border for inputs on dark — 5.2:1 on charcoal */
+  --color-accent-gradient: linear-gradient(135deg, #C79A48 0%, #9A6A28 100%); /* gold gradient — 6.1:1 on charcoal */
   --color-on-accent: #fff;       /* button text on gold bg — 3.33:1 light / 12.27:1 dark */
   --color-accent-2: #C06B54;     /* oxblood, lifted for contrast */
   --color-accent-soft: #3A3125;  /* warm dark tint — active nav / badges */

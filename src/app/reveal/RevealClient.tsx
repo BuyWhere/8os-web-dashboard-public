@@ -102,7 +102,7 @@ export default function RevealClient() {
             boxShadow: 'var(--color-shadow)',
           }}
         >
-          <label htmlFor="birth-date" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-secondary)', marginBottom: '0.5rem' }}>
+          <label htmlFor="birth-date" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-primary)', marginBottom: '0.5rem' }}>
             Your birth date
           </label>
           <input
@@ -127,8 +127,8 @@ export default function RevealClient() {
             }}
           />
 
-          <label htmlFor="birth-time" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-secondary)', marginBottom: '0.5rem' }}>
-            Birth time <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: 'var(--color-text-secondary)' }}>(optional, sharpens the read)</span>
+          <label htmlFor="birth-time" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-primary)', marginBottom: '0.5rem' }}>
+            Birth time <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: 'var(--color-text-muted)' }}>(optional, sharpens the read)</span>
           </label>
           <input
             id="birth-time"
@@ -160,7 +160,7 @@ export default function RevealClient() {
               padding: '1rem',
               fontSize: '1.0625rem',
               fontWeight: 700,
-              background: 'var(--color-accent-gradient)',
+              background: 'var(--color-accent-gradient, var(--color-accent))',
               border: '2px solid var(--color-accent)',
               borderRadius: '12px',
               color: '#fff',
@@ -171,7 +171,7 @@ export default function RevealClient() {
           >
             {loading ? 'Reading your chart…' : 'Reveal my archetype →'}
           </button>
-          <p style={{ textAlign: 'center', fontSize: '0.8125rem', color: 'var(--color-text-secondary)', marginTop: '0.85rem' }}>
+          <p style={{ textAlign: 'center', fontSize: '0.8125rem', color: 'var(--color-text-muted)', marginTop: '0.85rem' }}>
             Free · no account · nothing stored
           </p>
         </form>
@@ -236,8 +236,8 @@ export default function RevealClient() {
               padding: '1.05rem',
               fontSize: '1.0625rem',
               fontWeight: 800,
-              background: 'var(--color-accent-gradient)',
-              border: 'none',
+              background: 'var(--color-accent-gradient, var(--color-accent))',
+              border: '2px solid var(--color-accent-border)',
               borderRadius: '12px',
               color: '#fff',
               textAlign: 'center',
@@ -248,7 +248,7 @@ export default function RevealClient() {
           >
             Create your free account to build your OS →
           </Link>
-          <p style={{ textAlign: 'center', fontSize: '0.85rem', color: 'var(--color-text-secondary)', margin: '0 0 1.25rem' }}>
+          <p style={{ textAlign: 'center', fontSize: '0.85rem', color: 'var(--color-text-muted)', margin: '0 0 1.25rem' }}>
             This is the taste. Your full OS plans goals around your seasons and times your days to your energy.
           </p>
 

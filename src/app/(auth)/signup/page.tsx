@@ -13,7 +13,7 @@ const INK = "#221F1A"   // ink, --color-text-primary
 const MUTED = "#221F1A" // ink body text for VidMee/WCAG-strong signup copy
 const LINK_DARK = "#000000" // black for WCAG-strong Clerk controls on gold/white
 const GOLD = "#B08637"  // 8os gold accent
-const BORDER = "#767676" // dark gray for WCAG input borders (was #E7DFD2, 1.46:1 fails)
+const BORDER = "#4A4A4A" // dark gray for WCAG input borders — 7.1:1 on white (was #767676 4.5:1, Clerk shorthand overrides border-color longhand)
 
 const BENEFITS = [
   { icon: "◐", title: "Your real BaZi archetype", body: "Not a horoscope, a decoded operating profile from your birth chart." },
@@ -47,7 +47,7 @@ export default function SignupPage() {
         </section>
 
         {/* Right, the Clerk form */}
-        <section className="signup-auth" style={{ display: "flex", justifyContent: "center", alignSelf: "center" }}>
+        <section className="signup-auth" style={{ display: "flex", justifyContent: "center", alignSelf: "start" }}>
           <SignUp
             routing="hash"
             signInUrl="/login"
@@ -69,6 +69,7 @@ export default function SignupPage() {
               elements: {
                 rootBox: { border: `1px solid ${BORDER}`, borderRadius: "16px", overflow: "hidden", boxShadow: "0 4px 24px rgba(34,31,26,0.06)" },
                 card: { border: "none", boxShadow: "none", borderRadius: 0 },
+                header: { display: "none" }, // Hide Clerk's default logo/header branding
                 formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: LINK_DARK },
                 socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px" }, // dark border for WCAG social button contrast
                 formFieldInput: { minHeight: "44px", border: `1px solid ${BORDER}`, boxShadow: `0 0 0 1px ${BORDER}` },
@@ -84,7 +85,7 @@ export default function SignupPage() {
       </div>
       {/* Mobile: single column, hide the pitch to keep the form above the fold. */}
       <style dangerouslySetInnerHTML={{ __html: `
-        .signup-auth .cl-formFieldInput { border-color: ${BORDER} !important; box-shadow: 0 0 0 1px ${BORDER} !important; }
+        .signup-auth .cl-formFieldInput { border: 1px solid ${BORDER} !important; box-shadow: 0 0 0 1px ${BORDER} !important; }
         .signup-auth .cl-formFieldOptionalText { color: ${LINK_DARK} !important; }
         .signup-auth .cl-socialButtonsBlockButton { border-color: ${BORDER} !important; border: 1px solid ${BORDER} !important; }
         .signup-auth .cl-formFieldHintText,
