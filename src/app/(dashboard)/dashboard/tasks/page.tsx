@@ -316,7 +316,7 @@ function renderTaskGroup(
                   <div
                     onDoubleClick={() => startEdit(t)}
                     style={{
-                      fontSize: 13, color: t.status === 'done' ? 'var(--color-text-muted)' : '#221F1A',
+                      fontSize: 13, color: t.status === 'done' ? 'var(--color-text-muted)' : 'var(--color-text-primary)',
                       textDecoration: t.status === 'done' ? 'line-through' : 'none',
                       overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                       cursor: 'text',

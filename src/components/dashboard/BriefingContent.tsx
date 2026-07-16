@@ -256,7 +256,7 @@ export function BriefingContent() {
                     <div
                       style={{
                         fontSize: 13,
-                        color: task.status === 'done' ? 'var(--color-text-muted)' : '#221F1A',
+                        color: task.status === 'done' ? 'var(--color-text-muted)' : 'var(--color-text-primary)',
                         textDecoration: task.status === 'done' ? 'line-through' : 'none',
                       }}
                     >

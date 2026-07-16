@@ -247,7 +247,7 @@ function GoalTasksPanel({ tasks, domainColor }: { tasks: Task[]; domainColor: st
                     borderBottom: '1px solid var(--color-border)', opacity: t.status === 'done' ? 0.5 : 1,
                   }}>
                     <div style={{ width: 6, height: 6, borderRadius: '50%', background: PRIORITY_DOT[t.priority] ?? 'var(--color-text-muted)', flexShrink: 0 }} />
-                    <div style={{ flex: 1, fontSize: 13, textDecoration: t.status === 'done' ? 'line-through' : 'none', color: t.status === 'done' ? 'var(--color-text-muted)' : '#221F1A' }}>
+                    <div style={{ flex: 1, fontSize: 13, textDecoration: t.status === 'done' ? 'line-through' : 'none', color: t.status === 'done' ? 'var(--color-text-muted)' : 'var(--color-text-primary)' }}>
                       {t.name}
                     </div>
                     {t.scheduledAt && (
