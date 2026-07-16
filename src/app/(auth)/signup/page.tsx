@@ -78,11 +78,12 @@ export default function SignupPage() {
                 rootBox: { border: `1px solid ${BORDER}`, borderRadius: "16px", overflow: "hidden", boxShadow: "0 4px 24px rgba(34,31,26,0.06)" },
                 card: { border: "none", boxShadow: "none", borderRadius: 0 },
                 formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: LINK_DARK },
-                socialButtonsBlockButton: { minHeight: "44px" },
+                socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px" }, // dark border for WCAG social button contrast
                 formFieldInput: { minHeight: "44px", border: `1px solid ${BORDER}`, boxShadow: `0 0 0 1px ${BORDER}` },
                 formFieldLabel: { color: LINK_DARK }, // dark label for WCAG AA 12.4:1 on white
                 formFieldLabelRow: { color: LINK_DARK },
                 formFieldHintText: { color: LINK_DARK },
+                formFieldOptionalText: { color: LINK_DARK }, // dark "Optional" label for WCAG AA 12.4:1
                 footerActionLink: { color: LINK_DARK, fontWeight: 600 }, // dark "Sign in" link for WCAG AA 12.4:1
               },
             }}
@@ -92,6 +93,8 @@ export default function SignupPage() {
       {/* Mobile: single column, hide the pitch to keep the form above the fold. */}
       <style dangerouslySetInnerHTML={{ __html: `
         .signup-auth .cl-formFieldInput { border-color: ${BORDER} !important; box-shadow: 0 0 0 1px ${BORDER} !important; }
+        .signup-auth .cl-formFieldOptionalText { color: ${LINK_DARK} !important; }
+        .signup-auth .cl-socialButtonsBlockButton { border-color: ${BORDER} !important; border: 1px solid ${BORDER} !important; }
         .signup-auth .cl-formFieldHintText,
         .signup-auth .cl-footerActionLink,
         .signup-auth .cl-formButtonPrimary { color: ${LINK_DARK} !important; }
