@@ -102,16 +102,18 @@ export default function RevealClient() {
             boxShadow: 'var(--color-shadow)',
           }}
         >
-          <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
+          <label htmlFor="birth-date" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
             Your birth date
           </label>
           <input
+            id="birth-date"
             type="date"
             value={birthDate}
             onChange={e => setBirthDate(e.target.value)}
             min="1900-01-01"
             max="2100-12-31"
             required
+            aria-required="true"
             style={{
               width: '100%',
               padding: '0.85rem 1rem',
@@ -124,13 +126,15 @@ export default function RevealClient() {
             }}
           />
 
-          <label style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
-            Birth time <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0 }}>(optional, sharpens the read)</span>
+          <label htmlFor="birth-time" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
+            Birth time <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: 'var(--color-text-secondary)' }}>(optional, sharpens the read)</span>
           </label>
           <input
+            id="birth-time"
             type="time"
             value={birthTime}
             onChange={e => setBirthTime(e.target.value)}
+            aria-label="Birth time (optional)"
             style={{
               width: '100%',
               padding: '0.85rem 1rem',
@@ -156,7 +160,7 @@ export default function RevealClient() {
               fontSize: '1.0625rem',
               fontWeight: 700,
               background: 'var(--color-accent-gradient)',
-              border: 'none',
+              border: '2px solid rgba(232, 98, 61, 0.4)',
               borderRadius: '12px',
               color: '#fff',
               cursor: loading ? 'wait' : 'pointer',
@@ -166,7 +170,7 @@ export default function RevealClient() {
           >
             {loading ? 'Reading your chart…' : 'Reveal my archetype →'}
           </button>
-          <p style={{ textAlign: 'center', fontSize: '0.8125rem', color: 'var(--color-text-muted)', marginTop: '0.85rem' }}>
+          <p style={{ textAlign: 'center', fontSize: '0.8125rem', color: 'var(--color-text-secondary)', marginTop: '0.85rem' }}>
             Free · no account · nothing stored
           </p>
         </form>
