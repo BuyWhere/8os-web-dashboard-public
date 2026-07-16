@@ -15,7 +15,7 @@ export default function TermsPage() {
       padding: '4rem 2rem',
     }}>
       <div style={{ maxWidth: '720px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: 'var(--color-accent)', textDecoration: 'none', fontSize: '0.875rem' }}>
+        <Link href="/" style={{ color: 'var(--color-text-primary)', textDecoration: 'none', fontSize: '0.875rem' }}>
           ← Back to 8os
         </Link>
 
@@ -124,7 +124,7 @@ export default function TermsPage() {
             </h2>
             <p>
               For questions about these Terms, email{' '}
-              <a href="mailto:legal@8os.ai" style={{ color: 'var(--color-accent)' }}>legal@8os.ai</a>.
+              <a href="mailto:legal@8os.ai" style={{ color: 'var(--color-text-primary)' }}>legal@8os.ai</a>.
             </p>
           </section>
         </div>

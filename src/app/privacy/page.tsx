@@ -15,7 +15,7 @@ export default function PrivacyPage() {
       padding: '4rem 2rem',
     }}>
       <div style={{ maxWidth: '720px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: 'var(--color-accent)', textDecoration: 'none', fontSize: '0.875rem' }}>
+        <Link href="/" style={{ color: 'var(--color-text-primary)', textDecoration: 'none', fontSize: '0.875rem' }}>
           ← Back to 8os
         </Link>
 
@@ -76,7 +76,7 @@ export default function PrivacyPage() {
             <p>
               We retain your data for as long as your account is active. You may request deletion of your
               account and associated data at any time by contacting us at{' '}
-              <a href="mailto:privacy@8os.ai" style={{ color: 'var(--color-accent)' }}>privacy@8os.ai</a>.
+              <a href="mailto:privacy@8os.ai" style={{ color: 'var(--color-text-primary)' }}>privacy@8os.ai</a>.
             </p>
           </section>
 
@@ -105,7 +105,7 @@ export default function PrivacyPage() {
             </ul>
             <p>
               To exercise these rights, contact us at{' '}
-              <a href="mailto:privacy@8os.ai" style={{ color: 'var(--color-accent)' }}>privacy@8os.ai</a>.
+              <a href="mailto:privacy@8os.ai" style={{ color: 'var(--color-text-primary)' }}>privacy@8os.ai</a>.
             </p>
           </section>
 
@@ -115,7 +115,7 @@ export default function PrivacyPage() {
             </h2>
             <p>
               For privacy-related enquiries, email{' '}
-              <a href="mailto:privacy@8os.ai" style={{ color: 'var(--color-accent)' }}>privacy@8os.ai</a>.
+              <a href="mailto:privacy@8os.ai" style={{ color: 'var(--color-text-primary)' }}>privacy@8os.ai</a>.
             </p>
           </section>
         </div>
