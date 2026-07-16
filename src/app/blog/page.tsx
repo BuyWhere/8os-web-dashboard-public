@@ -19,7 +19,7 @@ export default function BlogPage() {
       padding: '4rem 2rem',
     }}>
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: 'var(--color-accent)', textDecoration: 'none', fontSize: '0.875rem' }}>
+        <Link href="/" style={{ color: 'var(--color-text-primary)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>
           ← Back to 8os
         </Link>
         <section id="blog-header" style={{ marginTop: '2rem', marginBottom: '3rem' }}>

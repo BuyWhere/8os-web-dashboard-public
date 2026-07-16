@@ -175,7 +175,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
           }}
           style={{
             background: !activeCategory ? 'var(--color-accent)' : 'var(--color-bg-card)',
-            color: !activeCategory ? '#fff' : 'var(--color-text-secondary)',
+            color: !activeCategory ? '#fff' : 'var(--color-text-primary)',
             border: `1px solid ${!activeCategory ? 'var(--color-accent)' : 'var(--color-border)'}`,
             borderRadius: '8px',
             padding: '8px 16px',
@@ -199,7 +199,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
               }}
               style={{
                 background: isActive ? config.bg : 'var(--color-bg-card)',
-                color: isActive ? config.color : 'var(--color-text-secondary)',
+                color: isActive ? config.color : 'var(--color-text-primary)',
                 border: `1px solid ${isActive ? config.color + '40' : 'var(--color-border)'}`,
                 borderRadius: '8px',
                 padding: '8px 16px',
@@ -298,7 +298,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                   style={{
                     fontSize: '13px',
                     fontWeight: 500,
-                    color: 'var(--color-accent)',
+                    color: 'var(--color-text-primary)',
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '4px',
