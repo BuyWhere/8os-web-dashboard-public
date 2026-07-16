@@ -149,6 +149,18 @@
   --skin-divider: #362F26;
 }
 
+/* ── Legal-page dark-mode overrides (OS-3869 round 4) ─────────────────────
+ * /privacy and /terms have main/section/p/h1/h2/ul that inherit `color` and
+ * `background` from inline style on <main>. Inline style specificity beats
+ * even data-theme-driven variable changes, so we use `!important` here to
+ * make sure dark mode actually paints dark surfaces on these pages. QA
+ * flagged 39 contrast nodes on /privacy and 31 on /terms before this fix.
+ */
+[data-theme='dark'] main[style*="--color-bg-primary"] {
+  background: var(--color-bg-primary) !important;
+  color: var(--color-text-primary) !important;
+}
+
 /* ── Contact form affordance overrides ─────────────────────────────────────
  * Force input backgrounds to white card for strong border contrast in both
  * themes, and ensure button text is legible via theme-aware color.
