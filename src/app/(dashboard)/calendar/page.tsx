@@ -14,6 +14,7 @@ import { prisma } from '@/lib/db/prisma'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { QuickAdd } from '@/components/dashboard/QuickAdd'
 import { CalendarView } from '@/components/dashboard/CalendarView'
+import { CommitmentPlanner } from '@/components/dashboard/CommitmentPlanner'
 import { getCalendarHours } from '@/lib/calendar-prefs'
 import { caldiyApi } from '@/lib/caldiy/client'
 import { syncStaleGoogleSources } from '@/lib/external/google-calendar'
@@ -262,6 +263,8 @@ export default async function CalendarPage() {
       <Sidebar goals={goals} />
 
       <main className="cal-main" style={{ flex: 1, overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+        {/* One-pass "you said you'd do these" → calendar proposals (renders nothing when empty). */}
+        <CommitmentPlanner />
         <CalendarView
           events={[...nativeEvents, ...externalEvents, ...mappedCaldiyBookings]}
           goals={goals.map((g) => ({ id: g.id, name: g.name, domainId: g.domainId }))}
