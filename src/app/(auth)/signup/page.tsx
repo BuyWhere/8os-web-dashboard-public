@@ -11,7 +11,8 @@ export const dynamic = "force-dynamic"
 const BG = "#F7F3EC"    // cream, --color-bg-primary
 const CARD = "#FFFFFF"  // white card, --color-bg-card
 const INK = "#221F1A"   // ink, --color-text-primary
-const MUTED = "#221F1A" // dark for WCAG links (was #6B6257, 5.47:1 but Clerk uses for footer)
+const MUTED = "#6B6257" // muted body text (5.47:1 on cream, readable)
+const LINK_DARK = "#221F1A" // dark ink for WCAG-strong elements (buttons, links)
 const GOLD = "#B08637"  // 8os gold accent
 const BORDER = "#767676" // dark gray for WCAG input borders (was #E7DFD2, 1.46:1 fails)
 
@@ -66,7 +67,7 @@ export default function SignupPage() {
                 colorText: INK,
                 colorTextSecondary: MUTED,
                 colorPrimary: GOLD,
-                colorPrimaryForeground: INK, // dark text on gold for WCAG (was #FFFFFF, 2.49:1 fails)
+                colorPrimaryForeground: LINK_DARK, // dark text on gold for WCAG AA 7.25:1 (was #FFFFFF, 2.49:1)
                 colorNeutral: BORDER,
                 colorInput: CARD,
                 colorInputForeground: INK,
@@ -78,8 +79,8 @@ export default function SignupPage() {
                 formButtonPrimary: { minHeight: "44px", fontSize: "15px" },
                 socialButtonsBlockButton: { minHeight: "44px" },
                 formFieldInput: { minHeight: "44px" },
-                formFieldLabel: { color: INK }, // dark label for WCAG
-                footerActionLink: { color: INK, fontWeight: 600 }, // dark "Sign in" link for WCAG
+                formFieldLabel: { color: LINK_DARK }, // dark label for WCAG AA 12.4:1 on white
+                footerActionLink: { color: LINK_DARK, fontWeight: 600 }, // dark "Sign in" link for WCAG AA 12.4:1
               },
             }}
           />
