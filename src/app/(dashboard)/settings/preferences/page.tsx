@@ -38,7 +38,16 @@ interface PrefsResponse {
   theme: ThemeChoice
   firstDayOfWeek: 0 | 1
   timezone: string | null
+  calendarStartHour?: number
+  calendarEndHour?: number
   hasProfile?: boolean
+}
+
+function hourLabel(h: number): string {
+  if (h >= 24) return 'Midnight'
+  if (h === 0) return '12 AM'
+  if (h === 12) return '12 PM'
+  return h < 12 ? `${h} AM` : `${h - 12} PM`
 }
 
 const card: React.CSSProperties = {
@@ -113,6 +122,8 @@ function detectedTimezone(): string {
 export default function PreferencesPage() {
   const { choice, setTheme } = useTheme()
   const [firstDay, setFirstDay] = useState<0 | 1>(1)
+  const [calStart, setCalStart] = useState<number>(6)
+  const [calEnd, setCalEnd] = useState<number>(24)
   const [timezone, setTimezone] = useState<string>('')
   const [tzOptions, setTzOptions] = useState<string[]>([])
   // Detected on the CLIENT only. Initialising via useState during SSR would
@@ -151,6 +162,8 @@ export default function PreferencesPage() {
         if (!res.ok) throw new Error(`Load failed (${res.status})`)
         const data: PrefsResponse = await res.json()
         setFirstDay(data.firstDayOfWeek === 0 ? 0 : 1)
+        if (typeof data.calendarStartHour === 'number') setCalStart(data.calendarStartHour)
+        if (typeof data.calendarEndHour === 'number') setCalEnd(data.calendarEndHour)
         // Treat a missing OR UTC-default stored value as "unset": a fresh user
         // should see their real browser zone, not the UTC fallback.
         const stored = data.timezone && data.timezone !== "UTC" ? data.timezone : null
@@ -227,6 +240,24 @@ export default function PreferencesPage() {
               >
                 Sunday
               </button>
+            </div>
+          </section>
+
+          {/* Calendar visible hours */}
+          <section style={card}>
+            <h2 style={h2}>Calendar hours shown</h2>
+            <p style={sub}>Limit the day &amp; week calendar to your awake hours so you’re not scrolling the whole 24 hours.</p>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 14, color: 'var(--color-text-secondary)' }}>Show</span>
+              <select value={calStart} onChange={(e) => { const s = Number(e.target.value); const en = calEnd <= s ? Math.min(24, s + 1) : calEnd; setCalStart(s); setCalEnd(en); void save({ calendarStartHour: s, calendarEndHour: en }, 'Calendar hours updated.') }}
+                style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--color-border)', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', fontSize: 14 }}>
+                {Array.from({ length: 24 }, (_, h) => h).map((h) => <option key={h} value={h}>{hourLabel(h)}</option>)}
+              </select>
+              <span style={{ fontSize: 14, color: 'var(--color-text-muted)' }}>to</span>
+              <select value={calEnd} onChange={(e) => { const en = Number(e.target.value); const s = calStart >= en ? Math.max(0, en - 1) : calStart; setCalEnd(en); setCalStart(s); void save({ calendarStartHour: s, calendarEndHour: en }, 'Calendar hours updated.') }}
+                style={{ padding: '8px 10px', borderRadius: 8, border: '1px solid var(--color-border)', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', fontSize: 14 }}>
+                {Array.from({ length: 24 }, (_, i) => i + 1).map((h) => <option key={h} value={h} disabled={h <= calStart}>{hourLabel(h)}</option>)}
+              </select>
             </div>
           </section>
 

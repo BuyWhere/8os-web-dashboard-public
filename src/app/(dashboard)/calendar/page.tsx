@@ -14,6 +14,7 @@ import { prisma } from '@/lib/db/prisma'
 import { Sidebar } from '@/components/dashboard/Sidebar'
 import { QuickAdd } from '@/components/dashboard/QuickAdd'
 import { CalendarView } from '@/components/dashboard/CalendarView'
+import { getCalendarHours } from '@/lib/calendar-prefs'
 import { caldiyApi } from '@/lib/caldiy/client'
 import { syncStaleGoogleSources } from '@/lib/external/google-calendar'
 import { syncStaleMicrosoftSources } from '@/lib/external/microsoft-calendar'
@@ -164,6 +165,7 @@ export default async function CalendarPage() {
 
   const energyMap = (energyProfileRaw?.hourMap as Record<number, 'green' | 'yellow' | 'red'>) ?? null
   const firstDayOfWeek: 0 | 1 = userSettingsRaw?.firstDayOfWeek === 0 ? 0 : 1
+  const { start: dayStartHour, end: dayEndHour } = await getCalendarHours(userId)
 
   // Native events (with recurrence expansion). Track which Google event ids 8os
   // owns so the read-only external overlay never double-shows a pushed event.
@@ -273,6 +275,8 @@ export default async function CalendarPage() {
           }))}
           energyMap={energyMap}
           firstDayOfWeek={firstDayOfWeek}
+          dayStartHour={dayStartHour}
+          dayEndHour={dayEndHour}
         />
       </main>
 

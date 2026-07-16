@@ -60,6 +60,9 @@ interface Props {
   energyMap: Record<number, EnergyLevel> | null
   /** 0 = Sunday, 1 = Monday. Mirrors UserSettings.firstDayOfWeek. */
   firstDayOfWeek?: 0 | 1
+  /** Visible day-window on the day/week grid (hours, 0–24). Default 6–24. */
+  dayStartHour?: number
+  dayEndHour?: number
 }
 
 type CalView = 'day' | 'week' | 'month'
@@ -131,10 +134,23 @@ const SLOT_MIN = 15                 // snapping increment (minutes)
 const SLOTS_PER_HOUR = 60 / SLOT_MIN
 const SLOT_PX = 15                  // px per 15-min slot → 60px/hour
 const HOUR_PX = SLOT_PX * SLOTS_PER_HOUR
-const DAY_START_HOUR = 6            // grid starts at 6am
-const DAY_END_HOUR = 24             // …ends at midnight
-const HOURS = Array.from({ length: DAY_END_HOUR - DAY_START_HOUR }, (_, i) => i + DAY_START_HOUR)
-const GRID_HEIGHT = HOURS.length * HOUR_PX
+// The visible day window is user-configurable (Settings → Preferences → "Show hours").
+// These are module-level LET values that CalendarView sets from props at the top of
+// its render, so every helper + sub-component reads the current window without prop
+// threading. Defaults = 6am–midnight.
+let DAY_START_HOUR = 6
+let DAY_END_HOUR = 24
+let HOURS = Array.from({ length: DAY_END_HOUR - DAY_START_HOUR }, (_, i) => i + DAY_START_HOUR)
+let GRID_HEIGHT = HOURS.length * HOUR_PX
+function setDayWindow(start: number, end: number) {
+  const s = Math.max(0, Math.min(23, Math.round(start)))
+  const e = Math.max(s + 1, Math.min(24, Math.round(end)))
+  if (s === DAY_START_HOUR && e === DAY_END_HOUR) return
+  DAY_START_HOUR = s
+  DAY_END_HOUR = e
+  HOURS = Array.from({ length: DAY_END_HOUR - DAY_START_HOUR }, (_, i) => i + DAY_START_HOUR)
+  GRID_HEIGHT = HOURS.length * HOUR_PX
+}
 
 function pxPerMinute() { return HOUR_PX / 60 }
 function snapMinutes(min: number) { return Math.round(min / SLOT_MIN) * SLOT_MIN }
@@ -254,7 +270,10 @@ function normalizeSaved(
 
 // ─── Root ────────────────────────────────────────────────────────────────────
 
-export function CalendarView({ events: serverEvents, goals, unscheduledTasks, energyMap, firstDayOfWeek = 1 }: Props) {
+export function CalendarView({ events: serverEvents, goals, unscheduledTasks, energyMap, firstDayOfWeek = 1, dayStartHour = 6, dayEndHour = 24 }: Props) {
+  // Apply the user's visible window before anything renders (module-level; single
+  // instance). All grid helpers + sub-components then read the current HOURS/window.
+  setDayWindow(dayStartHour, dayEndHour)
   const router = useRouter()
   const [view, setView] = useState<CalView>('week')
   const [currentDate, setCurrentDate] = useState(new Date())
