@@ -102,7 +102,7 @@ export default function RevealClient() {
             boxShadow: 'var(--color-shadow)',
           }}
         >
-          <label htmlFor="birth-date" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
+          <label htmlFor="birth-date" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-secondary)', marginBottom: '0.5rem' }}>
             Your birth date
           </label>
           <input
@@ -114,6 +114,7 @@ export default function RevealClient() {
             max="2100-12-31"
             required
             aria-required="true"
+            aria-label="Birth date"
             style={{
               width: '100%',
               padding: '0.85rem 1rem',
@@ -126,7 +127,7 @@ export default function RevealClient() {
             }}
           />
 
-          <label htmlFor="birth-time" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-muted)', marginBottom: '0.5rem' }}>
+          <label htmlFor="birth-time" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-secondary)', marginBottom: '0.5rem' }}>
             Birth time <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: 'var(--color-text-secondary)' }}>(optional, sharpens the read)</span>
           </label>
           <input
@@ -160,7 +161,7 @@ export default function RevealClient() {
               fontSize: '1.0625rem',
               fontWeight: 700,
               background: 'var(--color-accent-gradient)',
-              border: '2px solid rgba(232, 98, 61, 0.4)',
+              border: '2px solid var(--color-accent)',
               borderRadius: '12px',
               color: '#fff',
               cursor: loading ? 'wait' : 'pointer',
