@@ -2,6 +2,19 @@
 
 import { useState } from 'react';
 
+// Shared input/textarea styles — stronger borders + depth shadow for clear affordance
+const INPUT_STYLE: React.CSSProperties = {
+  width: '100%',
+  padding: '0.625rem 0.75rem',
+  background: 'var(--color-bg-primary)',
+  border: '1px solid var(--color-border-strong)',
+  borderRadius: '8px',
+  color: 'var(--color-text-primary)',
+  fontSize: '1rem',
+  fontFamily: 'inherit',
+  boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.08)',
+};
+
 interface ContactFormData {
   name: string;
   email: string;
@@ -133,16 +146,9 @@ export function ContactForm() {
           value={form.name}
           onChange={update('name')}
           disabled={status === 'submitting'}
-          style={{
-            width: '100%',
-            padding: '0.625rem 0.75rem',
-            background: 'var(--color-bg-primary)',
-            border: '1px solid var(--color-border)',
-            borderRadius: '8px',
-            color: 'var(--color-text-primary)',
-            fontSize: '1rem',
-            fontFamily: 'inherit',
-          }}
+          style={INPUT_STYLE}
+          onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent)'; }}
+          onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border-strong)'; e.currentTarget.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.08)'; }}
         />
       </div>
 
@@ -158,16 +164,9 @@ export function ContactForm() {
           value={form.email}
           onChange={update('email')}
           disabled={status === 'submitting'}
-          style={{
-            width: '100%',
-            padding: '0.625rem 0.75rem',
-            background: 'var(--color-bg-primary)',
-            border: '1px solid var(--color-border)',
-            borderRadius: '8px',
-            color: 'var(--color-text-primary)',
-            fontSize: '1rem',
-            fontFamily: 'inherit',
-          }}
+          style={INPUT_STYLE}
+          onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent)'; }}
+          onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border-strong)'; e.currentTarget.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.08)'; }}
         />
       </div>
 
@@ -181,16 +180,9 @@ export function ContactForm() {
           value={form.subject}
           onChange={update('subject')}
           disabled={status === 'submitting'}
-          style={{
-            width: '100%',
-            padding: '0.625rem 0.75rem',
-            background: 'var(--color-bg-primary)',
-            border: '1px solid var(--color-border)',
-            borderRadius: '8px',
-            color: 'var(--color-text-primary)',
-            fontSize: '1rem',
-            fontFamily: 'inherit',
-          }}
+          style={INPUT_STYLE}
+          onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent)'; }}
+          onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border-strong)'; e.currentTarget.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.08)'; }}
         />
       </div>
 
@@ -205,18 +197,9 @@ export function ContactForm() {
           value={form.message}
           onChange={update('message')}
           disabled={status === 'submitting'}
-          style={{
-            width: '100%',
-            padding: '0.625rem 0.75rem',
-            background: 'var(--color-bg-primary)',
-            border: '1px solid var(--color-border)',
-            borderRadius: '8px',
-            color: 'var(--color-text-primary)',
-            fontSize: '1rem',
-            fontFamily: 'inherit',
-            resize: 'vertical',
-            minHeight: '120px',
-          }}
+          style={{ ...INPUT_STYLE, resize: 'vertical', minHeight: '120px' }}
+          onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent)'; }}
+          onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border-strong)'; e.currentTarget.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.08)'; }}
         />
       </div>
 
@@ -242,6 +225,10 @@ export function ContactForm() {
       <button
         type="submit"
         disabled={status === 'submitting'}
+        onFocus={e => { if (status !== 'submitting') e.currentTarget.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--color-accent) 40%, transparent)'; }}
+        onBlur={e => { e.currentTarget.style.boxShadow = 'none'; }}
+        onMouseEnter={e => { if (status !== 'submitting') e.currentTarget.style.filter = 'brightness(1.1)'; }}
+        onMouseLeave={e => { e.currentTarget.style.filter = 'none'; }}
         style={{
           background: status === 'submitting' ? 'var(--color-border)' : 'linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))',
           color: '#fff',
@@ -253,6 +240,7 @@ export function ContactForm() {
           cursor: status === 'submitting' ? 'wait' : 'pointer',
           opacity: status === 'submitting' ? 0.7 : 1,
           fontFamily: 'inherit',
+          transition: 'filter 0.15s ease',
         }}
       >
         {status === 'submitting' ? 'Sending…' : 'Send message'}
