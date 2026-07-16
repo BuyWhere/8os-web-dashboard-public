@@ -73,7 +73,7 @@ export async function createChatCompletion(
   options: {
     model?: string
     tools?: Tool[]
-    tool_choice?: 'auto' | 'none' | { type: 'function'; function: { name: string } }
+    tool_choice?: 'auto' | 'none' | 'required' | { type: 'function'; function: { name: string } }
     temperature?: number
     max_tokens?: number
   } = {}
@@ -110,7 +110,7 @@ export async function createStreamingChatCompletion(
   options: {
     model?: string
     tools?: Tool[]
-    tool_choice?: 'auto' | 'none' | { type: 'function'; function: { name: string } }
+    tool_choice?: 'auto' | 'none' | 'required' | { type: 'function'; function: { name: string } }
     temperature?: number
     max_tokens?: number
   } = {}

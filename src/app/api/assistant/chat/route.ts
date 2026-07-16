@@ -167,10 +167,17 @@ export async function POST(request: NextRequest) {
 
         // Read one streamed completion; enqueue content deltas to the client and
         // accumulate any tool calls. Returns { content, toolCalls }.
-        async function streamOneRound(roundMessages: ChatMessage[]) {
+        async function streamOneRound(roundMessages: ChatMessage[], forceTool = false) {
           const response = await createStreamingChatCompletion(roundMessages, {
+            // The Coach is the flagship AGENTIC surface: pin the strong tier, not
+            // cost-routed 'auto' (which lands on deepseek-*-flash and, in long
+            // tool-heavy conversations, narrates "I'll do it" without emitting tool
+            // calls). Everything else keeps using 'auto'.
+            model: 'flow-1',
             tools: ASSISTANT_TOOLS,
-            tool_choice: 'auto',
+            // On the anti-narration corrective round, REQUIRE a tool call so the
+            // model can't just re-narrate.
+            tool_choice: forceTool ? 'required' : 'auto',
           })
           const reader = response.getReader()
           const decoder = new TextDecoder()
@@ -220,9 +227,11 @@ export async function POST(request: NextRequest) {
           const running: ChatMessage[] = [...messages]
           let mutatingCalled = false // did any tool that changes the OS actually run?
           let guardUsed = false      // anti-narration corrective round fired once
+          let forceNext = false      // force a tool call on the next round (guard)
 
           for (let round = 0; round < MAX_ROUNDS; round++) {
-            const { content, toolCalls } = await streamOneRound(running)
+            const { content, toolCalls } = await streamOneRound(running, forceNext)
+            forceNext = false
 
             // No tool calls → this is the final assistant turn.
             if (toolCalls.length === 0) {
@@ -235,8 +244,9 @@ export async function POST(request: NextRequest) {
                 running.push({
                   role: 'system',
                   content:
-                    'STOP. You just told the user you created/added/updated/scheduled/deleted something, but you called NO tool this turn, so nothing actually changed in their OS. If the user asked for a change, call the correct tools NOW to really perform it (use the exact ids from context). If no change was needed, rewrite your reply so it does not claim any action was taken.',
+                    'STOP. You just told the user you created/added/updated/scheduled/deleted something, but you called NO tool this turn, so nothing actually changed in their OS. If the user asked for a change, call the correct tools NOW to really perform it (use the exact ids from context, and the BULK tools delete_goals/convert_goals_to_tasks for batches). If no change was needed, rewrite your reply so it does not claim any action was taken.',
                 })
+                forceNext = true // next round MUST emit a tool call
                 continue
               }
               await prisma.assistantMessage.create({
@@ -290,7 +300,7 @@ export async function POST(request: NextRequest) {
             // If this was the last allowed round, force a final no-tools summary
             // so the user always gets a closing message.
             if (round === MAX_ROUNDS - 1) {
-              const finalResp = await createStreamingChatCompletion(running, { tool_choice: 'none' })
+              const finalResp = await createStreamingChatCompletion(running, { model: 'flow-1', tool_choice: 'none' })
               const finalReader = finalResp.getReader()
               const finalDecoder = new TextDecoder()
               let finalBuf = ''
