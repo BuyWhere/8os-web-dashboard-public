@@ -784,7 +784,7 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
   if (!p) notFound();
 
   return (
-    <main style={{ minHeight: '100vh', background: 'var(--color-bg-primary)', color: 'var(--color-border)', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', padding: '56px 24px 80px' }}>
+    <main style={{ minHeight: '100vh', background: 'var(--color-bg-primary)', color: 'var(--color-text-secondary)', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', padding: '56px 24px 80px' }}>
       <ArchetypeRevealedTracker archetype={slug} />
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
 
@@ -816,7 +816,7 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
 
         {/* Strengths + Challenges */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, marginBottom: 24 }}>
-          <div style={{ background: 'var(--color-bg-primary)', border: '1px solid #1e1e1e', borderRadius: 12, padding: 24 }}>
+          <div style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 24 }}>
             <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-accent)', marginBottom: 14 }}>Strengths</h2>
             <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
               {p.strengths.map((s, i) => (
@@ -827,7 +827,7 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
               ))}
             </ul>
           </div>
-          <div style={{ background: 'var(--color-bg-primary)', border: '1px solid #1e1e1e', borderRadius: 12, padding: 24 }}>
+          <div style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 24 }}>
             <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-challenges)', marginBottom: 14 }}>Challenges</h2>
             <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
               {p.challenges.map((c, i) => (
@@ -841,23 +841,23 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
         </div>
 
         {/* Ideal Work */}
-        <div style={{ background: 'var(--color-bg-primary)', border: '1px solid #1e1e1e', borderRadius: 12, padding: 24, marginBottom: 20 }}>
+        <div style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 24, marginBottom: 20 }}>
           <h2 style={{ fontSize: 15, fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: 14 }}>Ideal Work</h2>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
             {p.idealWork.map((w, i) => (
-              <span key={i} style={{ background: '#161616', border: '1px solid #2a2a2a', borderRadius: 8, padding: '6px 12px', color: 'var(--color-text-muted)', fontSize: 13 }}>{w}</span>
+              <span key={i} style={{ background: 'var(--color-bg-secondary)', border: '1px solid var(--color-border)', borderRadius: 8, padding: '6px 12px', color: 'var(--color-text-secondary)', fontSize: 13 }}>{w}</span>
             ))}
           </div>
         </div>
 
         {/* Key Insight */}
         <div style={{ background: 'var(--color-accent-soft)', border: '1px solid var(--color-accent-soft)', borderRadius: 12, padding: 24, marginBottom: 20 }}>
-          <h2 style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-accent)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>Key Insight</h2>
-          <p style={{ color: 'var(--color-accent)', fontSize: 15, lineHeight: 1.7, margin: 0 }}>{p.keyInsight}</p>
+          <h2 style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-text-primary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>Key Insight</h2>
+          <p style={{ color: 'var(--color-text-primary)', fontSize: 15, lineHeight: 1.7, margin: 0 }}>{p.keyInsight}</p>
         </div>
 
         {/* Daily Practice */}
-        <div style={{ background: 'var(--color-bg-primary)', border: '1px solid #1e1e1e', borderRadius: 12, padding: 24, marginBottom: 40 }}>
+        <div style={{ background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 24, marginBottom: 40 }}>
           <h2 style={{ fontSize: 13, fontWeight: 700, color: 'var(--color-text-secondary)', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: 10 }}>Daily Practice</h2>
           <p style={{ color: 'var(--color-text-muted)', fontSize: 15, lineHeight: 1.7, margin: 0 }}>{p.dailyPractice}</p>
         </div>
@@ -875,9 +875,9 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
         </div>
 
         <div style={{ display: 'flex', gap: 20, flexWrap: 'wrap', fontSize: 14 }}>
-          <Link href="/archetypes/famous" style={{ color: '#6e40c9', textDecoration: 'none' }}>Famous Archetypes →</Link>
-          <Link href="/resources/five-elements-guide" style={{ color: '#6e40c9', textDecoration: 'none' }}>Five Elements Guide →</Link>
-          <Link href="/quiz" style={{ color: '#6e40c9', textDecoration: 'none' }}>Archetype Quiz →</Link>
+          <Link href="/archetypes/famous" style={{ color: 'var(--color-text-primary)', textDecoration: 'none' }}>Famous Archetypes →</Link>
+          <Link href="/resources/five-elements-guide" style={{ color: 'var(--color-text-primary)', textDecoration: 'none' }}>Five Elements Guide →</Link>
+          <Link href="/quiz" style={{ color: 'var(--color-text-primary)', textDecoration: 'none' }}>Archetype Quiz →</Link>
         </div>
 
       </div>

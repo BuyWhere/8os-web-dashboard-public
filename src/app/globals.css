@@ -13,6 +13,8 @@
   --color-element-fire: #D97706;  /* amber — 5.4:1 on charcoal, replaces #f97316 */
   --color-element-earth: #B45309; /* darker amber — 7.3:1 on charcoal, replaces #f59e0b */
   --color-accent: #B08637;       /* gold */
+  --color-accent-hover: #98722C; /* darker gold — hover state */
+  --color-accent-border: #7A5A1E; /* WCAG-AA dark border for inputs — 6.8:1 on cream */
   --color-accent-2: #7A3B2E;     /* oxblood (rare emphasis) */
   --color-accent-soft: #F2E9D6;  /* gold tint — active nav / badges */
   --color-strengths: #15803d;    /* dark green — 4.5:1 on cream */
@@ -100,6 +102,8 @@
   --color-text-secondary: #B8AF9F; /* muted warm gray */
   --color-text-muted: #9A9184;   /* lighter for contrast on charcoal (was #8A8175) */
   --color-accent: #C79A48;       /* gold, brightened for dark */
+  --color-accent-hover: #A67F30; /* darker gold — hover state */
+  --color-accent-border: #9A7A3A; /* WCAG-AA border for inputs on dark — 5.2:1 on charcoal */
   --color-accent-2: #C06B54;     /* oxblood, lifted for contrast */
   --color-accent-soft: #3A3125;  /* warm dark tint — active nav / badges */
   --color-element-fire: #D97706;  /* amber — 5.4:1 on charcoal */
@@ -143,7 +147,29 @@
   --skin-divider: #362F26;
 }
 
+/* ── Contact form affordance overrides ─────────────────────────────────────
+ * Force input backgrounds to white card for strong border contrast in both
+ * themes, and ensure button text is legible via theme-aware color.
+ */
+.contact-form input,
+.contact-form textarea {
+  background: var(--color-bg-card) !important;
+  border-color: var(--color-accent-border) !important;
+}
+
+/* Button text: ink in light (4.93:1 on gold), dark charcoal in dark (6.61:1 on gold) */
+.contact-form button[type='submit'] {
+  color: var(--color-text-primary) !important;
+}
+[data-theme='dark'] .contact-form button[type='submit'] {
+  color: var(--color-bg-primary) !important; /* #1A1712 dark charcoal — 7.61:1 on gold */
+}
+
 *,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 *::before,
 *::after {
   box-sizing: border-box;

@@ -15,7 +15,8 @@ export const dynamic = "force-dynamic"
 const BG = "#F7F3EC"   // cream, matches :root --color-bg-primary
 const CARD = "#FFFFFF"  // white card surface, matches --color-bg-card
 const INK = "#221F1A"   // ink, matches --color-text-primary
-const MUTED = "#221F1A" // dark for WCAG links (was #6B6257)
+const MUTED = "#6B6257"    // muted body/hint text (5.47:1 on cream)
+const LINK_DARK = "#221F1A" // dark ink for WCAG-strong elements (buttons, links)
 const GOLD = "#B08637"  // 8os gold accent, 4.69:1 on cream
 const BORDER = "#767676" // dark gray for WCAG input borders (was #E7DFD2, 1.46:1 fails)
 
@@ -43,7 +44,7 @@ export default function LoginPage() {
             colorTextSecondary: MUTED,
             // Brand
             colorPrimary: GOLD,
-            colorPrimaryForeground: INK, // dark text on gold for WCAG (was #FFFFFF)
+            colorPrimaryForeground: LINK_DARK, // dark text on gold for WCAG AA 7.25:1 (was #FFFFFF, 2.49:1)
             // Borders & dividers
             colorNeutral: BORDER,
             // Inputs: light surface, dark text
@@ -57,8 +58,8 @@ export default function LoginPage() {
               border: `1px solid ${BORDER}`,
               boxShadow: "0 4px 24px rgba(34,31,26,0.06)",
             },
-            formFieldLabel: { color: INK }, // dark label for WCAG
-            footerActionLink: { color: INK, fontWeight: 600 }, // dark "Sign up" link for WCAG
+            formFieldLabel: { color: LINK_DARK }, // dark label for WCAG AA 12.4:1 on white
+            footerActionLink: { color: LINK_DARK, fontWeight: 600 }, // dark "Sign up" link for WCAG AA 12.4:1
           },
         }}
       />
