@@ -55,7 +55,8 @@ export default function SignupPage() {
           </ul>
         </section>
 
-        {/* Right, the Clerk form */}
+        {/* Right, the Clerk form — alignSelf centers it within its row so the
+            card floats between the hero copy top and the benefits list bottom. */}
         <section className="signup-auth" style={{ display: "flex", justifyContent: "center", alignSelf: "start" }}>
           <SignUp
             routing="hash"
@@ -77,7 +78,7 @@ export default function SignupPage() {
               },
               elements: {
                 rootBox: { border: `1px solid ${BORDER}`, borderRadius: "16px", overflow: "hidden", boxShadow: "0 4px 24px rgba(34,31,26,0.06)" },
-                card: { border: "none", boxShadow: "none", borderRadius: 0 },
+                card: { border: "none", boxShadow: "none", borderRadius: 0, padding: "0" },
                 header: { display: "none" }, // Hide Clerk's default logo/header branding
                 formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: LINK_DARK },
                 socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px" }, // dark border for WCAG social button contrast
