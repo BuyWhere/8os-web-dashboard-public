@@ -1,12 +1,6 @@
 'use client'
 import Link from 'next/link'
-import type { Metadata } from 'next'
 import { useTheme } from '@/components/ThemeProvider'
-
-export const metadata: Metadata = {
-  title: 'Privacy Policy, 8os',
-  description: 'How 8os collects, uses, and protects your personal information.',
-}
 
 // Explicit theme-colour values — needed because the data-theme boot script runs
 // client-side after SSR, so SSR markup sees the light-mode defaults.
