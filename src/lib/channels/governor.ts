@@ -49,7 +49,10 @@ interface Prefs {
 const DEFAULT_PREFS: Omit<Prefs, 'prefsJson'> & { prefsJson: null } = {
   prefsJson: null,
   quietStart: '22:00',
-  quietEnd: '07:30',
+  // MUST end BEFORE the default 07:08 brief tick: with the old '07:30' default,
+  // the morning brief fell inside its own quiet window and was suppressed for
+  // every default user — the proactive coach never delivered once.
+  quietEnd: '07:00',
   dailyCap: 3,
   snoozeUntil: null,
 }
