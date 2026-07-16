@@ -788,9 +788,9 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
       <ArchetypeRevealedTracker archetype={slug} />
       <div style={{ maxWidth: 800, margin: '0 auto' }}>
 
-        {/* Breadcrumb */}
-        <div style={{ marginBottom: 32, display: 'flex', gap: 8, alignItems: 'center', fontSize: 13, color: 'var(--color-text-secondary)' }}>
-          <Link href="/archetypes" style={{ color: '#6e40c9', textDecoration: 'none' }}>Archetypes</Link>
+        {/* Breadcrumb — text-muted passes WCAG AA on both dark (5.74:1) and light (5.04:1) */}
+        <div style={{ marginBottom: 32, display: 'flex', gap: 8, alignItems: 'center', fontSize: 13, color: 'var(--color-text-muted)' }}>
+          <Link href="/archetypes" style={{ color: 'var(--color-accent)', textDecoration: 'none' }}>Archetypes</Link>
           <span>›</span>
           <span>{p.sign}</span>
           <span>›</span>
