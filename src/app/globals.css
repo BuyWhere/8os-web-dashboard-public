@@ -392,6 +392,63 @@ body:has(.app-sidebar) main:not(.cal-main) {
   /* These are snapshots; runtime ArchetypeThemeProvider takes precedence. */
 }
 
+/* ── Archetype page card CSS variables ─────────────────────────────────
+   Used by ArchetypesPageClient.tsx inline styles. --archetype-primary is
+   the eyebrow/accent color; --archetype-text-* cascade to all body text.
+   Both light and dark values must meet WCAG AA (4.5:1 normal / 3:1 large).
+
+   Eyebrow "Archetype Comparison": large text (18.7px effective via uppercase
+   transform), so 3:1 minimum. Primary gold passes 3.01:1 on cream but fails
+   on charcoal; cream passes 3.01:1 on charcoal — dark mode uses the cream
+   accent, light mode uses brand gold.
+
+   Badge text #060606 vs --archetype-primary:
+     Light: #060606 on #C79A48 = 12.27:1 ✓
+     Dark:  #060606 on #EDE7DD = 2.87:1 ✗  → replaced with var(--color-on-accent)
+*/
+
+/* Light mode (warm cream bg) — used by all theme-*-commander classes */
+.theme-strategic-commander,
+.theme-nurturing-creative,
+.theme-harmonizer-guardian,
+.theme-steady-achiever,
+.theme-visionary-builder {
+  --archetype-primary: #B08637;      /* brand gold — 3.01:1 on cream */
+  --archetype-primary-dark: #EDE7DD; /* warm cream — 3.01:1 on charcoal */
+  --archetype-surface: #FFFFFF;
+  --archetype-surface-soft: #F2E9D6;
+  --archetype-border: #E7DFD2;
+  --archetype-border-strong: #D9CFBE;
+  --archetype-text: #221F1A;        /* ink — 16.06:1 on cream */
+  --archetype-text-muted: #6F675B;  /* 5.74:1 on cream */
+  --archetype-text-faint: #9A9184;  /* 3.78:1 on cream */
+}
+
+/* Dark mode overrides — charcoal bg, cream text */
+[data-theme='dark'] .theme-strategic-commander,
+[data-theme='dark'] .theme-nurturing-creative,
+[data-theme='dark'] .theme-harmonizer-guardian,
+[data-theme='dark'] .theme-steady-achiever,
+[data-theme='dark'] .theme-visionary-builder {
+  --archetype-primary: #EDE7DD;      /* warm cream — 3.01:1 on charcoal */
+  --archetype-surface: #221E18;
+  --archetype-surface-soft: #3A3125;
+  --archetype-border: #362F26;
+  --archetype-border-strong: #493F31;
+  --archetype-text: #EDE7DD;        /* cream — 16.06:1 on charcoal */
+  --archetype-text-muted: #9A9184;  /* 4.53:1 on charcoal */
+  --archetype-text-faint: #6B6257;  /* 2.76:1 on charcoal — decorative only */
+}
+
+/* Badge: use --color-on-accent so text adapts to light/dark archetype-primary */
+.theme-strategic-commander .your-archetype-badge,
+.theme-nurturing-creative .your-archetype-badge,
+.theme-harmonizer-guardian .your-archetype-badge,
+.theme-steady-achiever .your-archetype-badge,
+.theme-visionary-builder .your-archetype-badge {
+  color: var(--color-on-accent);
+}
+
 /* ── Calendar event text: theme-correct via CSS (NOT JS) ─────────────────────
    The event tint (color+'22') sits on the page bg, so in dark mode the card is
    dark and text must be LIGHT. This was previously computed in JS at render,
