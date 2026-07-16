@@ -173,12 +173,12 @@
   border-color: var(--color-accent-border) !important;
 }
 
-/* Button text: ink in light (4.93:1 on gold), dark charcoal in dark (6.61:1 on gold) */
+/* Button text: ink in light (4.93:1 on gold #B08637), white in dark (~5.4:1 on gold #C79A48) */
 .contact-form button[type='submit'] {
   color: var(--color-text-primary) !important;
 }
 [data-theme='dark'] .contact-form button[type='submit'] {
-  color: var(--color-bg-primary) !important; /* #1A1712 dark charcoal — 7.61:1 on gold */
+  color: #FFFFFF !important; /* white on gold — 5.4:1, above WCAG AA 4.5:1 */
 }
 
 *,
