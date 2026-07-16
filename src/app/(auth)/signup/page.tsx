@@ -1,5 +1,4 @@
 import { SignUp } from "@clerk/nextjs"
-import Link from "next/link"
 
 // Clerk components read request context; render at request time (never prerender).
 export const dynamic = "force-dynamic"
@@ -25,16 +24,9 @@ const BENEFITS = [
 export default function SignupPage() {
   return (
     <main style={{ minHeight: "100vh", background: BG, color: INK }}>
-      <div className="signup-grid" style={{ maxWidth: 1080, margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "center", gap: "3rem", padding: "2rem 1.5rem" }}>
+      <div className="signup-grid" style={{ maxWidth: 1080, margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "start", gap: "3rem", padding: "5rem 1.5rem 3rem" }}>
         {/* Left, product context */}
         <section className="signup-pitch" style={{ maxWidth: 460 }}>
-          <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: "1.75rem" }} aria-label="8os home">
-            <svg width={28} height={28} viewBox="0 0 32 32" fill="none" aria-hidden="true">
-              <circle cx="16" cy="10.5" r="6" stroke={GOLD} strokeWidth="2" />
-              <circle cx="16" cy="21.5" r="6.5" stroke={INK} strokeWidth="2" />
-            </svg>
-            <span style={{ fontFamily: "var(--font-serif-header), Georgia, serif", fontSize: "1.35rem", fontWeight: 600, color: INK }}>8os</span>
-          </Link>
           <h1 style={{ fontFamily: "var(--font-serif-header), Georgia, serif", fontSize: "2rem", lineHeight: 1.15, fontWeight: 600, margin: "0 0 0.75rem" }}>
             Build your personalized Life OS
           </h1>
@@ -55,7 +47,7 @@ export default function SignupPage() {
         </section>
 
         {/* Right, the Clerk form */}
-        <section className="signup-auth" style={{ display: "flex", justifyContent: "center" }}>
+        <section className="signup-auth" style={{ display: "flex", justifyContent: "center", alignSelf: "center" }}>
           <SignUp
             routing="hash"
             signInUrl="/login"
