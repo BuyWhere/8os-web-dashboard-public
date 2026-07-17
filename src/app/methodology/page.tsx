@@ -40,35 +40,35 @@ export default function MethodologyPage() {
             proprietary synthesis layer that maps your Western expression onto your BaZi structure.
           </p>
           <div style={flowchartStyle}>
-            <div style={flowNodeStyle('var(--color-accent)')}>User Input: Birth Date + Location</div>
+            <div style={flowNodeStyle('var(--color-accent)', '#0f172a')}>User Input: Birth Date + Location</div>
             <div style={flowRowStyle}>
               <div style={flowBranchStyle}>
                 <div style={flowArrowStyle} />
-                <div style={flowNodeStyle('#818cf8')}>Sun Sign Calculation</div>
+                <div style={flowNodeStyle('#818cf8', '#0f172a')}>Sun Sign Calculation</div>
                 <div style={flowSubStyle}>No birth time needed</div>
               </div>
               <div style={flowBranchStyle}>
                 <div style={flowArrowStyle} />
-                <div style={flowNodeStyle('#818cf8')}>BaZi Calculation</div>
+                <div style={flowNodeStyle('#818cf8', '#0f172a')}>BaZi Calculation</div>
                 <div style={flowSubStyle}>Real Solar Time</div>
               </div>
             </div>
             <div style={flowRowStyle}>
               <div style={flowBranchStyle}>
                 <div style={flowArrowStyle} />
-                <div style={flowNodeStyle('var(--color-border)')}>Archetype Expression</div>
+                <div style={flowNodeStyle('var(--color-border)', '#0f172a')}>Archetype Expression</div>
               </div>
               <div style={flowBranchStyle}>
                 <div style={flowArrowStyle} />
-                <div style={flowNodeStyle('var(--color-border)')}>Structural Capacity</div>
+                <div style={flowNodeStyle('var(--color-border)', '#0f172a')}>Structural Capacity</div>
               </div>
             </div>
             <div style={flowArrowStyle} />
-            <div style={flowNodeStyle('var(--color-accent)')}>Archetype Synthesis Layer</div>
+            <div style={flowNodeStyle('var(--color-accent)', '#0f172a')}>Archetype Synthesis Layer</div>
             <div style={flowArrowStyle} />
-            <div style={flowNodeStyle('#5b21b6')}>Unified Profile + Goal Architecture</div>
+            <div style={flowNodeStyle('#5b21b6', '#f8fafc')}>Unified Profile + Goal Architecture</div>
             <div style={flowArrowStyle} />
-            <div style={flowNodeStyle('#4c1d95')}>Live OS Dashboard + AI Journaling</div>
+            <div style={flowNodeStyle('#4c1d95', '#f8fafc')}>Live OS Dashboard + AI Journaling</div>
           </div>
         </section>
 
@@ -210,7 +210,7 @@ const bodyStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: '1rem', l
 const dividerStyle: React.CSSProperties = { height: '1px', background: 'var(--color-border)', margin: '3rem 0' };
 
 const flowchartStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', padding: '2rem', background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: '16px' };
-const flowNodeStyle = (bg: string): React.CSSProperties => ({ padding: '0.75rem 1.5rem', borderRadius: '10px', background: bg, color: 'var(--color-text-primary)', fontWeight: 600, fontSize: '0.9rem', textAlign: 'center', maxWidth: '340px', width: '100%' });
+const flowNodeStyle = (bg: string, textColor?: string): React.CSSProperties => ({ padding: '0.75rem 1.5rem', borderRadius: '10px', background: bg, color: textColor || 'var(--color-text-primary)', fontWeight: 600, fontSize: '0.9rem', textAlign: 'center', maxWidth: '340px', width: '100%' });
 const flowRowStyle: React.CSSProperties = { display: 'flex', gap: '2rem', justifyContent: 'center', width: '100%' };
 const flowBranchStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' };
 const flowArrowStyle: React.CSSProperties = { width: '2px', height: '24px', background: 'var(--color-text-secondary)' };
