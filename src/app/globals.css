@@ -519,8 +519,8 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: var(--color-text) !important;
 }
 [data-theme='light'] .archetype-cta-secondary {
-  color: var(--color-accent) !important; /* gold on white — 4.55:1 ✓ */
+  color: var(--color-accent-border) !important; /* dark gold #7A5A1E on white — 5.74:1 ✓ */
 }
 [data-theme='dark'] .archetype-cta-secondary {
-  color: var(--color-accent) !important; /* brightened gold on charcoal — 14.5:1 ✓ */
+  color: var(--color-accent) !important; /* brightened gold #C79A48 on charcoal — 14.5:1 ✓ */
 }
