@@ -539,13 +539,14 @@ body:has(.app-sidebar) main:not(.cal-main) {
 
 /* ── Contact form placeholders (OS-3982) ──────────────────────────────────
  * Inline styles can't set :placeholder, so we override here.
- * Light:  #7A6E62 on white card = 4.48:1 ≈ AA (large-text safe)
- * Dark:   #B8AF9F on charcoal   = 8.23:1 ✓
+ * Use --color-text-muted at full opacity (no alpha blending — that's where
+ * a previous attempt silently broke AA at 3.12:1 on the light card):
+ *   Light: #5C5652 on white card = 7.22:1 ✓
+ *   Dark:  #9A9184 on charcoal   = 5.75:1 ✓
+ * Visual hierarchy vs the input text is preserved by weight + size rather
+ * than by lowering placeholder contrast below AA.
  */
 .contact-form ::placeholder {
-  color: var(--color-text-secondary);
-  opacity: 0.7;
-}
-[data-theme='dark'] .contact-form ::placeholder {
-  opacity: 0.8;
+  color: var(--color-text-muted);
+  opacity: 1;
 }
