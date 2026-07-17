@@ -482,6 +482,18 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: rgba(242, 237, 228, 0.75) !important;
 }
 
+/* ── Archetype breadcrumb links: WCAG AA for both themes ────────────────────────
+ * Inline style on the anchor has specificity 0,1,0 (element+inline).
+ * This class selector 0,1,0 + !important matches it; dark overrides win via
+ * source order (after the base class). Breadcrumb link: anchor on cream bg. */
+.archetype-breadcrumb-link {
+  color: var(--color-accent-border) !important; /* #7A5A1E on #F7F3EC = 5.74:1 ✓ (light) */
+  text-decoration: none;
+}
+[data-theme='dark'] .archetype-breadcrumb-link {
+  color: var(--color-accent) !important; /* #C79A48 on #1A1712 = 5.20:1 ✓ (dark) */
+}
+
 /* ── Archetype page CTA buttons: WCAG AA contrast for all themes ─────────────────── */
 /* Primary CTA: ink text on gold — passes WCAG AA (large/bold text, min 3.0:1)
  *   Light: #221F1A on #B08637  = 4.93:1 ✓
