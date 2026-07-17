@@ -459,7 +459,20 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
             <button onClick={() => setCurrentDate(new Date())} style={btnStyle}>Today</button>
             <button onClick={() => navigate(-1)} style={btnStyle} aria-label="Previous">◀</button>
             <button onClick={() => navigate(1)} style={btnStyle} aria-label="Next">▶</button>
-            <span style={{ fontWeight: 600, fontSize: 16, fontFamily: 'var(--font-serif), Fraunces, Georgia, serif' }}>{headerTitle}</span>
+            {/* Jump-to-date: the header title doubles as a native date picker. */}
+            <label title="Jump to date" style={{ position: 'relative', cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
+              <span style={{ fontWeight: 600, fontSize: 16, fontFamily: 'var(--font-serif), Fraunces, Georgia, serif' }}>{headerTitle} ▾</span>
+              <input
+                type="date"
+                aria-label="Jump to date"
+                value={`${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`}
+                onChange={(e) => {
+                  const [y, m, d] = e.target.value.split('-').map(Number)
+                  if (y && m && d) setCurrentDate(new Date(y, m - 1, d))
+                }}
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+              />
+            </label>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <button
