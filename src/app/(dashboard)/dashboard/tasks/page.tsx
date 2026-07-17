@@ -204,6 +204,37 @@ export default function TasksPage() {
     setDetailId(null)
   }
 
+  const [replanning, setReplanning] = useState(false)
+  /** Motion's core move: replan every overdue task into the next best free slots.
+   *  Sequential on purpose — each /api/schedule call re-reads the calendar, so
+   *  earlier placements become conflicts for later ones (no double-booking). */
+  async function replanOverdue(list: Task[]) {
+    if (replanning || list.length === 0) return
+    setReplanning(true)
+    let placed = 0
+    for (const t of list) {
+      try {
+        const res = await fetch('/api/schedule', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ taskId: t.id }),
+        })
+        if (res.ok) {
+          const data = await res.json().catch(() => ({} as any))
+          const startAt: string | undefined = data?.slot?.startAt || data?.task?.scheduledAt
+          if (startAt) {
+            placed++
+            setTasks(prev => prev.map(x => x.id === t.id ? { ...x, scheduledAt: startAt } : x))
+          }
+        }
+      } catch { /* keep going */ }
+    }
+    setReplanning(false)
+    showToast(placed === list.length
+      ? `Replanned all ${placed} overdue task(s) into free slots`
+      : `Replanned ${placed} of ${list.length} — no free slot found for the rest`, () => setToast(null))
+  }
+
   async function bulkDefer(list: Task[], kind: 'today' | 'tomorrow') {
     const target = new Date()
     if (kind === 'tomorrow') target.setDate(target.getDate() + 1)
@@ -291,6 +322,7 @@ export default function TasksPage() {
       deferOpenId={deferOpenId} setDeferOpenId={setDeferOpenId} deferTask={deferTask}
       detailId={detailId} setDetailId={setDetailId} saveDetail={saveDetail}
       deleteTask={deleteTask} autoScheduleTask={autoScheduleTask} bulkDefer={bulkDefer}
+      replanOverdue={replanOverdue} replanning={replanning}
     />
   )
 
@@ -424,18 +456,23 @@ function TaskGroup(props: {
   deleteTask: (t: Task) => void
   autoScheduleTask: (t: Task) => void
   bulkDefer: (list: Task[], kind: 'today' | 'tomorrow') => void
+  replanOverdue: (list: Task[]) => void
+  replanning: boolean
 }) {
-  const { title, taskList, emptyMessage, overdue, bulkDefer } = props
+  const { title, taskList, emptyMessage, overdue, bulkDefer, replanOverdue, replanning } = props
   return (
     <div style={{ marginBottom: 24 }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
         <h3 style={{ margin: 0, fontSize: 13, fontWeight: 600, color: overdue ? '#ef4444' : 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
           {title} ({taskList.length})
         </h3>
         {overdue && taskList.length > 0 && (
           <>
-            <button onClick={() => bulkDefer(taskList, 'today')} style={bulkBtn}>All → Today</button>
-            <button onClick={() => bulkDefer(taskList, 'tomorrow')} style={bulkBtn}>All → Tomorrow</button>
+            <button onClick={() => replanOverdue(taskList)} disabled={replanning} title="Auto-place every overdue task into the next best free slots" style={{ ...bulkBtn, color: 'var(--color-accent)', borderColor: 'var(--color-accent)' }}>
+              {replanning ? 'Replanning…' : '⚡ Replan'}
+            </button>
+            <button onClick={() => bulkDefer(taskList, 'today')} disabled={replanning} style={bulkBtn}>All → Today</button>
+            <button onClick={() => bulkDefer(taskList, 'tomorrow')} disabled={replanning} style={bulkBtn}>All → Tomorrow</button>
           </>
         )}
       </div>
