@@ -59,7 +59,7 @@ export function SidebarNav({ sections }: { sections: NavSection[] }) {
               style={{
                 width: '100%',
                 textAlign: 'left',
-                background: isActive ? 'rgba(102, 126, 234, 0.12)' : 'transparent',
+                background: 'transparent',
                 border: 'none',
                 borderLeft: `2px solid ${isActive ? 'var(--color-accent)' : 'transparent'}`,
                 padding: '0.4375rem 0.75rem',
