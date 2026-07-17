@@ -23,6 +23,28 @@ interface Version {
 
 const versions: Version[] = [
   {
+    version: 'v1.0.0',
+    date: 'July 17, 2026',
+    isoDate: '2026-07-17',
+    label: 'The Coach, Journal & Calendar release',
+    changes: [
+      { type: 'new', text: 'Coach with memory: remembers you across sessions, knows your goals, chart and commitments, and actually performs the work with real tools' },
+      { type: 'new', text: 'Proactive morning brief arrives in your Coach thread at your local morning, governed by quiet hours and a daily cap' },
+      { type: 'new', text: 'Journal: write or just talk (continuous voice input); tasks, events, goals and people-to-contact are extracted for one-tap confirmation, and memories are learned automatically' },
+      { type: 'new', text: 'Commitments you mention to the Coach surface as calendar proposals ("You said you would... put it on the calendar?")' },
+      { type: 'new', text: 'Recurring tasks that actually repeat: completing one schedules the next occurrence; quick-add understands "every day", "every monday", "monthly"' },
+      { type: 'new', text: 'Overdue tasks roll forward instead of disappearing, with one-tap Replan into free slots, Defer menus and bulk move to today or tomorrow' },
+      { type: 'new', text: 'Tasks on the calendar look like tasks (dashed edge) and can be checked off right on the grid; meetings stay solid' },
+      { type: 'new', text: 'Calendar quality of life: jump to any date from the header, copy an event to tomorrow, choose which hours your calendar shows, custom weekday repeats' },
+      { type: 'new', text: 'Pro subscription live: AI journaling, goal engine and priority support at $18/month or $119/year' },
+      { type: 'improvement', text: 'Tasks page: search, sort by time/priority/duration, notes on every task, undo after complete or delete, daily plan total with an overload warning' },
+      { type: 'improvement', text: 'Google Calendar two-way sync: events created in 8os appear in Google, and Google events are editable inside 8os' },
+      { type: 'improvement', text: 'Dark mode is fully legible across calendar, tasks and briefings' },
+      { type: 'fix', text: 'Times you give the Coach are interpreted in your timezone, everywhere' },
+      { type: 'fix', text: 'Checkout, upgrade and post-payment flows keep you on 8os.ai end to end' },
+    ],
+  },
+  {
     version: 'v0.9.2',
     date: 'May 8, 2026',
     isoDate: '2026-05-08',
