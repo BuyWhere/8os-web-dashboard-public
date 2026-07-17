@@ -27,6 +27,7 @@ interface Task {
   domainId: string | null
   notes?: string | null
   recurrence?: string
+  subtasks?: { id: string; text: string; done: boolean }[]
   project: { id: string; name: string } | null
 }
 
@@ -262,6 +263,12 @@ export default function TasksPage() {
     } catch { /* ignore */ }
   }
 
+  /** Persist a task's checklist (optimistic; whole-array PATCH). */
+  async function saveSubtasks(task: Task, subtasks: { id: string; text: string; done: boolean }[]) {
+    setTasks(prev => prev.map(t => t.id === task.id ? { ...t, subtasks } : t))
+    await patchTask(task.id, { subtasks })
+  }
+
   async function startEdit(task: Task) { setEditingId(task.id); setEditValue(task.name) }
   async function saveEdit(task: Task) {
     if (!editValue.trim()) { setEditingId(null); return }
@@ -322,7 +329,7 @@ export default function TasksPage() {
       deferOpenId={deferOpenId} setDeferOpenId={setDeferOpenId} deferTask={deferTask}
       detailId={detailId} setDetailId={setDetailId} saveDetail={saveDetail}
       deleteTask={deleteTask} autoScheduleTask={autoScheduleTask} bulkDefer={bulkDefer}
-      replanOverdue={replanOverdue} replanning={replanning}
+      replanOverdue={replanOverdue} replanning={replanning} saveSubtasks={saveSubtasks}
     />
   )
 
@@ -458,6 +465,7 @@ function TaskGroup(props: {
   bulkDefer: (list: Task[], kind: 'today' | 'tomorrow') => void
   replanOverdue: (list: Task[]) => void
   replanning: boolean
+  saveSubtasks: (t: Task, subtasks: { id: string; text: string; done: boolean }[]) => void
 }) {
   const { title, taskList, emptyMessage, overdue, bulkDefer, replanOverdue, replanning } = props
   return (
@@ -506,8 +514,12 @@ function TaskTile(props: {
   saveDetail: (t: Task, form: { date: string; time: string; duration: number; priority: string; notes: string; recurrence: string }) => void
   deleteTask: (t: Task) => void
   autoScheduleTask: (t: Task) => void
+  saveSubtasks: (t: Task, subtasks: { id: string; text: string; done: boolean }[]) => void
 }) {
-  const { t, overdue, toggleComplete, startEdit, saveEdit, editingId, editValue, setEditValue, completing, setEditingId, deferOpenId, setDeferOpenId, deferTask, detailId, setDetailId, saveDetail, deleteTask, autoScheduleTask } = props
+  const { t, overdue, toggleComplete, startEdit, saveEdit, editingId, editValue, setEditValue, completing, setEditingId, deferOpenId, setDeferOpenId, deferTask, detailId, setDetailId, saveDetail, deleteTask, autoScheduleTask, saveSubtasks } = props
+  const [newSub, setNewSub] = useState('')
+  const subs = t.subtasks ?? []
+  const subsDone = subs.filter(s => s.done).length
   const [pickDate, setPickDate] = useState(false)
   const [form, setForm] = useState({ date: localDateInput(t.scheduledAt), time: localTimeInput(t.scheduledAt), duration: t.duration, priority: t.priority, notes: t.notes || '', recurrence: t.recurrence || 'none' })
   const open = detailId === t.id
@@ -565,6 +577,7 @@ function TaskTile(props: {
               </span>
             )}
             <span>{t.duration}m</span>
+            {subs.length > 0 && <span style={{ color: subsDone === subs.length ? '#4F7A52' : 'var(--color-text-secondary)' }}>☑ {subsDone}/{subs.length}</span>}
             {t.project && <span style={{ color: 'var(--color-accent)' }}>{t.project.name}</span>}
             {t.domainId && <span>{DOMAIN_ICONS[t.domainId]} <span style={{ color: DOMAIN_COLORS[t.domainId] }}>{t.domainId}</span></span>}
           </div>
@@ -641,6 +654,34 @@ function TaskTile(props: {
               <option value="biweekly">Every 2 weeks</option>
               <option value="monthly">Monthly</option>
             </select>
+          </DetailField>
+          <DetailField label="Checklist" style={{ flex: '1 1 100%' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+              {subs.map((s) => (
+                <div key={s.id} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <input
+                    type="checkbox"
+                    checked={s.done}
+                    onChange={() => saveSubtasks(t, subs.map(x => x.id === s.id ? { ...x, done: !x.done } : x))}
+                    style={{ cursor: 'pointer' }}
+                  />
+                  <span style={{ flex: 1, fontSize: 13, textTransform: 'none', letterSpacing: 0, color: s.done ? 'var(--color-text-muted)' : 'var(--color-text-primary)', textDecoration: s.done ? 'line-through' : 'none' }}>{s.text}</span>
+                  <button onClick={() => saveSubtasks(t, subs.filter(x => x.id !== s.id))} aria-label={`Remove ${s.text}`} style={{ border: 'none', background: 'none', color: 'var(--color-text-muted)', cursor: 'pointer', fontSize: 14 }}>×</button>
+                </div>
+              ))}
+              <input
+                value={newSub}
+                onChange={(e) => setNewSub(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' && newSub.trim()) {
+                    saveSubtasks(t, [...subs, { id: `st-${Date.now()}`, text: newSub.trim().slice(0, 300), done: false }])
+                    setNewSub('')
+                  }
+                }}
+                placeholder="Add a step and press Enter…"
+                style={{ ...detailInput, width: '100%', textTransform: 'none', letterSpacing: 0 }}
+              />
+            </div>
           </DetailField>
           <DetailField label="Notes" style={{ flex: '1 1 100%' }}>
             <textarea

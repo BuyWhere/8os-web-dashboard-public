@@ -37,6 +37,7 @@ const versions: Version[] = [
       { type: 'new', text: 'Tasks on the calendar look like tasks (dashed edge) and can be checked off right on the grid; meetings stay solid' },
       { type: 'new', text: 'Calendar quality of life: jump to any date from the header, copy an event to tomorrow, choose which hours your calendar shows, custom weekday repeats' },
       { type: 'new', text: 'Pro subscription live: AI journaling, goal engine and priority support at $18/month or $119/year' },
+      { type: 'new', text: 'Subtasks: break any task into a checklist right on the task tile, with progress shown at a glance' },
       { type: 'improvement', text: 'Tasks page: search, sort by time/priority/duration, notes on every task, undo after complete or delete, daily plan total with an overload warning' },
       { type: 'improvement', text: 'Google Calendar two-way sync: events created in 8os appear in Google, and Google events are editable inside 8os' },
       { type: 'improvement', text: 'Dark mode is fully legible across calendar, tasks and briefings' },

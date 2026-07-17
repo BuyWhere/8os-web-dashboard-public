@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
 import { requireAuth } from '@/lib/auth/require-auth'
 import { z } from 'zod'
+import { setSubtasks, sanitizeSubtasks } from '@/lib/subtasks'
 
 const UpdateSchema = z.object({
   name: z.string().min(1).max(500).optional(),
@@ -17,6 +18,7 @@ const UpdateSchema = z.object({
   duration: z.number().int().min(5).max(480).optional(),
   energyRequired: z.enum(['green', 'yellow', 'red']).optional(),
   recurrence: z.enum(['none', 'daily', 'weekly', 'biweekly', 'monthly']).optional(),
+  subtasks: z.array(z.object({ id: z.string().max(40), text: z.string().min(1).max(300), done: z.boolean() })).max(30).optional(),
 })
 
 /** Next occurrence for a recurrence rule, stepped from the task's scheduled time. */
@@ -51,6 +53,12 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
   if (!parsed.success) return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 })
 
   const update: Record<string, unknown> = { ...parsed.data, updatedAt: new Date() }
+  // Checklist lives in a sidecar jsonb column (not a Prisma field) — strip it
+  // from the model update and persist via setSubtasks below.
+  delete update.subtasks
+  if (parsed.data.subtasks !== undefined) {
+    await setSubtasks(auth.userId, task.id, sanitizeSubtasks(parsed.data.subtasks)).catch(() => {})
+  }
 
   if (parsed.data.scheduledAt !== undefined) {
     const scheduledAt = parsed.data.scheduledAt ? new Date(parsed.data.scheduledAt) : null
