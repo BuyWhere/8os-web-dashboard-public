@@ -40,7 +40,7 @@ export default function MethodologyPage() {
             proprietary synthesis layer that maps your Western expression onto your BaZi structure.
           </p>
           <div style={flowchartStyle}>
-            <div style={flowNodeStyle('var(--color-accent)', '#0f172a')}>User Input: Birth Date + Location</div>
+            <div style={flowNodeStyle('var(--color-accent)', '#fff')}>User Input: Birth Date + Location</div>
             <div style={flowRowStyle}>
               <div style={flowBranchStyle}>
                 <div style={flowArrowStyle} />
@@ -64,7 +64,7 @@ export default function MethodologyPage() {
               </div>
             </div>
             <div style={flowArrowStyle} />
-            <div style={flowNodeStyle('var(--color-accent)', '#0f172a')}>Archetype Synthesis Layer</div>
+            <div style={flowNodeStyle('var(--color-accent)', '#fff')}>Archetype Synthesis Layer</div>
             <div style={flowArrowStyle} />
             <div style={flowNodeStyle('#5b21b6', '#f8fafc')}>Unified Profile + Goal Architecture</div>
             <div style={flowArrowStyle} />
@@ -201,7 +201,7 @@ export default function MethodologyPage() {
 const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '1000px', margin: '0 auto', padding: '5rem 2rem' };
 const headerStyle: React.CSSProperties = { marginBottom: '4rem' };
-const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)' };
+const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-text-secondary)' };
 const pageTitleStyle: React.CSSProperties = { margin: 0, fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.15, letterSpacing: '-0.03em' };
 const sectionStyle: React.CSSProperties = { marginBottom: '1rem' };
 const h2Style: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', letterSpacing: '-0.03em' };
@@ -224,7 +224,7 @@ const barrierNumStyle: React.CSSProperties = { display: 'block', fontSize: '0.75
 const barrierTitleStyle: React.CSSProperties = { margin: '0 0 0.4rem', fontSize: '0.95rem', fontWeight: 700 };
 const barrierBodyStyle: React.CSSProperties = { margin: 0, fontSize: '0.85rem', lineHeight: 1.6, color: 'var(--color-text-secondary)' };
 const upgradePathStyle: React.CSSProperties = { marginTop: '1.5rem', padding: '1.25rem', borderRadius: '12px', background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.2)' };
-const upgradePathLabelStyle: React.CSSProperties = { margin: '0 0 0.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--color-accent)' };
+const upgradePathLabelStyle: React.CSSProperties = { margin: '0 0 0.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--color-text-secondary)' };
 const upgradePathBodyStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-text-secondary)' };
 
 const matrixWrapStyle: React.CSSProperties = { overflowX: 'auto', borderRadius: '12px', border: '1px solid var(--color-border)' };
