@@ -66,7 +66,7 @@ export function SidebarNav({ sections }: { sections: NavSection[] }) {
                 borderRadius: '0 6px 6px 0',
                 cursor: 'pointer',
                 fontSize: '0.8125rem',
-                color: isActive ? 'var(--color-accent)' : 'var(--color-text-secondary)',
+                color: isActive ? 'var(--color-accent)' : 'var(--color-text-muted)',
                 fontWeight: isActive ? 600 : 400,
                 transition: 'all 0.15s',
                 lineHeight: 1.4,

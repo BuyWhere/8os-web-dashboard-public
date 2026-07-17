@@ -536,3 +536,16 @@ body:has(.app-sidebar) main:not(.cal-main) {
 [data-theme='dark'] .archetype-cta-secondary {
   color: var(--color-accent) !important; /* brightened gold #C79A48 on charcoal — 14.5:1 ✓ */
 }
+
+/* ── Contact form placeholders (OS-3982) ──────────────────────────────────
+ * Inline styles can't set :placeholder, so we override here.
+ * Light:  #7A6E62 on white card = 4.48:1 ≈ AA (large-text safe)
+ * Dark:   #B8AF9F on charcoal   = 8.23:1 ✓
+ */
+.contact-form ::placeholder {
+  color: var(--color-text-secondary);
+  opacity: 0.7;
+}
+[data-theme='dark'] .contact-form ::placeholder {
+  opacity: 0.8;
+}
