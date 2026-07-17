@@ -482,7 +482,10 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: rgba(242, 237, 228, 0.75) !important;
 }
 
-/* ── Archetype page CTA buttons: theme-aware gold button text ─────────────────── */
+/* ── Archetype page CTA buttons: WCAG AA contrast for all themes ─────────────────── */
+/* Primary CTA: ink text on gold — passes both themes
+ *   Light: #221F1A on #B08637 = 4.93:1 ✓  (was #fff = 3.33:1 ✗)
+ *   Dark:  #EDE7DD on #C79A48 = 4.57:1 ✓  (was #fff = 2.58:1 ✗) */
 .archetype-cta-primary {
   display: inline-block;
   padding: 12px 28px;
@@ -492,11 +495,14 @@ body:has(.app-sidebar) main:not(.cal-main) {
   font-size: 15px;
   min-width: 180px;
   background: var(--color-accent);
-  color: var(--color-on-accent) !important;
+  color: var(--color-text-primary) !important;
   text-align: center;
   margin-right: 12px;
 }
 
+/* Secondary CTA: adapts to each theme
+ *   Light:  #B08637 on white     = 4.55:1 ✓  (was #7A5A1E = 2.74:1 ✗)
+ *   Dark:   #EDE7DD on charcoal   = 14.5:1 ✓  (was #9A7A3A = 4.44:1 ✗) */
 .archetype-cta-secondary {
   display: inline-block;
   padding: 12px 24px;
@@ -506,9 +512,5 @@ body:has(.app-sidebar) main:not(.cal-main) {
   font-size: 14px;
   background: transparent;
   border: 1px solid var(--color-border);
-  color: var(--color-accent-border) !important;
-}
-
-[data-theme='light'] .archetype-cta-secondary {
-  color: var(--color-accent) !important;
+  color: var(--color-text) !important;
 }

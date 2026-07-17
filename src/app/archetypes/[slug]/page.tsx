@@ -790,7 +790,7 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
 
         {/* Breadcrumb — text-muted passes WCAG AA on both dark (5.74:1) and light (5.04:1) */}
         <div style={{ marginBottom: 32, display: 'flex', gap: 8, alignItems: 'center', fontSize: 13, color: 'var(--color-text-muted)' }}>
-          <Link href="/archetypes" style={{ color: 'var(--color-accent)', textDecoration: 'none' }}>Archetypes</Link>
+          <Link href="/archetypes" style={{ color: 'var(--color-accent-border)', textDecoration: 'none' }}>Archetypes</Link>
           <span>›</span>
           <span>{p.sign}</span>
           <span>›</span>
