@@ -243,24 +243,29 @@ export function Header() {
 
         {/* Auth actions. Single primary CTA removed per OS-2515 — "Get started" in
             hero is the sole primary CTA. On archetype pages the CTA above is the
-            conversion path; this remains only for Log in on other pages. */}
+            conversion path; this remains only for Log in on other pages. Hide the
+            Log in link on /login to avoid a redundant dead self-link (OS-3976). */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <ClerkLoading>
-            <Link
-              href="/login"
-              style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none', whiteSpace: 'nowrap' }}
-            >
-              Log in
-            </Link>
+            {pathname !== '/login' && (
+              <Link
+                href="/login"
+                style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none', whiteSpace: 'nowrap' }}
+              >
+                Log in
+              </Link>
+            )}
           </ClerkLoading>
           <ClerkLoaded>
           <SignedOut>
-            <Link
-              href="/login"
-              style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none', whiteSpace: 'nowrap' }}
-            >
-              Log in
-            </Link>
+            {pathname !== '/login' && (
+              <Link
+                href="/login"
+                style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none', whiteSpace: 'nowrap' }}
+              >
+                Log in
+              </Link>
+            )}
           </SignedOut>
           <SignedIn>
             {/* A signed-in user browsing a marketing page still gets their
