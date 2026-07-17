@@ -1,11 +1,9 @@
-import Link from 'next/link';
-import type { Metadata } from 'next';
+import Link from 'next/link'
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy, 8os',
-  description: 'How 8os collects, uses, and protects your personal information.',
-};
-
+// This is a plain server component — no 'use client' needed.
+// All colours are CSS variables, resolved by globals.css against data-theme
+// (set synchronously by the boot script before first paint).
+// Dark-mode overrides for legal-page text are in globals.css.
 export default function PrivacyPage() {
   return (
     <main style={{
@@ -121,5 +119,5 @@ export default function PrivacyPage() {
         </div>
       </div>
     </main>
-  );
+  )
 }

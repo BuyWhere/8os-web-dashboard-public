@@ -1,11 +1,6 @@
-import Link from 'next/link';
-import type { Metadata } from 'next';
+import Link from 'next/link'
 
-export const metadata: Metadata = {
-  title: 'Terms of Service, 8os',
-  description: 'Terms governing your use of the 8os platform.',
-};
-
+// Plain server component — colours resolved by globals.css against data-theme.
 export default function TermsPage() {
   return (
     <main style={{
@@ -130,5 +125,5 @@ export default function TermsPage() {
         </div>
       </div>
     </main>
-  );
+  )
 }

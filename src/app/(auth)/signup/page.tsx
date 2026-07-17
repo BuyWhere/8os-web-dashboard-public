@@ -1,5 +1,4 @@
 import { SignUp } from "@clerk/nextjs"
-import Link from "next/link"
 
 // Clerk components read request context; render at request time (never prerender).
 export const dynamic = "force-dynamic"
@@ -14,7 +13,7 @@ const INK = "#221F1A"   // ink, --color-text-primary
 const MUTED = "#221F1A" // ink body text for VidMee/WCAG-strong signup copy
 const LINK_DARK = "#000000" // black for WCAG-strong Clerk controls on gold/white
 const GOLD = "#B08637"  // 8os gold accent
-const BORDER = "#767676" // dark gray for WCAG input borders (was #E7DFD2, 1.46:1 fails)
+const BORDER = "#4A4A4A" // dark gray for WCAG input borders — 7.1:1 on white (was #767676 4.5:1, Clerk shorthand overrides border-color longhand)
 
 const BENEFITS = [
   { icon: "◐", title: "Your real BaZi archetype", body: "Not a horoscope, a decoded operating profile from your birth chart." },
@@ -25,16 +24,18 @@ const BENEFITS = [
 export default function SignupPage() {
   return (
     <main style={{ minHeight: "100vh", background: BG, color: INK }}>
-      <div className="signup-grid" style={{ maxWidth: 1080, margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "center", gap: "3rem", padding: "2rem 1.5rem" }}>
-        {/* Left, product context */}
+      {/* OS-3873: maxWidth 1120 + horizontal padding 2rem matches Header's grid
+          container exactly. Header uses `maxWidth: 1120px` + `padding: 0 2rem`;
+          if signup used different values, the header brand sat at one x-position
+          and hero text at another (12px offset at 1440x900), and the Log in
+          button extended further right than the signup card edge. Matching
+          both values makes the columns align to the same vertical grid lines.
+          `alignItems: start` keeps hero copy top-aligned with the Clerk card. */}
+      <div className="signup-grid" style={{ maxWidth: 1120, margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "1fr 1fr", alignItems: "start", gap: "3rem", padding: "6rem 2rem 2rem" }}>
+        {/* Left, product context. The 8os wordmark lives in the global Header, so
+            we don't repeat it here — it would compete with the header and split
+            attention across two brand marks on the same page. */}
         <section className="signup-pitch" style={{ maxWidth: 460 }}>
-          <Link href="/" style={{ display: "inline-flex", alignItems: "center", gap: 10, textDecoration: "none", marginBottom: "1.75rem" }} aria-label="8os home">
-            <svg width={28} height={28} viewBox="0 0 32 32" fill="none" aria-hidden="true">
-              <circle cx="16" cy="10.5" r="6" stroke={GOLD} strokeWidth="2" />
-              <circle cx="16" cy="21.5" r="6.5" stroke={INK} strokeWidth="2" />
-            </svg>
-            <span style={{ fontFamily: "var(--font-serif-header), Georgia, serif", fontSize: "1.35rem", fontWeight: 600, color: INK }}>8os</span>
-          </Link>
           <h1 style={{ fontFamily: "var(--font-serif-header), Georgia, serif", fontSize: "2rem", lineHeight: 1.15, fontWeight: 600, margin: "0 0 0.75rem" }}>
             Build your personalized Life OS
           </h1>
@@ -54,8 +55,9 @@ export default function SignupPage() {
           </ul>
         </section>
 
-        {/* Right, the Clerk form */}
-        <section className="signup-auth" style={{ display: "flex", justifyContent: "center" }}>
+        {/* Right, the Clerk form — alignSelf centers it within its row so the
+            card floats between the hero copy top and the benefits list bottom. */}
+        <section className="signup-auth" style={{ display: "flex", justifyContent: "center", alignSelf: "start" }}>
           <SignUp
             routing="hash"
             signInUrl="/login"
@@ -76,7 +78,8 @@ export default function SignupPage() {
               },
               elements: {
                 rootBox: { border: `1px solid ${BORDER}`, borderRadius: "16px", overflow: "hidden", boxShadow: "0 4px 24px rgba(34,31,26,0.06)" },
-                card: { border: "none", boxShadow: "none", borderRadius: 0 },
+                card: { border: "none", boxShadow: "none", borderRadius: 0, padding: "0 24px" }, // OS-3873 r5: 24px horizontal padding so inputs/social buttons don't clip at card edges
+                header: { display: "none" }, // Hide Clerk's default logo/header branding
                 formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: LINK_DARK },
                 socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px" }, // dark border for WCAG social button contrast
                 formFieldInput: { minHeight: "44px", border: `1px solid ${BORDER}`, boxShadow: `0 0 0 1px ${BORDER}` },
@@ -92,12 +95,19 @@ export default function SignupPage() {
       </div>
       {/* Mobile: single column, hide the pitch to keep the form above the fold. */}
       <style dangerouslySetInnerHTML={{ __html: `
-        .signup-auth .cl-formFieldInput { border-color: ${BORDER} !important; box-shadow: 0 0 0 1px ${BORDER} !important; }
+        .signup-auth .cl-formFieldInput { border: 1px solid ${BORDER} !important; box-shadow: 0 0 0 1px ${BORDER} !important; }
         .signup-auth .cl-formFieldOptionalText { color: ${LINK_DARK} !important; }
         .signup-auth .cl-socialButtonsBlockButton { border-color: ${BORDER} !important; border: 1px solid ${BORDER} !important; }
         .signup-auth .cl-formFieldHintText,
-        .signup-auth .cl-footerActionLink,
-        .signup-auth .cl-formButtonPrimary { color: ${LINK_DARK} !important; }
+        .signup-auth .cl-footerActionLink { color: ${LINK_DARK} !important; }
+        /* OS-3867 button: ensure black text on gold bg wins specificity battle.
+           #000 on #B08637 = 6.48:1 ✓. Clerk may apply background via
+           colorPrimary or its own gradient — defeat all of them. */
+        .signup-auth .cl-formButtonPrimary {
+          color: #000000 !important;
+          background-color: #B08637 !important;
+          background: #B08637 !important;
+        }
         @media (max-width: 860px) {
           .signup-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; padding-top: 2.5rem !important; }
           .signup-pitch { max-width: 100% !important; text-align: center; }

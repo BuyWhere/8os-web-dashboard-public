@@ -132,10 +132,28 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
             >
               {featured.excerpt}
             </p>
-            <div style={{ display: 'flex', gap: '12px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
-              <time dateTime={featured.isoDate}>{featured.date}</time>
-              <span>·</span>
-              <span>{featured.readTime}</span>
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+              <div style={{ display: 'flex', gap: '12px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
+                <time dateTime={featured.isoDate}>{featured.date}</time>
+                <span>·</span>
+                <span>{featured.readTime}</span>
+              </div>
+              <span
+                style={{
+                  fontSize: '13px',
+                  fontWeight: 600,
+                  color: 'var(--color-text-primary)',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '4px',
+                }}
+                aria-hidden="true"
+              >
+                Read article
+                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                  <path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
             </div>
           </article>
         </Link>
@@ -157,7 +175,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
           }}
           style={{
             background: !activeCategory ? 'var(--color-accent)' : 'var(--color-bg-card)',
-            color: !activeCategory ? '#fff' : 'var(--color-text-secondary)',
+            color: !activeCategory ? '#fff' : 'var(--color-text-primary)',
             border: `1px solid ${!activeCategory ? 'var(--color-accent)' : 'var(--color-border)'}`,
             borderRadius: '8px',
             padding: '8px 16px',
@@ -181,7 +199,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
               }}
               style={{
                 background: isActive ? config.bg : 'var(--color-bg-card)',
-                color: isActive ? config.color : 'var(--color-text-secondary)',
+                color: isActive ? config.color : 'var(--color-text-primary)',
                 border: `1px solid ${isActive ? config.color + '40' : 'var(--color-border)'}`,
                 borderRadius: '8px',
                 padding: '8px 16px',
@@ -280,7 +298,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                   style={{
                     fontSize: '13px',
                     fontWeight: 500,
-                    color: 'var(--color-accent)',
+                    color: 'var(--color-text-primary)',
                     display: 'inline-flex',
                     alignItems: 'center',
                     gap: '4px',

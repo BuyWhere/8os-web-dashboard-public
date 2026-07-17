@@ -862,14 +862,14 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
           <p style={{ color: 'var(--color-text-muted)', fontSize: 15, lineHeight: 1.7, margin: 0 }}>{p.dailyPractice}</p>
         </div>
 
-        {/* CTA */}
-        <div style={{ background: 'linear-gradient(135deg, var(--color-accent-soft), var(--color-accent-soft))', border: '1px solid var(--color-accent-soft)', borderRadius: 14, padding: 32, textAlign: 'center', marginBottom: 32 }}>
+        {/* CTA — distinct warm tint bg for conversion visibility on both themes */}
+        <div style={{ background: 'var(--color-bg-secondary)', border: '1px solid var(--color-border)', borderRadius: 14, padding: 32, textAlign: 'center', marginBottom: 32 }}>
           <h3 style={{ fontSize: 20, fontWeight: 700, color: 'var(--color-text-primary)', marginBottom: 10 }}>Is This Your Archetype?</h3>
           <p style={{ color: 'var(--color-text-secondary)', fontSize: 15, marginBottom: 20 }}>90 seconds. No birth time required. Get your personal operating system free.</p>
-          <Link href="/onboarding" style={{ display: 'inline-block', background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent))', color: '#fff', padding: '12px 28px', borderRadius: 10, textDecoration: 'none', fontWeight: 700, fontSize: 15, marginRight: 12 }}>
+          <Link href="/onboarding" className="archetype-cta-primary">
             Get My Archetype →
           </Link>
-          <Link href={`/share/${p.archetypeSlug}`} style={{ display: 'inline-block', background: 'transparent', border: `1px solid ${p.elementColor}40`, color: p.elementColor, padding: '12px 24px', borderRadius: 10, textDecoration: 'none', fontWeight: 600, fontSize: 14 }}>
+          <Link href={`/share/${p.archetypeSlug}`} className="archetype-cta-secondary">
             View {p.archetype} Card →
           </Link>
         </div>
