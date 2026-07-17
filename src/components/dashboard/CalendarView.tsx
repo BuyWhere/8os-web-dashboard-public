@@ -414,6 +414,18 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
     })
   }
 
+  /** All-day row shortcut: create an all-day event on `day` (panel opens pre-set). */
+  function openCreateAllDay(day: Date) {
+    const s = new Date(day); s.setHours(9, 0, 0, 0)
+    const e = new Date(s.getTime() + 60 * 60000)
+    setEditing({
+      mode: 'create', id: null, title: '', description: '', location: '',
+      startAt: s.toISOString(), endAt: e.toISOString(), allDay: true,
+      color: null, goalId: null, recurrenceRule: 'none', recurrenceUntil: null,
+      readOnly: false,
+    })
+  }
+
   // Open the detail panel to EDIT (or view read-only) an existing event.
   function openEvent(e: CalendarEvent) {
     setEditing({
@@ -581,7 +593,7 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
           {view === 'week' && (
             <WeekView days={weekDays} events={events} energy={energy} todayKey={todayKey}
               onSlotCreate={openCreate} onEventClick={openEvent} onEventDrag={patchTimes} onEventResize={patchTimes}
-              firstDay={firstDay} />
+              firstDay={firstDay} onAllDayCreate={openCreateAllDay} />
           )}
           {view === 'day' && (
             <DayView day={currentDate} events={events} energy={energy}
@@ -1267,13 +1279,14 @@ function useSlotCreate(day: Date, onSlotCreate: (start: Date, mins: number) => v
 
 // ─── Week View ───────────────────────────────────────────────────────────────
 
-function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, onEventDrag, onEventResize, firstDay = 1 }: {
+function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, onEventDrag, onEventResize, firstDay = 1, onAllDayCreate }: {
   days: Date[]; events: CalendarEvent[]; energy: Record<number, EnergyLevel>; todayKey: string
   onSlotCreate: (start: Date, mins: number) => void
   onEventClick: (e: CalendarEvent) => void
   onEventDrag: (id: string, s: Date, e: Date) => void
   onEventResize: (id: string, s: Date, e: Date) => void
   firstDay?: 0 | 1
+  onAllDayCreate?: (day: Date) => void
 }) {
   const WEEKDAYS_SHORT = firstDay === 0
     ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -1297,15 +1310,21 @@ function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, 
         })}
       </div>
 
-      {/* All-day row */}
-      {anyAllDay && (
-        <div style={{ display: 'grid', gridTemplateColumns: '56px repeat(7, 1fr)', borderBottom: '1px solid var(--color-border)', minHeight: 26 }}>
+      {/* All-day row — always visible; click an empty cell to create an all-day
+          event on that day (existing pills still open their event). */}
+      {(anyAllDay || onAllDayCreate) && (
+        <div style={{ display: 'grid', gridTemplateColumns: '56px repeat(7, 1fr)', borderBottom: '1px solid var(--color-border)', minHeight: 24 }}>
           <div style={{ fontSize: 9, color: 'var(--color-text-muted)', textAlign: 'right', paddingRight: 6, paddingTop: 4 }}>all-day</div>
           {days.map((d, i) => (
-            <div key={i} style={{ borderLeft: '1px solid var(--color-border)', padding: 2 }}>
+            <div
+              key={i}
+              onClick={() => onAllDayCreate?.(d)}
+              title="Add an all-day event"
+              style={{ borderLeft: '1px solid var(--color-border)', padding: 2, cursor: onAllDayCreate ? 'pointer' : 'default' }}
+            >
               {allDayForDay(events, d).map((e) => {
                 const c = eventColor(e)
-                return <div key={e.id} className="cal-event-text" onClick={() => onEventClick(e)} style={{ background: c + '22', color: eventTextColor(c), borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 10, padding: '1px 5px', marginBottom: 2, cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{e.title}</div>
+                return <div key={e.id} className="cal-event-text" onClick={(ev) => { ev.stopPropagation(); onEventClick(e) }} style={{ background: c + '22', color: eventTextColor(c), borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 10, padding: '1px 5px', marginBottom: 2, cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{e.title}</div>
               })}
             </div>
           ))}
