@@ -197,15 +197,17 @@ a.cl-formButtonPrimary,
  *   Light: gradient #7A5A1E -> #5C4408; white on light end = 6.35:1,
  *          white on dark end = 9.19:1. (Original #B08637->#98722C gave
  *          ink 4.93:1 at light end but only 3.74:1 at dark end.)
- *   Dark:  gradient #9A7A3A -> #5C4408; white on light end = 5.16:1,
- *          white on dark end = 9.19:1.
+ *   Dark:  gradient #8A6A28 -> #5C4408; white on light end = 5.03:1,
+ *          white on dark end = 9.19:1. (#9A7A3A start gave 4.02:1 — AA fail;
+ *          dark theme needs darker start than light theme because white
+ *          on #9A7A3A < 4.5.)
  */
 .contact-form button[type='submit'] {
   background: linear-gradient(135deg, #7A5A1E 0%, #5C4408 100%) !important;
   color: #FFFFFF !important;
 }
 [data-theme='dark'] .contact-form button[type='submit'] {
-  background: linear-gradient(135deg, #9A7A3A 0%, #5C4408 100%) !important;
+  background: linear-gradient(135deg, #8A6A28 0%, #5C4408 100%) !important;
   color: #FFFFFF !important;
 }
 
