@@ -21,6 +21,7 @@ export interface QuickAddResult {
   driftEmotion?: string
   notes?: string
   dayOffset?: number       // 0 = today, 1 = tomorrow
+  recurrence?: 'daily' | 'weekly' | 'biweekly' | 'monthly'
 }
 
 // Domain keyword maps
@@ -161,6 +162,14 @@ export function parseQuickAdd(input: string): QuickAddResult {
   let dayOffset = 0
   if (/\btomorrow\b/i.test(trimmed)) dayOffset = 1
 
+  // Recurrence — Todoist-style "every…" phrases ("gym every day", "review every
+  // monday", "pay rent monthly", "standup every 2 weeks").
+  let recurrence: 'daily' | 'weekly' | 'biweekly' | 'monthly' | undefined
+  if (/\bevery\s*(2|two|other)\s*weeks?\b|\bbi-?weekly\b|\bfortnight(ly)?\b/i.test(trimmed)) recurrence = 'biweekly'
+  else if (/\bevery\s*day\b|\bdaily\b|\bevery\s+(morning|afternoon|evening|night)\b/i.test(trimmed)) recurrence = 'daily'
+  else if (/\bevery\s*week\b|\bweekly\b|\bevery\s+(mon|tues?|wed(nes)?|thur?s?|fri|sat(ur)?|sun)(day)?\b/i.test(trimmed)) recurrence = 'weekly'
+  else if (/\bevery\s*month\b|\bmonthly\b/i.test(trimmed)) recurrence = 'monthly'
+
   // Priority
   let priority: 'high' | 'medium' | 'low' = 'medium'
   if (HIGH_PRIORITY.test(trimmed)) priority = 'high'
@@ -169,8 +178,17 @@ export function parseQuickAdd(input: string): QuickAddResult {
   // Domain
   const domainId = detectDomain(trimmed)
 
-  // Clean task name
-  const name = stripTimePhrases(trimmed) || trimmed
+  // Clean task name (time phrases + recurrence phrases)
+  let name = stripTimePhrases(trimmed) || trimmed
+  if (recurrence) {
+    name = name
+      .replace(/\bevery\s*(2|two|other)\s*weeks?\b|\bbi-?weekly\b|\bfortnight(ly)?\b/gi, '')
+      .replace(/\bevery\s*day\b|\bdaily\b|\bevery\s+(morning|afternoon|evening|night)\b/gi, '')
+      .replace(/\bevery\s*week\b|\bweekly\b|\bevery\s+(mon|tues?|wed(nes)?|thur?s?|fri|sat(ur)?|sun)(day)?\b/gi, '')
+      .replace(/\bevery\s*month\b|\bmonthly\b/gi, '')
+      .replace(/\s{2,}/g, ' ')
+      .trim() || name
+  }
 
   return {
     name,
@@ -179,5 +197,6 @@ export function parseQuickAdd(input: string): QuickAddResult {
     durationMinutes,
     priority,
     dayOffset,
+    recurrence,
   }
 }

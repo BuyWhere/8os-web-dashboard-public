@@ -70,6 +70,9 @@ export async function POST(req: NextRequest) {
       scheduledAt: scheduledAt ? new Date(scheduledAt) : null,
       scheduledEnd: scheduledEnd ? new Date(scheduledEnd) : null,
       energyRequired: result.priority === 'high' ? 'green' : 'yellow',
+      // "every…" phrases parse to a repeat rule; completing the task then spawns
+      // the next occurrence (see /api/tasks/[id] spawn-on-done).
+      recurrence: result.recurrence ?? 'none',
     },
   })
 
@@ -110,6 +113,7 @@ function buildConfirmationMessage(result: ReturnType<typeof parseQuickAdd>, task
     parts.push(`Scheduled: ${displayH}${ampm}`)
   }
   if (result.dayOffset) parts.push('(tomorrow)')
+  if (result.recurrence) parts.push(`↻ repeats ${result.recurrence}`)
   return parts.join(' · ')
 }
 
