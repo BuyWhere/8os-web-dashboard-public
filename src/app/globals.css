@@ -191,12 +191,22 @@ a.cl-formButtonPrimary,
   border-color: var(--color-accent-border) !important;
 }
 
-/* Button text: ink in light (4.93:1 on gold #B08637), white in dark (~5.4:1 on gold #C79A48) */
+/* Button text + background: white text on darker-gold gradient for WCAG AA
+ * at every pixel (was ink-on-light-gold gradient that only hit 3.74:1 on
+ * the dark half). OS-3982 round 2 fix.
+ *   Light: gradient #7A5A1E -> #5C4408; white on light end = 6.35:1,
+ *          white on dark end = 9.19:1. (Original #B08637->#98722C gave
+ *          ink 4.93:1 at light end but only 3.74:1 at dark end.)
+ *   Dark:  gradient #9A7A3A -> #5C4408; white on light end = 5.16:1,
+ *          white on dark end = 9.19:1.
+ */
 .contact-form button[type='submit'] {
-  color: var(--color-text-primary) !important;
+  background: linear-gradient(135deg, #7A5A1E 0%, #5C4408 100%) !important;
+  color: #FFFFFF !important;
 }
 [data-theme='dark'] .contact-form button[type='submit'] {
-  color: #FFFFFF !important; /* white on gold — 5.4:1, above WCAG AA 4.5:1 */
+  background: linear-gradient(135deg, #9A7A3A 0%, #5C4408 100%) !important;
+  color: #FFFFFF !important;
 }
 
 *,
