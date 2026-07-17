@@ -743,6 +743,23 @@ const PROFILES: Record<string, ArchetypeProfile> = {
   },
 };
 
+const STEM_LABELS: Record<string, string> = {
+  bing: 'Bing',
+  ding: 'Ding',
+  geng: 'Geng',
+  gui: 'Gui',
+  jia: 'Jia',
+  ji: 'Ji',
+  ren: 'Ren',
+  wu: 'Wu',
+  yi: 'Yi',
+};
+
+function getElementLabel(profile: ArchetypeProfile) {
+  const stem = profile.slug.split('-').at(-2);
+  return stem && STEM_LABELS[stem] ? `${STEM_LABELS[stem]} ${profile.element}` : profile.element;
+}
+
 export async function generateStaticParams() {
   return Object.keys(PROFILES).map((slug) => ({ slug }));
 }
@@ -751,12 +768,13 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const p = PROFILES[slug];
   if (!p) return {};
+  const elementLabel = getElementLabel(p);
   return {
-    title: `${p.sign} × ${p.element}, ${p.archetype} | 8os.ai`,
-    description: `${p.tagline}. Strengths, challenges, ideal work, and daily practice for the ${p.sign} ${p.element} (${p.archetype}) archetype.`,
-    keywords: [`${p.sign} BaZi`, `${p.element} archetype`, `${p.sign} ${p.element}`, p.archetype, 'BaZi archetype'],
+    title: `${p.sign} × ${elementLabel}, ${p.archetype} | 8os.ai`,
+    description: `${p.tagline}. Strengths, challenges, ideal work, and daily practice for the ${p.sign} ${elementLabel} (${p.archetype}) archetype.`,
+    keywords: [`${p.sign} BaZi`, `${elementLabel} archetype`, `${p.sign} ${elementLabel}`, p.archetype, 'BaZi archetype'],
     openGraph: {
-      title: `${p.sign} × ${p.element}, ${p.archetype} | 8os.ai`,
+      title: `${p.sign} × ${elementLabel}, ${p.archetype} | 8os.ai`,
       description: p.description,
       url: `https://8os.ai/archetypes/${p.slug}`,
       siteName: '8os',
@@ -766,12 +784,12 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
         url: 'https://8os.ai/og-image.png',
         width: 1200,
         height: 630,
-        alt: `${p.sign} × ${p.element}, ${p.archetype}`,
+        alt: `${p.sign} × ${elementLabel}, ${p.archetype}`,
       }],
     },
     twitter: {
       card: 'summary_large_image',
-      title: `${p.sign} × ${p.element}, ${p.archetype} | 8os.ai`,
+      title: `${p.sign} × ${elementLabel}, ${p.archetype} | 8os.ai`,
       description: p.description,
       creator: '@8os',
     },
@@ -782,6 +800,7 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
   const { slug } = await params;
   const p = PROFILES[slug];
   if (!p) notFound();
+  const elementLabel = getElementLabel(p);
 
   return (
     <main style={{ minHeight: '100vh', background: 'var(--color-bg-primary)', color: 'var(--color-text-secondary)', fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif', padding: '56px 24px 80px' }}>
@@ -794,21 +813,21 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
           <span>›</span>
           <span>{p.sign}</span>
           <span>›</span>
-          <span>{p.element}</span>
+          <span>{elementLabel}</span>
         </div>
 
         {/* Header */}
         <div style={{ marginBottom: 48 }}>
           <div style={{ display: 'flex', gap: 10, alignItems: 'center', marginBottom: 16, flexWrap: 'wrap' }}>
             <span style={{ background: `${p.elementColor}15`, border: `1px solid ${p.elementColor}30`, color: p.elementColor, borderRadius: 20, padding: '4px 14px', fontSize: 13, fontWeight: 600 }}>
-              {p.elementEmoji} {p.element}
+              {p.elementEmoji} {elementLabel}
             </span>
             <span style={{ background: 'var(--color-accent-soft)', border: '1px solid var(--color-accent-soft)', color: 'var(--color-accent)', borderRadius: 20, padding: '4px 14px', fontSize: 13, fontWeight: 600 }}>
               {p.archetype}
             </span>
           </div>
           <h1 style={{ fontSize: 40, fontWeight: 900, letterSpacing: '-0.02em', marginBottom: 8, color: 'var(--color-text-primary)', lineHeight: 1.1 }}>
-            {p.sign} × {p.element}
+            {p.sign} × {elementLabel}
           </h1>
           <p style={{ fontSize: 20, color: 'var(--color-text-muted)', fontWeight: 600, marginBottom: 16 }}>{p.tagline}</p>
           <p style={{ color: 'var(--color-text-muted)', fontSize: 16, lineHeight: 1.7 }}>{p.description}</p>
