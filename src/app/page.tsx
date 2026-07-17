@@ -43,7 +43,7 @@ const INK = 'var(--color-text-primary)'
 const GRAY = 'var(--color-text-secondary)'
 const CREAM = 'var(--color-bg-primary)'
 const SURFACE = 'var(--color-bg-card)'
-const GOLD = '#8A6728' // OS-2712: darkened for WCAG AA (4.69:1 gold-on-cream, 5.18:1 white-on-gold)
+const GOLD = '#6E531F' // OS-3973: darkened from #8A6728 to clear WCAG AA on small eyebrow text (6.55:1 gold-on-cream)
 const HAIRLINE = 'var(--color-border)'
 const OXBLOOD = 'var(--color-accent-2)'
 const MAXW = 1120
@@ -629,7 +629,7 @@ function SectionHead({
           fontWeight: 600,
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          color: '#8A6728', // OS-2712: WCAG AA
+          color: GOLD,
           marginBottom: '0.9rem',
         }}
       >
