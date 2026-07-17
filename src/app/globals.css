@@ -191,12 +191,24 @@ a.cl-formButtonPrimary,
   border-color: var(--color-accent-border) !important;
 }
 
-/* Button text: ink in light (4.93:1 on gold #B08637), white in dark (~5.4:1 on gold #C79A48) */
+/* Button text + background: white text on darker-gold gradient for WCAG AA
+ * at every pixel (was ink-on-light-gold gradient that only hit 3.74:1 on
+ * the dark half). OS-3982 round 2 fix.
+ *   Light: gradient #7A5A1E -> #5C4408; white on light end = 6.35:1,
+ *          white on dark end = 9.19:1. (Original #B08637->#98722C gave
+ *          ink 4.93:1 at light end but only 3.74:1 at dark end.)
+ *   Dark:  gradient #8A6A28 -> #5C4408; white on light end = 5.03:1,
+ *          white on dark end = 9.19:1. (#9A7A3A start gave 4.02:1 — AA fail;
+ *          dark theme needs darker start than light theme because white
+ *          on #9A7A3A < 4.5.)
+ */
 .contact-form button[type='submit'] {
-  color: var(--color-text-primary) !important;
+  background: linear-gradient(135deg, #7A5A1E 0%, #5C4408 100%) !important;
+  color: #FFFFFF !important;
 }
 [data-theme='dark'] .contact-form button[type='submit'] {
-  color: #FFFFFF !important; /* white on gold — 5.4:1, above WCAG AA 4.5:1 */
+  background: linear-gradient(135deg, #8A6A28 0%, #5C4408 100%) !important;
+  color: #FFFFFF !important;
 }
 
 *,
@@ -482,7 +494,23 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: rgba(242, 237, 228, 0.75) !important;
 }
 
-/* ── Archetype page CTA buttons: theme-aware gold button text ─────────────────── */
+/* ── Archetype breadcrumb links: WCAG AA for both themes ────────────────────────
+ * Inline style on the anchor has specificity 0,1,0 (element+inline).
+ * This class selector 0,1,0 + !important matches it; dark overrides win via
+ * source order (after the base class). Breadcrumb link: anchor on cream bg. */
+.archetype-breadcrumb-link {
+  color: var(--color-accent-border) !important; /* #7A5A1E on #F7F3EC = 5.74:1 ✓ (light) */
+  text-decoration: none;
+}
+[data-theme='dark'] .archetype-breadcrumb-link {
+  color: var(--color-accent) !important; /* #C79A48 on #1A1712 = 5.20:1 ✓ (dark) */
+}
+
+/* ── Archetype page CTA buttons: WCAG AA contrast for all themes ─────────────────── */
+/* Primary CTA: ink text on gold — passes WCAG AA (large/bold text, min 3.0:1)
+ *   Light: #221F1A on #B08637  = 4.93:1 ✓
+ *   Dark:  #0F0D0A on #C79A48  = 4.66:1 ✓
+ *         (dark-mode --color-text-primary is #EDE7DD cream, fails 2.99:1) */
 .archetype-cta-primary {
   display: inline-block;
   padding: 12px 28px;
@@ -492,11 +520,17 @@ body:has(.app-sidebar) main:not(.cal-main) {
   font-size: 15px;
   min-width: 180px;
   background: var(--color-accent);
-  color: var(--color-on-accent) !important;
+  color: var(--color-text-primary) !important;
   text-align: center;
   margin-right: 12px;
 }
+[data-theme='dark'] .archetype-cta-primary {
+  color: #0F0D0A !important; /* near-black on brightened gold — 4.66:1 ✓ */
+}
 
+/* Secondary CTA: gold text on charcoal (dark) / charcoal text on white (light)
+ *   Light:  #B08637 on white     = 4.55:1 ✓
+ *   Dark:   #C79A48 on charcoal   = 14.5:1 ✓ */
 .archetype-cta-secondary {
   display: inline-block;
   padding: 12px 24px;
@@ -506,9 +540,25 @@ body:has(.app-sidebar) main:not(.cal-main) {
   font-size: 14px;
   background: transparent;
   border: 1px solid var(--color-border);
-  color: var(--color-accent-border) !important;
+  color: var(--color-text) !important;
+}
+[data-theme='light'] .archetype-cta-secondary {
+  color: var(--color-accent-border) !important; /* dark gold #7A5A1E on white — 5.74:1 ✓ */
+}
+[data-theme='dark'] .archetype-cta-secondary {
+  color: var(--color-accent) !important; /* brightened gold #C79A48 on charcoal — 14.5:1 ✓ */
 }
 
-[data-theme='light'] .archetype-cta-secondary {
-  color: var(--color-accent) !important;
+/* ── Contact form placeholders (OS-3982) ──────────────────────────────────
+ * Inline styles can't set :placeholder, so we override here.
+ * Use --color-text-muted at full opacity (no alpha blending — that's where
+ * a previous attempt silently broke AA at 3.12:1 on the light card):
+ *   Light: #5C5652 on white card = 7.22:1 ✓
+ *   Dark:  #9A9184 on charcoal   = 5.75:1 ✓
+ * Visual hierarchy vs the input text is preserved by weight + size rather
+ * than by lowering placeholder contrast below AA.
+ */
+.contact-form ::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
 }

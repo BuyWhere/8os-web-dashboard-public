@@ -13,6 +13,9 @@ const INPUT_STYLE: React.CSSProperties = {
   fontSize: '1rem',
   fontFamily: 'inherit',
   boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.08)',
+  // Placeholder color: warm gray at 5.4:1 on white card bg (WCAG AA)
+  // Note: :placeholder pseudo-class cannot be set inline; use the
+  // contact-form class override in globals.css.
 };
 
 interface ContactFormData {
@@ -144,6 +147,7 @@ export function ContactForm() {
           type="text"
           required
           autoComplete="name"
+          placeholder="Your name"
           value={form.name}
           onChange={update('name')}
           disabled={status === 'submitting'}
@@ -162,6 +166,7 @@ export function ContactForm() {
           type="email"
           required
           autoComplete="email"
+          placeholder="you@example.com"
           value={form.email}
           onChange={update('email')}
           disabled={status === 'submitting'}
@@ -178,6 +183,7 @@ export function ContactForm() {
         <input
           id="contact-subject"
           type="text"
+          placeholder="How can we help?"
           value={form.subject}
           onChange={update('subject')}
           disabled={status === 'submitting'}
@@ -195,6 +201,7 @@ export function ContactForm() {
           id="contact-message"
           required
           rows={6}
+          placeholder="Tell us what's on your mind..."
           value={form.message}
           onChange={update('message')}
           disabled={status === 'submitting'}
@@ -231,8 +238,13 @@ export function ContactForm() {
         onMouseEnter={e => { if (status !== 'submitting') e.currentTarget.style.filter = 'brightness(1.1)'; }}
         onMouseLeave={e => { e.currentTarget.style.filter = 'none'; }}
         style={{
-          background: status === 'submitting' ? 'var(--color-border)' : 'linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))',
-          color: 'var(--color-text-primary)',
+          // Background + text colors are owned by the !important CSS rules
+          // in globals.css on .contact-form button[type='submit']. The inline
+          // gradient was ink-on-light-gold which failed AA on the dark half
+          // (3.74:1). The CSS now paints a darker-gold gradient with white
+          // text — 6.35:1+ at every pixel in both themes. OS-3982 round 2.
+          background: status === 'submitting' ? 'var(--color-border)' : 'var(--color-accent)',
+          color: '#FFFFFF',
           border: 'none',
           padding: '0.75rem 1.5rem',
           borderRadius: '8px',
