@@ -747,6 +747,28 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
     } catch { setErr('Delete failed, try again.'); setSaving(false) }
   }
 
+  /** Duplicate this event 24h later as a new native event ("copy to tomorrow"). */
+  async function duplicateTomorrow() {
+    setSaving(true); setErr(null)
+    try {
+      const startAt = new Date(new Date(form.startAt).getTime() + 24 * 60 * 60 * 1000).toISOString()
+      const endAt = new Date(new Date(form.endAt).getTime() + 24 * 60 * 60 * 1000).toISOString()
+      const res = await fetch('/api/calendar/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: form.title || 'Untitled', description: form.description || '',
+          location: form.location || null, startAt, endAt, allDay: form.allDay,
+          goalId: form.goalId || null, color: form.color || null,
+        }),
+      })
+      if (!res.ok) { setErr('Copy failed, try again.'); setSaving(false); return }
+      const data = await res.json().catch(() => null)
+      onSaved(normalizeSaved(data, { ...form, id: null, startAt, endAt }))
+      onClose()
+    } catch { setErr('Copy failed, try again.'); setSaving(false) }
+  }
+
   const title = form.mode === 'create' ? 'New event' : readOnly ? (form.external ? 'External event' : 'Event') : 'Edit event'
 
   return (
@@ -932,7 +954,12 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
 
             <div style={{ display: 'flex', gap: 8, justifyContent: 'space-between', marginTop: 4 }}>
               {form.mode === 'edit' ? (
-                <button onClick={remove} disabled={saving} style={{ ...btnStyle, color: '#B5502F', border: '1px solid #E3C4B6' }}>Delete</button>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button onClick={remove} disabled={saving} style={{ ...btnStyle, color: '#B5502F', border: '1px solid #E3C4B6' }}>Delete</button>
+                  <button onClick={duplicateTomorrow} disabled={saving} title="Create a copy of this event tomorrow at the same time" style={btnStyle}>
+                    Copy → tomorrow
+                  </button>
+                </div>
               ) : <span />}
               <div style={{ display: 'flex', gap: 8 }}>
                 <button onClick={onClose} style={btnStyle}>Cancel</button>
