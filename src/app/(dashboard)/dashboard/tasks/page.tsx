@@ -25,6 +25,7 @@ interface Task {
   duration: number
   scheduledAt: string | null
   domainId: string | null
+  notes?: string | null
   project: { id: string; name: string } | null
 }
 
@@ -80,6 +81,7 @@ export default function TasksPage() {
   const [loading, setLoading] = useState(true)
   const [filterPriority, setFilterPriority] = useState<FilterPriority>('all')
   const [filterDomain, setFilterDomain] = useState<FilterDomain>('all')
+  const [search, setSearch] = useState('')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editValue, setEditValue] = useState('')
   const [completing, setCompleting] = useState<string | null>(null)
@@ -142,8 +144,8 @@ export default function TasksPage() {
     setDeferOpenId(null)
   }
 
-  async function saveDetail(task: Task, form: { date: string; time: string; duration: number; priority: string }) {
-    const patch: Record<string, unknown> = { duration: form.duration, priority: form.priority }
+  async function saveDetail(task: Task, form: { date: string; time: string; duration: number; priority: string; notes: string }) {
+    const patch: Record<string, unknown> = { duration: form.duration, priority: form.priority, notes: form.notes }
     if (form.date) {
       const [y, m, d] = form.date.split('-').map(Number)
       const [hh, mm] = (form.time || '09:00').split(':').map(Number)
@@ -152,9 +154,33 @@ export default function TasksPage() {
       patch.scheduledAt = null
     }
     if (await patchTask(task.id, patch)) {
-      setTasks(prev => prev.map(t => t.id === task.id ? { ...t, scheduledAt: (patch.scheduledAt as string | null), duration: form.duration, priority: form.priority } : t))
+      setTasks(prev => prev.map(t => t.id === task.id ? { ...t, scheduledAt: (patch.scheduledAt as string | null), duration: form.duration, priority: form.priority, notes: form.notes } : t))
     }
     setDetailId(null)
+  }
+
+  async function deleteTask(task: Task) {
+    if (!window.confirm(`Delete "${task.name}"? This also removes its calendar event.`)) return
+    try {
+      const res = await fetch(`/api/tasks/${task.id}`, { method: 'DELETE' })
+      if (res.ok) setTasks(prev => prev.filter(t => t.id !== task.id))
+    } catch { /* ignore */ }
+    setDetailId(null)
+  }
+
+  async function autoScheduleTask(task: Task) {
+    try {
+      const res = await fetch('/api/schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ taskId: task.id }),
+      })
+      if (res.ok) {
+        const data = await res.json().catch(() => ({}))
+        const startAt: string | undefined = data?.slot?.startAt || data?.task?.scheduledAt
+        if (startAt) setTasks(prev => prev.map(t => t.id === task.id ? { ...t, scheduledAt: startAt } : t))
+      }
+    } catch { /* ignore */ }
   }
 
   async function startEdit(task: Task) { setEditingId(task.id); setEditValue(task.name) }
@@ -167,9 +193,11 @@ export default function TasksPage() {
   }
 
   // Filters (status filter removed — the grouping IS the status view).
+  const q = search.trim().toLowerCase()
   const filteredTasks = tasks.filter(t => {
     if (filterPriority !== 'all' && t.priority !== filterPriority) return false
     if (filterDomain !== 'all' && t.domainId !== filterDomain) return false
+    if (q && !(t.name.toLowerCase().includes(q) || (t.project?.name || '').toLowerCase().includes(q) || (t.notes || '').toLowerCase().includes(q))) return false
     return true
   })
 
@@ -200,6 +228,7 @@ export default function TasksPage() {
       completing={completing} setEditingId={setEditingId}
       deferOpenId={deferOpenId} setDeferOpenId={setDeferOpenId} deferTask={deferTask}
       detailId={detailId} setDetailId={setDetailId} saveDetail={saveDetail}
+      deleteTask={deleteTask} autoScheduleTask={autoScheduleTask}
     />
   )
 
@@ -230,8 +259,14 @@ export default function TasksPage() {
             </p>
           </div>
 
-          {/* Filters */}
+          {/* Search + filters */}
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search tasks…"
+              style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 6, color: 'var(--color-text-primary)', padding: '6px 10px', fontSize: 12, width: 170 }}
+            />
             <select
               value={filterPriority}
               onChange={e => setFilterPriority(e.target.value as FilterPriority)}
@@ -302,7 +337,9 @@ function TaskGroup(props: {
   deferTask: (t: Task, kind: string) => void
   detailId: string | null
   setDetailId: (id: string | null) => void
-  saveDetail: (t: Task, form: { date: string; time: string; duration: number; priority: string }) => void
+  saveDetail: (t: Task, form: { date: string; time: string; duration: number; priority: string; notes: string }) => void
+  deleteTask: (t: Task) => void
+  autoScheduleTask: (t: Task) => void
 }) {
   const { title, taskList, emptyMessage, overdue } = props
   return (
@@ -337,11 +374,13 @@ function TaskTile(props: {
   deferTask: (t: Task, kind: string) => void
   detailId: string | null
   setDetailId: (id: string | null) => void
-  saveDetail: (t: Task, form: { date: string; time: string; duration: number; priority: string }) => void
+  saveDetail: (t: Task, form: { date: string; time: string; duration: number; priority: string; notes: string }) => void
+  deleteTask: (t: Task) => void
+  autoScheduleTask: (t: Task) => void
 }) {
-  const { t, overdue, toggleComplete, startEdit, saveEdit, editingId, editValue, setEditValue, completing, setEditingId, deferOpenId, setDeferOpenId, deferTask, detailId, setDetailId, saveDetail } = props
+  const { t, overdue, toggleComplete, startEdit, saveEdit, editingId, editValue, setEditValue, completing, setEditingId, deferOpenId, setDeferOpenId, deferTask, detailId, setDetailId, saveDetail, deleteTask, autoScheduleTask } = props
   const [pickDate, setPickDate] = useState(false)
-  const [form, setForm] = useState({ date: localDateInput(t.scheduledAt), time: localTimeInput(t.scheduledAt), duration: t.duration, priority: t.priority })
+  const [form, setForm] = useState({ date: localDateInput(t.scheduledAt), time: localTimeInput(t.scheduledAt), duration: t.duration, priority: t.priority, notes: t.notes || '' })
   const open = detailId === t.id
   const deferOpen = deferOpenId === t.id
   const done = t.status === 'done'
@@ -352,7 +391,7 @@ function TaskTile(props: {
       onMouseLeave={e => (e.currentTarget.style.borderColor = overdue ? '#ef444455' : 'var(--color-border)')}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', cursor: 'pointer', position: 'relative' }}
-        onClick={(e) => { e.stopPropagation(); setDeferOpenId(null); setForm({ date: localDateInput(t.scheduledAt), time: localTimeInput(t.scheduledAt), duration: t.duration, priority: t.priority }); setDetailId(open ? null : t.id) }}
+        onClick={(e) => { e.stopPropagation(); setDeferOpenId(null); setForm({ date: localDateInput(t.scheduledAt), time: localTimeInput(t.scheduledAt), duration: t.duration, priority: t.priority, notes: t.notes || '' }); setDetailId(open ? null : t.id) }}
       >
         {/* Checkbox */}
         <button
@@ -401,6 +440,17 @@ function TaskTile(props: {
             {t.domainId && <span>{DOMAIN_ICONS[t.domainId]} <span style={{ color: DOMAIN_COLORS[t.domainId] }}>{t.domainId}</span></span>}
           </div>
         </div>
+
+        {/* Auto-schedule (unscheduled tasks): one tap places it in the best free slot */}
+        {!done && !t.scheduledAt && (
+          <button
+            onClick={(e) => { e.stopPropagation(); autoScheduleTask(t) }}
+            title="Auto-schedule into the best free slot"
+            style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, border: '1px solid var(--color-border)', background: 'transparent', color: 'var(--color-accent)', cursor: 'pointer', flexShrink: 0 }}
+          >
+            ⚡ Schedule
+          </button>
+        )}
 
         {/* Defer (not for done tasks) */}
         {!done && (
@@ -454,7 +504,19 @@ function TaskTile(props: {
               <option value="low">Low</option>
             </select>
           </DetailField>
+          <DetailField label="Notes" style={{ flex: '1 1 100%' }}>
+            <textarea
+              value={form.notes}
+              onChange={(e) => setForm({ ...form, notes: e.target.value })}
+              placeholder="Notes, links, context…"
+              rows={2}
+              style={{ ...detailInput, width: '100%', resize: 'vertical', fontFamily: 'inherit' }}
+            />
+          </DetailField>
           <div style={{ display: 'flex', gap: 6, marginLeft: 'auto' }}>
+            <button onClick={() => deleteTask(t)} style={{ fontSize: 11, padding: '6px 10px', borderRadius: 6, border: '1px solid #ef444455', background: 'transparent', color: '#ef4444', cursor: 'pointer' }}>
+              Delete
+            </button>
             {form.date && (
               <button onClick={() => setForm({ ...form, date: '', time: '09:00' })} style={{ fontSize: 11, padding: '6px 10px', borderRadius: 6, border: '1px solid var(--color-border)', background: 'transparent', color: 'var(--color-text-muted)', cursor: 'pointer' }}>
                 Unschedule
@@ -478,9 +540,9 @@ const detailInput: React.CSSProperties = {
   color: 'var(--color-text-primary)', padding: '6px 8px', fontSize: 12,
 }
 
-function DetailField({ label, children }: { label: string; children: React.ReactNode }) {
+function DetailField({ label, children, style }: { label: string; children: React.ReactNode; style?: React.CSSProperties }) {
   return (
-    <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 10, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: 0.4 }}>
+    <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 10, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: 0.4, ...style }}>
       {label}
       {children}
     </label>
