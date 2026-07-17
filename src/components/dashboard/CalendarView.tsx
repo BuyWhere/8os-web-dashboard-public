@@ -1115,6 +1115,25 @@ function EventBlock({ e, ghost, onClick, onDragStart, onResizeStart, dense, col 
   // Side-by-side layout for overlapping events: each takes 1/cols of the width.
   const leftPct = (col / cols) * 100
   const widthCalc = `calc(${100 / cols}% - ${cols > 1 ? 3 : 4}px)`
+  // Motion pattern: TASKS look different from meetings (dashed spine + checkbox,
+  // completable right on the grid); meetings stay solid. Local checked state so
+  // no prop threading through the grid tree.
+  const isTask = !!e.task
+  const [checked, setChecked] = useState(e.task?.status === 'done')
+  async function toggleDone(ev: React.MouseEvent) {
+    ev.stopPropagation()
+    if (!e.task) return
+    const next = !checked
+    setChecked(next)
+    try {
+      const res = await fetch(`/api/tasks/${e.task.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: next ? 'done' : 'todo' }),
+      })
+      if (!res.ok) setChecked(!next)
+    } catch { setChecked(!next) }
+  }
   return (
     <div
       onMouseDown={(ev) => draggable && onDragStart(ev, e)}
@@ -1123,17 +1142,37 @@ function EventBlock({ e, ghost, onClick, onDragStart, onResizeStart, dense, col 
         position: 'absolute', top, height,
         left: `calc(${leftPct}% + 2px)`, width: widthCalc,
         background: e.external ? color + '18' : color + '22',
-        border: `1px solid ${color}44`, borderLeft: `3px solid ${color}`,
+        border: `1px solid ${color}44`,
+        borderLeft: isTask ? `3px dashed ${color}` : `3px solid ${color}`,
         borderRadius: 4, padding: dense ? '1px 5px' : '2px 6px',
         overflow: 'hidden', zIndex: isGhost ? 6 : 2,
         cursor: draggable ? 'grab' : 'pointer',
-        opacity: e.readOnly ? 0.85 : 1,
+        opacity: e.readOnly ? 0.85 : checked ? 0.55 : 1,
         boxShadow: isGhost ? '0 2px 10px rgba(0,0,0,0.2)' : 'none',
       }}
-      title={`${e.title}${e.location ? ' · ' + e.location : ''}`}
+      title={`${e.title}${e.location ? ' · ' + e.location : ''}${isTask ? ' · task' : ''}`}
     >
-      <div className="cal-event-text" style={{ fontSize: 11, fontWeight: 600, color: eventTextColor(color), whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-        {e.recurrenceRule !== 'none' && '↻ '}{e.title}
+      <div className="cal-event-text" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: eventTextColor(color), whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        {isTask && (
+          <button
+            onClick={toggleDone}
+            onMouseDown={(ev) => ev.stopPropagation()}
+            aria-label={checked ? 'Mark task not done' : 'Mark task done'}
+            title={checked ? 'Mark not done' : 'Mark done'}
+            style={{
+              width: 11, height: 11, flexShrink: 0, padding: 0, cursor: 'pointer',
+              borderRadius: 3, border: `1.5px solid ${eventTextColor(color)}`,
+              background: checked ? eventTextColor(color) : 'transparent',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 8, lineHeight: 1, color: 'var(--color-bg-card)',
+            }}
+          >
+            {checked ? '✓' : ''}
+          </button>
+        )}
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', textDecoration: checked ? 'line-through' : 'none' }}>
+          {e.recurrenceRule !== 'none' && '↻ '}{e.title}
+        </span>
       </div>
       {height > 34 && (
         <div className="cal-event-sub" style={{ fontSize: 10, color: eventTextColor(color) + 'cc' }}>{fmtTime(new Date(e.startAt))} - {fmtTime(new Date(e.endAt))}</div>
