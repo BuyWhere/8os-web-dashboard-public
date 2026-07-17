@@ -218,34 +218,34 @@ export function Header() {
           ))}
         </nav>
 
-        {/* CTA — shown on archetype SEO pages so organic visitors have an immediate
-            conversion path. Persists across all viewport sizes. */}
-        {pathname.startsWith('/archetypes/') && (
-          <Link
-            href="/onboarding"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              background: 'var(--color-accent)',
-              color: '#fff',
-              padding: '8px 18px',
-              borderRadius: 8,
-              textDecoration: 'none',
-              fontWeight: 700,
-              fontSize: '0.875rem',
-              whiteSpace: 'nowrap',
-              flexShrink: 0,
-            }}
-          >
-            Get Started →
-          </Link>
-        )}
-
         {/* Auth actions. Single primary CTA removed per OS-2515 — "Get started" in
-            hero is the sole primary CTA. On archetype pages the CTA above is the
-            conversion path; this remains only for Log in on other pages. Hide the
+            hero is the sole primary CTA. On archetype pages the CTA below is the
+            conversion path; this clusters both buttons on the right. Hide the
             Log in link on /login to avoid a redundant dead self-link (OS-3976). */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+          {/* CTA — shown on archetype SEO pages so organic visitors have an immediate
+              conversion path. Rendered INSIDE the auth-actions container so it clusters
+              with Log in on the right edge. */}
+          {pathname.startsWith('/archetypes/') && (
+            <Link
+              href="/onboarding"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                background: 'var(--color-accent)',
+                color: '#fff',
+                padding: '8px 18px',
+                borderRadius: 8,
+                textDecoration: 'none',
+                fontWeight: 700,
+                fontSize: '0.875rem',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+              }}
+            >
+              Get Started →
+            </Link>
+          )}
           <ClerkLoading>
             {pathname !== '/login' && (
               <Link
