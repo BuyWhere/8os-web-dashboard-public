@@ -414,6 +414,23 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
     })
   }
 
+  // Tasks dropped from the Unscheduled sidebar onto the grid → schedule at that
+  // time (PATCH creates the calendar event server-side); hide the card instantly.
+  const [droppedTaskIds, setDroppedTaskIds] = useState<Set<string>>(new Set())
+  async function handleTaskDrop(taskId: string, start: Date) {
+    try {
+      const res = await fetch(`/api/tasks/${taskId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scheduledAt: start.toISOString() }),
+      })
+      if (res.ok) {
+        setDroppedTaskIds((prev) => new Set(prev).add(taskId))
+        router.refresh()
+      }
+    } catch { /* card stays; user can retry */ }
+  }
+
   /** All-day row shortcut: create an all-day event on `day` (panel opens pre-set). */
   function openCreateAllDay(day: Date) {
     const s = new Date(day); s.setHours(9, 0, 0, 0)
@@ -593,11 +610,11 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
           {view === 'week' && (
             <WeekView days={weekDays} events={events} energy={energy} todayKey={todayKey}
               onSlotCreate={openCreate} onEventClick={openEvent} onEventDrag={patchTimes} onEventResize={patchTimes}
-              firstDay={firstDay} onAllDayCreate={openCreateAllDay} />
+              firstDay={firstDay} onAllDayCreate={openCreateAllDay} onTaskDrop={handleTaskDrop} />
           )}
           {view === 'day' && (
             <DayView day={currentDate} events={events} energy={energy}
-              onSlotCreate={openCreate} onEventClick={openEvent} onEventDrag={patchTimes} onEventResize={patchTimes} />
+              onSlotCreate={openCreate} onEventClick={openEvent} onEventDrag={patchTimes} onEventResize={patchTimes} onTaskDrop={handleTaskDrop} />
           )}
         </div>
       </div>
@@ -629,8 +646,14 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
               {schedulingResult}
             </div>
           )}
-          {unscheduledTasks.map((t) => (
-            <div key={t.id} style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 8, padding: '10px 12px', marginBottom: 8 }}>
+          {unscheduledTasks.filter((t) => !droppedTaskIds.has(t.id)).map((t) => (
+            <div
+              key={t.id}
+              draggable
+              onDragStart={(e) => { e.dataTransfer.setData('text/task-id', t.id); e.dataTransfer.effectAllowed = 'move' }}
+              title="Drag onto the calendar to schedule"
+              style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 8, padding: '10px 12px', marginBottom: 8, cursor: 'grab' }}
+            >
               <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{t.name}</div>
               <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 6 }}>
                 <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--color-text-secondary)' }}>{t.duration}m</span>
@@ -1279,7 +1302,7 @@ function useSlotCreate(day: Date, onSlotCreate: (start: Date, mins: number) => v
 
 // ─── Week View ───────────────────────────────────────────────────────────────
 
-function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, onEventDrag, onEventResize, firstDay = 1, onAllDayCreate }: {
+function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, onEventDrag, onEventResize, firstDay = 1, onAllDayCreate, onTaskDrop }: {
   days: Date[]; events: CalendarEvent[]; energy: Record<number, EnergyLevel>; todayKey: string
   onSlotCreate: (start: Date, mins: number) => void
   onEventClick: (e: CalendarEvent) => void
@@ -1287,6 +1310,7 @@ function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, 
   onEventResize: (id: string, s: Date, e: Date) => void
   firstDay?: 0 | 1
   onAllDayCreate?: (day: Date) => void
+  onTaskDrop?: (taskId: string, start: Date) => void
 }) {
   const WEEKDAYS_SHORT = firstDay === 0
     ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -1346,7 +1370,8 @@ function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, 
           {days.map((day, di) => (
             <DayColumn key={di} day={day} events={eventsForDay(events, day)} energy={energy}
               ghost={ghost} onSlotCreate={onSlotCreate} onEventClick={onEventClick}
-              onDragStart={beginDrag} onResizeStart={beginResize} showNow={dayKey(day) === todayKey} dense />
+              onDragStart={beginDrag} onResizeStart={beginResize} showNow={dayKey(day) === todayKey} dense
+              onTaskDrop={onTaskDrop} />
           ))}
         </div>
 
@@ -1397,7 +1422,7 @@ function layoutColumns(events: CalendarEvent[]): Map<string, { col: number; cols
   return out
 }
 
-function DayColumn({ day, events, energy, ghost, onSlotCreate, onEventClick, onDragStart, onResizeStart, showNow, dense }: {
+function DayColumn({ day, events, energy, ghost, onSlotCreate, onEventClick, onDragStart, onResizeStart, showNow, dense, onTaskDrop }: {
   day: Date; events: CalendarEvent[]; energy: Record<number, EnergyLevel>
   ghost: { id: string; top: number; height: number } | null
   onSlotCreate: (start: Date, mins: number) => void
@@ -1405,13 +1430,30 @@ function DayColumn({ day, events, energy, ghost, onSlotCreate, onEventClick, onD
   onDragStart: (ev: React.MouseEvent, e: CalendarEvent) => void
   onResizeStart: (ev: React.MouseEvent, e: CalendarEvent) => void
   showNow?: boolean; dense?: boolean
+  onTaskDrop?: (taskId: string, start: Date) => void
 }) {
   const { onMouseDown, sel } = useSlotCreate(day, onSlotCreate)
+  // Drop target for tasks dragged from the Unscheduled sidebar: y position → time.
+  function handleDragOver(e: React.DragEvent) {
+    if (onTaskDrop && e.dataTransfer.types.includes('text/task-id')) e.preventDefault()
+  }
+  function handleDrop(e: React.DragEvent) {
+    if (!onTaskDrop) return
+    const taskId = e.dataTransfer.getData('text/task-id')
+    if (!taskId) return
+    e.preventDefault()
+    const rect = e.currentTarget.getBoundingClientRect()
+    const mins = snapMinutes(Math.max(0, Math.min(GRID_HEIGHT, e.clientY - rect.top)) / pxPerMinute())
+    const start = new Date(day)
+    start.setHours(DAY_START_HOUR, 0, 0, 0)
+    start.setMinutes(start.getMinutes() + mins)
+    onTaskDrop(taskId, start)
+  }
   const now = new Date()
   const nowTop = ((now.getHours() - DAY_START_HOUR) * 60 + now.getMinutes()) * pxPerMinute()
 
   return (
-    <div style={{ borderLeft: '1px solid var(--color-border)', position: 'relative', height: GRID_HEIGHT }} onMouseDown={onMouseDown}>
+    <div style={{ borderLeft: '1px solid var(--color-border)', position: 'relative', height: GRID_HEIGHT }} onMouseDown={onMouseDown} onDragOver={handleDragOver} onDrop={handleDrop}>
       {/* hour rows + 15-min guide lines */}
       {HOURS.map((h) => (
         <div key={h} style={{ height: HOUR_PX, borderBottom: '1px solid var(--color-border)', background: ENERGY_BG[energy[h] ?? 'red'] }}>
@@ -1446,12 +1488,13 @@ function DayColumn({ day, events, energy, ghost, onSlotCreate, onEventClick, onD
 
 // ─── Day View ────────────────────────────────────────────────────────────────
 
-function DayView({ day, events, energy, onSlotCreate, onEventClick, onEventDrag, onEventResize }: {
+function DayView({ day, events, energy, onSlotCreate, onEventClick, onEventDrag, onEventResize, onTaskDrop }: {
   day: Date; events: CalendarEvent[]; energy: Record<number, EnergyLevel>
   onSlotCreate: (start: Date, mins: number) => void
   onEventClick: (e: CalendarEvent) => void
   onEventDrag: (id: string, s: Date, e: Date) => void
   onEventResize: (id: string, s: Date, e: Date) => void
+  onTaskDrop?: (taskId: string, start: Date) => void
 }) {
   const { beginDrag, beginResize, ghost } = useGridInteractions(onEventDrag, onEventResize)
   const allDay = allDayForDay(events, day)
@@ -1478,7 +1521,7 @@ function DayView({ day, events, energy, onSlotCreate, onEventClick, onEventDrag,
         </div>
         <DayColumn day={day} events={eventsForDay(events, day)} energy={energy} ghost={ghost}
           onSlotCreate={onSlotCreate} onEventClick={onEventClick} onDragStart={beginDrag} onResizeStart={beginResize}
-          showNow={dayKey(day) === dayKey(new Date())} />
+          showNow={dayKey(day) === dayKey(new Date())} onTaskDrop={onTaskDrop} />
       </div>
       <div style={{ padding: '8px 12px 16px 64px', fontSize: 10, color: 'var(--color-text-muted)' }}>
         Drag a slot to create · drag/resize events snap to 15 minutes
