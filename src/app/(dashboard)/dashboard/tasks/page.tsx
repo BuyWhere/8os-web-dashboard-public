@@ -83,6 +83,7 @@ export default function TasksPage() {
   const [filterPriority, setFilterPriority] = useState<FilterPriority>('all')
   const [filterDomain, setFilterDomain] = useState<FilterDomain>('all')
   const [search, setSearch] = useState('')
+  const [sortBy, setSortBy] = useState<'time' | 'priority' | 'duration'>('time')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editValue, setEditValue] = useState('')
   const [completing, setCompleting] = useState<string | null>(null)
@@ -251,14 +252,28 @@ export default function TasksPage() {
   const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0)
   const tomorrowStart = new Date(todayStart); tomorrowStart.setDate(tomorrowStart.getDate() + 1)
 
+  // Sort within groups: time (scheduled first, soonest→latest), priority
+  // (high→low), or duration (shortest first). Recently Done keeps fresh-first.
+  const PRIO = { high: 0, medium: 1, low: 2 } as Record<string, number>
+  const sortFn = (a: Task, b: Task): number => {
+    if (sortBy === 'priority') return (PRIO[a.priority] ?? 1) - (PRIO[b.priority] ?? 1)
+    if (sortBy === 'duration') return a.duration - b.duration
+    const ta = a.scheduledAt ? new Date(a.scheduledAt).getTime() : Infinity
+    const tb = b.scheduledAt ? new Date(b.scheduledAt).getTime() : Infinity
+    return ta - tb
+  }
+
   const isOpen = (t: Task) => t.status === 'todo'
   // OVERDUE: undone tasks scheduled before today. They are never hidden — they
   // roll forward here until completed or deferred.
-  const overdueTasks = filteredTasks.filter(t => isOpen(t) && t.scheduledAt && new Date(t.scheduledAt) < todayStart)
-  const todayTasks = filteredTasks.filter(t => isOpen(t) && t.scheduledAt && new Date(t.scheduledAt) >= todayStart && new Date(t.scheduledAt) < tomorrowStart)
-  const upcomingTasks = filteredTasks.filter(t => isOpen(t) && t.scheduledAt && new Date(t.scheduledAt) >= tomorrowStart)
-  const unscheduledTasks = filteredTasks.filter(t => isOpen(t) && !t.scheduledAt)
-  const inProgressTasks = filteredTasks.filter(t => t.status === 'in_progress')
+  const overdueTasks = filteredTasks.filter(t => isOpen(t) && t.scheduledAt && new Date(t.scheduledAt) < todayStart).sort(sortFn)
+  const todayTasks = filteredTasks.filter(t => isOpen(t) && t.scheduledAt && new Date(t.scheduledAt) >= todayStart && new Date(t.scheduledAt) < tomorrowStart).sort(sortFn)
+  const upcomingTasks = filteredTasks.filter(t => isOpen(t) && t.scheduledAt && new Date(t.scheduledAt) >= tomorrowStart).sort(sortFn)
+  const unscheduledTasks = filteredTasks.filter(t => isOpen(t) && !t.scheduledAt).sort(sortFn)
+  const inProgressTasks = filteredTasks.filter(t => t.status === 'in_progress').sort(sortFn)
+  // Sunsama-style realism signal: how much is actually planned for today.
+  const todayPlannedMin = todayTasks.reduce((s, t) => s + (t.duration || 0), 0) + inProgressTasks.reduce((s, t) => s + (t.duration || 0), 0)
+  const todayPlannedH = Math.round((todayPlannedMin / 60) * 10) / 10
   const doneTasks = filteredTasks
     .filter(t => t.status === 'done')
     .sort((a, b) => (completedOrder.current.get(b.id) ?? 0) - (completedOrder.current.get(a.id) ?? 0))
@@ -303,6 +318,9 @@ export default function TasksPage() {
             <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 13 }}>
               {filteredTasks.filter(t => t.status === 'todo' || t.status === 'in_progress').length} active
               {overdueTasks.length > 0 && <span style={{ color: '#ef4444', fontWeight: 600 }}> · {overdueTasks.length} overdue</span>}
+              {(todayTasks.length + inProgressTasks.length) > 0 && (
+                <span> · today: {todayTasks.length + inProgressTasks.length} task{todayTasks.length + inProgressTasks.length === 1 ? '' : 's'} · {todayPlannedH}h planned{todayPlannedH > 8 ? ' ⚠️' : ''}</span>
+              )}
             </p>
           </div>
 
@@ -314,6 +332,16 @@ export default function TasksPage() {
               placeholder="Search tasks…"
               style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 6, color: 'var(--color-text-primary)', padding: '6px 10px', fontSize: 12, width: 170 }}
             />
+            <select
+              value={sortBy}
+              onChange={e => setSortBy(e.target.value as 'time' | 'priority' | 'duration')}
+              title="Sort within groups"
+              style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 6, color: 'var(--color-text-primary)', padding: '6px 10px', fontSize: 12, cursor: 'pointer' }}
+            >
+              <option value="time">Sort: Time</option>
+              <option value="priority">Sort: Priority</option>
+              <option value="duration">Sort: Duration</option>
+            </select>
             <select
               value={filterPriority}
               onChange={e => setFilterPriority(e.target.value as FilterPriority)}
