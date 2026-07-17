@@ -78,7 +78,7 @@ export default function SignupPage() {
               },
               elements: {
                 rootBox: { border: `1px solid ${BORDER}`, borderRadius: "16px", overflow: "hidden", boxShadow: "0 4px 24px rgba(34,31,26,0.06)" },
-                card: { border: "none", boxShadow: "none", borderRadius: 0, padding: "0" },
+                card: { border: "none", boxShadow: "none", borderRadius: 0, padding: "0 24px" }, // OS-3873 r5: 24px horizontal padding so inputs/social buttons don't clip at card edges
                 header: { display: "none" }, // Hide Clerk's default logo/header branding
                 formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: LINK_DARK },
                 socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px" }, // dark border for WCAG social button contrast
