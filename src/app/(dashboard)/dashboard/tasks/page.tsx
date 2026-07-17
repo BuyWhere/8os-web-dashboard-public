@@ -25,6 +25,8 @@ interface Task {
   duration: number
   scheduledAt: string | null
   domainId: string | null
+  notes?: string | null
+  recurrence?: string
   project: { id: string; name: string } | null
 }
 
@@ -80,6 +82,8 @@ export default function TasksPage() {
   const [loading, setLoading] = useState(true)
   const [filterPriority, setFilterPriority] = useState<FilterPriority>('all')
   const [filterDomain, setFilterDomain] = useState<FilterDomain>('all')
+  const [search, setSearch] = useState('')
+  const [sortBy, setSortBy] = useState<'time' | 'priority' | 'duration'>('time')
   const [editingId, setEditingId] = useState<string | null>(null)
   const [editValue, setEditValue] = useState('')
   const [completing, setCompleting] = useState<string | null>(null)
@@ -87,6 +91,14 @@ export default function TasksPage() {
   const [detailId, setDetailId] = useState<string | null>(null)
   // Local completion order so freshly-checked tasks appear on top of Recently Done.
   const completedOrder = useRef<Map<string, number>>(new Map())
+  // Undo toast (Todoist pattern — reversible actions instead of confirm dialogs).
+  const [toast, setToast] = useState<{ msg: string; undo: () => void } | null>(null)
+  const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  function showToast(msg: string, undo: () => void) {
+    if (toastTimer.current) clearTimeout(toastTimer.current)
+    setToast({ msg, undo })
+    toastTimer.current = setTimeout(() => setToast(null), 7000)
+  }
 
   useEffect(() => {
     Promise.all([
@@ -115,9 +127,29 @@ export default function TasksPage() {
     setCompleting(task.id)
     const newStatus = task.status === 'done' ? 'todo' : 'done'
     if (newStatus === 'done') completedOrder.current.set(task.id, Date.now())
-    if (await patchTask(task.id, { status: newStatus })) {
-      setTasks(prev => prev.map(t => t.id === task.id ? { ...t, status: newStatus } : t))
-    }
+    try {
+      const res = await fetch(`/api/tasks/${task.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: newStatus }),
+      })
+      if (res.ok) {
+        const data = await res.json().catch(() => ({} as any))
+        const spawned: Task | null = data?._nextOccurrence ?? null
+        setTasks(prev => {
+          const next = prev.map(t => t.id === task.id ? { ...t, status: newStatus } : t)
+          return spawned ? [...next, spawned] : next
+        })
+        if (newStatus === 'done') {
+          showToast(`Completed "${task.name}"${spawned ? ' · next occurrence scheduled' : ''}`, async () => {
+            setToast(null)
+            await patchTask(task.id, { status: 'todo' })
+            if (spawned) await fetch(`/api/tasks/${spawned.id}`, { method: 'DELETE' }).catch(() => {})
+            setTasks(prev => prev.filter(t => t.id !== (spawned?.id ?? '')).map(t => t.id === task.id ? { ...t, status: 'todo' } : t))
+          })
+        }
+      }
+    } catch { /* ignore */ }
     setCompleting(null)
   }
 
@@ -142,8 +174,8 @@ export default function TasksPage() {
     setDeferOpenId(null)
   }
 
-  async function saveDetail(task: Task, form: { date: string; time: string; duration: number; priority: string }) {
-    const patch: Record<string, unknown> = { duration: form.duration, priority: form.priority }
+  async function saveDetail(task: Task, form: { date: string; time: string; duration: number; priority: string; notes: string; recurrence: string }) {
+    const patch: Record<string, unknown> = { duration: form.duration, priority: form.priority, notes: form.notes, recurrence: form.recurrence }
     if (form.date) {
       const [y, m, d] = form.date.split('-').map(Number)
       const [hh, mm] = (form.time || '09:00').split(':').map(Number)
@@ -152,9 +184,51 @@ export default function TasksPage() {
       patch.scheduledAt = null
     }
     if (await patchTask(task.id, patch)) {
-      setTasks(prev => prev.map(t => t.id === task.id ? { ...t, scheduledAt: (patch.scheduledAt as string | null), duration: form.duration, priority: form.priority } : t))
+      setTasks(prev => prev.map(t => t.id === task.id ? { ...t, scheduledAt: (patch.scheduledAt as string | null), duration: form.duration, priority: form.priority, notes: form.notes, recurrence: form.recurrence } : t))
     }
     setDetailId(null)
+  }
+
+  async function deleteTask(task: Task) {
+    // Reversible delete (Todoist pattern): soft-cancel + undo toast, no confirm
+    // dialog. Cancelled tasks match no group so they vanish from every view.
+    if (await patchTask(task.id, { status: 'cancelled' })) {
+      setTasks(prev => prev.filter(t => t.id !== task.id))
+      showToast(`Deleted "${task.name}"`, async () => {
+        setToast(null)
+        if (await patchTask(task.id, { status: 'todo' })) {
+          setTasks(prev => [...prev, { ...task, status: 'todo' }])
+        }
+      })
+    }
+    setDetailId(null)
+  }
+
+  async function bulkDefer(list: Task[], kind: 'today' | 'tomorrow') {
+    const target = new Date()
+    if (kind === 'tomorrow') target.setDate(target.getDate() + 1)
+    const patches = list.map(t => ({ id: t.id, iso: withTimeOfDay(target, t.scheduledAt) }))
+    await Promise.all(patches.map(p => patchTask(p.id, { scheduledAt: p.iso })))
+    setTasks(prev => prev.map(t => {
+      const p = patches.find(x => x.id === t.id)
+      return p ? { ...t, scheduledAt: p.iso } : t
+    }))
+    showToast(`Moved ${list.length} overdue task(s) to ${kind}`, () => setToast(null))
+  }
+
+  async function autoScheduleTask(task: Task) {
+    try {
+      const res = await fetch('/api/schedule', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ taskId: task.id }),
+      })
+      if (res.ok) {
+        const data = await res.json().catch(() => ({}))
+        const startAt: string | undefined = data?.slot?.startAt || data?.task?.scheduledAt
+        if (startAt) setTasks(prev => prev.map(t => t.id === task.id ? { ...t, scheduledAt: startAt } : t))
+      }
+    } catch { /* ignore */ }
   }
 
   async function startEdit(task: Task) { setEditingId(task.id); setEditValue(task.name) }
@@ -167,23 +241,39 @@ export default function TasksPage() {
   }
 
   // Filters (status filter removed — the grouping IS the status view).
+  const q = search.trim().toLowerCase()
   const filteredTasks = tasks.filter(t => {
     if (filterPriority !== 'all' && t.priority !== filterPriority) return false
     if (filterDomain !== 'all' && t.domainId !== filterDomain) return false
+    if (q && !(t.name.toLowerCase().includes(q) || (t.project?.name || '').toLowerCase().includes(q) || (t.notes || '').toLowerCase().includes(q))) return false
     return true
   })
 
   const todayStart = new Date(); todayStart.setHours(0, 0, 0, 0)
   const tomorrowStart = new Date(todayStart); tomorrowStart.setDate(tomorrowStart.getDate() + 1)
 
+  // Sort within groups: time (scheduled first, soonest→latest), priority
+  // (high→low), or duration (shortest first). Recently Done keeps fresh-first.
+  const PRIO = { high: 0, medium: 1, low: 2 } as Record<string, number>
+  const sortFn = (a: Task, b: Task): number => {
+    if (sortBy === 'priority') return (PRIO[a.priority] ?? 1) - (PRIO[b.priority] ?? 1)
+    if (sortBy === 'duration') return a.duration - b.duration
+    const ta = a.scheduledAt ? new Date(a.scheduledAt).getTime() : Infinity
+    const tb = b.scheduledAt ? new Date(b.scheduledAt).getTime() : Infinity
+    return ta - tb
+  }
+
   const isOpen = (t: Task) => t.status === 'todo'
   // OVERDUE: undone tasks scheduled before today. They are never hidden — they
   // roll forward here until completed or deferred.
-  const overdueTasks = filteredTasks.filter(t => isOpen(t) && t.scheduledAt && new Date(t.scheduledAt) < todayStart)
-  const todayTasks = filteredTasks.filter(t => isOpen(t) && t.scheduledAt && new Date(t.scheduledAt) >= todayStart && new Date(t.scheduledAt) < tomorrowStart)
-  const upcomingTasks = filteredTasks.filter(t => isOpen(t) && t.scheduledAt && new Date(t.scheduledAt) >= tomorrowStart)
-  const unscheduledTasks = filteredTasks.filter(t => isOpen(t) && !t.scheduledAt)
-  const inProgressTasks = filteredTasks.filter(t => t.status === 'in_progress')
+  const overdueTasks = filteredTasks.filter(t => isOpen(t) && t.scheduledAt && new Date(t.scheduledAt) < todayStart).sort(sortFn)
+  const todayTasks = filteredTasks.filter(t => isOpen(t) && t.scheduledAt && new Date(t.scheduledAt) >= todayStart && new Date(t.scheduledAt) < tomorrowStart).sort(sortFn)
+  const upcomingTasks = filteredTasks.filter(t => isOpen(t) && t.scheduledAt && new Date(t.scheduledAt) >= tomorrowStart).sort(sortFn)
+  const unscheduledTasks = filteredTasks.filter(t => isOpen(t) && !t.scheduledAt).sort(sortFn)
+  const inProgressTasks = filteredTasks.filter(t => t.status === 'in_progress').sort(sortFn)
+  // Sunsama-style realism signal: how much is actually planned for today.
+  const todayPlannedMin = todayTasks.reduce((s, t) => s + (t.duration || 0), 0) + inProgressTasks.reduce((s, t) => s + (t.duration || 0), 0)
+  const todayPlannedH = Math.round((todayPlannedMin / 60) * 10) / 10
   const doneTasks = filteredTasks
     .filter(t => t.status === 'done')
     .sort((a, b) => (completedOrder.current.get(b.id) ?? 0) - (completedOrder.current.get(a.id) ?? 0))
@@ -200,6 +290,7 @@ export default function TasksPage() {
       completing={completing} setEditingId={setEditingId}
       deferOpenId={deferOpenId} setDeferOpenId={setDeferOpenId} deferTask={deferTask}
       detailId={detailId} setDetailId={setDetailId} saveDetail={saveDetail}
+      deleteTask={deleteTask} autoScheduleTask={autoScheduleTask} bulkDefer={bulkDefer}
     />
   )
 
@@ -227,11 +318,30 @@ export default function TasksPage() {
             <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 13 }}>
               {filteredTasks.filter(t => t.status === 'todo' || t.status === 'in_progress').length} active
               {overdueTasks.length > 0 && <span style={{ color: '#ef4444', fontWeight: 600 }}> · {overdueTasks.length} overdue</span>}
+              {(todayTasks.length + inProgressTasks.length) > 0 && (
+                <span> · today: {todayTasks.length + inProgressTasks.length} task{todayTasks.length + inProgressTasks.length === 1 ? '' : 's'} · {todayPlannedH}h planned{todayPlannedH > 8 ? ' ⚠️' : ''}</span>
+              )}
             </p>
           </div>
 
-          {/* Filters */}
+          {/* Search + filters */}
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+            <input
+              value={search}
+              onChange={e => setSearch(e.target.value)}
+              placeholder="Search tasks…"
+              style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 6, color: 'var(--color-text-primary)', padding: '6px 10px', fontSize: 12, width: 170 }}
+            />
+            <select
+              value={sortBy}
+              onChange={e => setSortBy(e.target.value as 'time' | 'priority' | 'duration')}
+              title="Sort within groups"
+              style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 6, color: 'var(--color-text-primary)', padding: '6px 10px', fontSize: 12, cursor: 'pointer' }}
+            >
+              <option value="time">Sort: Time</option>
+              <option value="priority">Sort: Priority</option>
+              <option value="duration">Sort: Duration</option>
+            </select>
             <select
               value={filterPriority}
               onChange={e => setFilterPriority(e.target.value as FilterPriority)}
@@ -280,6 +390,14 @@ export default function TasksPage() {
       </main>
 
       <QuickAdd />
+
+      {/* Undo toast */}
+      {toast && (
+        <div style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 60, display: 'flex', alignItems: 'center', gap: 14, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 10, padding: '10px 16px', boxShadow: '0 8px 24px rgba(0,0,0,0.3)', fontSize: 13, color: 'var(--color-text-primary)', maxWidth: '90vw' }}>
+          <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{toast.msg}</span>
+          <button onClick={toast.undo} style={{ border: 'none', background: 'none', color: 'var(--color-accent)', fontWeight: 700, fontSize: 13, cursor: 'pointer', flexShrink: 0 }}>Undo</button>
+        </div>
+      )}
     </div>
   )
 }
@@ -302,14 +420,25 @@ function TaskGroup(props: {
   deferTask: (t: Task, kind: string) => void
   detailId: string | null
   setDetailId: (id: string | null) => void
-  saveDetail: (t: Task, form: { date: string; time: string; duration: number; priority: string }) => void
+  saveDetail: (t: Task, form: { date: string; time: string; duration: number; priority: string; notes: string; recurrence: string }) => void
+  deleteTask: (t: Task) => void
+  autoScheduleTask: (t: Task) => void
+  bulkDefer: (list: Task[], kind: 'today' | 'tomorrow') => void
 }) {
-  const { title, taskList, emptyMessage, overdue } = props
+  const { title, taskList, emptyMessage, overdue, bulkDefer } = props
   return (
     <div style={{ marginBottom: 24 }}>
-      <h3 style={{ margin: '0 0 12px', fontSize: 13, fontWeight: 600, color: overdue ? '#ef4444' : 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
-        {title} ({taskList.length})
-      </h3>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 }}>
+        <h3 style={{ margin: 0, fontSize: 13, fontWeight: 600, color: overdue ? '#ef4444' : 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+          {title} ({taskList.length})
+        </h3>
+        {overdue && taskList.length > 0 && (
+          <>
+            <button onClick={() => bulkDefer(taskList, 'today')} style={bulkBtn}>All → Today</button>
+            <button onClick={() => bulkDefer(taskList, 'tomorrow')} style={bulkBtn}>All → Tomorrow</button>
+          </>
+        )}
+      </div>
       {taskList.length === 0 ? (
         <div style={{ color: 'var(--color-text-muted)', fontSize: 13, padding: '12px 0' }}>{emptyMessage}</div>
       ) : (
@@ -337,11 +466,13 @@ function TaskTile(props: {
   deferTask: (t: Task, kind: string) => void
   detailId: string | null
   setDetailId: (id: string | null) => void
-  saveDetail: (t: Task, form: { date: string; time: string; duration: number; priority: string }) => void
+  saveDetail: (t: Task, form: { date: string; time: string; duration: number; priority: string; notes: string; recurrence: string }) => void
+  deleteTask: (t: Task) => void
+  autoScheduleTask: (t: Task) => void
 }) {
-  const { t, overdue, toggleComplete, startEdit, saveEdit, editingId, editValue, setEditValue, completing, setEditingId, deferOpenId, setDeferOpenId, deferTask, detailId, setDetailId, saveDetail } = props
+  const { t, overdue, toggleComplete, startEdit, saveEdit, editingId, editValue, setEditValue, completing, setEditingId, deferOpenId, setDeferOpenId, deferTask, detailId, setDetailId, saveDetail, deleteTask, autoScheduleTask } = props
   const [pickDate, setPickDate] = useState(false)
-  const [form, setForm] = useState({ date: localDateInput(t.scheduledAt), time: localTimeInput(t.scheduledAt), duration: t.duration, priority: t.priority })
+  const [form, setForm] = useState({ date: localDateInput(t.scheduledAt), time: localTimeInput(t.scheduledAt), duration: t.duration, priority: t.priority, notes: t.notes || '', recurrence: t.recurrence || 'none' })
   const open = detailId === t.id
   const deferOpen = deferOpenId === t.id
   const done = t.status === 'done'
@@ -352,7 +483,7 @@ function TaskTile(props: {
       onMouseLeave={e => (e.currentTarget.style.borderColor = overdue ? '#ef444455' : 'var(--color-border)')}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', cursor: 'pointer', position: 'relative' }}
-        onClick={(e) => { e.stopPropagation(); setDeferOpenId(null); setForm({ date: localDateInput(t.scheduledAt), time: localTimeInput(t.scheduledAt), duration: t.duration, priority: t.priority }); setDetailId(open ? null : t.id) }}
+        onClick={(e) => { e.stopPropagation(); setDeferOpenId(null); setForm({ date: localDateInput(t.scheduledAt), time: localTimeInput(t.scheduledAt), duration: t.duration, priority: t.priority, notes: t.notes || '', recurrence: t.recurrence || 'none' }); setDetailId(open ? null : t.id) }}
       >
         {/* Checkbox */}
         <button
@@ -387,7 +518,7 @@ function TaskTile(props: {
               style={{ fontSize: 13, color: done ? 'var(--color-text-muted)' : 'var(--color-text-primary)', textDecoration: done ? 'line-through' : 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
               title="Click for details · double-click to rename"
             >
-              {t.name}
+              {t.recurrence && t.recurrence !== 'none' && <span style={{ color: 'var(--color-accent)' }}>↻ </span>}{t.name}
             </div>
           )}
           <div style={{ display: 'flex', gap: 8, marginTop: 2, fontSize: 11, color: 'var(--color-text-muted)', flexWrap: 'wrap' }}>
@@ -401,6 +532,17 @@ function TaskTile(props: {
             {t.domainId && <span>{DOMAIN_ICONS[t.domainId]} <span style={{ color: DOMAIN_COLORS[t.domainId] }}>{t.domainId}</span></span>}
           </div>
         </div>
+
+        {/* Auto-schedule (unscheduled tasks): one tap places it in the best free slot */}
+        {!done && !t.scheduledAt && (
+          <button
+            onClick={(e) => { e.stopPropagation(); autoScheduleTask(t) }}
+            title="Auto-schedule into the best free slot"
+            style={{ fontSize: 11, fontWeight: 600, padding: '4px 10px', borderRadius: 6, border: '1px solid var(--color-border)', background: 'transparent', color: 'var(--color-accent)', cursor: 'pointer', flexShrink: 0 }}
+          >
+            ⚡ Schedule
+          </button>
+        )}
 
         {/* Defer (not for done tasks) */}
         {!done && (
@@ -454,7 +596,28 @@ function TaskTile(props: {
               <option value="low">Low</option>
             </select>
           </DetailField>
+          <DetailField label="Repeat">
+            <select value={form.recurrence} onChange={(e) => setForm({ ...form, recurrence: e.target.value })} style={detailInput}>
+              <option value="none">Never</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="biweekly">Every 2 weeks</option>
+              <option value="monthly">Monthly</option>
+            </select>
+          </DetailField>
+          <DetailField label="Notes" style={{ flex: '1 1 100%' }}>
+            <textarea
+              value={form.notes}
+              onChange={(e) => setForm({ ...form, notes: e.target.value })}
+              placeholder="Notes, links, context…"
+              rows={2}
+              style={{ ...detailInput, width: '100%', resize: 'vertical', fontFamily: 'inherit' }}
+            />
+          </DetailField>
           <div style={{ display: 'flex', gap: 6, marginLeft: 'auto' }}>
+            <button onClick={() => deleteTask(t)} style={{ fontSize: 11, padding: '6px 10px', borderRadius: 6, border: '1px solid #ef444455', background: 'transparent', color: '#ef4444', cursor: 'pointer' }}>
+              Delete
+            </button>
             {form.date && (
               <button onClick={() => setForm({ ...form, date: '', time: '09:00' })} style={{ fontSize: 11, padding: '6px 10px', borderRadius: 6, border: '1px solid var(--color-border)', background: 'transparent', color: 'var(--color-text-muted)', cursor: 'pointer' }}>
                 Unschedule
@@ -473,14 +636,20 @@ function TaskTile(props: {
   )
 }
 
+const bulkBtn: React.CSSProperties = {
+  fontSize: 11, fontWeight: 600, padding: '3px 9px', borderRadius: 6,
+  border: '1px solid var(--color-border)', background: 'transparent',
+  color: 'var(--color-text-secondary)', cursor: 'pointer',
+}
+
 const detailInput: React.CSSProperties = {
   background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', borderRadius: 6,
   color: 'var(--color-text-primary)', padding: '6px 8px', fontSize: 12,
 }
 
-function DetailField({ label, children }: { label: string; children: React.ReactNode }) {
+function DetailField({ label, children, style }: { label: string; children: React.ReactNode; style?: React.CSSProperties }) {
   return (
-    <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 10, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: 0.4 }}>
+    <label style={{ display: 'flex', flexDirection: 'column', gap: 4, fontSize: 10, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: 0.4, ...style }}>
       {label}
       {children}
     </label>
