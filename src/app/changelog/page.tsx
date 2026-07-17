@@ -39,6 +39,7 @@ const versions: Version[] = [
       { type: 'new', text: 'Pro subscription live: AI journaling, goal engine and priority support at $18/month or $119/year' },
       { type: 'new', text: 'Subtasks: break any task into a checklist right on the task tile, with progress shown at a glance' },
       { type: 'new', text: 'Drag a task from the Unscheduled sidebar straight onto the calendar to schedule it at that time; click the all-day row to add an all-day event' },
+      { type: 'new', text: 'Keyboard on the tasks page: j and k move the selection, x completes, d opens the defer menu' },
       { type: 'improvement', text: 'The morning brief includes your planned load for the day, with a gentle nudge when it looks too heavy' },
       { type: 'improvement', text: 'Tasks page: search, sort by time/priority/duration, notes on every task, undo after complete or delete, daily plan total with an overload warning' },
       { type: 'improvement', text: 'Google Calendar two-way sync: events created in 8os appear in Google, and Google events are editable inside 8os' },

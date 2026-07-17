@@ -302,6 +302,7 @@ export default function TasksPage() {
   }
 
   const isOpen = (t: Task) => t.status === 'todo'
+  const [selectedId, setSelectedId] = useState<string | null>(null)
   // OVERDUE: undone tasks scheduled before today. They are never hidden — they
   // roll forward here until completed or deferred.
   const overdueTasks = filteredTasks.filter(t => isOpen(t) && t.scheduledAt && new Date(t.scheduledAt) < todayStart).sort(sortFn)
@@ -319,6 +320,37 @@ export default function TasksPage() {
 
   const uniqueDomains = Array.from(new Set(tasks.map(t => t.domainId).filter(Boolean))) as string[]
 
+  // Keyboard: j/k move the selection through the visible open tasks (render
+  // order), x completes, d opens the Defer menu. Ignored while typing.
+  const flatOrder = [...overdueTasks, ...inProgressTasks, ...todayTasks, ...upcomingTasks, ...unscheduledTasks]
+  const flatRef = useRef<Task[]>(flatOrder)
+  flatRef.current = flatOrder
+  const selectedRef = useRef<string | null>(selectedId)
+  selectedRef.current = selectedId
+  useEffect(() => {
+    function onKey(e: KeyboardEvent) {
+      const tag = (e.target as HTMLElement)?.tagName
+      if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'SELECT' || e.metaKey || e.ctrlKey || e.altKey) return
+      const list = flatRef.current
+      if (list.length === 0) return
+      const idx = list.findIndex(t => t.id === selectedRef.current)
+      if (e.key === 'j') {
+        setSelectedId(list[Math.min(list.length - 1, idx + 1)]?.id ?? list[0].id)
+      } else if (e.key === 'k') {
+        setSelectedId(list[Math.max(0, idx <= 0 ? 0 : idx - 1)].id)
+      } else if (e.key === 'x' && idx >= 0) {
+        void toggleComplete(list[idx])
+      } else if (e.key === 'd' && idx >= 0) {
+        setDeferOpenId(list[idx].id)
+      } else if (e.key === 'Escape') {
+        setSelectedId(null); setDeferOpenId(null); setDetailId(null)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   const group = (title: string, list: Task[], empty: string, opts?: { overdue?: boolean }) => (
     <TaskGroup
       key={title}
@@ -330,6 +362,7 @@ export default function TasksPage() {
       detailId={detailId} setDetailId={setDetailId} saveDetail={saveDetail}
       deleteTask={deleteTask} autoScheduleTask={autoScheduleTask} bulkDefer={bulkDefer}
       replanOverdue={replanOverdue} replanning={replanning} saveSubtasks={saveSubtasks}
+      selectedId={selectedId}
     />
   )
 
@@ -360,6 +393,7 @@ export default function TasksPage() {
               {(todayTasks.length + inProgressTasks.length) > 0 && (
                 <span> · today: {todayTasks.length + inProgressTasks.length} task{todayTasks.length + inProgressTasks.length === 1 ? '' : 's'} · {todayPlannedH}h planned{todayPlannedH > 8 ? ' ⚠️' : ''}</span>
               )}
+              <span style={{ color: 'var(--color-text-muted)' }}> · keys: j/k select, x done, d defer</span>
             </p>
           </div>
 
@@ -466,6 +500,7 @@ function TaskGroup(props: {
   replanOverdue: (list: Task[]) => void
   replanning: boolean
   saveSubtasks: (t: Task, subtasks: { id: string; text: string; done: boolean }[]) => void
+  selectedId: string | null
 }) {
   const { title, taskList, emptyMessage, overdue, bulkDefer, replanOverdue, replanning } = props
   return (
@@ -515,8 +550,10 @@ function TaskTile(props: {
   deleteTask: (t: Task) => void
   autoScheduleTask: (t: Task) => void
   saveSubtasks: (t: Task, subtasks: { id: string; text: string; done: boolean }[]) => void
+  selectedId?: string | null
 }) {
-  const { t, overdue, toggleComplete, startEdit, saveEdit, editingId, editValue, setEditValue, completing, setEditingId, deferOpenId, setDeferOpenId, deferTask, detailId, setDetailId, saveDetail, deleteTask, autoScheduleTask, saveSubtasks } = props
+  const { t, overdue, toggleComplete, startEdit, saveEdit, editingId, editValue, setEditValue, completing, setEditingId, deferOpenId, setDeferOpenId, deferTask, detailId, setDetailId, saveDetail, deleteTask, autoScheduleTask, saveSubtasks, selectedId } = props
+  const kbSelected = selectedId === t.id
   const [newSub, setNewSub] = useState('')
   const subs = t.subtasks ?? []
   const subsDone = subs.filter(s => s.done).length
@@ -527,9 +564,9 @@ function TaskTile(props: {
   const done = t.status === 'done'
 
   return (
-    <div style={{ borderRadius: 10, background: 'var(--color-bg-card)', border: `1px solid ${overdue ? '#ef444455' : 'var(--color-border)'}`, opacity: done ? 0.6 : 1, transition: 'border-color 0.15s' }}
+    <div style={{ borderRadius: 10, background: 'var(--color-bg-card)', border: `1px solid ${kbSelected ? 'var(--color-accent)' : overdue ? '#ef444455' : 'var(--color-border)'}`, boxShadow: kbSelected ? '0 0 0 1px var(--color-accent)' : 'none', opacity: done ? 0.6 : 1, transition: 'border-color 0.15s' }}
       onMouseEnter={e => (e.currentTarget.style.borderColor = 'var(--color-accent)')}
-      onMouseLeave={e => (e.currentTarget.style.borderColor = overdue ? '#ef444455' : 'var(--color-border)')}
+      onMouseLeave={e => (e.currentTarget.style.borderColor = kbSelected ? 'var(--color-accent)' : overdue ? '#ef444455' : 'var(--color-border)')}
     >
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 14px', cursor: 'pointer', position: 'relative' }}
         onClick={(e) => { e.stopPropagation(); setDeferOpenId(null); setForm({ date: localDateInput(t.scheduledAt), time: localTimeInput(t.scheduledAt), duration: t.duration, priority: t.priority, notes: t.notes || '', recurrence: t.recurrence || 'none' }); setDetailId(open ? null : t.id) }}
