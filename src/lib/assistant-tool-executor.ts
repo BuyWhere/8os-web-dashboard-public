@@ -12,7 +12,7 @@
 
 import { prisma } from '@/lib/db/prisma'
 import { wouldExceedActiveCap } from '@/lib/goal-hygiene'
-import { normalizeHorizon } from '@/lib/horizons'
+import { normalizeHorizon, defaultTargetDate } from '@/lib/horizons'
 import { zonedNaiveToUtc, userLocalDate } from '@/lib/user-time'
 
 /**
@@ -97,7 +97,7 @@ export async function executeTool(
     case 'get_goals':
       return getGoals(userId, args.domainId, args.status)
     case 'create_goal':
-      return createGoal(userId, args)
+      return createGoal(userId, args, tz)
     case 'update_goal':
       return updateGoal(userId, args.goalId, args.updates)
     case 'delete_goal':
@@ -246,7 +246,7 @@ async function convertGoalsToTasks(userId: string, goalIds: string[], scheduledA
   return { success: true, converted: results.filter((r) => r.ok).length, results }
 }
 
-async function createGoal(userId: string, args: Record<string, any>) {
+async function createGoal(userId: string, args: Record<string, any>, tz?: string) {
   const name = String(args.name || '').trim()
   if (!name) throw new Error('Goal name is required')
 
@@ -255,6 +255,12 @@ async function createGoal(userId: string, args: Record<string, any>) {
   const checkMethod = CHECK_METHODS.includes(args.checkMethod) ? args.checkMethod : 'milestone'
   const checkConfig = (args.checkConfig && typeof args.checkConfig === 'object') ? args.checkConfig : {}
   const horizon = normalizeHorizon(args.horizon)
+  // Every goal gets a DEADLINE: the end of the current period for its horizon
+  // (weekly → this Sunday, monthly → month end, …) so completion gets reckoned.
+  const localToday = (() => {
+    try { return userLocalDate(tz || 'Asia/Singapore') } catch { const n = new Date(); return { year: n.getUTCFullYear(), month: n.getUTCMonth() + 1, day: n.getUTCDate() } }
+  })()
+  const targetDate = defaultTargetDate(horizon, localToday)
 
   // Respect the E-10 active-goal cap ("Focus Mode"), but degrade gracefully:
   // if capped, create the goal as `paused` instead of failing, and tell the
@@ -268,15 +274,15 @@ async function createGoal(userId: string, args: Record<string, any>) {
   const rows = await prisma.$queryRawUnsafe<Array<{ id: string }>>(
     `INSERT INTO goals (
        id, "userId", "company_id", title, description, level, status,
-       "domainId", name, definition, "checkMethod", "checkConfig", "horizon", progress,
+       "domainId", name, definition, "checkMethod", "checkConfig", "horizon", "target_date", progress,
        "createdAt", "updatedAt", "created_at", "updated_at"
      ) VALUES (
        gen_random_uuid(), $1, $2::uuid, $3, $4, 'task', $8,
-       $5, $3, $4, $6, $7::jsonb, $9, 0,
+       $5, $3, $4, $6, $7::jsonb, $9, $10::date, 0,
        NOW(), NOW(), NOW(), NOW()
      ) RETURNING id`,
     userId, companyId, name, definition, domainId, checkMethod,
-    JSON.stringify(checkConfig), status, horizon,
+    JSON.stringify(checkConfig), status, horizon, targetDate,
   )
   const goalId = rows[0].id
 

@@ -7,7 +7,7 @@ import { prisma } from '@/lib/db/prisma'
 import { requireAuth } from '@/lib/auth/require-auth'
 import { z } from 'zod'
 import { captureServerEvent } from '@/lib/analytics-server'
-import { HORIZONS, DEFAULT_HORIZON } from '@/lib/horizons'
+import { HORIZONS, DEFAULT_HORIZON, defaultTargetDate } from '@/lib/horizons'
 
 const DOMAIN_IDS = ['career', 'wealth', 'health', 'relationships', 'learning', 'legacy'] as const
 const CHECK_METHODS = ['binary', 'numeric', 'time', 'streak', 'milestone'] as const
@@ -69,7 +69,20 @@ export async function POST(req: NextRequest) {
   // populated (mirrors src/lib/os-seeder.ts). horizon + target_date are added
   // by the 20260712114743_goal_horizons migration.
   const companyId = resolveCompanyId()
-  const targetDateVal = targetDate ? new Date(targetDate).toISOString().slice(0, 10) : null
+  // Every goal gets a deadline: explicit if given, else the end of the current
+  // period for its horizon (weekly → this Sunday, monthly → month end, …) so
+  // there is always a completion reckoning.
+  let targetDateVal = targetDate ? new Date(targetDate).toISOString().slice(0, 10) : null
+  if (!targetDateVal) {
+    try {
+      const { getUserTimezone, userLocalDate } = await import('@/lib/user-time')
+      const tz = await getUserTimezone(auth.userId)
+      targetDateVal = defaultTargetDate(horizon, userLocalDate(tz))
+    } catch {
+      const now = new Date()
+      targetDateVal = defaultTargetDate(horizon, { year: now.getUTCFullYear(), month: now.getUTCMonth() + 1, day: now.getUTCDate() })
+    }
+  }
 
   const rows = await prisma.$queryRawUnsafe<
     Array<{ id: string; domainId: string; name: string; definition: string; checkMethod: string; checkConfig: unknown; status: string; progress: number; horizon: string; target_date: Date | null; createdAt: Date; updatedAt: Date }>

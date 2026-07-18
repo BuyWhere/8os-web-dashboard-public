@@ -12,7 +12,8 @@ import { Sidebar } from '@/components/dashboard/Sidebar'
 import { ProgressRing } from '@/components/dashboard/ProgressRing'
 import { QuickAdd } from '@/components/dashboard/QuickAdd'
 import { GoalComposer } from '@/components/dashboard/GoalComposer'
-import { HORIZONS, HORIZON_LABELS, HORIZON_ORDER, isNearTerm, buildGoalReminder, normalizeHorizon, type Horizon } from '@/lib/horizons'
+import { GoalCheckIn } from '@/components/dashboard/GoalCheckIn'
+import { HORIZONS, HORIZON_LABELS, HORIZON_ORDER, isNearTerm, buildGoalReminder, normalizeHorizon, defaultTargetDate, type Horizon } from '@/lib/horizons'
 import Link from 'next/link'
 
 async function getUserId(): Promise<string> {
@@ -55,7 +56,33 @@ export default async function GoalsPage() {
     byHorizon.get(h)!.push(g)
   }
 
+  // Backfill: every goal gets a deadline (rows created before the deadline rule
+  // have none, so the end-of-period check-in could never fire). Best-effort.
+  const missingDeadline = goals.filter((g) => !(g as { targetDate?: Date | null }).targetDate)
+  if (missingDeadline.length > 0) {
+    try {
+      const { getUserTimezone, userLocalDate } = await import('@/lib/user-time')
+      const tz = await getUserTimezone(userId)
+      const local = userLocalDate(tz)
+      await Promise.all(missingDeadline.map(async (g) => {
+        const td = defaultTargetDate(normalizeHorizon((g as { horizon?: string }).horizon), local)
+        await prisma.goal.update({ where: { id: g.id }, data: { targetDate: new Date(td) } }).catch(() => {})
+        ;(g as { targetDate?: Date | null }).targetDate = new Date(td)
+      }))
+    } catch { /* page still renders without deadlines */ }
+  }
+
   const now = new Date()
+
+  // Goals whose deadline has passed and are still ACTIVE → completion reckoning.
+  const endedGoals = goals
+    .filter((g) => g.status === 'active' && (g as { targetDate?: Date | null }).targetDate && new Date((g as { targetDate?: Date | null }).targetDate as Date) < now)
+    .map((g) => ({
+      id: g.id,
+      name: g.name,
+      horizon: normalizeHorizon((g as { horizon?: string }).horizon),
+      targetDate: new Date((g as { targetDate?: Date | null }).targetDate as Date).toISOString().slice(0, 10),
+    }))
 
   return (
     <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
@@ -72,6 +99,9 @@ export default async function GoalsPage() {
           </div>
           <GoalComposer />
         </div>
+
+        {/* End-of-period reckoning: did the weekly/monthly/... goals actually happen? */}
+        <GoalCheckIn goals={endedGoals} />
 
         {goals.length === 0 ? (
           <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 16, padding: 40, textAlign: 'center' }}>

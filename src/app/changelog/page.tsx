@@ -41,6 +41,7 @@ const versions: Version[] = [
       { type: 'new', text: 'Drag a task from the Unscheduled sidebar straight onto the calendar to schedule it at that time; click the all-day row to add an all-day event' },
       { type: 'new', text: 'Keyboard on the tasks page: j and k move the selection, x completes, d opens the defer menu' },
       { type: 'fix', text: 'Tasks scheduled for a day without a stated time no longer pile up as identical 9am calendar blocks; they live on that day\'s task list until you place, drag or Replan them (Replan now also available on the Today group)' },
+      { type: 'new', text: 'Every goal now has a deadline (weekly goals end this Sunday, monthly at month end, and so on). When the period ends, the Goals page asks the honest question: Completed, extend, or didn\'t happen' },
       { type: 'improvement', text: 'The morning brief includes your planned load for the day, with a gentle nudge when it looks too heavy' },
       { type: 'improvement', text: 'Tasks page: search, sort by time/priority/duration, notes on every task, undo after complete or delete, daily plan total with an overload warning' },
       { type: 'improvement', text: 'Google Calendar two-way sync: events created in 8os appear in Google, and Google events are editable inside 8os' },
