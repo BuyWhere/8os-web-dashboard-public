@@ -125,6 +125,7 @@ export async function POST(request: NextRequest) {
           }).join('\n')) +
       `\n\nOpen tasks: ${openTaskCount} (call get_tasks for details). When you update, schedule, or delete something, use these EXACT ids.\n` +
       `BATCH OPS: to remove or convert MANY goals at once, call delete_goals(goalIds:[...]) or convert_goals_to_tasks(goalIds:[...]) ONE time with all the ids — never loop the single-item tools dozens of times (that fails). After a batch tool returns, tell the user how many succeeded.\n` +
+      `SCHEDULING TIMES: never invent a clock time. If the user gave a day but no time, use DATE-ONLY scheduledAt (YYYY-MM-DD) so the task sits on that day's list without cluttering the calendar; suggest the Replan button or auto-scheduling if they want real slots. Only use a full datetime when the user stated one.\n` +
       `DELETION SAFETY: "today's goals" / "the ones you just created" means ONLY goals marked [CREATED TODAY]. NEVER delete a goal created on an earlier date or one that has projects unless the user names it explicitly — those are long-standing goals (the six foundational domain goals like Build/Fix/Improve/Operate/Think/Personal are permanent; never delete them as "today's"). When unsure which goals the user means, LIST the candidates and ask before deleting. NEVER paste raw JSON or tool output into your reply — summarise in plain language.`
 
     // Two-tier brain: SHARED knowledge (platform + topical BaZi doctrine) + the

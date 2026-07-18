@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Inter } from 'next/font/google'
@@ -80,7 +80,21 @@ function Mark({ size = 24 }: { size?: number }) {
 }
 
 export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
-  const [collapsed, setCollapsed] = useState(initialCollapsed)
+  // Collapse state was per-page (useState only; half the pages never passed
+  // initialCollapsed), so EVERY navigation remounted the sidebar at a different
+  // width and the whole nav (logo included) jumped on each click. localStorage
+  // is now the single source of truth, synced on mount and on toggle.
+  const [collapsed, setCollapsedState] = useState(initialCollapsed)
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('8os-sidebar-collapsed')
+      if (stored !== null) setCollapsedState(stored === '1')
+    } catch { /* keep initial */ }
+  }, [])
+  const setCollapsed = (v: boolean) => {
+    setCollapsedState(v)
+    try { localStorage.setItem('8os-sidebar-collapsed', v ? '1' : '0') } catch { /* ignore */ }
+  }
   const pathname = usePathname()
   // Mobile drawer state — controlled by the Header hamburger via a shared store.
   const drawerOpen = useSidebarDrawer()
@@ -185,7 +199,9 @@ export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
                     background: active ? ACTIVE_BG : 'transparent',
                     borderRadius: 10,
                     fontSize: 14,
-                    fontWeight: active ? 600 : 500,
+                    // Constant weight: toggling 500/600 on click changed the text
+                    // width and made labels wiggle. Active = background + colour.
+                    fontWeight: 500,
                     transition: 'background 0.12s, color 0.12s',
                     whiteSpace: 'nowrap',
                   }}

@@ -509,11 +509,13 @@ function TaskGroup(props: {
         <h3 style={{ margin: 0, fontSize: 13, fontWeight: 600, color: overdue ? '#ef4444' : 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>
           {title} ({taskList.length})
         </h3>
+        {(overdue || title === 'Today') && taskList.length > 0 && (
+          <button onClick={() => replanOverdue(taskList)} disabled={replanning} title="Auto-place these tasks into the next best free slots" style={{ ...bulkBtn, color: 'var(--color-accent)', borderColor: 'var(--color-accent)' }}>
+            {replanning ? 'Replanning…' : '⚡ Replan'}
+          </button>
+        )}
         {overdue && taskList.length > 0 && (
           <>
-            <button onClick={() => replanOverdue(taskList)} disabled={replanning} title="Auto-place every overdue task into the next best free slots" style={{ ...bulkBtn, color: 'var(--color-accent)', borderColor: 'var(--color-accent)' }}>
-              {replanning ? 'Replanning…' : '⚡ Replan'}
-            </button>
             <button onClick={() => bulkDefer(taskList, 'today')} disabled={replanning} style={bulkBtn}>All → Today</button>
             <button onClick={() => bulkDefer(taskList, 'tomorrow')} disabled={replanning} style={bulkBtn}>All → Tomorrow</button>
           </>

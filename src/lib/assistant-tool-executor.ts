@@ -236,7 +236,9 @@ async function convertGoalsToTasks(userId: string, goalIds: string[], scheduledA
     try {
       const goal = await prisma.goal.findFirst({ where: { id, userId } })
       if (!goal) { results.push({ id, ok: false, reason: 'not found' }); continue }
-      const created = await createTask(userId, { name: goal.name, domainId: goal.domainId, ...(scheduledAt ? { scheduledAt } : {}) }, tz)
+      // Bulk conversions NEVER fabricate calendar blocks — tasks land on the
+      // day's list; the user places or replans them into real slots.
+      const created = await createTask(userId, { name: goal.name, domainId: goal.domainId, _noEvent: true, ...(scheduledAt ? { scheduledAt } : {}) }, tz)
       await prisma.goal.update({ where: { id }, data: { status: 'archived' } })
       results.push({ id, ok: true, name: goal.name, taskId: created?.task?.id })
     } catch (e) { results.push({ id, ok: false, reason: e instanceof Error ? e.message : 'error' }) }
@@ -424,8 +426,13 @@ async function createTask(userId: string, args: Record<string, any>, tz?: string
   if (!domainId) domainId = inferDomain(String(args.name || ''))
 
   const duration = parseDurationMinutes(args.duration)
-  const scheduledAt = resolveScheduleTime(args.scheduledAt || args.suggestedSchedule, tz)
+  const resolved = resolveScheduleTimeEx(args.scheduledAt || args.suggestedSchedule, tz)
+  const scheduledAt = resolved.date
   const scheduledEnd = scheduledAt ? new Date(scheduledAt.getTime() + duration * 60000) : null
+  // A calendar event only exists when a REAL clock time was given (and never for
+  // bulk conversions). Day-only tasks live in the day's task list until the user
+  // places, drags, or replans them into an actual slot.
+  const wantEvent = resolved.explicitTime && args._noEvent !== true
 
   const task = await prisma.oSTask.create({
     data: {
@@ -446,9 +453,9 @@ async function createTask(userId: string, args: Record<string, any>, tz?: string
     data: { userId, taskId: task.id, goalId: goalId ?? undefined, action: 'task_created', metadata: { name: task.name, via: 'assistant' } },
   }).catch(() => {})
 
-  // If we scheduled it, also drop a calendar event so it appears on /calendar.
+  // Calendar event ONLY for explicit clock times (see wantEvent above).
   let calendarEvent = null
-  if (scheduledAt && scheduledEnd) {
+  if (wantEvent && scheduledAt && scheduledEnd) {
     calendarEvent = await prisma.calendarEvent.create({
       data: {
         userId, taskId: task.id, title: task.name, description: '',
@@ -582,6 +589,28 @@ function defaultSlot(): Date {
  *  - "morning" | "afternoon" | "evening" | "anytime"/"tomorrow" → tomorrow slot
  *  - undefined/null → null (unscheduled)
  */
+/**
+ * Like resolveScheduleTime but also reports whether the input carried a REAL
+ * clock time. Date-only ("2026-07-18") and bare day words ("today", "tomorrow")
+ * anchor the task to that day at 9:00 for list ordering, but explicitTime=false
+ * means NO calendar event should be fabricated — dumping every dated task into a
+ * 9am block made the calendar unreadable. Slot words (morning/afternoon/evening)
+ * and full datetimes count as explicit.
+ */
+function resolveScheduleTimeEx(input?: string, tz?: string): { date: Date | null; explicitTime: boolean } {
+  if (!input) return { date: null, explicitTime: false }
+  const s = String(input).trim()
+  const dateOnly = s.match(/^(\d{4})-(\d{2})-(\d{2})$/)
+  if (dateOnly) {
+    const [y, m, d] = [Number(dateOnly[1]), Number(dateOnly[2]), Number(dateOnly[3])]
+    const date = tz ? zonedNaiveToUtc(tz, y, m, d, 9, 0, 0) : new Date(Date.UTC(y, m - 1, d, 9, 0, 0))
+    return { date, explicitTime: false }
+  }
+  const lower = s.toLowerCase()
+  const bareDay = /^(today|tomorrow|anytime)$/.test(lower)
+  return { date: resolveScheduleTime(s, tz), explicitTime: !bareDay }
+}
+
 function resolveScheduleTime(input?: string, tz?: string): Date | null {
   if (!input) return null
   const s = String(input).trim()
