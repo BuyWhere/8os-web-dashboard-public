@@ -1,4 +1,4 @@
-import { SignUp } from "@clerk/nextjs"
+import { SignupClerkErrorBridge } from "@/components/auth/SignupClerkErrorBridge"
 
 // Clerk components read request context; render at request time (never prerender).
 export const dynamic = "force-dynamic"
@@ -56,10 +56,12 @@ export default function SignupPage() {
         </section>
 
         {/* Right, the Clerk form — alignSelf centers it within its row so the
-            card floats between the hero copy top and the benefits list bottom. */}
-        <section className="signup-auth" style={{ display: "flex", justifyContent: "center", alignSelf: "start" }}>
-          <SignUp
-            routing="hash"
+            card floats between the hero copy top and the benefits list bottom.
+            OS-4316: wrapped in SignupClerkErrorBridge to catch Clerk 4xx/5xx
+            errors (email already exists, rate limit, server errors) and show
+            a clear inline message instead of a silent broken form. */}
+        <section className="signup-auth" style={{ display: "flex", flexDirection: "column", alignItems: "center", alignSelf: "start" }}>
+          <SignupClerkErrorBridge
             signInUrl="/login"
             forceRedirectUrl="/onboarding"
             appearance={{
@@ -91,6 +93,15 @@ export default function SignupPage() {
               },
             }}
           />
+          {/* OS-4316: Terms + Privacy links below the Clerk card for transparency.
+              Clerk may render its own terms acceptance inside the widget depending
+              on Dashboard settings; these links are always visible regardless. */}
+          <p style={{ marginTop: 12, fontSize: "0.78rem", color: "#767676", textAlign: "center", lineHeight: 1.4 }}>
+            By creating an account you agree to our{" "}
+            <a href="/terms" style={{ color: LINK_DARK, textDecoration: "underline" }}>Terms of Service</a>
+            {" "}and{" "}
+            <a href="/privacy" style={{ color: LINK_DARK, textDecoration: "underline" }}>Privacy Policy</a>.
+          </p>
         </section>
       </div>
       {/* Mobile: single column, hide the pitch to keep the form above the fold. */}
