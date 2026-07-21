@@ -113,6 +113,14 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
   if (pathname === '/famous') {
     return applyCSP(NextResponse.redirect(new URL('/archetypes/famous', req.url), 307))
   }
+  // OS-4314: /coming-soon was a prelaunch reserve page; the App Router route
+  // only called redirect() which does NOT handle RSC prefetch (?_rsc=...) requests —
+  // those return 404 because the static route wins over next.config redirects.
+  // Fix: delete the route file and handle the redirect at the edge so RSC probes
+  // also get a clean 307 → /signup before any route resolution.
+  if (pathname === '/coming-soon') {
+    return applyCSP(NextResponse.redirect(new URL('/signup', req.url), 307))
+  }
 
   try {
     const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || ''
