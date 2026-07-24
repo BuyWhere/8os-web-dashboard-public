@@ -43,7 +43,7 @@ const INK = 'var(--color-text-primary)'
 const GRAY = 'var(--color-text-secondary)'
 const CREAM = 'var(--color-bg-primary)'
 const SURFACE = 'var(--color-bg-card)'
-const GOLD = '#8A6728' // OS-2712: darkened for WCAG AA (4.69:1 gold-on-cream, 5.18:1 white-on-gold)
+const GOLD = '#6E531F' // OS-3973: darkened from #8A6728 to clear WCAG AA on small eyebrow text (6.55:1 gold-on-cream)
 const HAIRLINE = 'var(--color-border)'
 const OXBLOOD = 'var(--color-accent-2)'
 const MAXW = 1120
@@ -117,7 +117,7 @@ const HOW_STEPS = [
   {
     n: '04',
     title: 'Let the OS operate daily',
-    body: 'Each day 8os reads your timing and tells you where to spend attention, and, honestly, when to push and when to hold.',
+    body: 'Every morning your coach messages you first: your Big 3, your timing, and what you committed to. Through the day it keeps your plan honest, and, honestly, tells you when to push and when to hold.',
   },
 ]
 
@@ -131,20 +131,20 @@ const FEATURES = [
     body: 'Luck pillars flow from decade to year to month to day. 8os tracks all four layers so guidance reflects the season you are actually in.',
   },
   {
+    title: 'A coach that acts',
+    body: 'It remembers you across every session, knows your goals and chart, and actually creates the tasks, events and plans you talk about. Each morning it reaches out first with your brief.',
+  },
+  {
+    title: 'Talk, and it organises you',
+    body: 'Journal by voice or text. What you say becomes tasks, calendar events and people to follow up with, confirmed by you in one tap, and remembered from then on.',
+  },
+  {
+    title: 'A calendar that keeps up',
+    body: 'Two-way Google sync, tasks you check off right on the grid, repeats that actually repeat, and one tap to replan everything you missed into free slots.',
+  },
+  {
     title: 'The Alignment Engine',
     body: 'A running check on whether your attention is on the right goal for this season, and a nudge when it drifts.',
-  },
-  {
-    title: 'An assistant that acts',
-    body: 'Not a chatbot that talks. It creates goals, breaks them into tasks, and lays them onto your schedule for you.',
-  },
-  {
-    title: 'Daily & weekly rituals',
-    body: 'Short, repeatable check-ins that keep the plan alive between big decisions, tuned to how you operate.',
-  },
-  {
-    title: 'Memory that learns you',
-    body: 'The OS remembers what worked, what you avoided, and what moved the needle, so guidance gets sharper over time.',
   },
 ]
 
@@ -629,7 +629,7 @@ function SectionHead({
           fontWeight: 600,
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          color: '#8A6728', // OS-2712: WCAG AA
+          color: GOLD,
           marginBottom: '0.9rem',
         }}
       >

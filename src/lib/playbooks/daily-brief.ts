@@ -15,6 +15,7 @@
  * nothing is synthesised. If Flow AI is down, a deterministic template ships.
  */
 import { assembleAgentContext } from '@/lib/agent-context'
+import { prisma } from '@/lib/db/prisma'
 import { deliverProactive } from '@/lib/channels/governor'
 import type { ChannelAction, ChannelMessage } from '@/lib/channels/types'
 import {
@@ -40,6 +41,22 @@ export async function runDailyBrief(
     const big3 = await computeBig3(userId)
     const redirection = await openRedirection(userId)
     const commitments = await dueCommitments(userId, opts.at ?? new Date())
+
+    // Sunsama-style realism line: how much is actually planned for today (open
+    // tasks scheduled within the user's local day). Best-effort; never throws.
+    let planLine = ''
+    try {
+      const { userDayBounds } = await import('@/lib/user-time')
+      const bounds = userDayBounds(context.timezone, opts.at ?? new Date())
+      const todays = await prisma.oSTask.findMany({
+        where: { userId, status: { in: ['todo', 'in_progress'] }, scheduledAt: { gte: bounds.start, lt: bounds.end } },
+        select: { duration: true },
+      })
+      if (todays.length > 0) {
+        const h = Math.round((todays.reduce((s, t) => s + (t.duration || 0), 0) / 60) * 10) / 10
+        planLine = `Planned today: ${todays.length} task${todays.length === 1 ? '' : 's'}, about ${h}h${h > 8 ? ' (that is a heavy day, consider trimming)' : ''}.`
+      }
+    } catch { /* omit the line */ }
 
     // ── Deterministic receipts (the honest fallback + the LLM's source data) ──
     const pillarLine = big3.dayPillar
@@ -77,6 +94,7 @@ export async function runDailyBrief(
       '',
       'Your Big 3 today:',
       big3Lines,
+      ...(planLine ? ['', planLine] : []),
       '',
       alignmentNote,
       ...(commitmentLine ? [commitmentLine] : []),
@@ -88,6 +106,7 @@ export async function runDailyBrief(
       `1) One line for today's pillar (honest, soft confidence): ${pillarLine}`,
       `2) Their Big 3 for today (list exactly these, unchanged):\n${big3Lines}`,
       `3) Exactly ONE alignment note using a real receipt: ${alignmentNote}`,
+      ...(planLine ? [`3b) Include this planned-load line verbatim (realism check): ${planLine}`] : []),
       commitments.length
         ? `4) Then, plainly and WITHOUT guilt, remind them of what they committed to (state the fact, offer no judgment): ${commitments.map((c) => `"${c.content}"${c.dueDate ? ` (due ${c.dueDate})` : ''}`).join('; ')}. Say the buttons below let them mark it done, pick a new date, or drop it.`
         : '',

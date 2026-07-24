@@ -70,10 +70,12 @@ export function Header() {
           left: 0,
           right: 0,
           height: 'var(--header-height)',
-          background: 'rgba(13, 13, 15, 0.92)',
+          // Theme token, not a hardcoded near-black: the dark bar over the warm
+          // cream app looked broken in light mode and fought the design system.
+          background: 'var(--color-bg-card)',
           backdropFilter: 'blur(12px)',
           WebkitBackdropFilter: 'blur(12px)',
-          borderBottom: `1px solid ${HAIRLINE}`,
+          borderBottom: '1px solid var(--color-border)',
           zIndex: 100,
           display: 'flex',
           alignItems: 'center',
@@ -99,7 +101,7 @@ export function Header() {
             style={{
               display: 'none',
               background: 'transparent',
-              border: `1px solid ${HAIRLINE}`,
+              border: '1px solid var(--color-border)',
               borderRadius: '9px',
               width: '40px',
               height: '40px',
@@ -109,7 +111,7 @@ export function Header() {
               flexShrink: 0,
             }}
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={INK} strokeWidth="2" strokeLinecap="round">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--color-text-primary)" strokeWidth="2" strokeLinecap="round">
               <line x1="3" y1="7" x2="21" y2="7" />
               <line x1="3" y1="12" x2="21" y2="12" />
               <line x1="3" y1="17" x2="21" y2="17" />
@@ -132,7 +134,7 @@ export function Header() {
             <SignedOut>
               <Link
                 href="/login"
-                style={{ fontSize: '0.9rem', fontWeight: 600, color: INK, textDecoration: 'none' }}
+                style={{ fontSize: '0.9rem', fontWeight: 600, color: 'var(--color-text-primary)', textDecoration: 'none' }}
               >
                 Sign in
               </Link>
@@ -218,49 +220,54 @@ export function Header() {
           ))}
         </nav>
 
-        {/* CTA — shown on archetype SEO pages so organic visitors have an immediate
-            conversion path. Persists across all viewport sizes. */}
-        {pathname.startsWith('/archetypes/') && (
-          <Link
-            href="/onboarding"
-            style={{
-              display: 'inline-flex',
-              alignItems: 'center',
-              background: 'var(--color-accent)',
-              color: '#fff',
-              padding: '8px 18px',
-              borderRadius: 8,
-              textDecoration: 'none',
-              fontWeight: 700,
-              fontSize: '0.875rem',
-              whiteSpace: 'nowrap',
-              flexShrink: 0,
-            }}
-          >
-            Get Started →
-          </Link>
-        )}
-
         {/* Auth actions. Single primary CTA removed per OS-2515 — "Get started" in
-            hero is the sole primary CTA. On archetype pages the CTA above is the
-            conversion path; this remains only for Log in on other pages. */}
+            hero is the sole primary CTA. On archetype pages the CTA below is the
+            conversion path; this clusters both buttons on the right. Hide the
+            Log in link on /login to avoid a redundant dead self-link (OS-3976). */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          <ClerkLoading>
+          {/* CTA — shown on archetype SEO pages so organic visitors have an immediate
+              conversion path. Rendered INSIDE the auth-actions container so it clusters
+              with Log in on the right edge. */}
+          {pathname.startsWith('/archetypes/') && (
             <Link
-              href="/login"
-              style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none', whiteSpace: 'nowrap' }}
+              href="/onboarding"
+              style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                background: 'var(--color-accent)',
+                color: '#fff',
+                padding: '8px 18px',
+                borderRadius: 8,
+                textDecoration: 'none',
+                fontWeight: 700,
+                fontSize: '0.875rem',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
+              }}
             >
-              Log in
+              Get Started →
             </Link>
+          )}
+          <ClerkLoading>
+            {pathname !== '/login' && (
+              <Link
+                href="/login"
+                style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none', whiteSpace: 'nowrap' }}
+              >
+                Log in
+              </Link>
+            )}
           </ClerkLoading>
           <ClerkLoaded>
           <SignedOut>
-            <Link
-              href="/login"
-              style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none', whiteSpace: 'nowrap' }}
-            >
-              Log in
-            </Link>
+            {pathname !== '/login' && (
+              <Link
+                href="/login"
+                style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none', whiteSpace: 'nowrap' }}
+              >
+                Log in
+              </Link>
+            )}
           </SignedOut>
           <SignedIn>
             {/* A signed-in user browsing a marketing page still gets their

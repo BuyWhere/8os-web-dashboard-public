@@ -43,7 +43,6 @@ export function CheckoutButton({ tier, label, style }: CheckoutButtonProps) {
           ...style,
           opacity: loading ? 0.7 : 1,
           cursor: loading ? 'wait' : 'pointer',
-          border: 'none',
           width: '100%',
         }}
       >

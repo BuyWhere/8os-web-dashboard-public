@@ -169,8 +169,12 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
         if (res.ok && !cancelled) {
           const data = await res.json()
           const latest = (data.conversations || [])[0]
-          const ts = latest?.updatedAt ? new Date(latest.updatedAt).getTime() : 0
-          if (latest?.id && Date.now() - ts < 24 * 60 * 60 * 1000) {
+          // Day-scoped threads: resume only a conversation from TODAY (the user's
+          // local day). Yesterday's thread stays in History; a new day opens fresh
+          // automatically — users never need to manage chat context themselves.
+          const sameLocalDay = latest?.updatedAt &&
+            new Date(latest.updatedAt).toDateString() === new Date().toDateString()
+          if (latest?.id && sameLocalDay) {
             const r2 = await fetch(`/api/assistant/conversations/${latest.id}`)
             if (r2.ok && !cancelled) {
               const d2 = await r2.json()
@@ -394,9 +398,11 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
           <button onClick={() => { loadConversations(); setShowHistory(true) }} style={iconBtn} title="History" aria-label="Conversation history"
             onMouseEnter={(e) => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = INK }}
             onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = GRAY }}><HistoryIcon size={16} /></button>
-          <button onClick={newConversation} style={iconBtn} title="New conversation" aria-label="New conversation"
+          {/* Labeled — an unlabeled plus icon was not discoverable as "start a new chat". */}
+          <button onClick={newConversation} title="Start a new conversation" aria-label="New chat"
+            style={{ ...iconBtn, width: 'auto', padding: '0 10px', display: 'flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600, border: `1px solid ${HAIRLINE}`, borderRadius: 8 }}
             onMouseEnter={(e) => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = INK }}
-            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = GRAY }}><PlusIcon size={16} /></button>
+            onMouseLeave={(e) => { e.currentTarget.style.background = 'transparent'; e.currentTarget.style.color = GRAY }}><PlusIcon size={14} /> New chat</button>
           {onToggleSize && (
             <button onClick={onToggleSize} style={iconBtn} title={isLarge ? 'Shrink' : 'Expand'} aria-label={isLarge ? 'Shrink coach' : 'Expand coach'}
               onMouseEnter={(e) => { e.currentTarget.style.background = CREAM; e.currentTarget.style.color = INK }}

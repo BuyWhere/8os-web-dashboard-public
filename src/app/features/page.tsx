@@ -15,23 +15,33 @@ const features = [
   },
   {
     icon: '🤖',
-    title: 'AI-Powered Daily Briefings',
-    desc: 'Every morning you receive an intelligence briefing aligned to your energy patterns, goals, and schedule.',
+    title: 'A Coach That Acts',
+    desc: 'Not a chatbot. Your Coach remembers you across sessions, knows your goals and chart, and actually creates the tasks, events and plans you talk about.',
+  },
+  {
+    icon: '🌅',
+    title: 'Proactive Morning Brief',
+    desc: 'Your Coach reaches out first: a morning brief with your Big 3, timing for the day, and what you committed to, delivered in the same conversation.',
   },
   {
     icon: '🎯',
     title: 'Goal & Project Management',
-    desc: 'Set goals across life domains, Career, Wealth, Health, Relationships, Learning, Legacy, and track progress over time.',
+    desc: 'Goals across Career, Wealth, Health, Relationships, Learning and Legacy, organised by time horizon from this week to five years out.',
   },
   {
     icon: '📅',
     title: 'Smart Scheduling',
-    desc: 'Built-in Cal.diy integration automatically schedules work in alignment with your peak energy windows.',
+    desc: 'One tap places any task into your best free slot around your meetings and energy windows. Fell behind? Replan every overdue task at once.',
   },
   {
-    icon: '💬',
-    title: 'Telegram-Native',
-    desc: 'Run your entire Life OS from Telegram. No app download required. Works anywhere.',
+    icon: '🎙️',
+    title: 'Voice Journal That Organises You',
+    desc: 'Talk freely. 8os remembers what matters and turns what you said into tasks, calendar events and people to reach out to, confirmed by you in one pass.',
+  },
+  {
+    icon: '🔁',
+    title: 'A Calendar That Works Both Ways',
+    desc: 'Two-way Google Calendar sync, tasks you can check off right on the grid, repeats, and a view trimmed to your waking hours.',
   },
   {
     icon: '🔒',

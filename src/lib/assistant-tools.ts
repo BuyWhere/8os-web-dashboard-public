@@ -353,7 +353,7 @@ export const ASSISTANT_TOOLS: Tool[] = [
           projectId: { type: 'string', description: 'Optional parent project ID' },
           duration: { type: 'string', description: 'Estimated duration, e.g., "30 min", "1h". Defaults to 60 min.' },
           priority: { type: 'string', enum: ['high', 'medium', 'low'], description: 'Task priority. Defaults to medium.' },
-          scheduledAt: { type: 'string', description: 'ISO datetime to schedule the task (also creates a calendar event).' },
+          scheduledAt: { type: 'string', description: 'When to do the task. Pass DATE-ONLY (YYYY-MM-DD) when the user gave no clock time — the task lands on that day\'s list WITHOUT blocking the calendar. Pass a full ISO datetime ONLY when the user stated a real time (that also creates a calendar event). NEVER invent 9am or any default time.' },
           suggestedSchedule: { type: 'string', description: 'Natural slot: "morning", "afternoon", "evening" (schedules for tomorrow).' },
         },
         required: ['name'],

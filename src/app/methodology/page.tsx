@@ -40,35 +40,35 @@ export default function MethodologyPage() {
             proprietary synthesis layer that maps your Western expression onto your BaZi structure.
           </p>
           <div style={flowchartStyle}>
-            <div style={flowNodeStyle('var(--color-accent)')}>User Input: Birth Date + Location</div>
+            <div style={flowNodeStyle('var(--color-accent)', '#fff')}>User Input: Birth Date + Location</div>
             <div style={flowRowStyle}>
               <div style={flowBranchStyle}>
                 <div style={flowArrowStyle} />
-                <div style={flowNodeStyle('#818cf8')}>Sun Sign Calculation</div>
+                <div style={flowNodeStyle('#818cf8', '#0f172a')}>Sun Sign Calculation</div>
                 <div style={flowSubStyle}>No birth time needed</div>
               </div>
               <div style={flowBranchStyle}>
                 <div style={flowArrowStyle} />
-                <div style={flowNodeStyle('#818cf8')}>BaZi Calculation</div>
+                <div style={flowNodeStyle('#818cf8', '#0f172a')}>BaZi Calculation</div>
                 <div style={flowSubStyle}>Real Solar Time</div>
               </div>
             </div>
             <div style={flowRowStyle}>
               <div style={flowBranchStyle}>
                 <div style={flowArrowStyle} />
-                <div style={flowNodeStyle('var(--color-border)')}>Archetype Expression</div>
+                <div style={flowNodeStyle('var(--color-border)', '#0f172a')}>Archetype Expression</div>
               </div>
               <div style={flowBranchStyle}>
                 <div style={flowArrowStyle} />
-                <div style={flowNodeStyle('var(--color-border)')}>Structural Capacity</div>
+                <div style={flowNodeStyle('var(--color-border)', '#0f172a')}>Structural Capacity</div>
               </div>
             </div>
             <div style={flowArrowStyle} />
-            <div style={flowNodeStyle('var(--color-accent)')}>Archetype Synthesis Layer</div>
+            <div style={flowNodeStyle('var(--color-accent)', '#fff')}>Archetype Synthesis Layer</div>
             <div style={flowArrowStyle} />
-            <div style={flowNodeStyle('#5b21b6')}>Unified Profile + Goal Architecture</div>
+            <div style={flowNodeStyle('#5b21b6', '#f8fafc')}>Unified Profile + Goal Architecture</div>
             <div style={flowArrowStyle} />
-            <div style={flowNodeStyle('#4c1d95')}>Live OS Dashboard + AI Journaling</div>
+            <div style={flowNodeStyle('#4c1d95', '#f8fafc')}>Live OS Dashboard + AI Journaling</div>
           </div>
         </section>
 
@@ -201,7 +201,7 @@ export default function MethodologyPage() {
 const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '1000px', margin: '0 auto', padding: '5rem 2rem' };
 const headerStyle: React.CSSProperties = { marginBottom: '4rem' };
-const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)' };
+const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-text-secondary)' };
 const pageTitleStyle: React.CSSProperties = { margin: 0, fontSize: 'clamp(2rem, 4vw, 3rem)', lineHeight: 1.15, letterSpacing: '-0.03em' };
 const sectionStyle: React.CSSProperties = { marginBottom: '1rem' };
 const h2Style: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', letterSpacing: '-0.03em' };
@@ -210,7 +210,7 @@ const bodyStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: '1rem', l
 const dividerStyle: React.CSSProperties = { height: '1px', background: 'var(--color-border)', margin: '3rem 0' };
 
 const flowchartStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', padding: '2rem', background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: '16px' };
-const flowNodeStyle = (bg: string): React.CSSProperties => ({ padding: '0.75rem 1.5rem', borderRadius: '10px', background: bg, color: 'var(--color-text-primary)', fontWeight: 600, fontSize: '0.9rem', textAlign: 'center', maxWidth: '340px', width: '100%' });
+const flowNodeStyle = (bg: string, textColor?: string): React.CSSProperties => ({ padding: '0.75rem 1.5rem', borderRadius: '10px', background: bg, color: textColor || 'var(--color-text-primary)', fontWeight: 600, fontSize: '0.9rem', textAlign: 'center', maxWidth: '340px', width: '100%' });
 const flowRowStyle: React.CSSProperties = { display: 'flex', gap: '2rem', justifyContent: 'center', width: '100%' };
 const flowBranchStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' };
 const flowArrowStyle: React.CSSProperties = { width: '2px', height: '24px', background: 'var(--color-text-secondary)' };
@@ -224,7 +224,7 @@ const barrierNumStyle: React.CSSProperties = { display: 'block', fontSize: '0.75
 const barrierTitleStyle: React.CSSProperties = { margin: '0 0 0.4rem', fontSize: '0.95rem', fontWeight: 700 };
 const barrierBodyStyle: React.CSSProperties = { margin: 0, fontSize: '0.85rem', lineHeight: 1.6, color: 'var(--color-text-secondary)' };
 const upgradePathStyle: React.CSSProperties = { marginTop: '1.5rem', padding: '1.25rem', borderRadius: '12px', background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.2)' };
-const upgradePathLabelStyle: React.CSSProperties = { margin: '0 0 0.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--color-accent)' };
+const upgradePathLabelStyle: React.CSSProperties = { margin: '0 0 0.5rem', fontSize: '0.8rem', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--color-text-secondary)' };
 const upgradePathBodyStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-text-secondary)' };
 
 const matrixWrapStyle: React.CSSProperties = { overflowX: 'auto', borderRadius: '12px', border: '1px solid var(--color-border)' };

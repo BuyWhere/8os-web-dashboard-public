@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+export const revalidate = 60;
 import Link from 'next/link';
 import { CheckoutButton } from '@/components/CheckoutButton';
 
@@ -182,16 +183,19 @@ export default function PricingPage() {
 
               <div style={tierFooterStyle}>
                 <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
+              </div>
+
+              <div style={tierCtaWrapStyle}>
                 {tier.id === 'agent-connect' || tier.id === 'pro' ? (
                   <CheckoutButton
                     tier={tier.id as 'agent-connect' | 'pro'}
                     label={tier.cta}
-                    style={{ ...tierCtaStyle, ...(tier.highlighted ? tierCtaHighlightedStyle : {}) }}
+                    style={{ ...tierCtaStyle, ...tierCtaVisibleStyle, ...(tier.highlighted ? tierCtaHighlightedStyle : {}) }}
                   />
                 ) : (
                   <Link
                     href={tier.ctaHref}
-                    style={{ ...tierCtaStyle, ...(tier.highlighted ? tierCtaHighlightedStyle : {}) }}
+                    style={{ ...tierCtaStyle, ...tierCtaVisibleStyle, ...(tier.highlighted ? tierCtaHighlightedStyle : {}) }}
                   >
                     {tier.cta}
                   </Link>
@@ -282,24 +286,24 @@ const tiersGridResponsiveStyle = `
 const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh' };
 const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '5rem 2rem', minWidth: 0 };
 const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '4rem' };
-const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-accent)' };
+const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-text-primary)' };
 const pageTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: 'clamp(1.4rem, 6vw, 2.25rem)', lineHeight: 1.15, letterSpacing: '-0.035em', fontWeight: 800 };
 const pageDescStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', color: 'var(--color-text-secondary)', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.65 };
 
-const tiersGridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem', alignItems: 'start' };
+const tiersGridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' };
 
 const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '2rem', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'flex', flexDirection: 'column', gap: '1.25rem' };
-const tierHighlightedStyle: React.CSSProperties = { border: '1px solid var(--color-accent-soft)', background: 'var(--color-accent-soft)', boxShadow: '0 0 0 1px var(--color-accent-soft)' };
+const tierHighlightedStyle: React.CSSProperties = { border: '2px solid #C87055', background: 'var(--color-accent-soft)', boxShadow: '0 0 0 1px var(--color-accent-soft)' };
 
-const popularBadgeStyle: React.CSSProperties = { position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', padding: '0.3rem 0.85rem', borderRadius: '999px', background: 'linear-gradient(135deg, var(--color-accent), var(--color-accent))', color: '#fff', fontSize: '0.75rem', fontWeight: 700, whiteSpace: 'nowrap' };
+const popularBadgeStyle: React.CSSProperties = { position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', padding: '0.3rem 0.85rem', borderRadius: '999px', background: 'var(--color-accent-2)', color: '#fff', fontSize: '0.75rem', fontWeight: 700, whiteSpace: 'nowrap' };
 
 const tierHeaderStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: '0.75rem' };
 const tierNameStyle: React.CSSProperties = { margin: '0 0 0.2rem', fontSize: '1.15rem', fontWeight: 800 };
-const tierTaglineStyle: React.CSSProperties = { margin: 0, fontSize: '0.8rem', color: 'var(--color-accent)', fontWeight: 600 };
+const tierTaglineStyle: React.CSSProperties = { margin: 0, fontSize: '0.8rem', color: 'var(--skin-badge-color)', fontWeight: 700 };
 const tierPriceBlockStyle: React.CSSProperties = { textAlign: 'left' };
 const tierPriceStyle: React.CSSProperties = { display: 'block', fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1 };
-const tierPeriodStyle: React.CSSProperties = { display: 'block', fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginTop: '0.15rem' };
-const tierDescStyle: React.CSSProperties = { margin: 0, fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-text-secondary)' };
+const tierPeriodStyle: React.CSSProperties = { display: 'block', fontSize: '0.75rem', color: 'var(--color-text-primary)', marginTop: '0.15rem' };
+const tierDescStyle: React.CSSProperties = { margin: 0, minHeight: '4.5rem', fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-text-secondary)' };
 const tierNoteStyle: React.CSSProperties = { padding: '0.85rem 1rem', borderRadius: '10px', background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.15)' };
 const tierNoteTextStyle: React.CSSProperties = { margin: 0, fontSize: '0.82rem', lineHeight: 1.6, color: 'var(--color-text-secondary)', fontStyle: 'italic' };
 
@@ -310,8 +314,10 @@ const featureCheckStyle = (included: boolean): React.CSSProperties => ({ flexShr
 const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', paddingTop: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' };
 const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600 };
 const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--color-text-secondary)' };
-const tierCtaStyle: React.CSSProperties = { display: 'block', textAlign: 'center', padding: '0.8rem', borderRadius: '10px', background: 'rgba(139,92,246,0.12)', border: '1px solid rgba(139,92,246,0.3)', color: 'var(--color-accent)', fontWeight: 700, textDecoration: 'none', fontSize: '0.9rem', transition: 'background 0.2s, border-color 0.2s' };
-const tierCtaHighlightedStyle: React.CSSProperties = { background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)', border: 'none', color: '#fff', boxShadow: '0 6px 20px var(--color-accent-soft)' };
+const tierCtaWrapStyle: React.CSSProperties = { width: '100%', marginTop: 'auto' };
+const tierCtaStyle: React.CSSProperties = { display: 'block', width: '100%', textAlign: 'center', padding: '0.9rem 1rem', borderRadius: '12px', background: 'var(--color-accent)', border: '1px solid var(--color-accent)', color: 'var(--skin-button-primary-text)', fontWeight: 800, textDecoration: 'none', fontSize: '0.92rem', boxShadow: '0 10px 24px rgba(34, 31, 26, 0.12)', transition: 'transform 0.2s, background 0.2s, border-color 0.2s' };
+const tierCtaVisibleStyle: React.CSSProperties = { background: 'var(--color-accent-2)', border: '1px solid var(--color-accent-2)', color: '#fff' };
+const tierCtaHighlightedStyle: React.CSSProperties = { background: 'var(--color-accent-2)', border: '1px solid var(--color-accent-2)', color: '#fff', boxShadow: '0 12px 28px rgba(34, 31, 26, 0.18)' };
 
 const tableSection: React.CSSProperties = { marginBottom: '4rem' };
 const sectionTitleStyle: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', letterSpacing: '-0.03em' };

@@ -54,11 +54,11 @@ const card: React.CSSProperties = {
 // OS-3707 — WCAG-compliant muted text on this page. Defaults (--color-text-muted
 // #8A8175 on white = 3.13:1; --color-text-secondary #6B6257 on cream = 5.13:1) are
 // OK on cream but fail on white cards. VidMee flagged them on /settings/sources.
-// We override locally to darken; --color-text-secondary on cards stays within AA
-// (5.56:1) but we standardize to the QA-recommended 7.46:1 / 9.43:1 pair.
-const textSecondaryOnWhite = '#595959'  // 7.46:1 on #FFFFFF — AAA
-const textSecondaryOnCream = '#4a4a4a'  // 9.43:1 on #F7F3EC — AAA
-// All Sources-page muted/secondary text uses these darker colors per QA direction.
+// THEME TOKENS, not hardcoded darks: the QA contrast pass hardcoded #595959/#4a4a4a,
+// which is invisible in DARK mode (dark-on-dark). --color-text-secondary meets AA in
+// both themes; visibility in dark mode beats squeezing AAA in light mode.
+const textSecondaryOnWhite = 'var(--color-text-secondary)'
+const textSecondaryOnCream = 'var(--color-text-secondary)'
 
 const PROVIDER_LABEL: Record<string, string> = { google_calendar: 'Google Calendar', microsoft_calendar: 'Outlook Calendar' }
 

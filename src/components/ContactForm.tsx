@@ -2,17 +2,20 @@
 
 import { useState } from 'react';
 
-// Shared input/textarea styles — stronger borders + depth shadow for clear affordance
+// Shared input/textarea styles — WCAG-AA border contrast + clear affordance
 const INPUT_STYLE: React.CSSProperties = {
   width: '100%',
   padding: '0.625rem 0.75rem',
-  background: 'var(--color-bg-primary)',
-  border: '1px solid var(--color-border-strong)',
+  background: 'var(--color-bg-card)',
+  border: '1px solid var(--color-accent-border)',
   borderRadius: '8px',
   color: 'var(--color-text-primary)',
   fontSize: '1rem',
   fontFamily: 'inherit',
   boxShadow: 'inset 0 1px 2px rgba(0,0,0,0.08)',
+  // Placeholder color: warm gray at 5.4:1 on white card bg (WCAG AA)
+  // Note: :placeholder pseudo-class cannot be set inline; use the
+  // contact-form class override in globals.css.
 };
 
 interface ContactFormData {
@@ -123,6 +126,7 @@ export function ContactForm() {
 
   return (
     <form
+      className="contact-form"
       onSubmit={submit}
       noValidate
       style={{
@@ -143,12 +147,13 @@ export function ContactForm() {
           type="text"
           required
           autoComplete="name"
+          placeholder="Your name"
           value={form.name}
           onChange={update('name')}
           disabled={status === 'submitting'}
           style={INPUT_STYLE}
           onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent)'; }}
-          onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border-strong)'; e.currentTarget.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.08)'; }}
+          onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-accent-border)'; e.currentTarget.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.08)'; }}
         />
       </div>
 
@@ -161,12 +166,13 @@ export function ContactForm() {
           type="email"
           required
           autoComplete="email"
+          placeholder="you@example.com"
           value={form.email}
           onChange={update('email')}
           disabled={status === 'submitting'}
           style={INPUT_STYLE}
           onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent)'; }}
-          onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border-strong)'; e.currentTarget.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.08)'; }}
+          onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-accent-border)'; e.currentTarget.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.08)'; }}
         />
       </div>
 
@@ -177,12 +183,13 @@ export function ContactForm() {
         <input
           id="contact-subject"
           type="text"
+          placeholder="How can we help?"
           value={form.subject}
           onChange={update('subject')}
           disabled={status === 'submitting'}
           style={INPUT_STYLE}
           onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent)'; }}
-          onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border-strong)'; e.currentTarget.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.08)'; }}
+          onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-accent-border)'; e.currentTarget.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.08)'; }}
         />
       </div>
 
@@ -194,12 +201,13 @@ export function ContactForm() {
           id="contact-message"
           required
           rows={6}
+          placeholder="Tell us what's on your mind..."
           value={form.message}
           onChange={update('message')}
           disabled={status === 'submitting'}
           style={{ ...INPUT_STYLE, resize: 'vertical', minHeight: '120px' }}
           onFocus={e => { e.currentTarget.style.borderColor = 'var(--color-accent)'; e.currentTarget.style.boxShadow = '0 0 0 3px color-mix(in srgb, var(--color-accent) 25%, transparent)'; }}
-          onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-border-strong)'; e.currentTarget.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.08)'; }}
+          onBlur={e => { e.currentTarget.style.borderColor = 'var(--color-accent-border)'; e.currentTarget.style.boxShadow = 'inset 0 1px 2px rgba(0,0,0,0.08)'; }}
         />
       </div>
 
@@ -230,8 +238,13 @@ export function ContactForm() {
         onMouseEnter={e => { if (status !== 'submitting') e.currentTarget.style.filter = 'brightness(1.1)'; }}
         onMouseLeave={e => { e.currentTarget.style.filter = 'none'; }}
         style={{
-          background: status === 'submitting' ? 'var(--color-border)' : 'linear-gradient(135deg, var(--color-accent), var(--color-accent-hover))',
-          color: '#fff',
+          // Background + text colors are owned by the !important CSS rules
+          // in globals.css on .contact-form button[type='submit']. The inline
+          // gradient was ink-on-light-gold which failed AA on the dark half
+          // (3.74:1). The CSS now paints a darker-gold gradient with white
+          // text — 6.35:1+ at every pixel in both themes. OS-3982 round 2.
+          background: status === 'submitting' ? 'var(--color-border)' : 'var(--color-accent)',
+          color: '#FFFFFF',
           border: 'none',
           padding: '0.75rem 1.5rem',
           borderRadius: '8px',

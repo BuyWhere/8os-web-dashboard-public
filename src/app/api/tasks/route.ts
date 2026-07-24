@@ -6,6 +6,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
 import { requireAuth } from '@/lib/auth/require-auth'
 import { z } from 'zod'
+import { getSubtasksFor } from '@/lib/subtasks'
 
 const CreateTaskSchema = z.object({
   name: z.string().min(1).max(500),
@@ -48,7 +49,9 @@ export async function GET(req: NextRequest) {
     orderBy: [{ scheduledAt: 'asc' }, { priority: 'asc' }, { createdAt: 'asc' }],
   })
 
-  return NextResponse.json(tasks)
+  // Merge checklist items (sidecar jsonb column, see src/lib/subtasks.ts).
+  const subtaskMap = await getSubtasksFor(auth.userId, tasks.map((t) => t.id))
+  return NextResponse.json(tasks.map((t) => ({ ...t, subtasks: subtaskMap.get(t.id) ?? [] })))
 }
 
 export async function POST(req: NextRequest) {

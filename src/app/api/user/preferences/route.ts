@@ -19,6 +19,7 @@ import { z } from 'zod'
 import { prisma } from '@/lib/db/prisma'
 import { requireAuth } from '@/lib/auth/require-auth'
 import { isValidTimezone } from '@/lib/user-time'
+import { getCalendarHours, setCalendarHours } from '@/lib/calendar-prefs'
 import {
   DEFAULT_THEME,
   DEFAULT_FIRST_DAY_OF_WEEK,
@@ -49,10 +50,13 @@ export async function GET(req: NextRequest) {
     }),
   ])
 
+  const calHours = await getCalendarHours(auth.userId)
   return NextResponse.json({
     theme: normTheme(settings?.theme),
     firstDayOfWeek: normFirstDay(settings?.firstDayOfWeek),
     timezone: profile?.timezone ?? null,
+    calendarStartHour: calHours.start,
+    calendarEndHour: calHours.end,
     // Whether a UserProfile row exists — the client uses this to decide if it
     // can persist an auto-detected timezone yet (no profile → nowhere to store).
     hasProfile: profile !== null,
@@ -64,9 +68,11 @@ const patchSchema = z
     theme: z.enum(['light', 'dark', 'system']).optional(),
     firstDayOfWeek: z.union([z.literal(0), z.literal(1)]).optional(),
     timezone: z.string().max(64).optional(),
+    calendarStartHour: z.number().int().min(0).max(23).optional(),
+    calendarEndHour: z.number().int().min(1).max(24).optional(),
   })
   .refine(
-    (d) => d.theme !== undefined || d.firstDayOfWeek !== undefined || d.timezone !== undefined,
+    (d) => d.theme !== undefined || d.firstDayOfWeek !== undefined || d.timezone !== undefined || d.calendarStartHour !== undefined || d.calendarEndHour !== undefined,
     { message: 'Provide at least one preference to update' },
   )
 
@@ -86,7 +92,13 @@ export async function PATCH(req: NextRequest) {
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 422 })
   }
-  const { theme, firstDayOfWeek, timezone } = parsed.data
+  const { theme, firstDayOfWeek, timezone, calendarStartHour, calendarEndHour } = parsed.data
+
+  // Calendar view-window hours (stored on user_settings via calendar-prefs).
+  if (calendarStartHour !== undefined || calendarEndHour !== undefined) {
+    const cur = await getCalendarHours(auth.userId)
+    await setCalendarHours(auth.userId, calendarStartHour ?? cur.start, calendarEndHour ?? cur.end)
+  }
 
   // Reject a bad timezone up front so we never persist junk into the E-0 field.
   if (timezone !== undefined && !isValidTimezone(timezone)) {

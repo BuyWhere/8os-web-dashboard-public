@@ -83,7 +83,7 @@ export default function ArchetypesPageClient() {
       <div style={backdropGlowStyle} aria-hidden="true" />
 
       <section style={heroStyle}>
-        <p style={eyebrowStyle}>BaZi Comparison</p>
+        <p style={eyebrowStyle}>Archetype Comparison</p>
         <h1 style={titleStyle}>See all four 8os archetypes side by side.</h1>
         <p style={subtitleStyle}>
           Each profile maps a different operating rhythm. Compare the dominant element, core
@@ -121,7 +121,7 @@ export default function ArchetypesPageClient() {
                   </span>
                   <span>{archetype.element}</span>
                 </div>
-                {isActive ? <span style={yourArchetypeBadgeStyle}>Your Archetype</span> : null}
+                {isActive ? <span style={yourArchetypeBadgeStyle} className="your-archetype-badge">Your Archetype</span> : null}
               </div>
 
               <div style={nameBlockStyle}>

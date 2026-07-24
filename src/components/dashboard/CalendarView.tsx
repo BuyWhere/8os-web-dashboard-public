@@ -60,6 +60,9 @@ interface Props {
   energyMap: Record<number, EnergyLevel> | null
   /** 0 = Sunday, 1 = Monday. Mirrors UserSettings.firstDayOfWeek. */
   firstDayOfWeek?: 0 | 1
+  /** Visible day-window on the day/week grid (hours, 0–24). Default 6–24. */
+  dayStartHour?: number
+  dayEndHour?: number
 }
 
 type CalView = 'day' | 'week' | 'month'
@@ -86,25 +89,12 @@ const EVENT_TEXT_COLORS: Record<string, string> = {
   '#f59e0b': '#78350f', // dark amber on amber
   '#7A3B2E': '#450a0a', // dark red on brown-red
 }
-// LIGHT text for DARK mode — the color+'22' tint sits on a dark surface, so the
-// light-mode dark text was invisible (dark-on-dark). This was the "all calendar/
-// task items show blank in dark mode" bug.
-const EVENT_TEXT_COLORS_DARK: Record<string, string> = {
-  '#B08637': '#e9cfa0',
-  '#6366f1': '#c7d2fe',
-  '#22c55e': '#bbf7d0',
-  '#ec4899': '#fbcfe8',
-  '#3b82f6': '#bfdbfe',
-  '#8b5cf6': '#ddd6fe',
-  '#f59e0b': '#fde68a',
-  '#7A3B2E': '#fecaca',
-}
-
-/** Theme-aware, WCAG-legible text colour for an event's colour. Reads the active
- *  theme (data-theme on <html>) at render so titles are visible in BOTH modes. */
+/** LIGHT-mode text colour for an event's colour (WCAG on the color+'22' tint).
+ *  DARK mode is handled purely in CSS (globals.css `[data-theme='dark'] .cal-event-text`)
+ *  — do NOT detect the theme in JS here: the page is server-rendered without a
+ *  theme and React does not patch mismatched inline styles on hydration, which is
+ *  exactly how the invisible dark-on-dark text bug happened. */
 function eventTextColor(color: string): string {
-  const dark = typeof document !== 'undefined' && document.documentElement.getAttribute('data-theme') === 'dark'
-  if (dark) return EVENT_TEXT_COLORS_DARK[color] ?? '#EDE7DD'
   return EVENT_TEXT_COLORS[color] ?? color
 }
 
@@ -131,10 +121,23 @@ const SLOT_MIN = 15                 // snapping increment (minutes)
 const SLOTS_PER_HOUR = 60 / SLOT_MIN
 const SLOT_PX = 15                  // px per 15-min slot → 60px/hour
 const HOUR_PX = SLOT_PX * SLOTS_PER_HOUR
-const DAY_START_HOUR = 6            // grid starts at 6am
-const DAY_END_HOUR = 24             // …ends at midnight
-const HOURS = Array.from({ length: DAY_END_HOUR - DAY_START_HOUR }, (_, i) => i + DAY_START_HOUR)
-const GRID_HEIGHT = HOURS.length * HOUR_PX
+// The visible day window is user-configurable (Settings → Preferences → "Show hours").
+// These are module-level LET values that CalendarView sets from props at the top of
+// its render, so every helper + sub-component reads the current window without prop
+// threading. Defaults = 6am–midnight.
+let DAY_START_HOUR = 6
+let DAY_END_HOUR = 24
+let HOURS = Array.from({ length: DAY_END_HOUR - DAY_START_HOUR }, (_, i) => i + DAY_START_HOUR)
+let GRID_HEIGHT = HOURS.length * HOUR_PX
+function setDayWindow(start: number, end: number) {
+  const s = Math.max(0, Math.min(23, Math.round(start)))
+  const e = Math.max(s + 1, Math.min(24, Math.round(end)))
+  if (s === DAY_START_HOUR && e === DAY_END_HOUR) return
+  DAY_START_HOUR = s
+  DAY_END_HOUR = e
+  HOURS = Array.from({ length: DAY_END_HOUR - DAY_START_HOUR }, (_, i) => i + DAY_START_HOUR)
+  GRID_HEIGHT = HOURS.length * HOUR_PX
+}
 
 function pxPerMinute() { return HOUR_PX / 60 }
 function snapMinutes(min: number) { return Math.round(min / SLOT_MIN) * SLOT_MIN }
@@ -254,7 +257,10 @@ function normalizeSaved(
 
 // ─── Root ────────────────────────────────────────────────────────────────────
 
-export function CalendarView({ events: serverEvents, goals, unscheduledTasks, energyMap, firstDayOfWeek = 1 }: Props) {
+export function CalendarView({ events: serverEvents, goals, unscheduledTasks, energyMap, firstDayOfWeek = 1, dayStartHour = 6, dayEndHour = 24 }: Props) {
+  // Apply the user's visible window before anything renders (module-level; single
+  // instance). All grid helpers + sub-components then read the current HOURS/window.
+  setDayWindow(dayStartHour, dayEndHour)
   const router = useRouter()
   const [view, setView] = useState<CalView>('week')
   const [currentDate, setCurrentDate] = useState(new Date())
@@ -408,6 +414,35 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
     })
   }
 
+  // Tasks dropped from the Unscheduled sidebar onto the grid → schedule at that
+  // time (PATCH creates the calendar event server-side); hide the card instantly.
+  const [droppedTaskIds, setDroppedTaskIds] = useState<Set<string>>(new Set())
+  async function handleTaskDrop(taskId: string, start: Date) {
+    try {
+      const res = await fetch(`/api/tasks/${taskId}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ scheduledAt: start.toISOString() }),
+      })
+      if (res.ok) {
+        setDroppedTaskIds((prev) => new Set(prev).add(taskId))
+        router.refresh()
+      }
+    } catch { /* card stays; user can retry */ }
+  }
+
+  /** All-day row shortcut: create an all-day event on `day` (panel opens pre-set). */
+  function openCreateAllDay(day: Date) {
+    const s = new Date(day); s.setHours(9, 0, 0, 0)
+    const e = new Date(s.getTime() + 60 * 60000)
+    setEditing({
+      mode: 'create', id: null, title: '', description: '', location: '',
+      startAt: s.toISOString(), endAt: e.toISOString(), allDay: true,
+      color: null, goalId: null, recurrenceRule: 'none', recurrenceUntil: null,
+      readOnly: false,
+    })
+  }
+
   // Open the detail panel to EDIT (or view read-only) an existing event.
   function openEvent(e: CalendarEvent) {
     setEditing({
@@ -453,7 +488,20 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
             <button onClick={() => setCurrentDate(new Date())} style={btnStyle}>Today</button>
             <button onClick={() => navigate(-1)} style={btnStyle} aria-label="Previous">◀</button>
             <button onClick={() => navigate(1)} style={btnStyle} aria-label="Next">▶</button>
-            <span style={{ fontWeight: 600, fontSize: 16, fontFamily: 'var(--font-serif), Fraunces, Georgia, serif' }}>{headerTitle}</span>
+            {/* Jump-to-date: the header title doubles as a native date picker. */}
+            <label title="Jump to date" style={{ position: 'relative', cursor: 'pointer', display: 'inline-flex', alignItems: 'center' }}>
+              <span style={{ fontWeight: 600, fontSize: 16, fontFamily: 'var(--font-serif), Fraunces, Georgia, serif' }}>{headerTitle} ▾</span>
+              <input
+                type="date"
+                aria-label="Jump to date"
+                value={`${currentDate.getFullYear()}-${String(currentDate.getMonth() + 1).padStart(2, '0')}-${String(currentDate.getDate()).padStart(2, '0')}`}
+                onChange={(e) => {
+                  const [y, m, d] = e.target.value.split('-').map(Number)
+                  if (y && m && d) setCurrentDate(new Date(y, m - 1, d))
+                }}
+                style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+              />
+            </label>
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <button
@@ -562,11 +610,11 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
           {view === 'week' && (
             <WeekView days={weekDays} events={events} energy={energy} todayKey={todayKey}
               onSlotCreate={openCreate} onEventClick={openEvent} onEventDrag={patchTimes} onEventResize={patchTimes}
-              firstDay={firstDay} />
+              firstDay={firstDay} onAllDayCreate={openCreateAllDay} onTaskDrop={handleTaskDrop} />
           )}
           {view === 'day' && (
             <DayView day={currentDate} events={events} energy={energy}
-              onSlotCreate={openCreate} onEventClick={openEvent} onEventDrag={patchTimes} onEventResize={patchTimes} />
+              onSlotCreate={openCreate} onEventClick={openEvent} onEventDrag={patchTimes} onEventResize={patchTimes} onTaskDrop={handleTaskDrop} />
           )}
         </div>
       </div>
@@ -598,11 +646,17 @@ export function CalendarView({ events: serverEvents, goals, unscheduledTasks, en
               {schedulingResult}
             </div>
           )}
-          {unscheduledTasks.map((t) => (
-            <div key={t.id} style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 8, padding: '10px 12px', marginBottom: 8 }}>
+          {unscheduledTasks.filter((t) => !droppedTaskIds.has(t.id)).map((t) => (
+            <div
+              key={t.id}
+              draggable
+              onDragStart={(e) => { e.dataTransfer.setData('text/task-id', t.id); e.dataTransfer.effectAllowed = 'move' }}
+              title="Drag onto the calendar to schedule"
+              style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 8, padding: '10px 12px', marginBottom: 8, cursor: 'grab' }}
+            >
               <div style={{ fontSize: 12, fontWeight: 600, marginBottom: 4 }}>{t.name}</div>
               <div style={{ display: 'flex', gap: 6, alignItems: 'center', marginBottom: 6 }}>
-                <span style={{ fontSize: 11, fontWeight: 500, color: '#555555' }}>{t.duration}m</span>
+                <span style={{ fontSize: 11, fontWeight: 500, color: 'var(--color-text-secondary)' }}>{t.duration}m</span>
                 <span style={{ fontSize: 11, fontWeight: 600, color: t.priority === 'high' ? '#c0392b' : t.priority === 'medium' ? '#b45309' : '#15803d' }}>{t.priority}</span>
                 {t.domainId && <span style={{ fontSize: 11, fontWeight: 600, color: DOMAIN_COLORS[t.domainId] }}>{t.domainId}</span>}
               </div>
@@ -739,6 +793,28 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
       onDeleted(removedId)
       onClose()
     } catch { setErr('Delete failed, try again.'); setSaving(false) }
+  }
+
+  /** Duplicate this event 24h later as a new native event ("copy to tomorrow"). */
+  async function duplicateTomorrow() {
+    setSaving(true); setErr(null)
+    try {
+      const startAt = new Date(new Date(form.startAt).getTime() + 24 * 60 * 60 * 1000).toISOString()
+      const endAt = new Date(new Date(form.endAt).getTime() + 24 * 60 * 60 * 1000).toISOString()
+      const res = await fetch('/api/calendar/events', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: form.title || 'Untitled', description: form.description || '',
+          location: form.location || null, startAt, endAt, allDay: form.allDay,
+          goalId: form.goalId || null, color: form.color || null,
+        }),
+      })
+      if (!res.ok) { setErr('Copy failed, try again.'); setSaving(false); return }
+      const data = await res.json().catch(() => null)
+      onSaved(normalizeSaved(data, { ...form, id: null, startAt, endAt }))
+      onClose()
+    } catch { setErr('Copy failed, try again.'); setSaving(false) }
   }
 
   const title = form.mode === 'create' ? 'New event' : readOnly ? (form.external ? 'External event' : 'Event') : 'Edit event'
@@ -926,7 +1002,12 @@ function EventDetailPanel({ editing, goals, goalById, onClose, onSaved, onDelete
 
             <div style={{ display: 'flex', gap: 8, justifyContent: 'space-between', marginTop: 4 }}>
               {form.mode === 'edit' ? (
-                <button onClick={remove} disabled={saving} style={{ ...btnStyle, color: '#B5502F', border: '1px solid #E3C4B6' }}>Delete</button>
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button onClick={remove} disabled={saving} style={{ ...btnStyle, color: '#B5502F', border: '1px solid #E3C4B6' }}>Delete</button>
+                  <button onClick={duplicateTomorrow} disabled={saving} title="Create a copy of this event tomorrow at the same time" style={btnStyle}>
+                    Copy → tomorrow
+                  </button>
+                </div>
               ) : <span />}
               <div style={{ display: 'flex', gap: 8 }}>
                 <button onClick={onClose} style={btnStyle}>Cancel</button>
@@ -1009,7 +1090,7 @@ function MonthView({ days, events, todayKey, onEventClick, onDayClick, firstDay 
               {dayEvents.slice(0, 3).map((e) => {
                 const c = eventColor(e)
                 return (
-                  <div key={e.id} onClick={(ev) => { ev.stopPropagation(); onEventClick(e) }} style={{
+                  <div key={e.id} className="cal-event-text" onClick={(ev) => { ev.stopPropagation(); onEventClick(e) }} style={{
                     padding: '2px 6px', borderRadius: 3, marginBottom: 2, cursor: 'pointer',
                     background: c + '22', color: eventTextColor(c), fontSize: 10, overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis',
                     borderLeft: `2px solid ${c}`,
@@ -1109,6 +1190,25 @@ function EventBlock({ e, ghost, onClick, onDragStart, onResizeStart, dense, col 
   // Side-by-side layout for overlapping events: each takes 1/cols of the width.
   const leftPct = (col / cols) * 100
   const widthCalc = `calc(${100 / cols}% - ${cols > 1 ? 3 : 4}px)`
+  // Motion pattern: TASKS look different from meetings (dashed spine + checkbox,
+  // completable right on the grid); meetings stay solid. Local checked state so
+  // no prop threading through the grid tree.
+  const isTask = !!e.task
+  const [checked, setChecked] = useState(e.task?.status === 'done')
+  async function toggleDone(ev: React.MouseEvent) {
+    ev.stopPropagation()
+    if (!e.task) return
+    const next = !checked
+    setChecked(next)
+    try {
+      const res = await fetch(`/api/tasks/${e.task.id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: next ? 'done' : 'todo' }),
+      })
+      if (!res.ok) setChecked(!next)
+    } catch { setChecked(!next) }
+  }
   return (
     <div
       onMouseDown={(ev) => draggable && onDragStart(ev, e)}
@@ -1117,20 +1217,40 @@ function EventBlock({ e, ghost, onClick, onDragStart, onResizeStart, dense, col 
         position: 'absolute', top, height,
         left: `calc(${leftPct}% + 2px)`, width: widthCalc,
         background: e.external ? color + '18' : color + '22',
-        border: `1px solid ${color}44`, borderLeft: `3px solid ${color}`,
+        border: `1px solid ${color}44`,
+        borderLeft: isTask ? `3px dashed ${color}` : `3px solid ${color}`,
         borderRadius: 4, padding: dense ? '1px 5px' : '2px 6px',
         overflow: 'hidden', zIndex: isGhost ? 6 : 2,
         cursor: draggable ? 'grab' : 'pointer',
-        opacity: e.readOnly ? 0.85 : 1,
+        opacity: e.readOnly ? 0.85 : checked ? 0.55 : 1,
         boxShadow: isGhost ? '0 2px 10px rgba(0,0,0,0.2)' : 'none',
       }}
-      title={`${e.title}${e.location ? ' · ' + e.location : ''}`}
+      title={`${e.title}${e.location ? ' · ' + e.location : ''}${isTask ? ' · task' : ''}`}
     >
-      <div style={{ fontSize: 11, fontWeight: 600, color: eventTextColor(color), whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-        {e.recurrenceRule !== 'none' && '↻ '}{e.title}
+      <div className="cal-event-text" style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: eventTextColor(color), whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        {isTask && (
+          <button
+            onClick={toggleDone}
+            onMouseDown={(ev) => ev.stopPropagation()}
+            aria-label={checked ? 'Mark task not done' : 'Mark task done'}
+            title={checked ? 'Mark not done' : 'Mark done'}
+            style={{
+              width: 11, height: 11, flexShrink: 0, padding: 0, cursor: 'pointer',
+              borderRadius: 3, border: `1.5px solid ${eventTextColor(color)}`,
+              background: checked ? eventTextColor(color) : 'transparent',
+              display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+              fontSize: 8, lineHeight: 1, color: 'var(--color-bg-card)',
+            }}
+          >
+            {checked ? '✓' : ''}
+          </button>
+        )}
+        <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', textDecoration: checked ? 'line-through' : 'none' }}>
+          {e.recurrenceRule !== 'none' && '↻ '}{e.title}
+        </span>
       </div>
       {height > 34 && (
-        <div style={{ fontSize: 10, color: eventTextColor(color) + 'cc' }}>{fmtTime(new Date(e.startAt))} - {fmtTime(new Date(e.endAt))}</div>
+        <div className="cal-event-sub" style={{ fontSize: 10, color: eventTextColor(color) + 'cc' }}>{fmtTime(new Date(e.startAt))} - {fmtTime(new Date(e.endAt))}</div>
       )}
       {draggable && (
         <div onMouseDown={(ev) => onResizeStart(ev, e)} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: 7, cursor: 'ns-resize' }} title="Drag to resize">
@@ -1182,13 +1302,15 @@ function useSlotCreate(day: Date, onSlotCreate: (start: Date, mins: number) => v
 
 // ─── Week View ───────────────────────────────────────────────────────────────
 
-function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, onEventDrag, onEventResize, firstDay = 1 }: {
+function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, onEventDrag, onEventResize, firstDay = 1, onAllDayCreate, onTaskDrop }: {
   days: Date[]; events: CalendarEvent[]; energy: Record<number, EnergyLevel>; todayKey: string
   onSlotCreate: (start: Date, mins: number) => void
   onEventClick: (e: CalendarEvent) => void
   onEventDrag: (id: string, s: Date, e: Date) => void
   onEventResize: (id: string, s: Date, e: Date) => void
   firstDay?: 0 | 1
+  onAllDayCreate?: (day: Date) => void
+  onTaskDrop?: (taskId: string, start: Date) => void
 }) {
   const WEEKDAYS_SHORT = firstDay === 0
     ? ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
@@ -1212,15 +1334,21 @@ function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, 
         })}
       </div>
 
-      {/* All-day row */}
-      {anyAllDay && (
-        <div style={{ display: 'grid', gridTemplateColumns: '56px repeat(7, 1fr)', borderBottom: '1px solid var(--color-border)', minHeight: 26 }}>
+      {/* All-day row — always visible; click an empty cell to create an all-day
+          event on that day (existing pills still open their event). */}
+      {(anyAllDay || onAllDayCreate) && (
+        <div style={{ display: 'grid', gridTemplateColumns: '56px repeat(7, 1fr)', borderBottom: '1px solid var(--color-border)', minHeight: 24 }}>
           <div style={{ fontSize: 9, color: 'var(--color-text-muted)', textAlign: 'right', paddingRight: 6, paddingTop: 4 }}>all-day</div>
           {days.map((d, i) => (
-            <div key={i} style={{ borderLeft: '1px solid var(--color-border)', padding: 2 }}>
+            <div
+              key={i}
+              onClick={() => onAllDayCreate?.(d)}
+              title="Add an all-day event"
+              style={{ borderLeft: '1px solid var(--color-border)', padding: 2, cursor: onAllDayCreate ? 'pointer' : 'default' }}
+            >
               {allDayForDay(events, d).map((e) => {
                 const c = eventColor(e)
-                return <div key={e.id} onClick={() => onEventClick(e)} style={{ background: c + '22', color: eventTextColor(c), borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 10, padding: '1px 5px', marginBottom: 2, cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{e.title}</div>
+                return <div key={e.id} className="cal-event-text" onClick={(ev) => { ev.stopPropagation(); onEventClick(e) }} style={{ background: c + '22', color: eventTextColor(c), borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 10, padding: '1px 5px', marginBottom: 2, cursor: 'pointer', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{e.title}</div>
               })}
             </div>
           ))}
@@ -1242,7 +1370,8 @@ function WeekView({ days, events, energy, todayKey, onSlotCreate, onEventClick, 
           {days.map((day, di) => (
             <DayColumn key={di} day={day} events={eventsForDay(events, day)} energy={energy}
               ghost={ghost} onSlotCreate={onSlotCreate} onEventClick={onEventClick}
-              onDragStart={beginDrag} onResizeStart={beginResize} showNow={dayKey(day) === todayKey} dense />
+              onDragStart={beginDrag} onResizeStart={beginResize} showNow={dayKey(day) === todayKey} dense
+              onTaskDrop={onTaskDrop} />
           ))}
         </div>
 
@@ -1293,7 +1422,7 @@ function layoutColumns(events: CalendarEvent[]): Map<string, { col: number; cols
   return out
 }
 
-function DayColumn({ day, events, energy, ghost, onSlotCreate, onEventClick, onDragStart, onResizeStart, showNow, dense }: {
+function DayColumn({ day, events, energy, ghost, onSlotCreate, onEventClick, onDragStart, onResizeStart, showNow, dense, onTaskDrop }: {
   day: Date; events: CalendarEvent[]; energy: Record<number, EnergyLevel>
   ghost: { id: string; top: number; height: number } | null
   onSlotCreate: (start: Date, mins: number) => void
@@ -1301,13 +1430,30 @@ function DayColumn({ day, events, energy, ghost, onSlotCreate, onEventClick, onD
   onDragStart: (ev: React.MouseEvent, e: CalendarEvent) => void
   onResizeStart: (ev: React.MouseEvent, e: CalendarEvent) => void
   showNow?: boolean; dense?: boolean
+  onTaskDrop?: (taskId: string, start: Date) => void
 }) {
   const { onMouseDown, sel } = useSlotCreate(day, onSlotCreate)
+  // Drop target for tasks dragged from the Unscheduled sidebar: y position → time.
+  function handleDragOver(e: React.DragEvent) {
+    if (onTaskDrop && e.dataTransfer.types.includes('text/task-id')) e.preventDefault()
+  }
+  function handleDrop(e: React.DragEvent) {
+    if (!onTaskDrop) return
+    const taskId = e.dataTransfer.getData('text/task-id')
+    if (!taskId) return
+    e.preventDefault()
+    const rect = e.currentTarget.getBoundingClientRect()
+    const mins = snapMinutes(Math.max(0, Math.min(GRID_HEIGHT, e.clientY - rect.top)) / pxPerMinute())
+    const start = new Date(day)
+    start.setHours(DAY_START_HOUR, 0, 0, 0)
+    start.setMinutes(start.getMinutes() + mins)
+    onTaskDrop(taskId, start)
+  }
   const now = new Date()
   const nowTop = ((now.getHours() - DAY_START_HOUR) * 60 + now.getMinutes()) * pxPerMinute()
 
   return (
-    <div style={{ borderLeft: '1px solid var(--color-border)', position: 'relative', height: GRID_HEIGHT }} onMouseDown={onMouseDown}>
+    <div style={{ borderLeft: '1px solid var(--color-border)', position: 'relative', height: GRID_HEIGHT }} onMouseDown={onMouseDown} onDragOver={handleDragOver} onDrop={handleDrop}>
       {/* hour rows + 15-min guide lines */}
       {HOURS.map((h) => (
         <div key={h} style={{ height: HOUR_PX, borderBottom: '1px solid var(--color-border)', background: ENERGY_BG[energy[h] ?? 'red'] }}>
@@ -1342,12 +1488,13 @@ function DayColumn({ day, events, energy, ghost, onSlotCreate, onEventClick, onD
 
 // ─── Day View ────────────────────────────────────────────────────────────────
 
-function DayView({ day, events, energy, onSlotCreate, onEventClick, onEventDrag, onEventResize }: {
+function DayView({ day, events, energy, onSlotCreate, onEventClick, onEventDrag, onEventResize, onTaskDrop }: {
   day: Date; events: CalendarEvent[]; energy: Record<number, EnergyLevel>
   onSlotCreate: (start: Date, mins: number) => void
   onEventClick: (e: CalendarEvent) => void
   onEventDrag: (id: string, s: Date, e: Date) => void
   onEventResize: (id: string, s: Date, e: Date) => void
+  onTaskDrop?: (taskId: string, start: Date) => void
 }) {
   const { beginDrag, beginResize, ghost } = useGridInteractions(onEventDrag, onEventResize)
   const allDay = allDayForDay(events, day)
@@ -1360,7 +1507,7 @@ function DayView({ day, events, energy, onSlotCreate, onEventClick, onEventDrag,
         <div style={{ display: 'grid', gridTemplateColumns: '56px 1fr', borderBottom: '1px solid var(--color-border)', padding: '2px 0' }}>
           <div style={{ fontSize: 9, color: 'var(--color-text-muted)', textAlign: 'right', paddingRight: 6, paddingTop: 4 }}>all-day</div>
           <div style={{ padding: 2 }}>
-            {allDay.map((e) => { const c = eventColor(e); return <div key={e.id} onClick={() => onEventClick(e)} style={{ background: c + '22', color: eventTextColor(c), borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 11, padding: '2px 6px', marginBottom: 2, cursor: 'pointer' }}>{e.title}</div> })}
+            {allDay.map((e) => { const c = eventColor(e); return <div key={e.id} className="cal-event-text" onClick={() => onEventClick(e)} style={{ background: c + '22', color: eventTextColor(c), borderLeft: `2px solid ${c}`, borderRadius: 3, fontSize: 11, padding: '2px 6px', marginBottom: 2, cursor: 'pointer' }}>{e.title}</div> })}
           </div>
         </div>
       )}
@@ -1374,7 +1521,7 @@ function DayView({ day, events, energy, onSlotCreate, onEventClick, onEventDrag,
         </div>
         <DayColumn day={day} events={eventsForDay(events, day)} energy={energy} ghost={ghost}
           onSlotCreate={onSlotCreate} onEventClick={onEventClick} onDragStart={beginDrag} onResizeStart={beginResize}
-          showNow={dayKey(day) === dayKey(new Date())} />
+          showNow={dayKey(day) === dayKey(new Date())} onTaskDrop={onTaskDrop} />
       </div>
       <div style={{ padding: '8px 12px 16px 64px', fontSize: 10, color: 'var(--color-text-muted)' }}>
         Drag a slot to create · drag/resize events snap to 15 minutes

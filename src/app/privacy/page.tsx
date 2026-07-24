@@ -1,32 +1,30 @@
-import Link from 'next/link';
-import type { Metadata } from 'next';
+import Link from 'next/link'
 
-export const metadata: Metadata = {
-  title: 'Privacy Policy, 8os',
-  description: 'How 8os collects, uses, and protects your personal information.',
-};
-
+// This is a plain server component — no 'use client' needed.
+// All colours are CSS variables, resolved by globals.css against data-theme
+// (set synchronously by the boot script before first paint).
+// Dark-mode overrides for legal-page text are in globals.css.
 export default function PrivacyPage() {
   return (
     <main style={{
       minHeight: '100vh',
       background: 'var(--color-bg-primary)',
-      color: 'var(--color-border)',
+      color: 'var(--color-text-primary)',
       padding: '4rem 2rem',
     }}>
       <div style={{ maxWidth: '720px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: 'var(--color-accent)', textDecoration: 'none', fontSize: '0.875rem' }}>
+        <Link href="/" style={{ color: 'var(--color-text-primary)', textDecoration: 'none', fontSize: '0.875rem' }}>
           ← Back to 8os
         </Link>
 
         <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '2rem', marginBottom: '0.5rem' }}>
           Privacy Policy
         </h1>
-        <p style={{ color: '#666', marginBottom: '3rem' }}>Last updated: May 2026</p>
+        <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem' }}>Last updated: May 2026</p>
 
-        <div style={{ lineHeight: 1.8, color: '#ccc' }}>
+        <div style={{ lineHeight: 1.8, color: 'var(--color-text-secondary)' }}>
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               1. Information We Collect
             </h2>
             <p style={{ marginBottom: '1rem' }}>
@@ -42,7 +40,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               2. How We Use Your Information
             </h2>
             <p style={{ marginBottom: '1rem' }}>We use the information we collect to:</p>
@@ -56,7 +54,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               3. Data Sharing
             </h2>
             <p style={{ marginBottom: '1rem' }}>
@@ -70,18 +68,18 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               4. Data Retention
             </h2>
             <p>
               We retain your data for as long as your account is active. You may request deletion of your
               account and associated data at any time by contacting us at{' '}
-              <a href="mailto:privacy@8os.ai" style={{ color: 'var(--color-accent)' }}>privacy@8os.ai</a>.
+              <a href="mailto:privacy@8os.ai" style={{ color: 'var(--color-text-primary)' }}>privacy@8os.ai</a>.
             </p>
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               5. Security
             </h2>
             <p>
@@ -92,7 +90,7 @@ export default function PrivacyPage() {
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               6. Your Rights
             </h2>
             <p style={{ marginBottom: '1rem' }}>Depending on your location, you may have the right to:</p>
@@ -105,21 +103,21 @@ export default function PrivacyPage() {
             </ul>
             <p>
               To exercise these rights, contact us at{' '}
-              <a href="mailto:privacy@8os.ai" style={{ color: 'var(--color-accent)' }}>privacy@8os.ai</a>.
+              <a href="mailto:privacy@8os.ai" style={{ color: 'var(--color-text-primary)' }}>privacy@8os.ai</a>.
             </p>
           </section>
 
           <section style={{ marginBottom: '2.5rem' }}>
-            <h2 style={{ color: 'var(--color-border)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
+            <h2 style={{ color: 'var(--color-text-primary)', fontSize: '1.25rem', fontWeight: 600, marginBottom: '1rem' }}>
               7. Contact
             </h2>
             <p>
               For privacy-related enquiries, email{' '}
-              <a href="mailto:privacy@8os.ai" style={{ color: 'var(--color-accent)' }}>privacy@8os.ai</a>.
+              <a href="mailto:privacy@8os.ai" style={{ color: 'var(--color-text-primary)' }}>privacy@8os.ai</a>.
             </p>
           </section>
         </div>
       </div>
     </main>
-  );
+  )
 }

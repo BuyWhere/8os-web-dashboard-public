@@ -59,6 +59,38 @@ export function isNearTerm(h: Horizon): boolean {
   return NEAR_TERM_HORIZONS.includes(h)
 }
 
+/**
+ * Default deadline for a goal: the END of the current period for its horizon,
+ * as a local calendar date (yyyy-mm-dd). A weekly goal ends this Sunday, a
+ * monthly goal on the last day of the month, quarterly at quarter end, yearly
+ * on Dec 31, three/five-year on Dec 31 of that future year. Every goal gets a
+ * deadline so there is always a moment of reckoning.
+ */
+export function defaultTargetDate(
+  h: Horizon,
+  today: { year: number; month: number; day: number },
+): string {
+  const { year, month, day } = today
+  const pad = (n: number) => String(n).padStart(2, '0')
+  const fmt = (y: number, m: number, d: number) => `${y}-${pad(m)}-${pad(d)}`
+  const lastDayOfMonth = (y: number, m: number) => new Date(Date.UTC(y, m, 0)).getUTCDate()
+  if (h === 'weekly') {
+    // End of the current week = the upcoming Sunday (today if Sunday).
+    const dow = new Date(Date.UTC(year, month - 1, day)).getUTCDay() // 0=Sun
+    const add = dow === 0 ? 0 : 7 - dow
+    const end = new Date(Date.UTC(year, month - 1, day + add))
+    return fmt(end.getUTCFullYear(), end.getUTCMonth() + 1, end.getUTCDate())
+  }
+  if (h === 'monthly') return fmt(year, month, lastDayOfMonth(year, month))
+  if (h === 'quarterly') {
+    const qEndMonth = Math.ceil(month / 3) * 3
+    return fmt(year, qEndMonth, lastDayOfMonth(year, qEndMonth))
+  }
+  if (h === 'yearly') return fmt(year, 12, 31)
+  if (h === 'three_year') return fmt(year + 3, 12, 31)
+  return fmt(year + 5, 12, 31) // five_year
+}
+
 /** Days remaining until targetDate (negative = overdue). null if no date. */
 export function daysLeft(targetDate: Date | string | null | undefined, now: Date = new Date()): number | null {
   if (!targetDate) return null

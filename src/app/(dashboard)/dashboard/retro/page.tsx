@@ -241,7 +241,7 @@ export default function RetroPage() {
                     </div>
                     <div style={{ position: 'relative', height: 7, borderRadius: 4, background: 'var(--color-bg-primary)', overflow: 'hidden' }}>
                       <div style={{ width: `${Math.min(100, (g.sharePct / maxPct) * 100)}%`, height: '100%', borderRadius: 4, background: m.color, opacity: 0.85 }} />
-                      <div style={{ position: 'absolute', top: 0, bottom: 0, left: `${Math.min(99, (g.expectedSharePct / maxPct) * 100)}%`, width: 2, background: '#221F1A', opacity: 0.7 }} />
+                      <div style={{ position: 'absolute', top: 0, bottom: 0, left: `${Math.min(99, (g.expectedSharePct / maxPct) * 100)}%`, width: 2, background: 'var(--color-text-primary)', opacity: 0.7 }} />
                     </div>
                   </div>
                 )
