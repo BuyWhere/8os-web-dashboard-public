@@ -69,10 +69,20 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
   // (SSR-stable) and advances on a timer once mounted.
   const [tick, setTick] = useState<number>(0)
 
-  // On mount: pick up the persisted choice + current OS preference.
+  // `resolved` must be stable between server render and client hydration to
+  // avoid error #418. Using `new Date()` in useMemo produces different results
+  // when server and client are in different timezones. We initialise with a
+  // fixed 'light' default and reconcile in the mount effect below.
+  const [resolved, setResolved] = useState<ResolvedTheme>('light')
+
+  // On mount: pick up the persisted choice + current OS preference + resolve
+  // the real theme from the device clock. The boot script already applied the
+  // correct data-theme on <html> before paint, so there is no flash.
   useEffect(() => {
-    setChoice(readStoredChoice())
+    const stored = readStoredChoice()
+    setChoice(stored)
     setSystemDark(prefersDark())
+    setResolved(resolveTheme(stored, prefersDark(), new Date()))
   }, [])
 
   // Live-follow the OS preference (matters only when choice === 'system').
@@ -92,11 +102,11 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return () => clearInterval(id)
   }, [choice])
 
-  const resolved = useMemo(
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    () => resolveTheme(choice, systemDark, new Date()),
-    [choice, systemDark, tick],
-  )
+  // Recompute resolved theme when choice, systemDark, or tick changes.
+  // After mount, `new Date()` is always on the client — safe for hydration.
+  useEffect(() => {
+    setResolved(resolveTheme(choice, systemDark, new Date()))
+  }, [choice, systemDark, tick])
 
   // Keep <html> in sync with the resolved theme.
   useEffect(() => {

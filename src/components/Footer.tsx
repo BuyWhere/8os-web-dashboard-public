@@ -1,5 +1,6 @@
 'use client';
 
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
@@ -18,6 +19,8 @@ const SOCIAL_LINKS = [
 ];
 
 export function Footer() {
+  const [year, setYear] = useState('2026');
+  useEffect(() => setYear(String(new Date().getFullYear())), []);
   const pathname = usePathname();
 
   // The landing page ("/") ships its own warm editorial footer
@@ -218,7 +221,7 @@ export function Footer() {
               color: 'var(--color-text-muted)',
             }}
           >
-            © {new Date().getFullYear()} 8os. All rights reserved.
+            © {year} 8os. All rights reserved.
           </p>
           <p
             style={{

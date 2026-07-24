@@ -119,7 +119,7 @@ export default function RootLayout({
             dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
           />
         </head>
-        <body>
+        <body suppressHydrationWarning>
           {/* ThemeProvider wraps all chrome (Header/Footer) + content so the
               whole tree can read/toggle the light/dark theme via useTheme(). */}
           <ThemeProvider>
