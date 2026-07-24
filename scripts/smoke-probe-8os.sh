@@ -272,6 +272,49 @@ header_probe "OS-1199 /api/auth/google Location is Google consent" \
 header_probe "OS-1173 /coming-soon Location is /signup" \
   GET "$BASE_URL/coming-soon" Location '^/signup$'
 
+# OS-3550: legacy /famous prefetch target. The App Router has no /famous
+# route (the canonical home is /archetypes/famous), and any /famous?_rsc=…
+# request from a Next.js <Link prefetch would 404 — QA flagged this on
+# every /archetypes/famous/<name> page (66 of 66). Fix: middleware.ts
+# redirects /famous → /archetypes/famous (307) at the edge so RSC probes
+# (which arrive with `?_rsc=<id>` query strings) also get a clean 307
+# instead of a 404. The probe asserts the Location header so a regression
+# that 200s on /famous directly (would shadow the canonical index) is
+# caught, and so a regression that redirects to the wrong place is caught.
+header_probe "OS-3550 /famous Location is /archetypes/famous" \
+  GET "$BASE_URL/famous" Location '/archetypes/famous$'
+header_probe "OS-3550 /famous?_rsc=… Location is /archetypes/famous (RSC prefetch path)" \
+  GET "$BASE_URL/famous?_rsc=anc4mq" Location '/archetypes/famous(\?|$)'
+
+# OS-3550 follow-on: /archetypes/famous/<name> pages themselves must still
+# 200. We sample 3 high-traffic names; the route handler is the same for
+# all 66, but a regression in getFamousProfileBySlug or the dynamic
+# segment would surface as a 404/500 on these.
+probe "OS-3550 /archetypes/famous/taylor-swift 200" \
+  GET "$BASE_URL/archetypes/famous/taylor-swift" '^200$'
+probe "OS-3550 /archetypes/famous/elon-musk 200" \
+  GET "$BASE_URL/archetypes/famous/elon-musk" '^200$'
+probe "OS-3550 /archetypes/famous/steve-jobs 200" \
+  GET "$BASE_URL/archetypes/famous/steve-jobs" '^200$'
+probe "OS-3550 /archetypes/famous index 200" \
+  GET "$BASE_URL/archetypes/famous" '^200$'
+
+# OS-4562: /share/[archetype-slug] share-card route. The 5 canonical slugs
+# mirror the archetypeSlug field in src/app/archetypes/[slug]/page.tsx and
+# are prerendered via generateStaticParams in src/app/share/[slug]/page.tsx.
+# Negative case: an unknown slug must 404 (the handler is selective — a
+# regression that 200s on /share/anything would be a worse UX bug than
+# the original 404 because it'd render an empty shell).
+probe     "OS-4562 /share/strategic-commander 200"  GET "$BASE_URL/share/strategic-commander"  '^200$'
+body_probe "OS-4562 /share/strategic-commander body 'Strategic Commander'" \
+  GET "$BASE_URL/share/strategic-commander" 'Strategic Commander'
+probe     "OS-4562 /share/nurturing-creative 200"  GET "$BASE_URL/share/nurturing-creative"  '^200$'
+probe     "OS-4562 /share/visionary-builder 200"   GET "$BASE_URL/share/visionary-builder"   '^200$'
+probe     "OS-4562 /share/steady-achiever 200"     GET "$BASE_URL/share/steady-achiever"     '^200$'
+probe     "OS-4562 /share/harmonizer-guardian 200" GET "$BASE_URL/share/harmonizer-guardian" '^200$'
+probe     "OS-4562 /share/unknown-slug 404 (selective handler)" \
+  GET "$BASE_URL/share/taylor-swift" '^404$'
+
 # OS-1208: affiliates landing page (parent issue OS-1219 cites this as
 # one of the regression signals — Vex's deploy on alex/os-1137-meta-pixel
 # added /affiliates without /coming-soon, smoke probe caught the gap).
