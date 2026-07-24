@@ -1,0 +1,15 @@
+/* Element badge colors for /archetypes/explorer.
+ * Each token is chosen to hit WCAG AA 4.5:1 normal text against the badge
+ * background (--color-bg-secondary) in both light and dark themes.
+ */
+
+.metal { color: var(--color-text-muted); }
+.wood { color: #15803d; }
+.fire { color: #b45309; }
+.water { color: #0369a1; }
+.earth { color: #92400e; }
+
+[data-theme='dark'] .wood { color: #22c55e; }
+[data-theme='dark'] .fire { color: #D97706; }
+[data-theme='dark'] .water { color: #38bdf8; }
+[data-theme='dark'] .earth { color: #E88C2A; }

@@ -1,5 +1,6 @@
 import Link from 'next/link';
 import type { Metadata } from 'next';
+import styles from './page.module.css';
 
 export const metadata: Metadata = {
   title: 'Archetype Explorer, 8os',
@@ -10,7 +11,7 @@ const archetypes = [
   {
     name: 'Strategic Commander',
     element: 'Metal',
-    color: 'var(--color-text-muted)',
+    colorClass: styles.metal,
     traits: ['Decisive', 'Structured', 'Goal-driven', 'Analytical'],
     desc: 'You see the battlefield before others do. You plan, execute, and deliver with precision.',
     peak: 'Early morning and late evening',
@@ -18,7 +19,7 @@ const archetypes = [
   {
     name: 'Nurturing Creative',
     element: 'Wood',
-    color: '#4ade80',
+    colorClass: styles.wood,
     traits: ['Innovative', 'Adaptive', 'Empathetic', 'Visionary'],
     desc: 'Ideas flow through you naturally. You grow best when given space to explore and create.',
     peak: 'Mid-morning creative windows',
@@ -26,7 +27,7 @@ const archetypes = [
   {
     name: 'Steady Achiever',
     element: 'Fire',
-    color: '#fb923c',
+    colorClass: styles.fire,
     traits: ['Ambitious', 'Energetic', 'Charismatic', 'Action-oriented'],
     desc: 'You burn bright and move fast. Your enthusiasm is contagious and your output is prolific.',
     peak: 'Late morning to afternoon',
@@ -34,7 +35,7 @@ const archetypes = [
   {
     name: 'Harmonizer Guardian',
     element: 'Water',
-    color: '#60a5fa',
+    colorClass: styles.water,
     traits: ['Collaborative', 'Intuitive', 'Patient', 'Diplomatic'],
     desc: 'You bring people together. Your strength is in creating the conditions for others to thrive.',
     peak: 'Afternoon and early evening',
@@ -42,7 +43,7 @@ const archetypes = [
   {
     name: 'Earth Anchor',
     element: 'Earth',
-    color: '#d97706',
+    colorClass: styles.earth,
     traits: ['Reliable', 'Methodical', 'Grounded', 'Practical'],
     desc: 'You are the foundation. Steady, consistent, and trustworthy, you build things that last.',
     peak: 'Consistent throughout the day',
@@ -54,7 +55,7 @@ export default function ArchetypeExplorerPage() {
     <main style={{
       minHeight: '100vh',
       background: 'var(--color-bg-primary)',
-      color: 'var(--color-border)',
+      color: 'var(--color-text-primary)',
       padding: '4rem 2rem',
     }}>
       <div style={{ maxWidth: '900px', margin: '0 auto' }}>
@@ -66,7 +67,7 @@ export default function ArchetypeExplorerPage() {
           <div style={{
             display: 'inline-block',
             padding: '0.375rem 1rem',
-            background: 'rgba(102, 126, 234, 0.15)',
+            background: 'var(--color-accent-soft)',
             borderRadius: '9999px',
             fontSize: '0.75rem',
             fontWeight: 600,
@@ -80,7 +81,7 @@ export default function ArchetypeExplorerPage() {
           <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '1rem' }}>
             Archetype Explorer
           </h1>
-          <p style={{ color: '#888', fontSize: '1.125rem', lineHeight: 1.6, maxWidth: '600px', margin: '0 auto' }}>
+          <p style={{ color: 'var(--color-text-secondary)', fontSize: '1.125rem', lineHeight: 1.6, maxWidth: '600px', margin: '0 auto' }}>
             Every 8os is built on a BaZi-derived archetype. These are the five core patterns,
             your exact configuration is a unique blend.
           </p>
@@ -100,40 +101,40 @@ export default function ArchetypeExplorerPage() {
             }}>
               <div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.75rem' }}>
-                  <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-border)', margin: 0 }}>
+                  <h2 style={{ fontSize: '1.25rem', fontWeight: 700, color: 'var(--color-text-primary)', margin: 0 }}>
                     {a.name}
                   </h2>
-                  <span style={{
+                  <span className={a.colorClass} style={{
                     padding: '0.2rem 0.6rem',
-                    background: `${a.color}22`,
-                    border: `1px solid ${a.color}44`,
+                    background: 'var(--color-bg-secondary)',
+                    border: '1px solid var(--color-border)',
                     borderRadius: '9999px',
                     fontSize: '0.7rem',
                     fontWeight: 600,
-                    color: a.color,
                     textTransform: 'uppercase',
                     letterSpacing: '0.05em',
                   }}>
                     {a.element}
                   </span>
                 </div>
-                <p style={{ color: '#bbb', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1rem' }}>
+                <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.95rem', lineHeight: 1.6, marginBottom: '1rem' }}>
                   {a.desc}
                 </p>
                 <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.75rem' }}>
                   {a.traits.map((t) => (
                     <span key={t} style={{
                       padding: '0.25rem 0.625rem',
-                      background: 'var(--color-border)',
+                      background: 'var(--color-bg-secondary)',
+                      border: '1px solid var(--color-border)',
                       borderRadius: '6px',
                       fontSize: '0.75rem',
-                      color: '#aaa',
+                      color: 'var(--color-text-secondary)',
                     }}>
                       {t}
                     </span>
                   ))}
                 </div>
-                <p style={{ color: '#666', fontSize: '0.8rem' }}>
+                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.8rem' }}>
                   ⚡ Peak hours: {a.peak}
                 </p>
               </div>
@@ -142,8 +143,8 @@ export default function ArchetypeExplorerPage() {
         </div>
 
         <div style={{
-          background: 'rgba(102, 126, 234, 0.08)',
-          border: '1px solid rgba(102, 126, 234, 0.2)',
+          background: 'var(--color-accent-soft)',
+          border: '1px solid var(--color-border)',
           borderRadius: '16px',
           padding: '2.5rem',
           textAlign: 'center',
@@ -151,16 +152,16 @@ export default function ArchetypeExplorerPage() {
           <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem' }}>
             Discover Your Archetype
           </h2>
-          <p style={{ color: '#888', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+          <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1.5rem', lineHeight: 1.6 }}>
             Your exact archetype is a unique blend determined by your BaZi birth chart.
             Generate yours in 90 seconds, free.
           </p>
           <Link href="/onboarding" style={{
             display: 'inline-block',
             padding: '1rem 2rem',
-            background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)',
+            background: 'var(--color-accent-gradient)',
             borderRadius: '12px',
-            color: '#fff',
+            color: 'var(--color-on-accent)',
             textDecoration: 'none',
             fontSize: '1rem',
             fontWeight: 700,
