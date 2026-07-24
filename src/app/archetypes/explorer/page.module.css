@@ -3,7 +3,7 @@
  * background (--color-bg-secondary) in both light and dark themes.
  */
 
-.metal { color: var(--color-text-muted); }
+.metal { color: var(--color-text-primary); }
 .wood { color: #15803d; }
 .fire { color: #b45309; }
 .water { color: #0369a1; }

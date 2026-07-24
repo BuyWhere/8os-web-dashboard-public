@@ -128,13 +128,13 @@ export default function ArchetypeExplorerPage() {
                       border: '1px solid var(--color-border)',
                       borderRadius: '6px',
                       fontSize: '0.75rem',
-                      color: 'var(--color-text-secondary)',
+                      color: 'var(--color-text-primary)',
                     }}>
                       {t}
                     </span>
                   ))}
                 </div>
-                <p style={{ color: 'var(--color-text-muted)', fontSize: '0.8rem' }}>
+                <p style={{ color: 'var(--color-text-primary)', fontSize: '0.8rem' }}>
                   ⚡ Peak hours: {a.peak}
                 </p>
               </div>
