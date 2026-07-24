@@ -1,0 +1,22 @@
+# Railway RAILPACK auto-detect guard for web-dashboard.
+#
+# The web-dashboard repo co-locates a Next.js frontend (the deployed service)
+# with a Python FastAPI backend (backend/, the 8os Orchestrator). The
+# frontend is the deployed service; the backend is its own separate Railway
+# service.
+#
+# If the `web-dashboard` Railway service's `builder` setting ever drifts back
+# to RAILPACK (auto-detect), Railpack will see the co-located backend/ with
+# its own Dockerfile/pyproject.toml/railway.toml and build the FastAPI image
+# instead of the Next.js tree. That drift was OS-4324 (closed 2026-07-21) and
+# it has already recurred (OS-4615, 2026-07-24). Root-cause mitigation: keep
+# the backend out of the build context so RAILPACK can only detect Node.
+#
+# This file is consumed by Railway when RAILPACK is the active builder. It is
+# inert when the service is set to `builder = DOCKERFILE` (the canonical
+# config in this repo's railway.toml). It exists so a future drift lands as
+# a build failure (visible) rather than a wrong-image production impact.
+
+# FastAPI orchestrator co-located under web-dashboard/.
+backend/
+backend/**

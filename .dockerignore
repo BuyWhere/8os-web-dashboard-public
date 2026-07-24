@@ -1,0 +1,46 @@
+# Docker build context guard for web-dashboard.
+#
+# The web-dashboard repo co-locates a Next.js frontend with a Python FastAPI
+# backend (backend/, the 8os Orchestrator). The frontend is the deployed
+# service; the backend is its own separate Railway service.
+#
+# The top-level Dockerfile builds Next.js standalone. Excluding backend/ from
+# the Docker build context keeps the FastAPI source out of the Next.js image
+# (no wasted layer, no accidental presence) and makes the build deterministic
+# regardless of builder config. This is a hardening measure for OS-4615
+# (RAILPACK drift recurrence on 2026-07-24) following OS-4324 (RAILPACK drift
+# on 2026-07-21).
+
+# Never ship the FastAPI orchestrator inside the Next.js image.
+backend/
+backend/**
+
+# Local development + repo hygiene (most already .gitignored, but be explicit
+# at the build context level so a fresh clone without git history still
+# builds cleanly).
+node_modules/
+.next/
+out/
+build/
+dist/
+test-results/
+playwright-report/
+playwright/.cache/
+coverage/
+.vercel/
+.railway/
+.turbo/
+.env
+.env*
+*.log
+*.tsbuildinfo
+.__pycache__/
+*.pyc
+.venv/
+venv/
+.DS_Store
+.idea/
+.vscode/
+*.sqlite
+*.swp
+*.swo
