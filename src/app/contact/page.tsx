@@ -10,8 +10,31 @@ export const metadata: Metadata = {
 
 const SECTIONS = [
   { id: 'contact-header', label: 'Contact' },
-  { id: 'contact-form', label: 'Send a Message' },
   { id: 'contact-options', label: 'Email Options' },
+  { id: 'contact-form', label: 'Send a Message' },
+];
+
+const EMAIL_OPTIONS = [
+  {
+    label: 'General enquiries',
+    email: 'hello@8os.ai',
+    desc: 'Questions about 8os, feedback, or partnership opportunities.',
+  },
+  {
+    label: 'Privacy & data',
+    email: 'privacy@8os.ai',
+    desc: 'Data deletion requests, privacy concerns, or GDPR/CCPA matters.',
+  },
+  {
+    label: 'Legal',
+    email: 'legal@8os.ai',
+    desc: 'Terms of service questions or legal correspondence.',
+  },
+  {
+    label: 'Support',
+    email: 'support@8os.ai',
+    desc: 'Help with your account, billing, or technical issues.',
+  },
 ];
 
 export default function ContactPage() {
@@ -40,43 +63,15 @@ export default function ContactPage() {
             </p>
           </section>
 
-          <section id="contact-form" style={{ marginBottom: '3rem' }}>
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem' }}>
-              Send a message
+          <section id="contact-options" aria-labelledby="contact-options-title" style={{ marginBottom: '3rem' }}>
+            <h2 id="contact-options-title" style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem' }}>
+              Email Options
             </h2>
             <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1.25rem', lineHeight: 1.5 }}>
-              Drop your details below and we&apos;ll reply within 1-2 business days. Or email us directly using the addresses below.
+              Email us directly using the addresses below.
             </p>
-            <ContactForm />
-          </section>
-
-          <section id="contact-options">
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '1.25rem' }}>
-              Or email us directly
-            </h2>
             <div style={{ display: 'grid', gap: '1.5rem' }}>
-              {[
-                {
-                  label: 'General enquiries',
-                  email: 'hello@8os.ai',
-                  desc: 'Questions about 8os, feedback, or partnership opportunities.',
-                },
-                {
-                  label: 'Privacy & data',
-                  email: 'privacy@8os.ai',
-                  desc: 'Data deletion requests, privacy concerns, or GDPR/CCPA matters.',
-                },
-                {
-                  label: 'Legal',
-                  email: 'legal@8os.ai',
-                  desc: 'Terms of service questions or legal correspondence.',
-                },
-                {
-                  label: 'Support',
-                  email: 'support@8os.ai',
-                  desc: 'Help with your account, billing, or technical issues.',
-                },
-              ].map((item) => (
+              {EMAIL_OPTIONS.map((item) => (
                 <div key={item.email} style={{
                   background: 'var(--color-bg-card)',
                   border: '1px solid var(--color-border)',
@@ -95,6 +90,16 @@ export default function ContactPage() {
                 </div>
               ))}
             </div>
+          </section>
+
+          <section id="contact-form">
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem' }}>
+              Send a message
+            </h2>
+            <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1.25rem', lineHeight: 1.5 }}>
+              Prefer the form? Drop your details below and we&apos;ll reply within 1-2 business days.
+            </p>
+            <ContactForm />
           </section>
         </main>
       </div>
