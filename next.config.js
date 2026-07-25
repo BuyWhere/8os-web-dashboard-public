@@ -27,9 +27,18 @@ const nextConfig = {
       // OS-2618: legacy Clerk auth paths → canonical routes. Belt-and-suspenders
       // alongside the middleware redirect (next.config runs at the edge before
       // Clerk, so /signin never 404s even if middleware matcher misses it).
+      // OS-2618: legacy Clerk auth paths → canonical routes. Belt-and-suspenders
+      // alongside the middleware redirect (next.config runs at the edge before
+      // Clerk, so /signin never 404s even if middleware matcher misses it).
       { source: '/signin', destination: '/login', permanent: false },
       { source: '/sign-in', destination: '/login', permanent: false },
       { source: '/sign-up', destination: '/signup', permanent: false },
+      // OS-3550: legacy/dead /famous was the old famous archetypes URL.
+      // /archetypes/famous/<name> pages (66 in sitemap) prefetch /famous?_rsc=<id>
+      // which returns 404. Redirect to the canonical /archetypes/famous index.
+      // next.config redirect compiles into the server binary at build time,
+      // unlike middleware which may not initialize for bare 404 routes.
+      { source: '/famous', destination: '/archetypes/famous', permanent: false },
     ]
   },
 }
