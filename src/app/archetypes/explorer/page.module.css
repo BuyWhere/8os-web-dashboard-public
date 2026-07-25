@@ -3,6 +3,162 @@
  * background (--color-bg-secondary) in both light and dark themes.
  */
 
+.pageShell {
+  min-height: 100vh;
+  background: var(--color-bg-primary);
+  color: var(--color-text-primary);
+  padding: 1.5rem 1rem 3rem;
+}
+
+.pageContainer {
+  width: min(100%, 1180px);
+  margin: 0 auto;
+}
+
+.backLink {
+  color: var(--color-accent);
+  text-decoration: none;
+  font-size: 0.875rem;
+}
+
+.hero {
+  text-align: center;
+  margin: 1rem auto 1.25rem;
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 0.375rem 1rem;
+  background: var(--color-accent-soft);
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-accent);
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+
+.title {
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 800;
+  margin: 0 0 0.75rem;
+}
+
+.subtitle {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
+  line-height: 1.45;
+  max-width: 620px;
+  margin: 0 auto;
+}
+
+.archetypeGrid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.875rem;
+  margin-bottom: 2rem;
+}
+
+.archetypeCard {
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.cardTitle {
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  line-height: 1.2;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin: 0;
+}
+
+.elementBadge {
+  flex: 0 0 auto;
+  padding: 0.2rem 0.5rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 9999px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cardDescription {
+  color: var(--color-text-secondary);
+  font-size: 0.84rem;
+  line-height: 1.45;
+  margin: 0;
+}
+
+.traitList {
+  display: flex;
+  gap: 0.375rem;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+
+.trait {
+  padding: 0.2rem 0.45rem;
+  background: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  font-size: 0.68rem;
+  color: var(--color-text-primary);
+}
+
+.peakHours {
+  color: var(--color-text-primary);
+  font-size: 0.74rem;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.ctaCard {
+  background: var(--color-accent-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  padding: 2rem;
+  text-align: center;
+}
+
+.ctaTitle {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+}
+
+.ctaText {
+  color: var(--color-text-secondary);
+  margin: 0 0 1.5rem;
+  line-height: 1.6;
+}
+
+.ctaButton {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background: var(--color-accent-gradient);
+  border-radius: 12px;
+  color: var(--color-on-accent);
+  text-decoration: none;
+  font-size: 1rem;
+  font-weight: 700;
+}
+
 .metal { color: var(--color-text-primary); }
 .wood { color: #15803d; }
 .fire { color: #b45309; }
@@ -13,3 +169,25 @@
 [data-theme='dark'] .fire { color: #D97706; }
 [data-theme='dark'] .water { color: #38bdf8; }
 [data-theme='dark'] .earth { color: #E88C2A; }
+
+@media (max-width: 1100px) {
+  .archetypeGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .pageShell {
+    padding: 1.25rem 1rem 2rem;
+  }
+
+  .archetypeGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 540px) {
+  .archetypeGrid {
+    grid-template-columns: 1fr;
+  }
+}
