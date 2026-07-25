@@ -90,6 +90,39 @@ export default function FeaturesPage() {
             <p style={{ color: 'var(--color-text-secondary)', fontSize: '1.125rem', lineHeight: 1.6, maxWidth: '600px', margin: '0 auto' }}>
               8os combines ancient wisdom with modern AI to build an operating system unique to you.
             </p>
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '0.875rem', flexWrap: 'wrap', marginTop: '1.75rem' }}>
+              <Link href="/onboarding" style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '0.875rem 1.5rem',
+                background: 'var(--color-accent)',
+                border: '1px solid var(--color-accent)',
+                borderRadius: '12px',
+                color: '#fff',
+                textDecoration: 'none',
+                fontSize: '0.95rem',
+                fontWeight: 700,
+                boxShadow: '0 10px 24px rgba(110, 83, 31, 0.22)',
+              }}>
+                Get started free
+              </Link>
+              <Link href="/pricing" style={{
+                display: 'inline-flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                padding: '0.875rem 1.5rem',
+                background: 'var(--color-bg-card)',
+                border: '1px solid var(--color-border)',
+                borderRadius: '12px',
+                color: 'var(--color-text-primary)',
+                textDecoration: 'none',
+                fontSize: '0.95rem',
+                fontWeight: 700,
+              }}>
+                See pricing
+              </Link>
+            </div>
           </section>
 
           <section id="all-features" style={{ marginBottom: '4rem' }}>
