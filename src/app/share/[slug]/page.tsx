@@ -25,18 +25,26 @@ interface ArchetypeShareCard {
   exampleElement: string;
 }
 
+const STRATEGIC_COMMANDER: ArchetypeShareCard = {
+  slug: 'strategic-commander',
+  archetype: 'Strategic Commander',
+  element: 'Metal',
+  elementEmoji: '⚙️',
+  elementColor: 'var(--color-element-metal, #8A8B8E)',
+  tagline: 'The Architect Who Builds Empires',
+  description: 'Strategic Commanders combine decisive action with structural precision. Where others see obstacles, they see inefficiencies to eliminate. They earn trust through reliability, not charisma, and build systems that outlast the builder.',
+  traits: ['Unmatched long-range planning and execution', 'Decisive under pressure without panic', 'Builds systems that outlast the builder', 'Earns trust through reliability, not charisma'],
+  exampleSign: 'Capricorn',
+  exampleElement: 'Geng Metal',
+};
+
 const SHARE_CARDS: Record<string, ArchetypeShareCard> = {
-  'strategic-commander': {
-    slug: 'strategic-commander',
-    archetype: 'Strategic Commander',
-    element: 'Metal',
-    elementEmoji: '⚙️',
-    elementColor: 'var(--color-element-metal, #8A8B8E)',
-    tagline: 'The Architect Who Builds Empires',
-    description: 'Strategic Commanders combine decisive action with structural precision. Where others see obstacles, they see inefficiencies to eliminate. They earn trust through reliability, not charisma, and build systems that outlast the builder.',
-    traits: ['Unmatched long-range planning and execution', 'Decisive under pressure without panic', 'Builds systems that outlast the builder', 'Earns trust through reliability, not charisma'],
-    exampleSign: 'Capricorn',
-    exampleElement: 'Geng Metal',
+  'strategic-commander': STRATEGIC_COMMANDER,
+  // OS-4562: the archetype detail page can prefetch the concrete sign/element
+  // slug. Serve the same card for that URL instead of returning NEXT_NOT_FOUND.
+  'capricorn-geng-metal': {
+    ...STRATEGIC_COMMANDER,
+    slug: 'capricorn-geng-metal',
   },
   'nurturing-creative': {
     slug: 'nurturing-creative',

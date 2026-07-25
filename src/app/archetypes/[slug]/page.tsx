@@ -888,7 +888,7 @@ export default async function ArchetypePage({ params }: { params: Promise<{ slug
           <Link href="/onboarding" className="archetype-cta-primary">
             Get My Archetype →
           </Link>
-          <Link href={`/share/${p.archetypeSlug}`} className="archetype-cta-secondary">
+          <Link href={`/share/${p.archetypeSlug}`} prefetch={false} className="archetype-cta-secondary">
             View {p.archetype} Card →
           </Link>
         </div>
