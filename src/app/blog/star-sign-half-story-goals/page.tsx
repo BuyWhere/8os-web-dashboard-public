@@ -25,8 +25,8 @@ const jsonLd = {
     "Your sun sign is your headline, not your profile. Learn why Western astrology alone isn't enough for goal achievement and how BaZi fills the gap.",
   author: { '@type': 'Organization', name: '8os.ai' },
   publisher: { '@type': 'Organization', name: '8os.ai', url: 'https://8os.ai' },
-  datePublished: '2026-05-07',
-  dateModified: '2026-05-07',
+  datePublished: '2025-05-07',
+  dateModified: '2025-05-07',
 };
 
 export default function StarSignHalfStoryPage() {
@@ -40,7 +40,7 @@ export default function StarSignHalfStoryPage() {
         <header style={headerStyle}>
           <Link href="/blog" style={backLinkStyle}>← All Articles</Link>
           <h1 style={h1Style}>Why Your Star Sign Only Tells Half the Story</h1>
-          <p style={metaStyle}>May 7, 2026 · 8os.ai</p>
+          <p style={metaStyle}>May 7, 2025 · 8os.ai</p>
         </header>
 
         <div style={contentStyle}>

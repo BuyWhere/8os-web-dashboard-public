@@ -26,8 +26,8 @@ const jsonLd = {
     'BaZi (Four Pillars of Destiny) reveals your operating system from your birth data. Learn how this Chinese metaphysical system helps you understand your optimal path.',
   author: { '@type': 'Organization', name: '8os.ai' },
   publisher: { '@type': 'Organization', name: '8os.ai', url: 'https://8os.ai' },
-  datePublished: '2026-05-07',
-  dateModified: '2026-05-07',
+  datePublished: '2025-05-07',
+  dateModified: '2025-05-07',
   mainEntityOfPage: { '@type': 'WebPage', '@id': 'https://8os.ai/blog/what-is-bazi-best-self' },
 };
 
@@ -42,7 +42,7 @@ export default function WhatIsBaziPage() {
         <header style={headerStyle}>
           <Link href="/blog" style={backLinkStyle}>← All Articles</Link>
           <h1 style={h1Style}>What Is BaZi and How Can It Help You Achieve Your Goals?</h1>
-          <p style={metaStyle}>May 7, 2026 · 8os.ai</p>
+          <p style={metaStyle}>May 7, 2025 · 8os.ai</p>
         </header>
 
         <div style={contentStyle}>

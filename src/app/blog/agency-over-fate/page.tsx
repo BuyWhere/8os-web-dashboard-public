@@ -25,8 +25,8 @@ const jsonLd = {
     "Astrology doesn't predict your fate, it reveals your path. Learn how 8os.ai helps you navigate your journey with goal-native architecture, not deterministic predictions.",
   author: { '@type': 'Organization', name: '8os.ai' },
   publisher: { '@type': 'Organization', name: '8os.ai', url: 'https://8os.ai' },
-  datePublished: '2026-05-07',
-  dateModified: '2026-05-07',
+  datePublished: '2025-05-07',
+  dateModified: '2025-05-07',
 };
 
 export default function AgencyOverFatePage() {
@@ -40,7 +40,7 @@ export default function AgencyOverFatePage() {
         <header style={headerStyle}>
           <Link href="/blog" style={backLinkStyle}>← All Articles</Link>
           <h1 style={h1Style}>You Control the Journey: Agency Over Fate in 8os</h1>
-          <p style={metaStyle}>May 7, 2026 · 8os.ai</p>
+          <p style={metaStyle}>May 7, 2025 · 8os.ai</p>
         </header>
 
         <div style={contentStyle}>

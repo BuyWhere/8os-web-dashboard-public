@@ -59,7 +59,7 @@ export default function WhyNoBirthTimePage() {
         <header style={headerStyle}>
           <Link href="/blog" style={backLinkStyle}>← All Articles</Link>
           <h1 style={h1Style}>Why We Don&apos;t Ask for Your Birth Time</h1>
-          <p style={metaStyle}>May 7, 2026 · 8os.ai</p>
+          <p style={metaStyle}>May 7, 2025 · 8os.ai</p>
         </header>
 
         <div style={contentStyle}>
