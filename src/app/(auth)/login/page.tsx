@@ -36,6 +36,9 @@ export default function LoginPage() {
         signUpUrl="/signup"
         forceRedirectUrl="/dashboard"
         appearance={{
+          layout: {
+            socialButtonsVariant: "blockButton",
+          },
           variables: {
             // Card / page surface
             colorBackground: CARD,

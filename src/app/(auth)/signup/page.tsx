@@ -65,6 +65,9 @@ export default function SignupPage() {
             signInUrl="/login"
             forceRedirectUrl="/onboarding"
             appearance={{
+              layout: {
+                socialButtonsVariant: "blockButton",
+              },
               variables: {
                 colorBackground: CARD,
                 colorForeground: INK,
