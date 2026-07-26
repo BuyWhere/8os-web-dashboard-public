@@ -93,12 +93,11 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
             }}
           >
             <span
+              className="blog-featured-badge"
               style={{
                 position: 'absolute',
                 top: '16px',
                 right: '16px',
-                background: 'var(--color-accent-soft)',
-                color: 'var(--color-accent-border)',
                 fontSize: '11px',
                 fontWeight: 600,
                 padding: '4px 10px',
