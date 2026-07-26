@@ -5,8 +5,6 @@ import { runAttribution, computeLedger, computeAlignment } from '@/lib/alignment
 import { ensureProposal } from '@/lib/redirections'
 import { enforceRateLimit, RATE_LIMITS } from '@/lib/rate-limit'
 import { captureServerException } from '@/lib/error-track'
-import { detectDriftSignals } from '@/lib/drift-engine'
-import { generateCoachingNudges } from '@/lib/coaching-engine'
 
 /**
  * GET /api/drift/scan
@@ -14,12 +12,6 @@ import { generateCoachingNudges } from '@/lib/coaching-engine'
  * Flow-AI agent contract adapter over the Alignment Engine. It computes the
  * same live drift/accountability signal used by /api/alignment, but returns a
  * compact shape for proactive nudges and weekly-review routing.
- *
- * Optional query params:
- *   - full=1: include debug attributions and 30-day window
- *   - debug=1: include raw alignment attribution records
- *   - signals=1: include new drift signal detection (goal_abandonment, priority_inversion, etc.)
- *   - nudges=1: include archetype-appropriate coaching nudges
  */
 export async function GET(req: NextRequest) {
   const auth = await authOrQa(req)
@@ -31,8 +23,6 @@ export async function GET(req: NextRequest) {
   const sp = req.nextUrl.searchParams
   const full = sp.get('full') === '1'
   const debug = sp.get('debug') === '1'
-  const includeSignals = sp.get('signals') === '1' || sp.get('full') === '1'
-  const includeNudges = sp.get('nudges') === '1' || sp.get('full') === '1'
   const days = full ? 30 : 7
 
   let attribution
@@ -58,26 +48,7 @@ export async function GET(req: NextRequest) {
     const weekly = (alignment as { weekly?: { headline?: string; topRedirection?: string; unalignedShare?: number; perGoal?: unknown[] } }).weekly ?? null
     const daily = (alignment as { daily?: { headline?: string; topRedirection?: string; unalignedShare?: number; perGoal?: unknown[] } }).daily ?? null
     const unalignedShare = weekly?.unalignedShare ?? daily?.unalignedShare ?? 0
-
-    let driftSignals: Awaited<ReturnType<typeof detectDriftSignals>> = []
-    let coachingNudges: ReturnType<typeof generateCoachingNudges> = []
-    if (includeSignals || includeNudges) {
-      try {
-        driftSignals = await detectDriftSignals(auth.userId, days)
-        if (includeNudges) {
-          const archetype = await prisma.archetypeResult.findUnique({
-            where: { userId: auth.userId },
-            select: { archetypeId: true },
-          })
-          coachingNudges = generateCoachingNudges(driftSignals, auth.userId, archetype?.archetypeId ?? 'pioneer')
-        }
-      } catch (error) {
-        console.error('[drift/scan] signal detection failed:', error)
-        captureServerException(error, { route: '/api/drift/scan', userId: auth.userId, extra: { phase: 'detectDriftSignals' } })
-      }
-    }
-
-    const driftDetected = unalignedShare >= 0.25 || !!redirectionProposal || driftSignals.length > 0
+    const driftDetected = unalignedShare >= 0.25 || !!redirectionProposal
 
     const payload: Record<string, unknown> = {
       contract: 'flow-ai.drift.scan.v1',
@@ -93,16 +64,6 @@ export async function GET(req: NextRequest) {
       redirection: redirectionProposal,
       attribution,
       ledger,
-      signals: includeSignals ? driftSignals : undefined,
-      coachingNudges: includeNudges ? coachingNudges : undefined,
-      signalSummary: includeSignals
-        ? {
-            totalSignals: driftSignals.length,
-            highCount: driftSignals.filter((s) => s.severity === 'high').length,
-            mediumCount: driftSignals.filter((s) => s.severity === 'medium').length,
-            lowCount: driftSignals.filter((s) => s.severity === 'low').length,
-          }
-        : undefined,
       actions: {
         briefing: '/api/briefing/today',
         briefingAction: '/api/briefing/action',
