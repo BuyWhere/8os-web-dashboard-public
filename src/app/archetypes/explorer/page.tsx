@@ -67,6 +67,10 @@ export default function ArchetypeExplorerPage() {
           </p>
         </header>
 
+        <p className={styles.patternAffordance}>
+          Showing all five core patterns: Metal, Wood, Fire, Water, and Earth.
+        </p>
+
         <section className={styles.archetypeGrid} aria-label="Five core archetype patterns">
           {archetypes.map((a) => (
             <article key={a.name} className={styles.archetypeCard}>
