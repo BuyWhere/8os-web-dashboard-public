@@ -567,11 +567,11 @@ body:has(.app-sidebar) main:not(.cal-main) {
  * Component uses background: var(--color-accent-soft) with color:
  *   Light: --color-accent-border #7A5A1E on --color-accent-soft #F2E9D6 = 5.26:1 ✓
  *   Dark:  --color-accent-border #9A7A3A on --color-accent-soft #3A3125 = 3.17:1 ✗
- * Fix: swap color to --color-text-secondary (#6B6257 / #B8AF9F):
- *   Light: #6B6257 on #F2E9D6 = 5.26:1 ✓
- *   Dark:  #B8AF9F on #3A3125 = 4.49:1 ✓  (OS-4750)
+ * Fix: use --color-text-primary (#221F1A / #EDE7DD) for maximum legibility:
+ *   Light: #221F1A on #F2E9D6 = 12.81:1 ✓
+ *   Dark:  #EDE7DD on #3A3125 = 10.95:1 ✓  (OS-4750)
  */
 .blog-featured-badge {
   background: var(--color-accent-soft);
-  color: var(--color-text-secondary);
+  color: var(--color-text-primary);
 }
