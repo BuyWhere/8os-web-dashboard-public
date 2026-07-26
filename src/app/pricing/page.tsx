@@ -283,7 +283,7 @@ const tiersGridResponsiveStyle = `
   }
 `;
 
-const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh' };
+const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh', paddingBottom: '6rem' };
 const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '5rem 2rem', minWidth: 0 };
 const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '4rem' };
 const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-text-primary)' };
