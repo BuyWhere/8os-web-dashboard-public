@@ -54,12 +54,5 @@
       "source": "/health",
       "destination": "https://orchestrator-production-1643.up.railway.app/health"
     }
-  ],
-  "redirects": [
-    {
-      "source": "/archetype-explorer",
-      "destination": "/archetypes/explorer",
-      "statusCode": 308
-    }
   ]
 }

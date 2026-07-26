@@ -8,7 +8,7 @@ export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   reporter: 'list',
   use: {
-    baseURL: 'https://8os.ai',
+    baseURL: process.env.PLAYWRIGHT_BASE_URL ?? 'https://8os.ai',
     trace: 'on-first-retry',
   },
   projects: [
