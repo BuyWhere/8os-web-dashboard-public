@@ -177,7 +177,7 @@ export function Header() {
           alignItems: 'center',
           justifyContent: 'space-between',
           width: '100%',
-          maxWidth: '1120px',
+          maxWidth: '1200px',
           margin: '0 auto',
         }}
       >
