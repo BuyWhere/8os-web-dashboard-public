@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import Link from 'next/link'
 import type { BlogPost, BlogCategory } from '@/lib/content/blog'
 
@@ -23,16 +23,31 @@ interface BlogListClientProps {
 export default function BlogListClient({ posts }: BlogListClientProps) {
   const [activeCategory, setActiveCategory] = useState<BlogCategory | null>(null)
   const [visibleCount, setVisibleCount] = useState(POSTS_PER_PAGE)
+  const [searchQuery, setSearchQuery] = useState('')
 
   const featured = posts.find((p) => p.featured) ?? posts[0]
 
-  const filtered = activeCategory
-    ? posts.filter((p) => p.category === activeCategory)
-    : posts
+  // Filter by search query (title, excerpt, slug)
+  const searchFiltered = useMemo(() => {
+    if (!searchQuery.trim()) return posts
+    const q = searchQuery.toLowerCase()
+    return posts.filter((p) =>
+      p.title.toLowerCase().includes(q) ||
+      p.excerpt.toLowerCase().includes(q) ||
+      p.slug.toLowerCase().includes(q)
+    )
+  }, [posts, searchQuery])
 
-  // When the featured hero is shown (no category filter), drop it from the
-  // list below so it isn't duplicated as the first card.
-  const listSource = !activeCategory && featured
+  const filtered = activeCategory
+    ? searchFiltered.filter((p) => p.category === activeCategory)
+    : searchFiltered
+
+  const hasSearchQuery = searchQuery.trim().length > 0
+  const showFeatured = featured && !activeCategory && !hasSearchQuery
+
+  // When the featured hero is shown (no category or search filter), drop it
+  // from the list below so it isn't duplicated as the first card.
+  const listSource = showFeatured
     ? filtered.filter((p) => p.slug !== featured.slug)
     : filtered
 
@@ -53,7 +68,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
   return (
     <div>
       {/* Featured Article */}
-      {featured && !activeCategory && (
+      {showFeatured && (
         <Link
           href={`/blog/${featured.slug}`}
           style={{ textDecoration: 'none', display: 'block', marginBottom: '32px' }}
@@ -82,8 +97,8 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                 position: 'absolute',
                 top: '16px',
                 right: '16px',
-                background: 'var(--color-accent)',
-                color: '#fff',
+                background: 'var(--color-accent-soft)',
+                color: 'var(--color-accent-border)',
                 fontSize: '11px',
                 fontWeight: 600,
                 padding: '4px 10px',
@@ -158,6 +173,53 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
           </article>
         </Link>
       )}
+
+      {/* Search Input */}
+      <div style={{ marginBottom: '16px' }}>
+        <div style={{ position: 'relative' }}>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
+            fill="none"
+            aria-hidden="true"
+            style={{
+              position: 'absolute',
+              left: '12px',
+              top: '50%',
+              transform: 'translateY(-50%)',
+              color: 'var(--color-text-secondary)',
+              pointerEvents: 'none',
+            }}
+          >
+            <circle cx="7" cy="7" r="5" stroke="currentColor" strokeWidth="1.5" />
+            <path d="M11 11l3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+          </svg>
+          <input
+            type="search"
+            placeholder="Search articles by title or keyword…"
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value)
+              setVisibleCount(POSTS_PER_PAGE)
+            }}
+            style={{
+              width: '100%',
+              boxSizing: 'border-box',
+              padding: '10px 12px 10px 38px',
+              background: 'var(--color-bg-card)',
+              border: '1px solid var(--color-border)',
+              borderRadius: '10px',
+              color: 'var(--color-text-primary)',
+              fontSize: '14px',
+              outline: 'none',
+              transition: 'border-color 0.2s',
+            }}
+            onFocus={(e) => { e.currentTarget.style.borderColor = 'var(--color-accent)' }}
+            onBlur={(e) => { e.currentTarget.style.borderColor = 'var(--color-border)' }}
+          />
+        </div>
+      </div>
 
       {/* Category Filter Chips */}
       <div
