@@ -46,7 +46,7 @@ export default function LandingHeader() {
     >
       <div
         style={{
-          maxWidth: 1200,
+          maxWidth: 1360,
           margin: '0 auto',
           padding: '0 2rem',
           height: '68px',

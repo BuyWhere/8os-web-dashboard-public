@@ -74,7 +74,7 @@ export default function FeaturesPage() {
       color: 'var(--color-text-primary)',
       padding: '4rem 2rem',
     }}>
-      <div style={{ maxWidth: '1200px', margin: '0 auto', display: 'flex', gap: '3rem', alignItems: 'flex-start' }}>
+      <div style={{ maxWidth: '1360px', margin: '0 auto', display: 'flex', gap: '2.5rem', alignItems: 'flex-start' }}>
 
         <SidebarNav sections={SECTIONS} />
 

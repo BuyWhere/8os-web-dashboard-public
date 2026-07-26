@@ -46,7 +46,7 @@ const SURFACE = 'var(--color-bg-card)'
 const GOLD = '#6E531F' // OS-3973: darkened from #8A6728 to clear WCAG AA on small eyebrow text (6.55:1 gold-on-cream)
 const HAIRLINE = 'var(--color-border)'
 const OXBLOOD = 'var(--color-accent-2)'
-const MAXW = 1200
+const MAXW = 1360
 
 // ── Small SVG chart motif — a simple four-pillar BaZi glyph, tasteful ──
 function ChartMotif() {
