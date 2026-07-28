@@ -308,8 +308,8 @@ const tierNoteStyle: React.CSSProperties = { padding: '0.85rem 1rem', borderRadi
 const tierNoteTextStyle: React.CSSProperties = { margin: 0, fontSize: '0.82rem', lineHeight: 1.6, color: 'var(--color-text-secondary)', fontStyle: 'italic' };
 
 const featureListStyle: React.CSSProperties = { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 };
-const featureItemStyle = (included: boolean): React.CSSProperties => ({ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.85rem', lineHeight: 1.5, color: included ? 'var(--color-text-secondary)' : 'var(--color-text-secondary)' });
-const featureCheckStyle = (included: boolean): React.CSSProperties => ({ flexShrink: 0, fontSize: '0.8rem', fontWeight: 700, color: included ? '#4ade80' : 'var(--color-text-secondary)', marginTop: '0.1rem' });
+const featureItemStyle = (included: boolean): React.CSSProperties => ({ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.85rem', lineHeight: 1.5, color: included ? 'var(--color-text-secondary)' : '#a1a1aa', textDecoration: included ? 'none' : 'line-through' });
+const featureCheckStyle = (included: boolean): React.CSSProperties => ({ flexShrink: 0, fontSize: '0.8rem', fontWeight: 700, color: included ? '#4ade80' : '#a1a1aa', marginTop: '0.1rem' });
 
 const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', paddingTop: '1.25rem', display: 'flex', flexDirection: 'column', gap: '0.75rem' };
 const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600 };
@@ -329,7 +329,7 @@ const thPriceStyle: React.CSSProperties = { fontWeight: 400, fontSize: '0.75rem'
 const trEvenStyle: React.CSSProperties = { background: 'var(--color-bg-card)' };
 const tdStyle: React.CSSProperties = { padding: '0.75rem 1rem', color: 'var(--color-text-secondary)', borderBottom: '1px solid var(--color-border)' };
 const checkStyle: React.CSSProperties = { color: '#4ade80', fontWeight: 700, fontSize: '1rem' };
-const crossStyle: React.CSSProperties = { color: 'var(--color-text-secondary)', fontSize: '0.9rem' };
+const crossStyle: React.CSSProperties = { color: '#a1a1aa', fontSize: '0.9rem' };
 const partialStyle: React.CSSProperties = { color: 'var(--color-accent)', fontSize: '0.82rem', fontWeight: 600 };
 
 const faqStyle: React.CSSProperties = { padding: '2rem', borderRadius: '16px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', marginBottom: '3rem' };
