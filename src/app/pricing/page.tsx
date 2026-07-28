@@ -137,7 +137,7 @@ export default function PricingPage() {
   return (
     <>
       <style dangerouslySetInnerHTML={{ __html: tiersGridResponsiveStyle }} />
-    <main style={pageStyle} aria-label="Pricing tiers">
+    <main className="pricing-page" style={pageStyle} aria-label="Pricing tiers">
       <div style={innerStyle}>
         <div style={headerStyle}>
           <p style={eyebrowStyle}>Pricing</p>
@@ -275,6 +275,8 @@ export default function PricingPage() {
 }
 
 const tiersGridResponsiveStyle = `
+  .pricing-page { --pricing-excluded-feature-color: #6B6257; }
+  [data-theme='dark'] .pricing-page { --pricing-excluded-feature-color: #B8AF9F; }
   .tiers-grid { margin-bottom: 5rem; }
   @media (max-width: 1100px) {
     .tiers-grid { grid-template-columns: repeat(2, 1fr) !important; }
@@ -309,7 +311,7 @@ const tierNoteStyle: React.CSSProperties = { padding: '0.85rem 1rem', borderRadi
 const tierNoteTextStyle: React.CSSProperties = { margin: 0, fontSize: '0.82rem', lineHeight: 1.6, color: 'var(--color-text-secondary)', fontStyle: 'italic' };
 
 const featureListStyle: React.CSSProperties = { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 };
-const excludedFeatureTextColor = '#a1a1aa';
+const excludedFeatureTextColor = 'var(--pricing-excluded-feature-color)';
 const featureItemStyle = (included: boolean): React.CSSProperties => ({ display: 'flex', alignItems: 'flex-start', gap: '0.6rem', fontSize: '0.85rem', lineHeight: 1.5, color: included ? 'var(--color-text-secondary)' : excludedFeatureTextColor, textDecoration: included ? 'none' : 'line-through' });
 const featureCheckStyle = (included: boolean): React.CSSProperties => ({ flexShrink: 0, fontSize: '0.8rem', fontWeight: 700, color: included ? '#4ade80' : excludedFeatureTextColor, marginTop: '0.1rem' });
 
