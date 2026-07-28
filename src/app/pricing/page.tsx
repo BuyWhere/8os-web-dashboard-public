@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { CheckoutButton } from '@/components/CheckoutButton';
 
+export const dynamic = 'force-dynamic';
+
 export const metadata: Metadata = {
   title: 'Pricing: Choose Your Operating System | 8os.ai',
   description:
