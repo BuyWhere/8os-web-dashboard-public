@@ -286,6 +286,15 @@ header_probe "OS-3550 /famous Location is /archetypes/famous" \
 header_probe "OS-3550 /famous?_rsc=… Location is /archetypes/famous (RSC prefetch path)" \
   GET "$BASE_URL/famous?_rsc=anc4mq" Location '/archetypes/famous(\?|$)'
 
+# OS-4957: /contact's shared chrome can prefetch /developers as an RSC request.
+# The App Router route must exist for both document and RSC variants; when the
+# RSC variant 404s, Playwright/VidMee can keep the failed fetch open long enough
+# for /contact networkidle to time out.
+probe "OS-4957 /developers 200" \
+  GET "$BASE_URL/developers" '^200$'
+probe "OS-4957 /developers?_rsc=… 200" \
+  GET "$BASE_URL/developers?_rsc=y1ld3" '^200$'
+
 # OS-3550 follow-on: /archetypes/famous/<name> pages themselves must still
 # 200. We sample 3 high-traffic names; the route handler is the same for
 # all 66, but a regression in getFamousProfileBySlug or the dynamic
