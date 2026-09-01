@@ -1,7 +1,8 @@
 'use client'
 
-import { SignUp } from '@clerk/nextjs'
-import { useEffect, useState, type FC } from 'react'
+import { SignUp, useSignUp } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
+import { useEffect, useRef, useState, type FC } from 'react'
 
 // OS-4316: Clerk's <SignUp> can return 4xx errors from /v1/client/sign_ups
 // (e.g. email_already_exists 422, rate limit 429) without rendering a clear
@@ -58,10 +59,13 @@ interface SignupClerkErrorBridgeProps {
 export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
   appearance,
   signInUrl,
-  forceRedirectUrl,
+  forceRedirectUrl: _forceRedirectUrl,
   fallbackRedirectUrl,
 }) => {
   const [bridgeError, setBridgeError] = useState<BridgeError | null>(null)
+  const { isLoaded, signUp, setActive } = useSignUp()
+  const router = useRouter()
+  const advancing = useRef(false)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -102,6 +106,14 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
         throw err
       }
 
+      if (watch && response.ok) {
+        try {
+          window.dispatchEvent(new CustomEvent('8os:clerk-signup-write', { detail: { url, status: response.status } }))
+        } catch {
+          /* ignore */
+        }
+      }
+
       if (watch && response.status >= 400) {
         const { message, severity } = classify(response.status)
         setBridgeError({ status: response.status, message, endpoint: url, at: Date.now() })
@@ -129,6 +141,53 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
       window.fetch = originalFetch
     }
   }, [])
+
+  async function advanceIfStuck() {
+    if (advancing.current) return
+    if (!isLoaded || !signUp) return
+
+    const status = signUp.status
+    const unverified = signUp.unverifiedFields ?? []
+    const needsEmail =
+      status === 'missing_requirements' && unverified.includes('email_address')
+
+    if (needsEmail) {
+      const path = window.location.pathname
+      const hash = window.location.hash || ''
+      if (!path.includes('verify-email') && !hash.includes('verify-email')) {
+        router.replace('/signup/verify-email-address')
+      }
+      return
+    }
+
+    if (status === 'complete' && signUp.createdSessionId) {
+      advancing.current = true
+      try {
+        await setActive({ session: signUp.createdSessionId })
+        router.replace('/onboarding')
+      } catch (err) {
+        advancing.current = false
+        console.warn('[clerk-sign-up-bridge] setActive failed', err)
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const onWrite = () => {
+      window.setTimeout(() => {
+        void advanceIfStuck()
+      }, 250)
+    }
+    window.addEventListener('8os:clerk-signup-write', onWrite)
+    return () => window.removeEventListener('8os:clerk-signup-write', onWrite)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, signUp?.status, signUp?.id])
+
+  useEffect(() => {
+    void advanceIfStuck()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoaded, signUp?.status, signUp?.createdSessionId, signUp?.unverifiedFields?.join(',')])
 
   return (
     <div>
@@ -164,10 +223,10 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
         </div>
       )}
       <SignUp
-        routing="hash"
+        routing="path"
+        path="/signup"
         signInUrl={signInUrl ?? '/login'}
-        forceRedirectUrl={forceRedirectUrl ?? '/onboarding'}
-        fallbackRedirectUrl={fallbackRedirectUrl}
+        fallbackRedirectUrl={fallbackRedirectUrl ?? '/onboarding'}
         appearance={appearance}
       />
     </div>
