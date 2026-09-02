@@ -1,4 +1,5 @@
 import { SignupClerkErrorBridge } from "@/components/auth/SignupClerkErrorBridge"
+import { SignupPlanIntent } from "@/components/auth/SignupPlanIntent"
 
 // Clerk components read request context; render at request time (never prerender).
 export const dynamic = "force-dynamic"
@@ -59,6 +60,7 @@ export default function SignupPage() {
             errors (email already exists, rate limit, server errors) and show
             a clear inline message instead of a silent broken form. */}
         <section className="signup-auth" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", alignSelf: "start" }}>
+          <SignupPlanIntent />
           <SignupClerkErrorBridge
             signInUrl="/login"
             forceRedirectUrl="/onboarding"

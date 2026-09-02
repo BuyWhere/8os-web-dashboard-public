@@ -115,7 +115,10 @@ export async function requireAuth(
   // Real Clerk session path.
   const { userId: clerkUserId, sessionId } = await auth()
   if (!clerkUserId) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
+    return NextResponse.json(
+      { error: "Unauthorized", code: "unauthenticated" },
+      { status: 401 },
+    )
   }
 
   try {
