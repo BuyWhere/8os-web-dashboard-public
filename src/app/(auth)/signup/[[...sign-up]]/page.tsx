@@ -86,7 +86,8 @@ export default function SignupPage() {
                 card: { border: "none", boxShadow: "none", borderRadius: 0, padding: "0 24px" }, // OS-3873 r5: 24px horizontal padding so inputs/social buttons don't clip at card edges
                 header: { display: "none" }, // Hide Clerk's default logo/header branding
                 formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: LINK_DARK },
-                socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px" }, // dark border for WCAG social button contrast
+                socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px", color: "#1F2937" },
+                socialButtonsBlockButtonText: { color: "#1F2937" },
                 formFieldInput: { minHeight: "44px", border: `1px solid ${BORDER}`, boxShadow: `0 0 0 1px ${BORDER}` },
                 formFieldLabel: { color: LINK_DARK }, // dark label for WCAG AA 12.4:1 on white
                 formFieldLabelRow: { color: LINK_DARK },
@@ -99,7 +100,7 @@ export default function SignupPage() {
           {/* OS-4316: Terms + Privacy links below the Clerk card for transparency.
               Clerk may render its own terms acceptance inside the widget depending
               on Dashboard settings; these links are always visible regardless. */}
-          <p style={{ marginTop: 12, fontSize: "0.78rem", color: "#767676", textAlign: "center", lineHeight: 1.4 }}>
+          <p style={{ marginTop: 12, fontSize: "0.85rem", color: "#4A4A4A", textAlign: "center", lineHeight: 1.4 }}>
             By creating an account you agree to our{" "}
             <a href="/terms" style={{ color: LINK_DARK, textDecoration: "underline" }}>Terms of Service</a>
             {" "}and{" "}
@@ -111,7 +112,12 @@ export default function SignupPage() {
       <style dangerouslySetInnerHTML={{ __html: `
         .signup-auth .cl-formFieldInput { border: 1px solid ${BORDER} !important; box-shadow: 0 0 0 1px ${BORDER} !important; }
         .signup-auth .cl-formFieldOptionalText { color: ${LINK_DARK} !important; }
-        .signup-auth .cl-socialButtonsBlockButton { border-color: ${BORDER} !important; border: 1px solid ${BORDER} !important; }
+        .signup-auth .cl-socialButtonsBlockButton { border-color: ${BORDER} !important; border: 1px solid ${BORDER} !important; color: #1F2937 !important; }
+        .signup-auth .cl-socialButtonsBlockButtonText,
+        .signup-auth .cl-socialButtonsBlockButtonText__apple,
+        .signup-auth .cl-socialButtonsBlockButtonText__github,
+        .signup-auth .cl-socialButtonsBlockButtonText__google { color: #1F2937 !important; }
+        .signup-auth > p { color: #4A4A4A !important; }
         .signup-auth .cl-formFieldHintText,
         .signup-auth .cl-footerActionLink { color: ${LINK_DARK} !important; }
         /* OS-3867 button: ensure black text on gold bg wins specificity battle.

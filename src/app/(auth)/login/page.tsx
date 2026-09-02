@@ -23,6 +23,7 @@ const BORDER = "#767676" // dark gray for WCAG input borders (was #E7DFD2, 1.46:
 export default function LoginPage() {
   return (
     <main
+      className="login-auth"
       style={{
         display: "flex",
         alignItems: "center",
@@ -63,9 +64,18 @@ export default function LoginPage() {
             },
             formFieldLabel: { color: LINK_DARK }, // dark label for WCAG AA 12.4:1 on white
             footerActionLink: { color: LINK_DARK, fontWeight: 600 }, // dark "Sign up" link for WCAG AA 12.4:1
+            socialButtonsBlockButton: { color: "#1F2937", border: `1px solid ${BORDER}` },
+            socialButtonsBlockButtonText: { color: "#1F2937" },
           },
         }}
       />
+      <style dangerouslySetInnerHTML={{ __html: `
+        .login-auth .cl-socialButtonsBlockButton { color: #1F2937 !important; }
+        .login-auth .cl-socialButtonsBlockButtonText,
+        .login-auth .cl-socialButtonsBlockButtonText__apple,
+        .login-auth .cl-socialButtonsBlockButtonText__github,
+        .login-auth .cl-socialButtonsBlockButtonText__google { color: #1F2937 !important; }
+      ` }} />
     </main>
   )
 }
