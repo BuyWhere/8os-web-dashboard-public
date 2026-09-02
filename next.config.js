@@ -43,6 +43,10 @@ const nextConfig = {
       // to the existing contact/support page instead of a generic 404.
       { source: '/help', destination: '/contact', permanent: false },
       { source: '/--help', destination: '/contact', permanent: false },
+      // OS-5932: /docs 404ed (no App Router page). Canonical docs surface is
+      // /developers. Edge + next.config belt-and-suspenders like /help.
+      { source: '/docs', destination: '/developers', permanent: false },
+      { source: '/docs/:path*', destination: '/developers', permanent: false },
     ]
   },
 }

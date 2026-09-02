@@ -134,6 +134,11 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
   if (pathname === '/help' || pathname === '/--help') {
     return applyCSP(NextResponse.redirect(new URL('/contact', req.url), 307))
   }
+  // OS-5932: /docs is not a product route (docs live at /developers). Edge
+  // 307 so RSC prefetch (?_rsc=) and next.config misses still avoid the 404.
+  if (pathname === '/docs' || pathname.startsWith('/docs/')) {
+    return applyCSP(NextResponse.redirect(new URL('/developers', req.url), 307))
+  }
 
   try {
     const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || ''
