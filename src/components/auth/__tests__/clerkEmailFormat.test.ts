@@ -2,9 +2,30 @@ import {
   classifySignin422,
   classifySignup422,
   EMAIL_FORMAT_MESSAGE,
+  EMAIL_REQUIRED_MESSAGE,
+  PASSWORD_REQUIRED_MESSAGE,
   extractEmailFromBody,
   looksLikeEmail,
+  signupRequiredFieldMessage,
 } from '../clerkEmailFormat'
+
+describe('signupRequiredFieldMessage (OS-5915)', () => {
+  it('reports both email and password when empty', () => {
+    const msg = signupRequiredFieldMessage({ email: '  ', password: '' })
+    expect(msg).toContain(EMAIL_REQUIRED_MESSAGE)
+    expect(msg).toContain(PASSWORD_REQUIRED_MESSAGE)
+  })
+  it('reports only email when password is filled', () => {
+    expect(signupRequiredFieldMessage({ email: '', password: 'abcdefgh' })).toBe(
+      EMAIL_REQUIRED_MESSAGE
+    )
+  })
+  it('returns null when both fields have values', () => {
+    expect(
+      signupRequiredFieldMessage({ email: 'user@example.com', password: 'abcdefgh' })
+    ).toBeNull()
+  })
+})
 
 describe('looksLikeEmail', () => {
   it('rejects not-an-email', () => {

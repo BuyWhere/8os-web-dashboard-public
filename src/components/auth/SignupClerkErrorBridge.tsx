@@ -8,6 +8,7 @@ import {
   extractEmailFromBody,
   EMAIL_FORMAT_MESSAGE,
   looksLikeEmail,
+  signupRequiredFieldMessage,
   type AuthBridgeKind,
 } from './clerkEmailFormat'
 import { observeClerkContinueArrows } from './clerkContinueArrow'
@@ -220,34 +221,93 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, signUp?.status, signUp?.createdSessionId, signUp?.unverifiedFields?.join(',')])
 
-  // OS-5954: intercept submit before Clerk's type=text email field hits the API.
-  // Clerk widgets often use type="text" so browser native email validation never fires.
+  // OS-5954 / OS-5915: intercept submit + Continue click. Clerk's type=text
+  // fields skip native required/email validation, so empty Continue is a no-op.
   useEffect(() => {
     if (typeof window === 'undefined') return
     const root = document.querySelector('.signup-auth') ?? document.body
+
+    const readFields = (scope: ParentNode) => {
+      const emailInput = scope.querySelector<HTMLInputElement>(
+        'input[name="emailAddress"], input[name="identifier"], input[type="email"]'
+      )
+      const passwordInput = scope.querySelector<HTMLInputElement>(
+        'input[name="password"], input[type="password"]'
+      )
+      return { emailInput, passwordInput }
+    }
+
+    const markInvalid = (el: HTMLInputElement | null, invalid: boolean) => {
+      if (!el) return
+      el.setAttribute('aria-invalid', invalid ? 'true' : 'false')
+      el.style.outline = invalid ? '2px solid #B45309' : ''
+      el.style.outlineOffset = invalid ? '1px' : ''
+    }
+
+    const applyClientValidation = (event: Event, scope: ParentNode): boolean => {
+      const { emailInput, passwordInput } = readFields(scope)
+      if (!emailInput && !passwordInput) return false
+      const email = emailInput?.value ?? ''
+      const password = passwordInput?.value ?? ''
+      const required = signupRequiredFieldMessage({ email, password })
+      if (required) {
+        event.preventDefault()
+        event.stopPropagation()
+        markInvalid(emailInput, !email.trim())
+        markInvalid(passwordInput, !password.trim())
+        setBridgeError({
+          status: 422,
+          message: required,
+          endpoint: 'client-required-fields',
+          at: Date.now(),
+          kind: 'required',
+        })
+        return true
+      }
+      markInvalid(emailInput, false)
+      markInvalid(passwordInput, false)
+      if (emailInput && !looksLikeEmail(email.trim())) {
+        event.preventDefault()
+        event.stopPropagation()
+        markInvalid(emailInput, true)
+        setBridgeError({
+          status: 422,
+          message: EMAIL_FORMAT_MESSAGE,
+          endpoint: 'client-email-format',
+          at: Date.now(),
+          kind: 'format',
+        })
+        return true
+      }
+      return false
+    }
+
     const onSubmit = (event: Event) => {
       const form = event.target
       if (!(form instanceof HTMLFormElement)) return
-      const emailInput = form.querySelector<HTMLInputElement>(
-        'input[name="emailAddress"], input[name="identifier"], input[type="email"]'
-      )
-      if (!emailInput) return
-      const value = emailInput.value.trim()
-      if (!value || looksLikeEmail(value)) {
-        return
-      }
-      event.preventDefault()
-      event.stopPropagation()
-      setBridgeError({
-        status: 422,
-        message: EMAIL_FORMAT_MESSAGE,
-        endpoint: 'client-email-format',
-        at: Date.now(),
-        kind: 'format',
-      })
+      applyClientValidation(event, form)
     }
+
+    const onClick = (event: Event) => {
+      const target = event.target
+      if (!(target instanceof Element)) return
+      const button = target.closest('button')
+      if (!button) return
+      const isContinue =
+        button.type === 'submit' ||
+        button.classList.contains('cl-formButtonPrimary') ||
+        /continue/i.test(button.textContent ?? '')
+      if (!isContinue) return
+      const form = button.closest('form') ?? root
+      applyClientValidation(event, form)
+    }
+
     root.addEventListener('submit', onSubmit, true)
-    return () => root.removeEventListener('submit', onSubmit, true)
+    root.addEventListener('click', onClick, true)
+    return () => {
+      root.removeEventListener('submit', onSubmit, true)
+      root.removeEventListener('click', onClick, true)
+    }
   }, [])
 
   return (
@@ -277,7 +337,9 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
               ? 'Connection problem'
               : bridgeError.status === 429
                 ? 'Slow down'
-                : bridgeError.kind === 'format'
+                : bridgeError.kind === 'required'
+                  ? 'Missing information'
+                  : bridgeError.kind === 'format'
                   ? 'Invalid email'
                   : bridgeError.kind === 'password'
                     ? 'Password issue'
