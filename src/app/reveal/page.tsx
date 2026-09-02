@@ -101,7 +101,7 @@ export default function RevealPage() {
         </h1>
         <p style={{ fontSize: '1.1rem', color: 'var(--color-text-secondary)', lineHeight: 1.6, maxWidth: '520px', margin: '0 auto' }}>
           Your birth chart names how you operate and what season you&apos;re in.
-          Enter your date, meet your archetype, and read your current season,
+          Enter your date (city optional), meet your archetype, and read your current season,
           no signup, nothing stored.
         </p>
       </section>

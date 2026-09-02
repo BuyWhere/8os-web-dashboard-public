@@ -26,6 +26,7 @@ const ELEMENT_ICONS: Record<string, string> = {
 export default function RevealClient() {
   const [birthDate, setBirthDate] = useState('')
   const [birthTime, setBirthTime] = useState('')
+  const [birthLocation, setBirthLocation] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [result, setResult] = useState<RevealResult | null>(null)
@@ -49,7 +50,11 @@ export default function RevealClient() {
       const res = await fetch('/api/reveal', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ birthDate, birthTime: birthTime || undefined }),
+        body: JSON.stringify({
+          birthDate,
+          birthTime: birthTime || undefined,
+          birthLocation: birthLocation.trim() || undefined,
+        }),
       })
       const json = await res.json()
       if (!res.ok) {
@@ -144,9 +149,36 @@ export default function RevealClient() {
               border: '1px solid var(--color-border-strong)',
               borderRadius: '10px',
               color: 'var(--color-text-primary)',
-              marginBottom: '1.5rem',
+              marginBottom: '1.25rem',
             }}
           />
+
+          <label htmlFor="birth-location" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-secondary)', marginBottom: '0.5rem' }}>
+            Birth city <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: 'var(--color-text-secondary)' }}>(optional)</span>
+          </label>
+          <input
+            id="birth-location"
+            type="text"
+            value={birthLocation}
+            onChange={e => setBirthLocation(e.target.value)}
+            placeholder="City, Country (e.g. Shanghai, China)"
+            autoComplete="off"
+            aria-label="Birth city (optional)"
+            aria-describedby="birth-location-help"
+            style={{
+              width: '100%',
+              padding: '0.85rem 1rem',
+              fontSize: '1rem',
+              background: 'var(--color-bg-secondary)',
+              border: '1px solid var(--color-border-strong)',
+              borderRadius: '10px',
+              color: 'var(--color-text-primary)',
+              marginBottom: '0.5rem',
+            }}
+          />
+          <p id="birth-location-help" style={{ fontSize: '0.75rem', color: 'var(--color-text-secondary)', lineHeight: 1.5, margin: '0 0 1.5rem' }}>
+            8os uses BaZi four pillars from the solar calendar date. Location is not required for year/month/day pillars. If you add a birth time, enter it as local clock time at the birthplace — we do not convert Western longitude or DST here.
+          </p>
 
           {error && (
             <p style={{ color: '#E8623D', fontSize: '0.875rem', marginBottom: '1rem' }}>{error}</p>

@@ -1,8 +1,8 @@
 /**
  * POST /api/reveal
  *
- * FREE pre-signup archetype taste. Takes just a birth date (+ optional time)
- * and returns the REAL engine-computed archetype name, a short description, the
+ * FREE pre-signup archetype taste. Takes a birth date (+ optional time and
+ * optional birth city) and returns the REAL engine-computed archetype name, a short description, the
  * dominant element, and an honest "current phase" teaser — WITHOUT signup and
  * WITHOUT persisting anything.
  *
@@ -26,8 +26,9 @@ const ELEMENT_LABEL: Record<string, string> = {
 }
 
 interface RevealBody {
-  birthDate?: string   // YYYY-MM-DD
-  birthTime?: string   // HH:MM (24h), optional
+  birthDate?: string      // YYYY-MM-DD
+  birthTime?: string      // HH:MM (24h), optional
+  birthLocation?: string  // free-text city, optional; not persisted, not used in pillar math
 }
 
 // Validate YYYY-MM-DD and a real calendar date.
@@ -66,6 +67,10 @@ export async function POST(req: NextRequest) {
   }
   const birthDate = body.birthDate as string
   const birthTime = parseBirthTime(body.birthTime)
+  // birthLocation is accepted so the public form can collect it, but BaZi
+  // year/month/day pillars are solar-calendar (not Western longitude). Hour
+  // pillar uses the clock hour as local time. Nothing is persisted.
+  void (typeof body.birthLocation === 'string' ? body.birthLocation.trim() : '')
 
   try {
     // Real ARCHIE archetype. Pre-signup we don't have the personality quiz, so
