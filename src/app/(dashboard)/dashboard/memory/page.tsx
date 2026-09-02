@@ -106,8 +106,10 @@ export default function MemoryPage() {
     }
   }
 
-  const byKind = KIND_ORDER.map((k) => ({ kind: k, rows: items.filter((i) => i.kind === k) }))
-    .filter((g) => g.rows.length > 0)
+  const byKind = KIND_ORDER.map((k) => ({
+    kind: k,
+    rows: items.filter((i) => String(i.kind ?? '').toLowerCase() === k),
+  })).filter((g) => g.rows.length > 0)
 
   if (loading) {
     return (
@@ -183,8 +185,22 @@ export default function MemoryPage() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                 {rows.map((m) => {
                   const isEditing = editing[m.id] !== undefined
+                  const body = (m.content ?? '').trim()
+                  const displayBody = body || (kind === 'person' ? 'Unnamed person' : 'Untitled memory')
                   return (
-                    <div key={m.id} data-testid="memory-item" style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderLeft: `2px solid ${m.pinned ? KIND_COLOR[kind] : 'var(--color-border)'}`, borderRadius: 10, padding: '12px 14px' }}>
+                    <div
+                      key={m.id || `${kind}-${m.createdAt}`}
+                      data-testid="memory-item"
+                      data-kind={kind}
+                      style={{
+                        background: 'var(--color-bg-card)',
+                        border: '1px solid var(--color-border)',
+                        borderLeft: `2px solid ${m.pinned ? KIND_COLOR[kind] : 'var(--color-border)'}`,
+                        borderRadius: 10,
+                        padding: '12px 14px',
+                        minHeight: 56,
+                      }}
+                    >
                       {isEditing ? (
                         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
                           <input
@@ -203,17 +219,32 @@ export default function MemoryPage() {
                           >Cancel</button>
                         </div>
                       ) : (
-                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10 }}>
-                          <div style={{ flex: 1, fontSize: 14 }}>
-                            {m.pinned && <span title="Pinned" style={{ marginRight: 6 }}>📌</span>}
-                            {m.content}
-                            <span style={{ marginLeft: 8, color: 'var(--color-text-muted)', fontSize: 11 }}>
-                              salience {m.salience}{m.sourceKind ? ` · ${m.sourceKind}` : ''}
-                            </span>
+                        <div style={{ display: 'flex', alignItems: 'flex-start', gap: 10, minWidth: 0 }}>
+                          <div style={{ flex: 1, minWidth: 0, fontSize: 14 }}>
+                            <div style={{ wordBreak: 'break-word' }}>
+                              {m.pinned && <span title="Pinned" style={{ marginRight: 6 }}>📌</span>}
+                              <span style={!body ? { fontStyle: 'italic', color: 'var(--color-text-secondary)' } : undefined}>
+                                {displayBody}
+                              </span>
+                            </div>
+                            <div
+                              data-testid="memory-meta"
+                              style={{
+                                marginTop: 6,
+                                color: 'var(--color-text-muted)',
+                                fontSize: 11,
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                              }}
+                            >
+                              salience {Number.isFinite(m.salience) ? m.salience : '—'}
+                              {m.sourceKind ? ` · ${m.sourceKind}` : ''}
+                            </div>
                           </div>
                           <div style={{ display: 'flex', gap: 6, flexShrink: 0 }}>
                             <button title={m.pinned ? 'Unpin' : 'Pin'} onClick={() => patch(m.id, { pinned: !m.pinned })} disabled={busy[m.id]} style={btn}>{m.pinned ? 'Unpin' : 'Pin'}</button>
-                            <button title="Edit" onClick={() => setEditing((s) => ({ ...s, [m.id]: m.content }))} style={btn}>Edit</button>
+                            <button title="Edit" onClick={() => setEditing((s) => ({ ...s, [m.id]: m.content ?? '' }))} style={btn}>Edit</button>
                             <button title="Delete" onClick={() => del(m.id)} disabled={busy[m.id]} data-testid="memory-delete" style={{ ...btn, color: '#B5502F', borderColor: '#E8C4B6' }}>Delete</button>
                           </div>
                         </div>
