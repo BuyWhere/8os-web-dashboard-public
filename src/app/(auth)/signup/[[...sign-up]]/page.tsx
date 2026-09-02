@@ -38,7 +38,12 @@ export default function SignupPage() {
       {/* OS-5893: minmax(400px, 520px) on the auth column beat the 860px 1fr
           media override (inline style wins), so 375px viewports overflowed ~9px.
           minmax(0, 520px) still prefers ~520px on desktop and can shrink on mobile. */}
-      <div className="signup-grid" style={{ maxWidth: 1360, width: "100%", boxSizing: "border-box", margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 520px)", alignItems: "center", gap: "3rem", padding: "6rem 2rem 2rem" }}>
+      {/* OS-5940: min-height: calc(100vh - var(--header-height)) accounts for the
+          fixed header (68px) so the grid sits exactly under it instead of
+          extending to full viewport and leaving ~68px of empty space at the
+          bottom. Combined with align-items:center this vertically centers the
+          hero copy and the auth card at 1440x900 with no orphaned whitespace. */}
+      <div className="signup-grid" style={{ maxWidth: 1360, width: "100%", boxSizing: "border-box", margin: "0 auto", minHeight: "calc(100vh - var(--header-height))", display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 520px)", alignItems: "center", gap: "3rem", padding: "2rem 2rem 2rem" }}>
         {/* Left, product context. The 8os wordmark lives in the global Header, so
             we don't repeat it here — it would compete with the header and split
             attention across two brand marks on the same page. */}
@@ -66,54 +71,65 @@ export default function SignupPage() {
             card floats between the hero copy top and the benefits list bottom.
             OS-4316: wrapped in SignupClerkErrorBridge to catch Clerk 4xx/5xx
             errors (email already exists, rate limit, server errors) and show
-            a clear inline message instead of a silent broken form. */}
+            a clear inline message instead of a silent broken form.
+            OS-5940: wrap the Clerk widget + the legal <p> in a single bordered
+            card (the .signup-auth-card div) so the disclaimer reads as part of
+            the auth card footer instead of floating outside it. Clerk's own
+            rootBox border is removed so the outer wrapper is the only border,
+            preventing the visual disconnect between the Clerk card and the
+            Terms/Privacy line. */}
         <section className="signup-auth" style={{ display: "flex", flexDirection: "column", alignItems: "stretch", alignSelf: "center", width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box" }}>
           <SignupPlanIntent />
-          <SignupClerkErrorBridge
-            signInUrl="/login"
-            forceRedirectUrl="/onboarding"
-            appearance={{
-              layout: {
-                socialButtonsVariant: "blockButton",
-              },
-              variables: {
-                colorBackground: CARD,
-                colorForeground: INK,
-                colorText: INK,
-                colorTextSecondary: MUTED,
-                colorPrimary: CTA_BG,
-                colorPrimaryForeground: CTA_FG, // OS-5957: white on #8A6728 = 5.18:1 AA
-                colorNeutral: BORDER,
-                colorInput: CARD,
-                colorInputForeground: INK,
-                borderRadius: "12px",
-                fontSize: "15px",
-              },
-              elements: {
-                rootBox: { border: `1px solid ${BORDER}`, borderRadius: "16px", overflow: "hidden", boxShadow: "0 4px 24px rgba(34,31,26,0.06)" },
-                card: { border: "none", boxShadow: "none", borderRadius: 0, padding: "0 24px" }, // OS-3873 r5: 24px horizontal padding so inputs/social buttons don't clip at card edges
-                header: { display: "none" }, // Hide Clerk's default logo/header branding
-                formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: CTA_FG, background: CTA_BG, backgroundColor: CTA_BG },
-                socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px", color: SOCIAL_FG },
-                socialButtonsBlockButtonText: { color: SOCIAL_FG },
-                formFieldInput: { minHeight: "44px", border: `1px solid ${BORDER}`, boxShadow: `0 0 0 1px ${BORDER}` },
-                formFieldLabel: { color: LINK_DARK }, // dark label for WCAG AA 12.4:1 on white
-                formFieldLabelRow: { color: LINK_DARK },
-                formFieldHintText: { color: LINK_DARK },
-                formFieldOptionalText: { color: LINK_DARK }, // dark "Optional" label for WCAG AA 12.4:1
-                footerActionLink: { color: LINK_DARK, fontWeight: 600 }, // dark "Sign in" link for WCAG AA 12.4:1
-              },
-            }}
-          />
-          {/* OS-4316: Terms + Privacy links below the Clerk card for transparency.
-              Clerk may render its own terms acceptance inside the widget depending
-              on Dashboard settings; these links are always visible regardless. */}
-          <p style={{ marginTop: 12, fontSize: "0.85rem", color: "#4A4A4A", textAlign: "center", lineHeight: 1.4 }}>
-            By creating an account you agree to our{" "}
-            <a href="/terms" style={{ color: LINK_DARK, textDecoration: "underline" }}>Terms of Service</a>
-            {" "}and{" "}
-            <a href="/privacy" style={{ color: LINK_DARK, textDecoration: "underline" }}>Privacy Policy</a>.
-          </p>
+          <div className="signup-auth-card" style={{ width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box", border: `1px solid ${BORDER}`, borderRadius: "16px", overflow: "hidden", background: CARD, boxShadow: "0 4px 24px rgba(34,31,26,0.06)" }}>
+            <SignupClerkErrorBridge
+              signInUrl="/login"
+              forceRedirectUrl="/onboarding"
+              appearance={{
+                layout: {
+                  socialButtonsVariant: "blockButton",
+                },
+                variables: {
+                  colorBackground: CARD,
+                  colorForeground: INK,
+                  colorText: INK,
+                  colorTextSecondary: MUTED,
+                  colorPrimary: CTA_BG,
+                  colorPrimaryForeground: CTA_FG, // OS-5957: white on #8A6728 = 5.18:1 AA
+                  colorNeutral: BORDER,
+                  colorInput: CARD,
+                  colorInputForeground: INK,
+                  borderRadius: "12px",
+                  fontSize: "15px",
+                },
+                elements: {
+                  rootBox: { border: "none", borderRadius: 0, boxShadow: "none", background: "transparent" }, // OS-5940: outer wrapper owns the border so the legal <p> below sits flush inside the card
+                  card: { border: "none", boxShadow: "none", borderRadius: 0, padding: "24px 24px 0" }, // OS-3873 r5: 24px horizontal padding so inputs/social buttons don't clip at card edges
+                  header: { display: "none" }, // Hide Clerk's default logo/header branding
+                  formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: CTA_FG, background: CTA_BG, backgroundColor: CTA_BG },
+                  socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px", color: SOCIAL_FG },
+                  socialButtonsBlockButtonText: { color: SOCIAL_FG },
+                  formFieldInput: { minHeight: "44px", border: `1px solid ${BORDER}`, boxShadow: `0 0 0 1px ${BORDER}` },
+                  formFieldLabel: { color: LINK_DARK }, // dark label for WCAG AA 12.4:1 on white
+                  formFieldLabelRow: { color: LINK_DARK },
+                  formFieldHintText: { color: LINK_DARK },
+                  formFieldOptionalText: { color: LINK_DARK }, // dark "Optional" label for WCAG AA 12.4:1
+                  footerActionLink: { color: LINK_DARK, fontWeight: 600 }, // dark "Sign in" link for WCAG AA 12.4:1
+                  footer: { padding: "0 24px 20px" }, // OS-5940: keep Clerk's own footer (sign-in link) inside the card
+                },
+              }}
+            />
+            {/* OS-4316: Terms + Privacy links below the Clerk card for transparency.
+                Clerk may render its own terms acceptance inside the widget depending
+                on Dashboard settings; these links are always visible regardless.
+                OS-5940: the <p> now lives inside .signup-auth-card so it visually
+                attaches to the card border (no gap) and matches the card width. */}
+            <p style={{ margin: 0, padding: "16px 24px 20px", fontSize: "0.85rem", color: "#4A4A4A", textAlign: "center", lineHeight: 1.4, borderTop: `1px solid rgba(74,74,74,0.12)` }}>
+              By creating an account you agree to our{" "}
+              <a href="/terms" style={{ color: LINK_DARK, textDecoration: "underline" }}>Terms of Service</a>
+              {" "}and{" "}
+              <a href="/privacy" style={{ color: LINK_DARK, textDecoration: "underline" }}>Privacy Policy</a>.
+            </p>
+          </div>
         </section>
       </div>
       {/* Mobile: single column, hide the pitch to keep the form above the fold. */}
@@ -136,7 +152,8 @@ export default function SignupPage() {
           fill: ${SOCIAL_FG} !important;
           opacity: 1 !important;
         }
-        .signup-auth > p { color: #4A4A4A !important; }
+        .signup-auth > p,
+        .signup-auth-card > p { color: #4A4A4A !important; }
         .signup-auth .cl-formFieldHintText,
         .signup-auth .cl-footerActionLink { color: ${LINK_DARK} !important; }
         /* OS-5912: white on dark charcoal = 19.3:1. Descendants + submit beat Clerk
