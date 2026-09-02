@@ -367,10 +367,10 @@ export default function QuizPage() {
               display: 'inline-block',
             }}
           />
-          {/* De-prelaunch: point the secondary quiz CTA at the free archetype reveal. */}
+          {/* OS-5910: keep every quiz-page CTA on the same onboarding/quiz flow. */}
           <div style={{ marginTop: '1.5rem' }}>
             <a
-              href="/reveal"
+              href="/onboarding"
               style={{
                 /* OS-5958: --color-accent #8A6514 on cream is only 4.80:1 — axe
                    still flags a[href$='reveal'] as serious. Use accent-hover:
