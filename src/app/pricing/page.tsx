@@ -64,7 +64,6 @@ const TIERS = [
       { label: 'Monthly personalized reports', included: false },
     ],
     bestFor: 'AI power users, privacy-focused, developers with existing AI subscriptions',
-    note: 'Connect Claude, GPT, or a local LLM via API. You bring the tokens; we provide the structured data.',
   },
   {
     id: 'pro',
@@ -214,11 +213,10 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              {tier.note ? (
-                <div className="tier-note" style={tierNoteStyle}>
-                  <p style={tierNoteTextStyle}>{tier.note}</p>
-                </div>
-              ) : null}
+              {/* OS-5960: no in-card note. The Agent Connect callout used to
+                  occupy a shared subgrid track and stretch every card past
+                  the 1440x900 fold. BYO-AI detail lives in the comparison
+                  table ("AI Journaling: BYO AI"). */}
             </div>
           ))}
         </div>
@@ -333,8 +331,6 @@ const tiersGridResponsiveStyle = `
     .tier-card ul { gap: 0.28rem !important; }
     .tier-card ul li { line-height: 1.3 !important; font-size: 0.8rem !important; }
     .tier-footer { padding-top: 0.55rem !important; padding-bottom: 0.55rem !important; gap: 0.5rem !important; }
-    .tier-note { padding: 0.5rem 0.75rem !important; }
-    .tier-note p { font-size: 0.74rem !important; line-height: 1.4 !important; }
   }
   /* OS-5914 / OS-5938: keep 4-col at widths ≥1101px (VidMee 1440x900
      baseline). CTAs sit above the feature list so they share a fold
@@ -368,8 +364,6 @@ const tierPriceBlockStyle: React.CSSProperties = { textAlign: 'left' };
 const tierPriceStyle: React.CSSProperties = { display: 'block', fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1 };
 const tierPeriodStyle: React.CSSProperties = { display: 'block', fontSize: '0.75rem', color: 'var(--color-text-primary)', marginTop: '0.15rem' };
 const tierDescStyle: React.CSSProperties = { margin: 0, minHeight: '2.75rem', fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-text-secondary)' };
-const tierNoteStyle: React.CSSProperties = { padding: '0.85rem 1rem', borderRadius: '10px', background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.15)' };
-const tierNoteTextStyle: React.CSSProperties = { margin: 0, fontSize: '0.82rem', lineHeight: 1.6, color: 'var(--color-text-secondary)', fontStyle: 'italic' };
 
 const featureListStyle: React.CSSProperties = { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 };
 const excludedFeatureTextColor = 'var(--pricing-excluded-feature-color)';
