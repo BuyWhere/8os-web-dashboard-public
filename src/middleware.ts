@@ -121,6 +121,11 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
   if (pathname === '/coming-soon') {
     return applyCSP(NextResponse.redirect(new URL('/signup', req.url), 307))
   }
+  // OS-5916: /help and CLI-style /--help are not product routes. Send to /contact
+  // at the edge so RSC prefetch and next.config misses still get a 307, not 404.
+  if (pathname === '/help' || pathname === '/--help') {
+    return applyCSP(NextResponse.redirect(new URL('/contact', req.url), 307))
+  }
 
   try {
     const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || ''
