@@ -144,6 +144,19 @@ export default function SignupPage() {
           background-color: ${GOLD} !important;
           background: ${GOLD} !important;
         }
+        /* OS-5811: hide Clerk's built-in arrow span; JS injects an aria-hidden SVG. */
+        .signup-auth .cl-formButtonPrimary .cl-buttonArrowIcon,
+        .signup-auth .cl-formButtonPrimary [class*="buttonArrow"],
+        .signup-auth button[type="submit"] .cl-buttonArrowIcon {
+          display: none !important;
+        }
+        .signup-auth .cl-formButtonPrimary svg[data-os-continue-arrow] {
+          display: inline-block !important;
+          margin-left: 0.4em;
+          vertical-align: -0.1em;
+          color: inherit !important;
+          background: transparent !important;
+        }
         @media (max-width: 860px) {
           .signup-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; padding-top: 2.5rem !important; }
           .signup-pitch { max-width: 100% !important; text-align: center; }

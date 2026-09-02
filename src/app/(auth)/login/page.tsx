@@ -84,6 +84,19 @@ export default function LoginPage() {
           background: ${GOLD} !important;
           background-color: ${GOLD} !important;
         }
+        /* OS-5811: hide Clerk's built-in arrow span; JS injects an aria-hidden SVG. */
+        .login-auth .cl-formButtonPrimary .cl-buttonArrowIcon,
+        .login-auth .cl-formButtonPrimary [class*="buttonArrow"],
+        .login-auth button[type="submit"] .cl-buttonArrowIcon {
+          display: none !important;
+        }
+        .login-auth .cl-formButtonPrimary svg[data-os-continue-arrow] {
+          display: inline-block !important;
+          margin-left: 0.4em;
+          vertical-align: -0.1em;
+          color: inherit !important;
+          background: transparent !important;
+        }
         .login-auth .cl-socialButtonsBlockButton,
         .login-auth .cl-socialButtonsBlockButton * { color: ${SOCIAL_FG} !important; }
         .login-auth .cl-socialButtonsBlockButtonText,

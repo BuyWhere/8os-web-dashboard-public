@@ -9,6 +9,7 @@ import {
   looksLikeEmail,
   type AuthBridgeKind,
 } from './clerkEmailFormat'
+import { observeClerkContinueArrows } from './clerkContinueArrow'
 
 // OS-3647: Clerk's <SignIn> can return a 422 from /v1/client/sign_ins
 // without rendering its built-in error banner. OS-5954: show an email-format
@@ -76,6 +77,7 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
 
   useEffect(() => {
     if (typeof window === 'undefined') return
+    const stopArrowPatch = observeClerkContinueArrows(document.body)
     const originalFetch = window.fetch.bind(window)
 
     const isClerkAuthEndpoint = (url: string): boolean => {
@@ -166,6 +168,7 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
     }
 
     return () => {
+      stopArrowPatch()
       window.fetch = originalFetch
     }
   }, [])
