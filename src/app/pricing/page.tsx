@@ -285,10 +285,11 @@ export default function PricingPage() {
   );
 }
 
-// OS-5923: do not set height:auto !important on .tier-card — that overrides
-// grid stretch, so cards size to their own content and CTAs misalign.
-// Keep overflow visible (no clip). Move Agent Connect note below the CTA
-// so the footer slot stays aligned. Tighten hero padding on short desktops.
+// OS-5923: Removed minHeight: fit-content from .tier-card to allow grid stretch
+// to work properly. Cards now stretch to match the tallest card in each row,
+// aligning CTAs vertically. Keep overflow visible (no clip). Move Agent Connect
+// note below the CTA so the footer slot stays aligned. Tighten hero padding on
+// short desktops.
 const tiersGridResponsiveStyle = `
   .pricing-page {
     --pricing-excluded-feature-color: #A1A1AA;
@@ -305,7 +306,6 @@ const tiersGridResponsiveStyle = `
   .tiers-grid { margin-bottom: 5rem; grid-template-columns: repeat(4, 1fr); align-items: stretch; }
   .tier-card {
     overflow: visible !important;
-    min-height: fit-content;
     max-height: none;
   }
   @media (max-height: 960px) {
@@ -333,7 +333,7 @@ const pageDescStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', colo
 
 const tiersGridStyle: React.CSSProperties = { display: 'grid', gap: '1.25rem' };
 
-const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '1.35rem', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'flex', flexDirection: 'column', gap: '0.85rem', overflow: 'visible', minHeight: 'fit-content' };
+const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '1.35rem', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'flex', flexDirection: 'column', gap: '0.85rem', overflow: 'visible' };
 const tierHighlightedStyle: React.CSSProperties = { border: '2px solid #C87055', background: 'var(--color-accent-soft)', boxShadow: '0 0 0 1px var(--color-accent-soft)' };
 
 const popularBadgeStyle: React.CSSProperties = { position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', padding: '0.3rem 0.85rem', borderRadius: '999px', background: 'var(--color-accent-2)', color: '#fff', fontSize: '0.75rem', fontWeight: 700, whiteSpace: 'nowrap' };
