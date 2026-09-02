@@ -158,7 +158,7 @@ export default function PricingPage() {
     <>
       <style dangerouslySetInnerHTML={{ __html: tiersGridResponsiveStyle }} />
     <main className="pricing-page" style={pageStyle} aria-label="Pricing tiers">
-      <div style={innerStyle}>
+      <div className="pricing-inner" style={innerStyle}>
         <div style={headerStyle}>
           <p style={eyebrowStyle}>Pricing</p>
           <h1 style={pageTitleStyle}>Choose Your Operating System Tier</h1>
@@ -192,12 +192,6 @@ export default function PricingPage() {
 
               <p style={tierDescStyle}>{tier.description}</p>
 
-              {tier.note && (
-                <div style={tierNoteStyle}>
-                  <p style={tierNoteTextStyle}>{tier.note}</p>
-                </div>
-              )}
-
               <ul style={featureListStyle} role="list">
                 {tier.features.map(({ label, included }) => (
                   <li key={label} style={featureItemStyle(included)}>
@@ -211,6 +205,12 @@ export default function PricingPage() {
                 <TierCta tier={tier} />
                 <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
               </div>
+
+              {tier.note && (
+                <div style={tierNoteStyle}>
+                  <p style={tierNoteTextStyle}>{tier.note}</p>
+                </div>
+              )}
             </div>
           ))}
         </div>
@@ -283,15 +283,15 @@ export default function PricingPage() {
   );
 }
 
-// OS-5568: tier cards clipped at viewport bottom on desktop (>=1280px wide
-// + <=960h). (1) Inline gridTemplateColumns beat CSS media queries; moved
-// grid-template-columns into CSS so the 3-col overrides can win. (2) Added
-// align-items:stretch so all cards share row height. (3) 3-column media
-// queries at wide+short viewports keep cards above the fold.
+// OS-5923: do not set height:auto !important on .tier-card — that overrides
+// grid stretch, so cards size to their own content and CTAs misalign.
+// Keep overflow visible (no clip). Move Agent Connect note below the CTA
+// so the footer slot stays aligned. Tighten hero padding on short desktops.
 const tiersGridResponsiveStyle = `
   .pricing-page {
     --pricing-excluded-feature-color: #A1A1AA;
     --pricing-included-marker-color: #15803D;
+    overflow: visible;
   }
   [data-theme='light'] .pricing-page {
     --pricing-excluded-feature-color: #6B6257;
@@ -301,12 +301,17 @@ const tiersGridResponsiveStyle = `
     --pricing-included-marker-color: #86EFAC;
   }
   .tiers-grid { margin-bottom: 5rem; grid-template-columns: repeat(4, 1fr); align-items: stretch; }
-  .tier-card { height: auto !important; overflow: visible !important; }
-  /* 3-column at wide+short viewports keeps cards above the fold. */
-  @media (min-width: 1280px) and (max-height: 820px) {
-    .tiers-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  .tier-card {
+    overflow: visible !important;
+    min-height: fit-content;
+    max-height: none;
   }
-  @media (min-width: 1440px) and (max-height: 960px) {
+  @media (max-height: 960px) {
+    .pricing-inner { padding-top: 2.5rem !important; padding-bottom: 3rem !important; }
+    .tiers-grid { margin-bottom: 3rem; gap: 1rem; }
+  }
+  /* 3-column at wide+short viewports keeps feature rows readable. */
+  @media (min-width: 1101px) and (max-height: 1000px) {
     .tiers-grid { grid-template-columns: repeat(3, 1fr) !important; }
   }
   @media (max-width: 1100px) {
@@ -318,7 +323,7 @@ const tiersGridResponsiveStyle = `
 `;
 
 const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh', paddingBottom: '6rem' };
-const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '5rem 2rem', minWidth: 0 };
+const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '3.5rem 2rem', minWidth: 0 };
 const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '2.25rem' };
 const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-text-primary)' };
 const pageTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: 'clamp(1.4rem, 6vw, 2.25rem)', lineHeight: 1.15, letterSpacing: '-0.035em', fontWeight: 800 };
@@ -326,7 +331,7 @@ const pageDescStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', colo
 
 const tiersGridStyle: React.CSSProperties = { display: 'grid', gap: '1.25rem' };
 
-const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '1.35rem', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'flex', flexDirection: 'column', gap: '0.85rem' };
+const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '1.35rem', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'flex', flexDirection: 'column', gap: '0.85rem', overflow: 'visible', minHeight: 'fit-content' };
 const tierHighlightedStyle: React.CSSProperties = { border: '2px solid #C87055', background: 'var(--color-accent-soft)', boxShadow: '0 0 0 1px var(--color-accent-soft)' };
 
 const popularBadgeStyle: React.CSSProperties = { position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', padding: '0.3rem 0.85rem', borderRadius: '999px', background: 'var(--color-accent-2)', color: '#fff', fontSize: '0.75rem', fontWeight: 700, whiteSpace: 'nowrap' };
