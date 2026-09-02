@@ -371,10 +371,13 @@ export default function QuizPage() {
             <a
               href="/reveal"
               style={{
-                color: 'var(--color-accent-2)',
+                /* OS-5931: --color-accent-2 oxblood fails WCAG AA on dark charcoal
+                   (#B05E47 on #1A1712 ≈ 3.86:1). Gold accent is 4.80:1 on cream
+                   and 6.93:1 on charcoal. */
+                color: 'var(--color-accent)',
                 fontSize: '0.95rem',
                 textDecoration: 'none',
-                borderBottom: '1px solid rgba(122, 59, 46, 0.4)',
+                borderBottom: '1px solid color-mix(in srgb, var(--color-accent) 45%, transparent)',
                 fontWeight: 600,
               }}
             >
