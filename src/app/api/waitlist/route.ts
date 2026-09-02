@@ -120,11 +120,16 @@ export async function POST(request: NextRequest) {
     // signup. Fix the path so the existing form starts working too.
     // OS-1744: orchestrator returning 500 on all routes.
     // Write directly to database via Prisma instead of proxying.
-    // OS-6023: generate UUID for id column since DB expects it
+    // OS-6053: use crypto.randomUUID() instead of uuid_generate_v4().
+    // The uuid-ossp extension is present on the original DB (endearing-miracle)
+    // but absent on the new Railway Postgres instance used by the `frontend`
+    // service. crypto.randomUUID() is a built-in Node.js API (v16+) with no
+    // DB dependency and produces RFC-4122-compliant v4 UUIDs.
+    const id = crypto.randomUUID();
     try {
       await prisma.$executeRaw`
         INSERT INTO waitlist_entries (id, email, source, affiliate_opt_in)
-        VALUES (uuid_generate_v4(), ${email}, ${source}, ${affiliateOptIn})
+        VALUES (${id}, ${email}, ${source}, ${affiliateOptIn})
       `;
     } catch (insertErr) {
       const msg = insertErr instanceof Error ? insertErr.message : '';
