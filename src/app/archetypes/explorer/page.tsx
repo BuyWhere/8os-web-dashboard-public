@@ -95,9 +95,9 @@ export default function ArchetypeExplorerPage() {
             Your exact archetype is a unique blend determined by your BaZi birth chart.
             Generate yours in 90 seconds, free.
           </p>
-          <Link href="/onboarding" className={styles.ctaButton}>
+          <a href="/quiz" className={styles.ctaButton}>
             Generate My Life OS, Free
-          </Link>
+          </a>
         </section>
       </div>
     </main>
