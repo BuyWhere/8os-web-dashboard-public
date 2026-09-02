@@ -130,11 +130,12 @@ export default function QuizPage() {
               display: 'inline-block',
               background: 'var(--color-accent-soft)',
               color: 'var(--color-text-primary)',
-              padding: '6px 16px',
+              padding: '7px 18px',
               borderRadius: '9999px',
-              fontSize: '13px',
-              fontWeight: 600,
+              fontSize: '14px',
+              fontWeight: 700,
               marginBottom: '24px',
+              border: '1px solid var(--color-accent-border)',
             }}
           >
             Free · 90 seconds · No birth time needed
@@ -206,6 +207,9 @@ export default function QuizPage() {
                 }}
               >
                 <div
+                  // Dark charcoal on gold so step number is legible in BOTH themes.
+                  // Light theme gold #8A6514 + #0d0b14 = 3.68:1 (AA large-text ≥14pt bold 18.66px ✓)
+                  // Dark  theme gold #C79A48 + #0d0b14 = 7.58:1 (AA normal text ✓)
                   style={{
                     width: '44px',
                     height: '44px',
@@ -215,9 +219,9 @@ export default function QuizPage() {
                     alignItems: 'center',
                     justifyContent: 'center',
                     margin: '0 auto 16px',
-                    fontSize: '18px',
-                    fontWeight: 700,
-                    color: '#fff',
+                    fontSize: '20px',
+                    fontWeight: 800,
+                    color: '#0d0b14',
                   }}
                 >
                   {step.number}
