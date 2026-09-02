@@ -3,12 +3,17 @@
 import { SignUp, useSignUp } from '@clerk/nextjs'
 import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState, type FC } from 'react'
+import {
+  classifySignup422,
+  extractEmailFromBody,
+  EMAIL_FORMAT_MESSAGE,
+  looksLikeEmail,
+  type AuthBridgeKind,
+} from './clerkEmailFormat'
 
 // OS-4316: Clerk's <SignUp> can return 4xx errors from /v1/client/sign_ups
-// (e.g. email_already_exists 422, rate limit 429) without rendering a clear
-// inline error. This wrapper catches upstream errors from Clerk's sign-up
-// endpoints and surfaces a user-friendly message above the widget, matching
-// the LoginClerkErrorBridge pattern from OS-3647.
+// without a clear inline error. OS-5954: distinguish email-format 422s from
+// identifier-exists so users see "Please enter a valid email address."
 
 const CLERK_SIGN_UP_HOST_RE = /^https:\/\/(?:[^/]+\.)?clerk\.(?:8os\.ai|accounts\.dev|com)$/
 const CLERK_SIGN_UP_PATH_RE = /^\/v1\/client\/(?:sign_ups|verify)/
@@ -20,20 +25,23 @@ interface BridgeError {
   message: string
   endpoint: string
   at: number
+  kind?: AuthBridgeKind
 }
 
-function classify(status: number): { message: string; severity: Severity } {
+function classify(
+  status: number,
+  payload?: unknown,
+  requestEmail?: string | null
+): { message: string; severity: Severity; kind: AuthBridgeKind } {
   if (status === 422) {
-    return {
-      message:
-        "We couldn't create your account with those details. The email may already be in use — try logging in, or use a different email address.",
-      severity: 'warning',
-    }
+    const classified = classifySignup422(payload, requestEmail)
+    return { ...classified, severity: 'warning' }
   }
   if (status === 429) {
     return {
       message: 'Too many attempts. Please wait a moment before trying again.',
       severity: 'warning',
+      kind: 'generic',
     }
   }
   if (status >= 500) {
@@ -41,11 +49,13 @@ function classify(status: number): { message: string; severity: Severity } {
       message:
         "We're having trouble reaching the sign-up service right now. Please try again in a minute.",
       severity: 'error',
+      kind: 'generic',
     }
   }
   return {
     message: 'Something went wrong creating your account. Please try again.',
     severity: 'error',
+    kind: 'generic',
   }
 }
 
@@ -94,6 +104,14 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
       const method = (init?.method ?? (input instanceof Request ? input.method : 'GET')).toUpperCase()
       const watch = isClerkSignUpEndpoint(url) && (method === 'POST' || method === 'PATCH' || method === 'PUT')
 
+      let requestEmail: string | null = null
+      if (watch) {
+        const rawBody = init?.body ?? (input instanceof Request ? undefined : undefined)
+        if (typeof rawBody === 'string') {
+          requestEmail = extractEmailFromBody(rawBody)
+        }
+      }
+
       let response: Response
       try {
         response = await originalFetch(input as any, init)
@@ -115,12 +133,19 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
       }
 
       if (watch && response.status >= 400) {
-        const { message, severity } = classify(response.status)
-        setBridgeError({ status: response.status, message, endpoint: url, at: Date.now() })
+        let payload: unknown = null
+        try {
+          payload = await response.clone().json()
+        } catch {
+          payload = null
+        }
+        const { message, severity, kind } = classify(response.status, payload, requestEmail)
+        setBridgeError({ status: response.status, message, endpoint: url, at: Date.now(), kind })
         console.warn('[clerk-sign-up-bridge] upstream error', {
           status: response.status,
           endpoint: url,
           severity,
+          kind,
         })
         try {
           if (typeof window !== 'undefined' && (window as any).posthog?.capture) {
@@ -189,6 +214,36 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, signUp?.status, signUp?.createdSessionId, signUp?.unverifiedFields?.join(',')])
 
+  // OS-5954: intercept submit before Clerk's type=text email field hits the API.
+  // Clerk widgets often use type="text" so browser native email validation never fires.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const root = document.querySelector('.signup-auth') ?? document.body
+    const onSubmit = (event: Event) => {
+      const form = event.target
+      if (!(form instanceof HTMLFormElement)) return
+      const emailInput = form.querySelector<HTMLInputElement>(
+        'input[name="emailAddress"], input[name="identifier"], input[type="email"]'
+      )
+      if (!emailInput) return
+      const value = emailInput.value.trim()
+      if (!value || looksLikeEmail(value)) {
+        return
+      }
+      event.preventDefault()
+      event.stopPropagation()
+      setBridgeError({
+        status: 422,
+        message: EMAIL_FORMAT_MESSAGE,
+        endpoint: 'client-email-format',
+        at: Date.now(),
+        kind: 'format',
+      })
+    }
+    root.addEventListener('submit', onSubmit, true)
+    return () => root.removeEventListener('submit', onSubmit, true)
+  }, [])
+
   return (
     <div>
       {bridgeError && (
@@ -197,6 +252,7 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
           aria-live="polite"
           data-testid="clerk-sign-up-error"
           data-status={bridgeError.status}
+          data-kind={bridgeError.kind ?? 'generic'}
           style={{
             margin: '0 auto 1rem auto',
             maxWidth: 420,
@@ -215,11 +271,13 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
               ? 'Connection problem'
               : bridgeError.status === 429
                 ? 'Slow down'
-                : bridgeError.status === 422
-                  ? 'Account creation issue'
-                  : 'Sign-up error'}
+                : bridgeError.kind === 'format'
+                  ? 'Invalid email'
+                  : bridgeError.status === 422
+                    ? 'Account creation issue'
+                    : 'Sign-up error'}
           </strong>
-          <span>{bridgeError.message}</span>
+          <span data-testid="clerk-sign-up-error-message">{bridgeError.message}</span>
         </div>
       )}
       <SignUp

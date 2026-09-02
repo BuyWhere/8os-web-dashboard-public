@@ -2,16 +2,17 @@
 
 import { SignIn } from '@clerk/nextjs'
 import { useEffect, useState, type FC } from 'react'
+import {
+  classifySignin422,
+  extractEmailFromBody,
+  EMAIL_FORMAT_MESSAGE,
+  looksLikeEmail,
+  type AuthBridgeKind,
+} from './clerkEmailFormat'
 
 // OS-3647: Clerk's <SignIn> can return a 422 from /v1/client/sign_ins
-// (e.g. when the first factor rejects) without rendering its built-in
-// error banner. This wrapper catches any 4xx response from Clerk's
-// sign_in/attempt endpoints and surfaces a clear inline error above the
-// widget, so users get a real message instead of a silent broken form.
-//
-// The 422 is also demoted from console.error → console.warn so the
-// devtools "Failed to load resource" noise is replaced with a structured
-// analytics event.
+// without rendering its built-in error banner. OS-5954: show an email-format
+// message when the identifier is not a valid email.
 
 const CLERK_SIGN_IN_HOST_RE = /^https:\/\/(?:[^/]+\.)?clerk\.(?:8os\.ai|accounts\.dev|com)$/
 const CLERK_SIGN_IN_PATH_RE = /^\/v1\/client\/(?:sign_ins|sign_ups|verify)/
@@ -23,20 +24,23 @@ interface BridgeError {
   message: string
   endpoint: string
   at: number
+  kind?: AuthBridgeKind
 }
 
-function classify(status: number): { message: string; severity: Severity } {
+function classify(
+  status: number,
+  payload?: unknown,
+  requestEmail?: string | null
+): { message: string; severity: Severity; kind: AuthBridgeKind } {
   if (status === 401 || status === 422) {
-    return {
-      message:
-        "We couldn't sign you in with those details. Double-check your email and password, then try again.",
-      severity: 'warning',
-    }
+    const classified = classifySignin422(payload, requestEmail)
+    return { ...classified, severity: 'warning' }
   }
   if (status === 429) {
     return {
       message: 'Too many attempts. Please wait a moment before trying again.',
       severity: 'warning',
+      kind: 'generic',
     }
   }
   if (status >= 500) {
@@ -44,11 +48,13 @@ function classify(status: number): { message: string; severity: Severity } {
       message:
         "We're having trouble reaching the sign-in service right now. Please try again in a minute.",
       severity: 'error',
+      kind: 'generic',
     }
   }
   return {
     message: 'Something went wrong signing you in. Please try again.',
     severity: 'error',
+    kind: 'generic',
   }
 }
 
@@ -95,6 +101,11 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
       const method = (init?.method ?? (input instanceof Request ? input.method : 'GET')).toUpperCase()
       const watch = isClerkAuthEndpoint(url) && (method === 'POST' || method === 'PATCH' || method === 'PUT')
 
+      let requestEmail: string | null = null
+      if (watch && typeof init?.body === 'string') {
+        requestEmail = extractEmailFromBody(init.body)
+      }
+
       let response: Response
       try {
         response = await originalFetch(input as any, init)
@@ -109,8 +120,14 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
       }
 
       if (watch && response.status >= 400) {
-        const { message, severity } = classify(response.status)
-        setBridgeError({ status: response.status, message, endpoint: url, at: Date.now() })
+        let payload: unknown = null
+        try {
+          payload = await response.clone().json()
+        } catch {
+          payload = null
+        }
+        const { message, severity, kind } = classify(response.status, payload, requestEmail)
+        setBridgeError({ status: response.status, message, endpoint: url, at: Date.now(), kind })
         // Demote devtools noise to a structured warn with status + endpoint context
         console.warn('[clerk-sign-in-bridge] upstream error', {
           status: response.status,
@@ -153,6 +170,32 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
     }
   }, [])
 
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const root = document.querySelector('.login-auth') ?? document.body
+    const onSubmit = (event: Event) => {
+      const form = event.target
+      if (!(form instanceof HTMLFormElement)) return
+      const emailInput = form.querySelector<HTMLInputElement>(
+        'input[name="identifier"], input[name="emailAddress"], input[type="email"]'
+      )
+      if (!emailInput) return
+      const value = emailInput.value.trim()
+      if (!value || looksLikeEmail(value)) return
+      event.preventDefault()
+      event.stopPropagation()
+      setBridgeError({
+        status: 422,
+        message: EMAIL_FORMAT_MESSAGE,
+        endpoint: 'client-email-format',
+        at: Date.now(),
+        kind: 'format',
+      })
+    }
+    root.addEventListener('submit', onSubmit, true)
+    return () => root.removeEventListener('submit', onSubmit, true)
+  }, [])
+
   return (
     <div>
       {bridgeError && (
@@ -161,6 +204,7 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
           aria-live="polite"
           data-testid="clerk-sign-in-error"
           data-status={bridgeError.status}
+          data-kind={bridgeError.kind ?? 'generic'}
           style={{
             margin: '0 auto 1rem auto',
             maxWidth: 420,
@@ -179,11 +223,13 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
               ? 'Connection problem'
               : bridgeError.status === 429
                 ? 'Slow down'
-                : bridgeError.status === 401 || bridgeError.status === 422
-                  ? 'Invalid credentials'
-                  : 'Sign-in error'}
+                : bridgeError.kind === 'format'
+                  ? 'Invalid email'
+                  : bridgeError.status === 401 || bridgeError.status === 422
+                    ? 'Invalid credentials'
+                    : 'Sign-in error'}
           </strong>
-          <span>{bridgeError.message}</span>
+          <span data-testid="clerk-sign-in-error-message">{bridgeError.message}</span>
         </div>
       )}
       <SignIn
