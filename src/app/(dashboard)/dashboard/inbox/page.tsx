@@ -12,6 +12,13 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import posthog from 'posthog-js'
 import { Sidebar } from '@/components/dashboard/Sidebar'
+import {
+  DashboardPageStyles,
+  ErrorCard,
+  LoadingMessage,
+  SectionCard,
+  SkeletonBlock,
+} from '@/components/dashboard/page-state'
 
 interface InboxAction { id: string; label: string }
 interface InboxMessage {
@@ -29,32 +36,87 @@ function fmtWhen(iso: string): string {
   return d.toLocaleString('en-US', { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
 }
 
+const INBOX_FETCH_MS = 12_000
+
+function InboxSkeleton({ slow }: { slow: boolean }) {
+  return (
+    <div style={{ maxWidth: 720, display: 'grid', gap: 12 }} data-testid="inbox-skeleton" aria-busy="true" aria-live="polite">
+      <LoadingMessage>{slow ? 'Still opening your inbox…' : 'Opening your inbox…'}</LoadingMessage>
+      {Array.from({ length: 4 }).map((_, i) => (
+        <SectionCard key={i} style={{ padding: '14px 16px' }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10 }}>
+            <SkeletonBlock width={8} height={8} radius={999} />
+            <SkeletonBlock width="46%" height={14} />
+            <SkeletonBlock width={72} height={11} style={{ marginLeft: 'auto' }} />
+          </div>
+          <SkeletonBlock width="92%" height={12} style={{ marginBottom: 8 }} />
+          <SkeletonBlock width="74%" height={12} />
+        </SectionCard>
+      ))}
+    </div>
+  )
+}
+
+function EmptyInboxState() {
+  return (
+    <div
+      data-testid="inbox-empty"
+      style={{ maxWidth: 720, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 28, color: 'var(--color-text-secondary)', fontSize: 14 }}
+    >
+      Nothing here yet. Daily briefs and nudges will land in this inbox, and in Telegram once you
+      {' '}<Link href="/settings/channels" style={{ color: 'var(--color-accent)' }}>link a channel</Link>.
+    </div>
+  )
+}
+
 export default function InboxPage() {
   const [messages, setMessages] = useState<InboxMessage[]>([])
   const [unreadCount, setUnreadCount] = useState(0)
   const [loading, setLoading] = useState(true)
+  const [slow, setSlow] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [marking, setMarking] = useState(false)
   const [actionState, setActionState] = useState<Record<string, 'busy' | 'done' | 'error'>>({})
   // Which messages are expanded to show their full body (accordion).
   const [expanded, setExpanded] = useState<Record<string, boolean>>({})
+  const [requestKey, setRequestKey] = useState(0)
 
-  const load = useCallback(async () => {
+  const load = useCallback(async (opts?: { cancelled?: () => boolean }) => {
+    setLoading(true)
+    setError(null)
+    setSlow(false)
+    const ac = new AbortController()
+    const slowTimer = window.setTimeout(() => setSlow(true), 2500)
+    const timeout = window.setTimeout(() => ac.abort(), INBOX_FETCH_MS)
+    const gone = () => !!opts?.cancelled?.()
     try {
-      const res = await fetch('/api/inbox/messages?limit=100', { cache: 'no-store' })
+      const res = await fetch('/api/inbox/messages?limit=100', {
+        cache: 'no-store',
+        credentials: 'same-origin',
+        signal: ac.signal,
+      })
+      if (gone()) return
       if (!res.ok) throw new Error(`inbox ${res.status}`)
       const data = await res.json()
+      if (gone()) return
       setMessages(Array.isArray(data.messages) ? data.messages : [])
       setUnreadCount(typeof data.unreadCount === 'number' ? data.unreadCount : 0)
     } catch (e) {
+      if (gone()) return
       console.error('Failed to load inbox:', e)
-      setError('Could not load your inbox. Refresh to try again.')
+      setError('Could not load your inbox. Try again in a moment.')
     } finally {
-      setLoading(false)
+      window.clearTimeout(slowTimer)
+      window.clearTimeout(timeout)
+      if (!gone()) setLoading(false)
     }
   }, [])
 
-  useEffect(() => { load() }, [load])
+  useEffect(() => {
+    let cancelled = false
+    load({ cancelled: () => cancelled })
+    return () => { cancelled = true }
+  }, [load, requestKey])
 
   // E-7: one-tap accept of a redirection proposal delivered as an inbox action.
   async function acceptRedirection(actionId: string, proposalId: string) {
@@ -135,27 +197,17 @@ export default function InboxPage() {
     }
   }
 
-  if (loading) {
-    return (
-      <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
-        <Sidebar goals={[]} />
-        <main style={{ flex: 1, padding: '24px 32px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-          <div style={{ color: 'var(--color-text-secondary)' }}>Opening your inbox…</div>
-        </main>
-      </div>
-    )
-  }
-
   return (
     <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <Sidebar goals={[]} />
 
       <main style={{ flex: 1, padding: '24px 32px', overflowY: 'auto' }}>
+        <DashboardPageStyles />
         <div style={{ marginBottom: 24, maxWidth: 720, display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', gap: 12 }}>
           <div>
             <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
             <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700, fontFamily: 'var(--font-serif), Georgia, serif' }}>
-              Inbox{unreadCount > 0 && (
+              Inbox{!loading && unreadCount > 0 && (
                 <span style={{ marginLeft: 10, verticalAlign: 'middle', background: 'var(--color-accent)', color: '#fff', borderRadius: 10, fontSize: 11, fontWeight: 700, padding: '2px 8px' }}>
                   {unreadCount} unread
                 </span>
@@ -165,7 +217,7 @@ export default function InboxPage() {
               Briefs, nudges and channel messages, the web inbox is always on
             </p>
           </div>
-          {unreadCount > 0 && (
+          {!loading && unreadCount > 0 && (
             <button
               onClick={() => markRead('all')}
               disabled={marking}
@@ -176,19 +228,20 @@ export default function InboxPage() {
           )}
         </div>
 
-        {error && (
-          <div style={{ maxWidth: 720, background: '#B5502F18', border: '1px solid #B5502F44', borderRadius: 8, color: '#B5502F', padding: '10px 14px', fontSize: 13, marginBottom: 16 }}>
-            {error}
-          </div>
+        {loading && <InboxSkeleton slow={slow} />}
+
+        {!loading && error && (
+          <ErrorCard
+            title="Could not load your inbox"
+            message={error}
+            actionLabel="Try again"
+            onAction={() => setRequestKey((k) => k + 1)}
+          />
         )}
 
-        {!error && messages.length === 0 && (
-          <div style={{ maxWidth: 720, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 12, padding: 28, color: 'var(--color-text-secondary)', fontSize: 14 }}>
-            Nothing here yet. Daily briefs and nudges will land in this inbox, and in Telegram once you
-            {' '}<Link href="/settings/channels" style={{ color: 'var(--color-accent)' }}>link a channel</Link>.
-          </div>
-        )}
+        {!loading && !error && messages.length === 0 && <EmptyInboxState />}
 
+        {!loading && !error && messages.length > 0 && (
         <div style={{ maxWidth: 720, display: 'flex', flexDirection: 'column', gap: 10 }}>
           {messages.map((m) => {
             const isOpen = !!expanded[m.id]
@@ -325,6 +378,7 @@ export default function InboxPage() {
             )
           })}
         </div>
+        )}
       </main>
     </div>
   )

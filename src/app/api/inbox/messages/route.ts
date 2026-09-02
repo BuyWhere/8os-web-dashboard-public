@@ -20,31 +20,36 @@ export async function GET(req: NextRequest) {
   if (auth instanceof NextResponse) return auth
   const userId = auth.userId
 
-  const sp = req.nextUrl.searchParams
-  const unreadCount = await prisma.inboxMessage.count({ where: { userId, read: false } })
-  if (sp.get('countOnly') === '1') {
-    return NextResponse.json({ unreadCount })
+  try {
+    const sp = req.nextUrl.searchParams
+    const unreadCount = await prisma.inboxMessage.count({ where: { userId, read: false } })
+    if (sp.get('countOnly') === '1') {
+      return NextResponse.json({ unreadCount })
+    }
+
+    const limit = Math.min(Math.max(parseInt(sp.get('limit') ?? '50', 10) || 50, 1), 200)
+    const rows = await prisma.inboxMessage.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+    })
+
+    return NextResponse.json({
+      unreadCount,
+      messages: rows.map((m) => ({
+        id: m.id,
+        title: m.title,
+        body: m.body,
+        actions: m.actionsJson ?? [],
+        meta: m.meta ?? null,
+        read: m.read,
+        createdAt: m.createdAt.toISOString(),
+      })),
+    })
+  } catch (e) {
+    console.error('[inbox/messages] GET failed:', e)
+    return NextResponse.json({ error: 'Could not load inbox messages.' }, { status: 500 })
   }
-
-  const limit = Math.min(Math.max(parseInt(sp.get('limit') ?? '50', 10) || 50, 1), 200)
-  const rows = await prisma.inboxMessage.findMany({
-    where: { userId },
-    orderBy: { createdAt: 'desc' },
-    take: limit,
-  })
-
-  return NextResponse.json({
-    unreadCount,
-    messages: rows.map((m) => ({
-      id: m.id,
-      title: m.title,
-      body: m.body,
-      actions: m.actionsJson ?? [],
-      meta: m.meta ?? null,
-      read: m.read,
-      createdAt: m.createdAt.toISOString(),
-    })),
-  })
 }
 
 export async function PATCH(req: NextRequest) {
@@ -66,9 +71,14 @@ export async function PATCH(req: NextRequest) {
     return NextResponse.json({ error: 'Provide ids: string[] or all: true' }, { status: 400 })
   }
 
-  const result = await prisma.inboxMessage.updateMany({
-    where: { userId, ...(all ? {} : { id: { in: ids } }) },
-    data: { read },
-  })
-  return NextResponse.json({ updated: result.count, read })
+  try {
+    const result = await prisma.inboxMessage.updateMany({
+      where: { userId, ...(all ? {} : { id: { in: ids } }) },
+      data: { read },
+    })
+    return NextResponse.json({ updated: result.count, read })
+  } catch (e) {
+    console.error('[inbox/messages] PATCH failed:', e)
+    return NextResponse.json({ error: 'Could not update inbox messages.' }, { status: 500 })
+  }
 }
