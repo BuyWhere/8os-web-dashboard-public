@@ -103,6 +103,42 @@ export default function LoginPage() {
         .login-auth .cl-socialButtonsBlockButtonText__apple,
         .login-auth .cl-socialButtonsBlockButtonText__github,
         .login-auth .cl-socialButtonsBlockButtonText__google { color: ${SOCIAL_FG} !important; }
+        /* OS-5570: Clerk parks the password row as position:absolute;height:0;opacity:0
+           on the identifier step, but overflow:visible lets the input paint at the
+           same Y as Email. Hide it completely until the password step is active. */
+        .login-auth .cl-signIn-start .cl-formFieldRow__password {
+          position: absolute !important;
+          left: -9999px !important;
+          top: auto !important;
+          width: 1px !important;
+          height: 1px !important;
+          min-height: 0 !important;
+          overflow: hidden !important;
+          clip: rect(0 0 0 0) !important;
+          clip-path: inset(50%) !important;
+          opacity: 0 !important;
+          visibility: hidden !important;
+          pointer-events: none !important;
+        }
+        .login-auth .cl-signIn-password .cl-formFieldRow__password,
+        .login-auth .cl-signIn-password .cl-formFieldRow__identifier {
+          position: static !important;
+          left: auto !important;
+          width: auto !important;
+          height: auto !important;
+          min-height: auto !important;
+          overflow: visible !important;
+          clip: auto !important;
+          clip-path: none !important;
+          opacity: 1 !important;
+          visibility: visible !important;
+          pointer-events: auto !important;
+        }
+        .login-auth .cl-form {
+          display: flex !important;
+          flex-direction: column !important;
+          gap: 0.75rem !important;
+        }
       ` }} />
     </main>
   )
