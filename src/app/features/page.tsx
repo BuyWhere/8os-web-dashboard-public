@@ -133,10 +133,10 @@ export default function FeaturesPage() {
           </section>
 
           <section id="all-features" style={{ marginBottom: '4rem', width: '100%' }}>
-            <div style={{
+            {/* OS-5939: 280px minmax so 1440x900 with sidebar is 3 cols, not cramped 4. */}
+            <div className="features-card-grid" style={{
               display: 'grid',
               width: '100%',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))',
               gap: '1.5rem',
             }}>
               {features.map((f) => (
@@ -173,6 +173,16 @@ export default function FeaturesPage() {
           </section>
         </main>
       </div>
+      <style>{`
+        .features-card-grid {
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+        @media (max-width: 700px) {
+          .features-card-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
     </div>
   );
 }
