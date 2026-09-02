@@ -20,6 +20,7 @@ const SUGGESTED_LINKS: Array<{ href: string; label: string; hint: string }> = [
   { href: '/quiz', label: 'Quiz', hint: 'Find your archetype in 90s' },
   { href: '/features', label: 'Features', hint: 'What 8os does' },
   { href: '/pricing', label: 'Pricing', hint: 'Always free' },
+  { href: '/contact', label: 'Contact', hint: 'Help and support' },
 ];
 
 export default function NotFound() {

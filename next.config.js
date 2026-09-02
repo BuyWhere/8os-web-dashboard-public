@@ -39,6 +39,10 @@ const nextConfig = {
       // next.config redirect compiles into the server binary at build time,
       // unlike middleware which may not initialize for bare 404 routes.
       { source: '/famous', destination: '/archetypes/famous', permanent: false },
+      // OS-5916: CLI-style /--help and /help are not product routes; send users
+      // to the existing contact/support page instead of a generic 404.
+      { source: '/help', destination: '/contact', permanent: false },
+      { source: '/--help', destination: '/contact', permanent: false },
     ]
   },
 }
