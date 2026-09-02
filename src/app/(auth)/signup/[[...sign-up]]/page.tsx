@@ -13,7 +13,9 @@ const CARD = "#FFFFFF"  // white card, --color-bg-card
 const INK = "#221F1A"   // ink, --color-text-primary
 const MUTED = "#221F1A" // ink body text for VidMee/WCAG-strong signup copy
 const LINK_DARK = "#000000" // black for WCAG-strong Clerk controls on gold/white
-const GOLD = "#B08637"  // 8os gold accent
+const GOLD = "#8A6728"  // darkened gold: white text 5.18:1 (brand #B08637 is 3.33:1 with white)
+const CTA_FG = "#FFFFFF"
+const SOCIAL_FG = "#000000" // 21:1 on white — beats Clerk provider brand greys
 const BORDER = "#4A4A4A" // dark gray for WCAG input borders — 7.1:1 on white (was #767676 4.5:1, Clerk shorthand overrides border-color longhand)
 
 const BENEFITS = [
@@ -74,7 +76,7 @@ export default function SignupPage() {
                 colorText: INK,
                 colorTextSecondary: MUTED,
                 colorPrimary: GOLD,
-                colorPrimaryForeground: LINK_DARK, // dark text on gold for WCAG AA 7.25:1 (was #FFFFFF, 2.49:1)
+                colorPrimaryForeground: CTA_FG, // OS-5957: white on #8A6728 = 5.18:1 AA
                 colorNeutral: BORDER,
                 colorInput: CARD,
                 colorInputForeground: INK,
@@ -85,9 +87,9 @@ export default function SignupPage() {
                 rootBox: { border: `1px solid ${BORDER}`, borderRadius: "16px", overflow: "hidden", boxShadow: "0 4px 24px rgba(34,31,26,0.06)" },
                 card: { border: "none", boxShadow: "none", borderRadius: 0, padding: "0 24px" }, // OS-3873 r5: 24px horizontal padding so inputs/social buttons don't clip at card edges
                 header: { display: "none" }, // Hide Clerk's default logo/header branding
-                formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: LINK_DARK },
-                socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px", color: "#221F1A" }, // OS-5928: dark social auth labels for WCAG contrast
-                socialButtonsBlockButtonText: { color: "#221F1A" },
+                formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: CTA_FG, background: GOLD, backgroundColor: GOLD },
+                socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px", color: SOCIAL_FG },
+                socialButtonsBlockButtonText: { color: SOCIAL_FG },
                 formFieldInput: { minHeight: "44px", border: `1px solid ${BORDER}`, boxShadow: `0 0 0 1px ${BORDER}` },
                 formFieldLabel: { color: LINK_DARK }, // dark label for WCAG AA 12.4:1 on white
                 formFieldLabelRow: { color: LINK_DARK },
@@ -112,26 +114,26 @@ export default function SignupPage() {
       <style dangerouslySetInnerHTML={{ __html: `
         .signup-auth .cl-formFieldInput { border: 1px solid ${BORDER} !important; box-shadow: 0 0 0 1px ${BORDER} !important; }
         .signup-auth .cl-formFieldOptionalText { color: ${LINK_DARK} !important; }
-        .signup-auth .cl-socialButtonsBlockButton { border-color: ${BORDER} !important; border: 1px solid ${BORDER} !important; color: #221F1A !important; }
-        /* OS-5928: axe flagged social auth labels and terms copy because
-           production had white text on white/cream backgrounds. Force dark
-           WCAG-passing colors on the exact selectors QA reported. */
+        .signup-auth .cl-socialButtonsBlockButton { border-color: ${BORDER} !important; border: 1px solid ${BORDER} !important; color: ${SOCIAL_FG} !important; }
+        .signup-auth .cl-socialButtonsBlockButton * { color: ${SOCIAL_FG} !important; }
+        /* OS-5957 / OS-5928: axe targets provider-suffixed social labels. */
         .signup-auth .cl-socialButtonsBlockButtonText,
         .signup-auth .cl-socialButtonsBlockButtonText__apple,
         .signup-auth .cl-socialButtonsBlockButtonText__github,
         .signup-auth .cl-socialButtonsBlockButtonText__google {
-          color: #221F1A !important;
+          color: ${SOCIAL_FG} !important;
         }
         .signup-auth > p { color: #4A4A4A !important; }
         .signup-auth .cl-formFieldHintText,
         .signup-auth .cl-footerActionLink { color: ${LINK_DARK} !important; }
-        /* OS-3867 button: ensure black text on gold bg wins specificity battle.
-           #000 on #B08637 = 6.48:1 ✓. Clerk may apply background via
-           colorPrimary or its own gradient — defeat all of them. */
-        .signup-auth .cl-formButtonPrimary {
-          color: #000000 !important;
-          background-color: #B08637 !important;
-          background: #B08637 !important;
+        /* OS-5957: white on #8A6728 = 5.18:1. Descendants + submit beat Clerk
+           inner spans and the old globals.css * { color:#000 } trap. */
+        .signup-auth .cl-formButtonPrimary,
+        .signup-auth .cl-formButtonPrimary *,
+        .signup-auth button[type="submit"] {
+          color: ${CTA_FG} !important;
+          background-color: ${GOLD} !important;
+          background: ${GOLD} !important;
         }
         @media (max-width: 860px) {
           .signup-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; padding-top: 2.5rem !important; }

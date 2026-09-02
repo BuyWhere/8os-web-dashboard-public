@@ -75,13 +75,17 @@ export default function LoginPage() {
         }}
       />
       <style dangerouslySetInnerHTML={{ __html: `
-        /* OS-5929: Clerk applies color via shorthand; override with shorthand + !important. */
-        .login-auth .cl-formButtonPrimary {
+        /* OS-5957 / OS-5929: force white on #8A6728 including descendants;
+           social labels black including provider-suffixed classes axe targets. */
+        .login-auth .cl-formButtonPrimary,
+        .login-auth .cl-formButtonPrimary *,
+        .login-auth button[type="submit"] {
           color: ${CTA_FG} !important;
           background: ${GOLD} !important;
           background-color: ${GOLD} !important;
         }
-        .login-auth .cl-socialButtonsBlockButton { color: ${SOCIAL_FG} !important; }
+        .login-auth .cl-socialButtonsBlockButton,
+        .login-auth .cl-socialButtonsBlockButton * { color: ${SOCIAL_FG} !important; }
         .login-auth .cl-socialButtonsBlockButtonText,
         .login-auth .cl-socialButtonsBlockButtonText__apple,
         .login-auth .cl-socialButtonsBlockButtonText__github,
