@@ -37,6 +37,32 @@ describe('classifySignup422', () => {
     expect(result.kind).toBe('format')
     expect(result.message).toBe(EMAIL_FORMAT_MESSAGE)
   })
+
+  it('maps form_password_length_too_short to Clerk longMessage, not email-exists (OS-5955)', () => {
+    const result = classifySignup422({
+      errors: [
+        {
+          code: 'form_password_length_too_short',
+          message: 'Passwords must be 8 characters or more.',
+          longMessage: 'Your password must contain 8 or more characters.',
+        },
+      ],
+    })
+    expect(result.kind).toBe('password')
+    expect(result.message).toBe('Your password must contain 8 or more characters.')
+    expect(result.message).not.toMatch(/already be in use/i)
+  })
+
+  it('does not treat a valid email + password 422 as format', () => {
+    const result = classifySignup422(
+      {
+        errors: [{ code: 'form_password_not_strong_enough', message: 'Password is not strong enough.' }],
+      },
+      'user@example.com'
+    )
+    expect(result.kind).toBe('password')
+    expect(result.message).toMatch(/strong enough/i)
+  })
 })
 
 describe('classifySignin422', () => {

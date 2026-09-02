@@ -273,9 +273,11 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
                 ? 'Slow down'
                 : bridgeError.kind === 'format'
                   ? 'Invalid email'
-                  : bridgeError.status === 422
-                    ? 'Account creation issue'
-                    : 'Sign-up error'}
+                  : bridgeError.kind === 'password'
+                    ? 'Password issue'
+                    : bridgeError.status === 422
+                      ? 'Account creation issue'
+                      : 'Sign-up error'}
           </strong>
           <span data-testid="clerk-sign-up-error-message">{bridgeError.message}</span>
         </div>
