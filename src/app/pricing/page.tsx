@@ -136,7 +136,10 @@ function FeatureValue({ value }: { value: boolean | string }) {
 }
 
 function TierCta({ tier }: { tier: (typeof TIERS)[number] }) {
-  const style = { ...tierCtaStyle, ...tierCtaVisibleStyle, ...(tier.highlighted ? tierCtaHighlightedStyle : {}) };
+  const style = {
+    ...tierCtaStyle,
+    ...(tier.highlighted ? tierCtaHighlightedStyle : tierCtaSecondaryStyle),
+  };
 
   if (tier.id === 'agent-connect' || tier.id === 'pro') {
     return (
@@ -371,9 +374,11 @@ const featureCheckStyle = (included: boolean): React.CSSProperties => ({
 const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', paddingTop: '1.25rem', marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem', overflow: 'visible' };
 const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600 };
 const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--color-text-secondary)' };
-const tierCtaStyle: React.CSSProperties = { display: 'block', width: '100%', textAlign: 'center', padding: '0.9rem 1rem', borderRadius: '12px', background: 'var(--color-accent)', border: '1px solid var(--color-accent)', color: 'var(--skin-button-primary-text)', fontWeight: 800, textDecoration: 'none', fontSize: '0.92rem', boxShadow: '0 10px 24px rgba(34, 31, 26, 0.12)', transition: 'transform 0.2s, background 0.2s, border-color 0.2s' };
-const tierCtaVisibleStyle: React.CSSProperties = { background: 'var(--color-accent-2)', border: '1px solid var(--color-accent-2)', color: '#fff' };
-const tierCtaHighlightedStyle: React.CSSProperties = { background: 'var(--color-accent-2)', border: '1px solid var(--color-accent-2)', color: '#fff', boxShadow: '0 12px 28px rgba(34, 31, 26, 0.18)' };
+const tierCtaStyle: React.CSSProperties = { display: 'block', width: '100%', textAlign: 'center', padding: '0.9rem 1rem', borderRadius: '12px', fontWeight: 800, textDecoration: 'none', fontSize: '0.92rem', transition: 'transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s' };
+/* Secondary CTAs: outline, no terracotta fill — Pro is the only solid primary. */
+const tierCtaSecondaryStyle: React.CSSProperties = { background: 'transparent', border: '1.5px solid var(--color-accent-border)', color: 'var(--color-accent-border)', boxShadow: 'none' };
+/* Primary Pro CTA: gold fill + elevation. White on #8A6514 = 5.31:1 AA. */
+const tierCtaHighlightedStyle: React.CSSProperties = { background: 'var(--color-accent)', border: '1px solid var(--color-accent)', color: '#fff', fontSize: '1rem', padding: '1.05rem 1rem', boxShadow: '0 14px 32px rgba(138, 101, 20, 0.35)' };
 
 const tableSection: React.CSSProperties = { marginBottom: '4rem' };
 const sectionTitleStyle: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', letterSpacing: '-0.03em' };
