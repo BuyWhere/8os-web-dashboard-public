@@ -32,7 +32,9 @@ export default function SignupPage() {
           a 32px gutter, widen to 1360px, and right-align the auth card so the
           form uses the right side of the desktop canvas while the header actions
           also sit near the viewport edge. */}
-      <div className="signup-grid" style={{ maxWidth: 1360, margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(400px, 520px)", alignItems: "start", gap: "4rem", padding: "6rem 2rem 2rem" }}>
+      {/* OS-5655: 4rem (64px) gap left a visual disconnect between pitch and
+          Clerk card. gap-12 (3rem) + items-center keeps a tight two-column hero. */}
+      <div className="signup-grid" style={{ maxWidth: 1360, margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(400px, 520px)", alignItems: "center", gap: "3rem", padding: "6rem 2rem 2rem" }}>
         {/* Left, product context. The 8os wordmark lives in the global Header, so
             we don't repeat it here — it would compete with the header and split
             attention across two brand marks on the same page. */}
@@ -61,7 +63,7 @@ export default function SignupPage() {
             OS-4316: wrapped in SignupClerkErrorBridge to catch Clerk 4xx/5xx
             errors (email already exists, rate limit, server errors) and show
             a clear inline message instead of a silent broken form. */}
-        <section className="signup-auth" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", alignSelf: "start" }}>
+        <section className="signup-auth" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", alignSelf: "center" }}>
           <SignupPlanIntent />
           <SignupClerkErrorBridge
             signInUrl="/login"
@@ -115,13 +117,20 @@ export default function SignupPage() {
         .signup-auth .cl-formFieldInput { border: 1px solid ${BORDER} !important; box-shadow: 0 0 0 1px ${BORDER} !important; }
         .signup-auth .cl-formFieldOptionalText { color: ${LINK_DARK} !important; }
         .signup-auth .cl-socialButtonsBlockButton { border-color: ${BORDER} !important; border: 1px solid ${BORDER} !important; color: ${SOCIAL_FG} !important; }
-        .signup-auth .cl-socialButtonsBlockButton * { color: ${SOCIAL_FG} !important; }
-        /* OS-5957 / OS-5928: axe targets provider-suffixed social labels. */
+        .signup-auth .cl-socialButtonsBlockButton * { color: ${SOCIAL_FG} !important; fill: ${SOCIAL_FG} !important; }
+        /* OS-5957 / OS-5928 / OS-5655: Apple labels ship as Clerk --colorTextSecondary
+           / muted grey and look disabled vs GitHub/Google. Force every provider
+           suffix + inner span/svg to SOCIAL_FG (#000, 21:1 on white). */
         .signup-auth .cl-socialButtonsBlockButtonText,
         .signup-auth .cl-socialButtonsBlockButtonText__apple,
         .signup-auth .cl-socialButtonsBlockButtonText__github,
-        .signup-auth .cl-socialButtonsBlockButtonText__google {
+        .signup-auth .cl-socialButtonsBlockButtonText__google,
+        .signup-auth .cl-socialButtonsProviderIcon__apple,
+        .signup-auth button[data-provider="apple"],
+        .signup-auth button[data-provider="apple"] * {
           color: ${SOCIAL_FG} !important;
+          fill: ${SOCIAL_FG} !important;
+          opacity: 1 !important;
         }
         .signup-auth > p { color: #4A4A4A !important; }
         .signup-auth .cl-formFieldHintText,
