@@ -564,17 +564,6 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: var(--color-text-primary);
 }
 
-/* OS-5813: fill the 1200px blog shell on desktop instead of a left-weighted
-   single column. Collapse to 1 col below 900px so cards stay readable. */
-.blog-post-grid {
-  grid-template-columns: 1fr;
-}
-@media (min-width: 900px) {
-  .blog-post-grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-
 /* ── OS-5654 public-page WCAG AA ───────────────────────────────────────────
  * Gold-on-dark and muted-on-dark failures named by QA. Page-local where a
  * global token would break cream (light) contrast. Computed ratios:

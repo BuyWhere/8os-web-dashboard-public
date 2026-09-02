@@ -282,8 +282,8 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
         })}
       </div>
 
-      {/* Post Grid — 2-col on desktop so the 1200px shell is filled evenly (OS-5813) */}
-      <div className="blog-post-grid" style={{ display: 'grid', gap: '16px' }}>
+      {/* Post Grid */}
+      <div style={{ display: 'grid', gap: '16px' }}>
         {visible.map((post) => {
           const config = CATEGORY_CONFIG[post.category]
           return (

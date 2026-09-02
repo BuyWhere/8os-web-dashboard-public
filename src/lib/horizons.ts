@@ -55,25 +55,6 @@ export function normalizeHorizon(v: unknown): Horizon {
   return isHorizon(v) ? v : DEFAULT_HORIZON
 }
 
-/**
- * Bucket goals into horizon sections. Prefers an explicit horizon map (e.g. from
- * a raw SQL hydrate) over the object field so a stale Prisma client that omits
- * `horizon` cannot silently dump every goal into "This year".
- */
-export function groupGoalsByHorizon<T extends { id: string; horizon?: unknown }>(
-  goals: T[],
-  horizonById?: ReadonlyMap<string, unknown>,
-): Map<Horizon, T[]> {
-  const byHorizon = new Map<Horizon, T[]>()
-  for (const h of HORIZONS) byHorizon.set(h, [])
-  for (const g of goals) {
-    const fromMap = horizonById?.get(g.id)
-    const h = normalizeHorizon(fromMap ?? g.horizon)
-    byHorizon.get(h)!.push(g)
-  }
-  return byHorizon
-}
-
 export function isNearTerm(h: Horizon): boolean {
   return NEAR_TERM_HORIZONS.includes(h)
 }
