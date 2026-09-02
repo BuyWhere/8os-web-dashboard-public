@@ -283,6 +283,11 @@ export default function PricingPage() {
   );
 }
 
+// OS-5568: tier cards clipped at viewport bottom on desktop (>=1280px wide
+// + <=960h). (1) Inline gridTemplateColumns beat CSS media queries; moved
+// grid-template-columns into CSS so the 3-col overrides can win. (2) Added
+// align-items:stretch so all cards share row height. (3) 3-column media
+// queries at wide+short viewports keep cards above the fold.
 const tiersGridResponsiveStyle = `
   .pricing-page {
     --pricing-excluded-feature-color: #A1A1AA;
@@ -295,8 +300,15 @@ const tiersGridResponsiveStyle = `
     --pricing-excluded-feature-color: #EDE7DD;
     --pricing-included-marker-color: #86EFAC;
   }
-  .tiers-grid { margin-bottom: 5rem; }
+  .tiers-grid { margin-bottom: 5rem; grid-template-columns: repeat(4, 1fr); align-items: stretch; }
   .tier-card { height: auto !important; overflow: visible !important; }
+  /* 3-column at wide+short viewports keeps cards above the fold. */
+  @media (min-width: 1280px) and (max-height: 820px) {
+    .tiers-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  }
+  @media (min-width: 1440px) and (max-height: 960px) {
+    .tiers-grid { grid-template-columns: repeat(3, 1fr) !important; }
+  }
   @media (max-width: 1100px) {
     .tiers-grid { grid-template-columns: repeat(2, 1fr) !important; }
   }
@@ -312,7 +324,7 @@ const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.
 const pageTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: 'clamp(1.4rem, 6vw, 2.25rem)', lineHeight: 1.15, letterSpacing: '-0.035em', fontWeight: 800 };
 const pageDescStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', color: 'var(--color-text-secondary)', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.65 };
 
-const tiersGridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: '1.25rem' };
+const tiersGridStyle: React.CSSProperties = { display: 'grid', gap: '1.25rem' };
 
 const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '1.35rem', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'flex', flexDirection: 'column', gap: '0.85rem' };
 const tierHighlightedStyle: React.CSSProperties = { border: '2px solid #C87055', background: 'var(--color-accent-soft)', boxShadow: '0 0 0 1px var(--color-accent-soft)' };
