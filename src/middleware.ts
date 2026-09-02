@@ -59,11 +59,14 @@ const clerk = clerkMiddleware(async (auth, req) => {
   // throws "auth(...).protect is not a function" at runtime -> 500 on every
   // protected route). protect() redirects unauthenticated users to the sign-in
   // URL (NEXT_PUBLIC_CLERK_SIGN_IN_URL=/login) instead of 500-ing.
-  const loginUrl = new URL('/login', req.url).toString()
+  const loginUrl = new URL('/login', req.url)
+  loginUrl.searchParams.set('next', req.nextUrl.pathname)
+  const loginUrlStr = loginUrl.toString()
   const signupUrl = new URL('/signup', req.url).toString()
+
   if (isAdminRoute(req)) {
     await auth.protect((has) => has({ role: 'org:admin' }), {
-      unauthenticatedUrl: loginUrl,
+      unauthenticatedUrl: loginUrlStr,
     })
   } else if (isOnboardingRoute(req)) {
     // OS-3649: Public CTAs use "free" copy and link to /onboarding. Unauthenticated
@@ -76,10 +79,15 @@ const clerk = clerkMiddleware(async (auth, req) => {
     // src/lib/memory/qa-auth.ts). Lets automated QA exercise /api/assistant etc.
     const isQaApiProbe = req.nextUrl.pathname.startsWith('/api/') && !!req.headers.get('x-qa-user-id')
     if (!isQaApiProbe) {
-      // Clerk v6: bare protect() REWRITES signed-out users to a 404
-      // (x-clerk-auth-reason: protect-rewrite). Passing unauthenticatedUrl makes
-      // it a real redirect to /login instead. Authed users pass through.
-      await auth.protect({ unauthenticatedUrl: loginUrl })
+      // OS-5918: any missing/invalid Clerk userId on a protected page must 307
+      // to /login. protect() can rewrite to a blank 404 when the cookie is
+      // present but the session is dead (x-clerk-auth-reason: protect-rewrite).
+      const session = await auth()
+      if (!session.userId) {
+        loginUrl.searchParams.set('reason', 'session-expired')
+        return NextResponse.redirect(loginUrl, 307)
+      }
+      await auth.protect({ unauthenticatedUrl: loginUrlStr })
     }
   }
 })
