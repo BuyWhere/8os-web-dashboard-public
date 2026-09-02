@@ -219,15 +219,16 @@ export function ContactForm() {
         />
       </div>
 
-      {/* Honeypot for bots, hidden from sighted users */}
-      <div aria-hidden="true" style={{ position: 'absolute', left: '-10000px', width: '1px', height: '1px', overflow: 'hidden' }}>
-        <label htmlFor="contact-honeypot">Leave this empty</label>
+      {/* Honeypot for bots, hidden from sighted users — clearly non-interactive */}
+      <div aria-hidden="true" role="presentation" style={{ position: 'absolute', left: '-10000px', width: '1px', height: '1px', overflow: 'hidden' }}>
+        <label htmlFor="contact-honeypot">Do not fill in this field</label>
         <input
           id="contact-honeypot"
           name="honeypot"
           type="text"
           tabIndex={-1}
           autoComplete="off"
+          aria-disabled="true"
           value={form.honeypot}
           onChange={update('honeypot')}
         />

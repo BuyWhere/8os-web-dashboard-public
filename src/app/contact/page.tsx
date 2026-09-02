@@ -10,8 +10,8 @@ export const metadata: Metadata = {
 
 const SECTIONS = [
   { id: 'contact-header', label: 'Contact' },
-  { id: 'contact-options', label: 'Email Options' },
   { id: 'contact-form', label: 'Send a Message' },
+  { id: 'contact-options', label: 'Email Options' },
 ];
 
 const EMAIL_OPTIONS = [
@@ -63,7 +63,17 @@ export default function ContactPage() {
             </p>
           </section>
 
-          <section id="contact-options" aria-labelledby="contact-options-title" style={{ marginBottom: '3rem' }}>
+          <section id="contact-form">
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem' }}>
+              Send a message
+            </h2>
+            <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1.25rem', lineHeight: 1.5 }}>
+              Drop your details below and we&apos;ll reply within 1-2 business days.
+            </p>
+            <ContactForm />
+          </section>
+
+          <section id="contact-options" aria-labelledby="contact-options-title" style={{ marginTop: '3rem', marginBottom: '3rem' }}>
             <h2 id="contact-options-title" style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem' }}>
               Email Options
             </h2>
@@ -90,16 +100,6 @@ export default function ContactPage() {
                 </div>
               ))}
             </div>
-          </section>
-
-          <section id="contact-form">
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem' }}>
-              Send a message
-            </h2>
-            <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1.25rem', lineHeight: 1.5 }}>
-              Prefer the form? Drop your details below and we&apos;ll reply within 1-2 business days.
-            </p>
-            <ContactForm />
           </section>
         </main>
       </div>
