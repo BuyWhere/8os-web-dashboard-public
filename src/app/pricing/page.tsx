@@ -305,9 +305,12 @@ const tiersGridResponsiveStyle = `
     --pricing-excluded-feature-color: #EDE7DD;
     --pricing-included-marker-color: #86EFAC;
   }
+  /* OS-5934 / OS-5938: parent grid defines explicit row tracks so the
+     subgrid on .tier-card can inherit them and align CTA rows across cards. */
   .tiers-grid {
     margin-bottom: 5rem;
     grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto 1fr auto auto;
     align-items: stretch;
   }
   .tier-card {
@@ -328,10 +331,10 @@ const tiersGridResponsiveStyle = `
     .tier-card ul li { line-height: 1.35 !important; }
     .tier-footer { padding-top: 0.85rem !important; }
   }
-  /* 3-column at wide+short viewports keeps feature rows readable. */
-  @media (min-width: 1101px) and (max-height: 1000px) {
-    .tiers-grid { grid-template-columns: repeat(3, 1fr) !important; }
-  }
+  /* OS-5914: removed height-based 3-col breakpoint — keep 4-col at all
+     widths ≥1101px so VidMee's pricing screenshot baseline (4 cards in
+     one row at 1440x900) is preserved. Subgrid on .tier-card aligns
+     CTAs across cards in the same row (OS-5934 / OS-5938). */
   @media (max-width: 1100px) {
     .tiers-grid { grid-template-columns: repeat(2, 1fr) !important; }
   }
