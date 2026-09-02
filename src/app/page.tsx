@@ -43,7 +43,10 @@ const INK = 'var(--color-text-primary)'
 const GRAY = 'var(--color-text-secondary)'
 const CREAM = 'var(--color-bg-primary)'
 const SURFACE = 'var(--color-bg-card)'
-const GOLD = '#6E531F' // OS-3973: darkened from #8A6728 to clear WCAG AA on small eyebrow text (6.55:1 gold-on-cream)
+// Theme-aware gold: light --color-accent-border #7A5A1E on cream ≈ 5.74:1;
+// dark --color-accent #C79A48 on charcoal ≈ 6.93:1. Hardcoded #6E531F was
+// 6.50:1 on cream but only 2.48:1 on dark (OS-5654).
+const GOLD = 'var(--color-accent-border)'
 const HAIRLINE = 'var(--color-border)'
 const OXBLOOD = 'var(--color-accent-2)'
 const MAXW = 1360
@@ -186,6 +189,7 @@ export default function Home() {
         >
           <div>
             <span
+              className="landing-gold"
               style={{
                 display: 'inline-block',
                 fontSize: '0.8125rem',
@@ -236,6 +240,7 @@ export default function Home() {
             </p>
             <a
               href="/signup"
+              className="landing-gold-fill"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -303,6 +308,7 @@ export default function Home() {
               }}
             >
               <div
+                className="landing-gold"
                 style={{
                   fontFamily: serif,
                   fontSize: '1.5rem',
@@ -456,6 +462,7 @@ export default function Home() {
           }}
         >
           <span
+            className="landing-gold"
             style={{
               display: 'inline-block',
               fontSize: '0.8125rem',
@@ -623,6 +630,7 @@ function SectionHead({
   return (
     <div style={{ maxWidth: '40rem' }}>
       <span
+        className="landing-gold"
         style={{
           display: 'inline-block',
           fontSize: '0.8125rem',

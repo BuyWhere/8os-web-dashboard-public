@@ -7,11 +7,13 @@ import type { BlogPost, BlogCategory } from '@/lib/content/blog'
 const POSTS_PER_PAGE = 10
 
 const CATEGORY_CONFIG: Record<BlogCategory, { icon: string; color: string; bg: string }> = {
-  BaZi: { icon: '☯', color: 'var(--color-accent)', bg: 'rgba(167,139,250,0.12)' },
-  Productivity: { icon: '⚡', color: '#facc15', bg: 'rgba(250,204,21,0.12)' },
-  Archetypes: { icon: '🎭', color: '#f472b6', bg: 'rgba(244,114,182,0.12)' },
-  'Mental Health': { icon: '🧠', color: '#34d399', bg: 'rgba(52,211,153,0.12)' },
-  Comparisons: { icon: '⚖️', color: '#60a5fa', bg: 'rgba(96,165,250,0.12)' },
+  // Light: darken pastels so they clear 4.5:1 on cream/white. Dark: CSS
+  // [data-theme=dark] .blog-tag-pill brightens (OS-5654).
+  BaZi: { icon: '☯', color: 'var(--color-accent-border)', bg: 'var(--color-accent-soft)' },
+  Productivity: { icon: '⚡', color: '#7A5A1E', bg: 'var(--color-accent-soft)' },
+  Archetypes: { icon: '🎭', color: '#7A3B2E', bg: 'var(--color-accent-soft)' },
+  'Mental Health': { icon: '🧠', color: '#146C34', bg: 'var(--color-accent-soft)' },
+  Comparisons: { icon: '⚖️', color: '#0369a1', bg: 'var(--color-accent-soft)' },
 }
 
 const ALL_CATEGORIES: BlogCategory[] = ['BaZi', 'Productivity', 'Archetypes', 'Mental Health', 'Comparisons']
@@ -310,6 +312,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '10px' }}>
                   <span
+                    className="blog-tag-pill"
                     style={{
                       fontSize: '11px',
                       fontWeight: 600,
@@ -321,7 +324,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                   >
                     {config.icon} {post.category}
                   </span>
-                  {post.date && <span style={{ color: '#4a4a5a', fontSize: '12px' }}>·</span>}
+                  {post.date && <span className="blog-meta-dot" style={{ color: 'var(--color-text-muted)', fontSize: '12px' }}>·</span>}
                   {post.date && (
                     <time
                       dateTime={post.isoDate}
@@ -330,7 +333,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                       {post.date}
                     </time>
                   )}
-                  {post.readTime && <span style={{ color: '#4a4a5a', fontSize: '12px' }}>·</span>}
+                  {post.readTime && <span className="blog-meta-dot" style={{ color: 'var(--color-text-muted)', fontSize: '12px' }}>·</span>}
                   {post.readTime && <span style={{ color: 'var(--color-text-secondary)', fontSize: '12px' }}>{post.readTime}</span>}
                 </div>
                 <h2

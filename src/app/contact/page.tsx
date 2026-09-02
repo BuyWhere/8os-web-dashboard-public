@@ -78,7 +78,7 @@ export default function ContactPage() {
                   borderRadius: '12px',
                   padding: '1.5rem',
                 }}>
-                  <div style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-accent)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
+                  <div className="landing-gold" style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-accent-border)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
                     {item.label}
                   </div>
                   <a href={`mailto:${item.email}`} style={{ color: 'var(--color-text-primary)', textDecoration: 'none', fontSize: '1rem', fontWeight: 500 }}>

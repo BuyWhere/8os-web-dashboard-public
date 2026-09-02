@@ -56,6 +56,8 @@ export function SidebarNav({ sections }: { sections: NavSection[] }) {
           <li key={id}>
             <button
               onClick={() => scrollTo(id)}
+              className="sidebar-nav-link"
+              data-active={isActive ? 'true' : 'false'}
               style={{
                 width: '100%',
                 textAlign: 'left',
@@ -66,7 +68,7 @@ export function SidebarNav({ sections }: { sections: NavSection[] }) {
                 borderRadius: '0 6px 6px 0',
                 cursor: 'pointer',
                 fontSize: '0.8125rem',
-                color: isActive ? 'var(--color-accent)' : 'var(--color-text-muted)',
+                color: isActive ? 'var(--color-accent)' : 'var(--color-text-secondary)',
                 fontWeight: isActive ? 600 : 400,
                 transition: 'all 0.15s',
                 lineHeight: 1.4,

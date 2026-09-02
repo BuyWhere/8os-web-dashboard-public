@@ -126,6 +126,7 @@ export default function QuizPage() {
       >
         <div style={{ maxWidth: '640px', margin: '0 auto' }}>
           <div
+            className="quiz-badge-pill"
             style={{
               display: 'inline-block',
               background: 'var(--color-accent-soft)',

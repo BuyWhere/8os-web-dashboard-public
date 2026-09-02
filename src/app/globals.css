@@ -102,8 +102,8 @@
   --color-border-strong: #493F31;
   --color-text-primary: #EDE7DD; /* warm cream text */
   --color-text-secondary: #B8AF9F; /* muted warm gray */
-  --color-text-muted: #9A9184;   /* lighter for contrast on charcoal (was #8A8175) */
-  --color-accent: #C79A48;       /* gold, brightened for dark */
+  --color-text-muted: #B8AF9F;   /* 8.23:1 on charcoal — WCAG AA (was #9A9184 / #8A8175) */
+  --color-accent: #C79A48;       /* gold, brightened for dark — 6.93:1 on #1A1712 */
   --color-accent-hover: #A67F30; /* darker gold — hover state */
   --color-accent-border: #9A7A3A; /* WCAG-AA border for inputs on dark — 5.2:1 on charcoal */
   --color-accent-gradient: linear-gradient(135deg, #C79A48 0%, #9A6A28 100%); /* gold gradient — 6.1:1 on charcoal */
@@ -126,7 +126,7 @@
   --skin-color-surface-alt: #1F1B15;
   --skin-color-text: #EDE7DD;
   --skin-color-text-secondary: #B8AF9F;
-  --skin-color-text-muted: #8A8175;
+  --skin-color-text-muted: #B8AF9F; /* 8.23:1 on charcoal — WCAG AA (was #8A8175 = 4.66:1 / 4.32:1 on cards) */
   --skin-color-border: #362F26;
   --skin-color-border-strong: #493F31;
   --skin-color-badge-bg: #3A3125;
@@ -562,4 +562,58 @@ body:has(.app-sidebar) main:not(.cal-main) {
 .blog-featured-badge {
   background: var(--color-accent-soft);
   color: var(--color-text-primary);
+}
+
+/* ── OS-5654 public-page WCAG AA ───────────────────────────────────────────
+ * Gold-on-dark and muted-on-dark failures named by QA. Page-local where a
+ * global token would break cream (light) contrast. Computed ratios:
+ *   --color-accent #C79A48 on #1A1712 = 6.93:1
+ *   --color-text-secondary #B8AF9F on #1A1712 = 8.23:1
+ *   --color-text-muted (dark) #B8AF9F on #1A1712 = 8.23:1
+ *   #8FA0D4 on #282522 = 5.91:1 (tag pill, was #6C7CB3 = 3.75:1)
+ */
+
+/* Homepage eyebrow / CTA fill uses --color-accent-border in light (#7A5A1E
+ * on cream 5.74:1). In dark that token is #9A7A3A (~3.1:1 on charcoal) so
+ * swap to bright gold. White CTA text on #C79A48 is 2.58:1 — use ink. */
+[data-theme='dark'] .landing-gold {
+  color: var(--color-accent) !important;
+}
+[data-theme='dark'] .landing-gold-fill {
+  background: var(--color-accent) !important;
+  color: #0F0D0A !important; /* 4.66:1 on #C79A48 */
+}
+
+/* Quiz badge sits on the #0f0a1e hero gradient, not page cream.
+ * Light tokens: accent-soft #F2E9D6 + primary ink = 12.81:1.
+ * Dark tokens: accent-soft #3A3125 + cream text = 10.95:1.
+ * Force cream text in dark so the pill never inherits a dark gold. */
+[data-theme='dark'] .quiz-badge-pill {
+  background: var(--color-accent-soft);
+  color: var(--color-text-primary);
+  border-color: var(--color-accent);
+}
+
+/* Sidebar inactive links used --color-text-muted. After the dark muted
+ * bump they pass; keep a class hook so future muted tweaks don't regress. */
+.sidebar-nav-link {
+  color: var(--color-text-secondary);
+}
+.sidebar-nav-link[data-active='true'] {
+  color: var(--color-accent);
+}
+[data-theme='dark'] .sidebar-nav-link[data-active='true'] {
+  color: var(--color-accent); /* #C79A48 on charcoal 6.93:1 */
+}
+
+/* Blog list hardcoded #4a4a5a separators fail on dark (2.06:1). */
+[data-theme='dark'] .blog-meta-dot {
+  color: var(--color-text-muted) !important;
+}
+
+/* Article/list tag pills: cream on dark accent-soft (10.95:1). Light uses
+ * darkened category colors on #F2E9D6 (see BlogListClient). */
+[data-theme='dark'] .blog-tag-pill {
+  color: var(--color-text-primary) !important;
+  background: var(--color-accent-soft) !important;
 }
