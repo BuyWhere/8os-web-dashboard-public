@@ -209,23 +209,7 @@ export default async function DashboardPage() {
           </div>
         </header>
 
-        {/* ── Daily brief (insight), the one thing to read first ────── */}
-        <Section serif={serif} title="Your daily brief" href="/dashboard/briefing" cta="Full briefing">
-          <InsightDisplayCard
-            insight={insightResult.content}
-            date={insightResult.date}
-            archetypeId={archetype?.archetypeId ?? 'default'}
-            archetypeName={archetypeName}
-            isFallback={insightResult.isFallback}
-            cached={insightResult.cached}
-            initialFeedback={(insightFeedback?.feedback?.rating as 1 | -1 | null | undefined) ?? null}
-            priority={insightPriority}
-            priorityReason={insightPriorityReason}
-          />
-          <WeeklyReminder serif={serif} reminder={weeklyReminder} />
-        </Section>
-
-        {/* ── Today's focus (Big 3) + this week ──────────────────────── */}
+        {/* ── Today's focus (Big 3) first so Accept sits above the 900px fold (OS-5942) ── */}
         <Section serif={serif} title="Today's focus">
           <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1.3fr) minmax(0, 1fr)', gap: 20 }} className="dash-grid-2">
             <Card>
@@ -263,6 +247,22 @@ export default async function DashboardPage() {
               />
             </Card>
           </div>
+        </Section>
+
+        {/* ── Daily brief (insight) below the fold so Big 3 + Accept stay first (OS-5942) ── */}
+        <Section serif={serif} title="Your daily brief" href="/dashboard/briefing" cta="Full briefing">
+          <InsightDisplayCard
+            insight={insightResult.content}
+            date={insightResult.date}
+            archetypeId={archetype?.archetypeId ?? 'default'}
+            archetypeName={archetypeName}
+            isFallback={insightResult.isFallback}
+            cached={insightResult.cached}
+            initialFeedback={(insightFeedback?.feedback?.rating as 1 | -1 | null | undefined) ?? null}
+            priority={insightPriority}
+            priorityReason={insightPriorityReason}
+          />
+          <WeeklyReminder serif={serif} reminder={weeklyReminder} />
         </Section>
 
         {/* ── Alignment, are you on the right goal this season ───────── */}
