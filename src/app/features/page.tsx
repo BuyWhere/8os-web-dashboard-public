@@ -74,11 +74,18 @@ export default function FeaturesPage() {
       color: 'var(--color-text-primary)',
       padding: '4rem 2rem',
     }}>
-      <div style={{ maxWidth: '1360px', margin: '0 auto', display: 'flex', gap: '2.5rem', alignItems: 'flex-start' }}>
+      <div style={{
+        width: '100%',
+        maxWidth: '1360px',
+        margin: '0 auto',
+        display: 'flex',
+        gap: '2.5rem',
+        alignItems: 'flex-start',
+      }}>
 
         <SidebarNav sections={SECTIONS} />
 
-        <main style={{ flex: 1, minWidth: 0 }}>
+        <main style={{ flex: '1 1 0%', minWidth: 0, width: '100%' }}>
           <Link href="/" style={{ color: 'var(--color-accent)', textDecoration: 'none', fontSize: '0.875rem' }}>
             ← Back to 8os
           </Link>
@@ -91,11 +98,7 @@ export default function FeaturesPage() {
               8os combines ancient wisdom with modern AI to build an operating system unique to you.
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '0.875rem', flexWrap: 'wrap', marginTop: '1.75rem' }}>
-<<<<<<< HEAD
               <a href="/onboarding" style={{
-=======
-              <a href="/quiz" style={{
->>>>>>> 304ff1e (fix(signup): OS-5912 high-contrast dark charcoal CTA button)
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -129,10 +132,11 @@ export default function FeaturesPage() {
             </div>
           </section>
 
-          <section id="all-features" style={{ marginBottom: '4rem' }}>
+          <section id="all-features" style={{ marginBottom: '4rem', width: '100%' }}>
             <div style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              width: '100%',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))',
               gap: '1.5rem',
             }}>
               {features.map((f) => (
@@ -154,11 +158,7 @@ export default function FeaturesPage() {
 
           <section id="get-started" style={{ textAlign: 'center' }}>
             {/* Native <a> so click is a full navigation (QA test_flow checks window.location; Next <Link> SPA routing can leave the URL "unchanged" from the probe). */}
-<<<<<<< HEAD
             <a href="/onboarding" data-qa="features-cta-quiz" style={{
-=======
-            <a href="/quiz" data-qa="features-cta-quiz" style={{
->>>>>>> 304ff1e (fix(signup): OS-5912 high-contrast dark charcoal CTA button)
               display: 'inline-block',
               padding: '1rem 2rem',
               background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)',
