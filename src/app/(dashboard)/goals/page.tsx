@@ -13,7 +13,7 @@ import { ProgressRing } from '@/components/dashboard/ProgressRing'
 import { QuickAdd } from '@/components/dashboard/QuickAdd'
 import { GoalComposer } from '@/components/dashboard/GoalComposer'
 import { GoalCheckIn } from '@/components/dashboard/GoalCheckIn'
-import { HORIZONS, HORIZON_LABELS, HORIZON_ORDER, isNearTerm, buildGoalReminder, normalizeHorizon, defaultTargetDate, type Horizon } from '@/lib/horizons'
+import { HORIZONS, HORIZON_LABELS, HORIZON_ORDER, isNearTerm, buildGoalReminder, normalizeHorizon, defaultTargetDate, groupGoalsByHorizon, type Horizon } from '@/lib/horizons'
 import Link from 'next/link'
 
 async function getUserId(): Promise<string> {
@@ -48,13 +48,28 @@ export default async function GoalsPage() {
 
   const sidebarGoals = goals.map((g) => ({ id: g.id, domainId: g.domainId, name: g.name, progress: g.progress }))
 
-  // Group goals by horizon (default 'yearly' for legacy rows).
-  const byHorizon = new Map<Horizon, typeof goals>()
-  for (const h of HORIZONS) byHorizon.set(h, [])
-  for (const g of goals) {
-    const h = normalizeHorizon((g as { horizon?: string }).horizon)
-    byHorizon.get(h)!.push(g)
+  // Hydrate `horizon` from SQL. A stale Prisma client (schema without the
+  // column) omits it from findMany, and normalizeHorizon(undefined) dumps
+  // every goal into "This year" — OS-5572.
+  let horizonById = new Map<string, unknown>()
+  try {
+    const rows = await prisma.$queryRawUnsafe<Array<{ id: string; horizon: string | null }>>(
+      `SELECT id, horizon FROM goals WHERE "userId" = $1 AND status IN ('active', 'paused')`,
+      userId,
+    )
+    horizonById = new Map(rows.map((r) => [r.id, r.horizon]))
+    for (const g of goals) {
+      const h = horizonById.get(g.id)
+      if (h != null) (g as { horizon?: unknown }).horizon = h
+    }
+  } catch {
+    /* column missing on very old DBs — fall back to object field / yearly */
   }
+
+  const byHorizon = groupGoalsByHorizon(
+    goals as Array<(typeof goals)[number] & { horizon?: unknown }>,
+    horizonById,
+  )
 
   // Backfill: every goal gets a deadline (rows created before the deadline rule
   // have none, so the end-of-period check-in could never fire). Best-effort.
