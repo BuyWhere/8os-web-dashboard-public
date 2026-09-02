@@ -16,8 +16,12 @@ const BG = "#F7F3EC"   // cream, matches :root --color-bg-primary
 const CARD = "#FFFFFF"  // white card surface, matches --color-bg-card
 const INK = "#221F1A"   // ink, matches --color-text-primary
 const MUTED = "#6B6257"    // muted body/hint text (5.47:1 on cream)
-const LINK_DARK = "#221F1A" // dark ink for WCAG-strong elements (buttons, links)
-const GOLD = "#B08637"  // 8os gold accent, 4.69:1 on cream
+const LINK_DARK = "#221F1A" // dark ink for WCAG-strong elements (links, labels)
+// OS-5929: Continue uses white text. Brand gold #B08637 is only 3.33:1 with
+// white, so darken the CTA fill to #8A6728 (5.18:1). Social labels use black.
+const GOLD = "#8A6728"
+const CTA_FG = "#FFFFFF"
+const SOCIAL_FG = "#000000" // 21:1 on white — beats Clerk's muted provider colors
 const BORDER = "#767676" // dark gray for WCAG input borders (was #E7DFD2, 1.46:1 fails)
 
 export default function LoginPage() {
@@ -48,7 +52,7 @@ export default function LoginPage() {
             colorTextSecondary: MUTED,
             // Brand
             colorPrimary: GOLD,
-            colorPrimaryForeground: LINK_DARK, // dark text on gold for WCAG AA 7.25:1 (was #FFFFFF, 2.49:1)
+            colorPrimaryForeground: CTA_FG, // OS-5929: white on #8A6728 = 5.18:1 AA
             // Borders & dividers
             colorNeutral: BORDER,
             // Inputs: light surface, dark text
@@ -64,17 +68,24 @@ export default function LoginPage() {
             },
             formFieldLabel: { color: LINK_DARK }, // dark label for WCAG AA 12.4:1 on white
             footerActionLink: { color: LINK_DARK, fontWeight: 600 }, // dark "Sign up" link for WCAG AA 12.4:1
-            socialButtonsBlockButton: { color: "#1F2937", border: `1px solid ${BORDER}` },
-            socialButtonsBlockButtonText: { color: "#1F2937" },
+            formButtonPrimary: { color: CTA_FG, background: GOLD, backgroundColor: GOLD },
+            socialButtonsBlockButton: { color: SOCIAL_FG, border: `1px solid ${BORDER}` },
+            socialButtonsBlockButtonText: { color: SOCIAL_FG },
           },
         }}
       />
       <style dangerouslySetInnerHTML={{ __html: `
-        .login-auth .cl-socialButtonsBlockButton { color: #1F2937 !important; }
+        /* OS-5929: Clerk applies color via shorthand; override with shorthand + !important. */
+        .login-auth .cl-formButtonPrimary {
+          color: ${CTA_FG} !important;
+          background: ${GOLD} !important;
+          background-color: ${GOLD} !important;
+        }
+        .login-auth .cl-socialButtonsBlockButton { color: ${SOCIAL_FG} !important; }
         .login-auth .cl-socialButtonsBlockButtonText,
         .login-auth .cl-socialButtonsBlockButtonText__apple,
         .login-auth .cl-socialButtonsBlockButtonText__github,
-        .login-auth .cl-socialButtonsBlockButtonText__google { color: #1F2937 !important; }
+        .login-auth .cl-socialButtonsBlockButtonText__google { color: ${SOCIAL_FG} !important; }
       ` }} />
     </main>
   )
