@@ -112,7 +112,7 @@ const HOW_STEPS = [
   {
     n: '03',
     title: 'Set your goals',
-    body: 'Tell the assistant what you are working toward. It turns intentions into concrete goals, tasks and a schedule.',
+    body: 'On Free, capture the goals you are working toward and keep them next to your tasks. Pro and Agent Connect turn those into architecture, timing, and a living schedule.',
   },
   {
     n: '04',

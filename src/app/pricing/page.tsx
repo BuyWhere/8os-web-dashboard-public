@@ -34,7 +34,8 @@ const TIERS = [
       { label: 'Basic task management', included: true },
       { label: 'Calendar integration (view-only)', included: true },
       { label: 'Community forum access', included: true },
-      { label: 'Goal tracking & architecture', included: false },
+      { label: 'Basic goal tracking', included: true },
+      { label: 'Goal architecture (multi-goal plans)', included: false },
       { label: 'AI journaling', included: false },
       { label: 'Health/progress integrations', included: false },
       { label: 'Timing recommendations', included: false },
@@ -54,7 +55,7 @@ const TIERS = [
     features: [
       { label: 'Everything in Free', included: true },
       { label: 'Full dashboard (all archetype data, transit tracking, luck pillar)', included: true },
-      { label: 'Goal tracking & architecture', included: true },
+      { label: 'Goal tracking & architecture (multi-goal plans)', included: true },
       { label: 'Calendar & task integration (full read/write)', included: true },
       { label: 'Health integration hub (Apple Health, Fitbit, Garmin, Oura)', included: true },
       { label: 'Relationship nudges', included: true },
@@ -115,7 +116,8 @@ const COMPARISON_FEATURES = [
   { feature: 'Static Birth Chart', free: true, agent: true, pro: true, enterprise: true },
   { feature: 'Task Management', free: true, agent: true, pro: true, enterprise: true },
   { feature: 'Calendar View', free: true, agent: true, pro: true, enterprise: true },
-  { feature: 'Goal Tracking', free: false, agent: true, pro: true, enterprise: true },
+  { feature: 'Goal Tracking', free: 'Basic', agent: true, pro: true, enterprise: true },
+  { feature: 'Goal Architecture', free: false, agent: true, pro: true, enterprise: true },
   { feature: 'Health Integration', free: false, agent: 'Display', pro: 'Full AI', enterprise: 'Full AI' },
   { feature: 'AI Journaling', free: false, agent: 'BYO AI', pro: true, enterprise: true },
   { feature: 'AI Interpretation', free: false, agent: 'BYO AI', pro: true, enterprise: true },
@@ -163,7 +165,7 @@ export default function PricingPage() {
           <p style={eyebrowStyle}>Pricing</p>
           <h1 style={pageTitleStyle}>Choose Your Operating System Tier</h1>
           <p style={pageDescStyle}>
-            Start free. Upgrade when your goals need more. Every tier builds on the one before it.
+            Start free with basic goal tracking. Upgrade when you need architecture, AI journaling, and timing. Every tier builds on the one before it.
           </p>
         </div>
 
