@@ -317,9 +317,16 @@ const tiersGridResponsiveStyle = `
     grid-template-rows: subgrid;
     grid-row: span 5;
   }
+  /* OS-5938: compact the comparison grid on standard 900px desktop heights
+     so strikethrough rows stay in view and CTAs stay on a shared baseline. */
   @media (max-height: 960px) {
-    .pricing-inner { padding-top: 2.5rem !important; padding-bottom: 3rem !important; }
-    .tiers-grid { margin-bottom: 3rem; gap: 1rem; }
+    .pricing-inner { padding-top: 2rem !important; padding-bottom: 2.5rem !important; }
+    .pricing-page h1 { margin-bottom: 0.65rem !important; }
+    .tiers-grid { margin-bottom: 2.5rem; gap: 0.85rem; }
+    .tier-card { padding: 1.1rem !important; gap: 0.65rem !important; }
+    .tier-card ul { gap: 0.4rem !important; }
+    .tier-card ul li { line-height: 1.35 !important; }
+    .tier-footer { padding-top: 0.85rem !important; }
   }
   /* 3-column at wide+short viewports keeps feature rows readable. */
   @media (min-width: 1101px) and (max-height: 1000px) {
@@ -335,7 +342,7 @@ const tiersGridResponsiveStyle = `
 
 const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh', paddingBottom: '6rem' };
 const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '3.5rem 2rem', minWidth: 0 };
-const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '2.25rem' };
+const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '1.75rem' };
 const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-text-primary)' };
 const pageTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: 'clamp(1.4rem, 6vw, 2.25rem)', lineHeight: 1.15, letterSpacing: '-0.035em', fontWeight: 800 };
 const pageDescStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', color: 'var(--color-text-secondary)', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.65 };
