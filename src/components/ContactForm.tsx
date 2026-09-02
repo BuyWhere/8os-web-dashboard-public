@@ -127,6 +127,8 @@ export function ContactForm() {
   return (
     <form
       className="contact-form"
+      method="post"
+      action="/api/contact"
       onSubmit={submit}
       noValidate
       style={{
@@ -144,6 +146,7 @@ export function ContactForm() {
         </label>
         <input
           id="contact-name"
+          name="name"
           type="text"
           required
           autoComplete="name"
@@ -163,6 +166,7 @@ export function ContactForm() {
         </label>
         <input
           id="contact-email"
+          name="email"
           type="email"
           required
           autoComplete="email"
@@ -182,6 +186,7 @@ export function ContactForm() {
         </label>
         <input
           id="contact-subject"
+          name="subject"
           type="text"
           placeholder="How can we help?"
           value={form.subject}
@@ -199,6 +204,7 @@ export function ContactForm() {
         </label>
         <textarea
           id="contact-message"
+          name="message"
           required
           rows={6}
           placeholder="Tell us what's on your mind..."
@@ -216,6 +222,7 @@ export function ContactForm() {
         <label htmlFor="contact-honeypot">Leave this empty</label>
         <input
           id="contact-honeypot"
+          name="honeypot"
           type="text"
           tabIndex={-1}
           autoComplete="off"
