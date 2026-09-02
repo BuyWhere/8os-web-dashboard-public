@@ -217,9 +217,8 @@ export default function HowItWorksPage() {
           <div style={ctaGroupStyle}>
             <Link href="/onboarding" style={primaryCtaStyle}>Get Your Free Archetype →</Link>
             <Link href="/pricing" style={secondaryCtaStyle}>See Pricing</Link>
-            {/* De-prelaunch: product is live; send visitors to account creation. */}
             <Link
-              href="/signup"
+              href="/onboarding"
               style={{ ...secondaryCtaStyle, color: 'var(--color-accent)' }}
             >
               Get started →
