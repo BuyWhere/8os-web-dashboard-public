@@ -10,6 +10,7 @@ import {
   type AuthBridgeKind,
 } from './clerkEmailFormat'
 import { observeClerkContinueArrows } from './clerkContinueArrow'
+import { observeClerkAutocomplete } from './clerkAutocomplete'
 
 // OS-3647: Clerk's <SignIn> can return a 422 from /v1/client/sign_ins
 // without rendering its built-in error banner. OS-5954: show an email-format
@@ -98,6 +99,7 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
     if (typeof window === 'undefined') return
     if (sessionEstablishedRef.current) return
     const stopArrowPatch = observeClerkContinueArrows(document.body)
+    const stopAutocomplete = observeClerkAutocomplete(document.body, 'login')
     const originalFetch = window.fetch.bind(window)
 
     const isClerkAuthEndpoint = (url: string): boolean => {
@@ -193,6 +195,7 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
 
     return () => {
       stopArrowPatch()
+      stopAutocomplete()
       if (window.fetch !== originalFetch) {
         // Only unwind our wrapper. Clerk (or another layer) may have wrapped
         // fetch after we did; blindly restoring would drop that wrapper.
