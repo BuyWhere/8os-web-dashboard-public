@@ -153,8 +153,8 @@ export default function RevealClient() {
             }}
           />
 
-          <label htmlFor="birth-location" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-secondary)', marginBottom: '0.5rem' }}>
-            Birth city <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: 'var(--color-text-secondary)' }}>(optional)</span>
+          <label htmlFor="birth-location" style={{ display: 'block', fontSize: '0.8125rem', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--color-text-primary)', marginBottom: '0.5rem' }}>
+            Birth city <span style={{ fontWeight: 400, textTransform: 'none', letterSpacing: 0, color: 'var(--color-text-muted)' }}>(optional)</span>
           </label>
           <input
             id="birth-location"
