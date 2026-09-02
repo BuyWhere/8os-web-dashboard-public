@@ -93,6 +93,9 @@
   align-items: flex-start;
   justify-content: space-between;
   gap: 0.5rem;
+  /* Two-line title slot so 1-line names (Earth Anchor) share a baseline
+     with two-line names (Strategic Commander) in the 5-col grid. */
+  min-height: calc(1.2em * 2);
 }
 
 .cardTitle {
@@ -101,6 +104,8 @@
   font-weight: 700;
   color: var(--color-text-primary);
   margin: 0;
+  flex: 1 1 auto;
+  min-height: calc(1.2em * 2);
 }
 
 .elementBadge {
