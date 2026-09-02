@@ -181,10 +181,10 @@ export default function PricingPage() {
               className="tier-card"
               style={{ ...tierCardStyle, ...(tier.highlighted ? tierHighlightedStyle : {}) }}
             >
-              {tier.highlighted && (
-                <div style={popularBadgeStyle}>Most Popular</div>
-              )}
               <div style={tierHeaderStyle}>
+                {tier.highlighted && (
+                  <div style={popularBadgeStyle}>Most Popular</div>
+                )}
                 <div>
                   <p style={tierNameStyle}>{tier.name}</p>
                   <p style={tierTaglineStyle}>{tier.tagline}</p>
@@ -206,16 +206,16 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              <div style={tierFooterStyle}>
+              <div className="tier-footer" style={tierFooterStyle}>
                 <TierCta tier={tier} />
                 <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
               </div>
 
-              {tier.note && (
-                <div style={tierNoteStyle}>
-                  <p style={tierNoteTextStyle}>{tier.note}</p>
-                </div>
-              )}
+              {/* Always render the note slot so CSS subgrid can align CTAs
+                  across cards (OS-5934). Empty on tiers without a callout. */}
+              <div className="tier-note" style={tier.note ? tierNoteStyle : undefined}>
+                {tier.note ? <p style={tierNoteTextStyle}>{tier.note}</p> : null}
+              </div>
             </div>
           ))}
         </div>
@@ -288,11 +288,10 @@ export default function PricingPage() {
   );
 }
 
-// OS-5923: Removed minHeight: fit-content from .tier-card to allow grid stretch
-// to work properly. Cards now stretch to match the tallest card in each row,
-// aligning CTAs vertically. Keep overflow visible (no clip). Move Agent Connect
-// note below the CTA so the footer slot stays aligned. Tighten hero padding on
-// short desktops.
+// OS-5923: do not set min-height: fit-content on .tier-card — that blocks stretch.
+// OS-5934: parent-row subgrid so every card's CTA (4th in-flow row) shares a
+// baseline even when Agent Connect has a callout in the 5th row. The popular
+// badge is absolutely positioned and does not occupy a subgrid track.
 const tiersGridResponsiveStyle = `
   .pricing-page {
     --pricing-excluded-feature-color: #A1A1AA;
@@ -306,10 +305,17 @@ const tiersGridResponsiveStyle = `
     --pricing-excluded-feature-color: #EDE7DD;
     --pricing-included-marker-color: #86EFAC;
   }
-  .tiers-grid { margin-bottom: 5rem; grid-template-columns: repeat(4, 1fr); align-items: stretch; }
+  .tiers-grid {
+    margin-bottom: 5rem;
+    grid-template-columns: repeat(4, 1fr);
+    align-items: stretch;
+  }
   .tier-card {
     overflow: visible !important;
     max-height: none;
+    display: grid !important;
+    grid-template-rows: subgrid;
+    grid-row: span 5;
   }
   @media (max-height: 960px) {
     .pricing-inner { padding-top: 2.5rem !important; padding-bottom: 3rem !important; }
@@ -336,7 +342,7 @@ const pageDescStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', colo
 
 const tiersGridStyle: React.CSSProperties = { display: 'grid', gap: '1.25rem' };
 
-const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '1.35rem', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'flex', flexDirection: 'column', gap: '0.85rem', overflow: 'visible' };
+const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '1.35rem', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'grid', gap: '0.85rem', overflow: 'visible' };
 const tierHighlightedStyle: React.CSSProperties = { border: '2px solid #C87055', background: 'var(--color-accent-soft)', boxShadow: '0 0 0 1px var(--color-accent-soft)' };
 
 const popularBadgeStyle: React.CSSProperties = { position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', padding: '0.3rem 0.85rem', borderRadius: '999px', background: 'var(--color-accent-2)', color: '#fff', fontSize: '0.75rem', fontWeight: 700, whiteSpace: 'nowrap' };
