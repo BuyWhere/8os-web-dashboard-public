@@ -1,7 +1,7 @@
 'use client'
 
-import { SignIn } from '@clerk/nextjs'
-import { useEffect, useState, type FC } from 'react'
+import { SignIn, useAuth } from '@clerk/nextjs'
+import { useEffect, useRef, useState, type FC } from 'react'
 import {
   classifySignin422,
   extractEmailFromBody,
@@ -26,6 +26,17 @@ interface BridgeError {
   endpoint: string
   at: number
   kind?: AuthBridgeKind
+}
+
+/** Once a Clerk session exists, leftover SignIn POSTs must not be logged. */
+let signInWatchDisabled = false
+
+export function disableSignInBridgeWatch(): void {
+  signInWatchDisabled = true
+}
+
+export function resetSignInBridgeWatchForTests(): void {
+  signInWatchDisabled = false
 }
 
 function classify(
@@ -74,9 +85,18 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
   fallbackRedirectUrl,
 }) => {
   const [bridgeError, setBridgeError] = useState<BridgeError | null>(null)
+  const { isLoaded, isSignedIn } = useAuth()
+  // OS-5571: Clerk keeps POSTing /v1/client/sign_ins after a session exists
+  // (soft nav + leftover SignIn widget). Skip watch/log once signed in.
+  const sessionEstablishedRef = useRef(false)
+  if (isLoaded && isSignedIn) {
+    sessionEstablishedRef.current = true
+    signInWatchDisabled = true
+  }
 
   useEffect(() => {
     if (typeof window === 'undefined') return
+    if (sessionEstablishedRef.current) return
     const stopArrowPatch = observeClerkContinueArrows(document.body)
     const originalFetch = window.fetch.bind(window)
 
@@ -101,7 +121,11 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
             ? input.toString()
             : input.url
       const method = (init?.method ?? (input instanceof Request ? input.method : 'GET')).toUpperCase()
-      const watch = isClerkAuthEndpoint(url) && (method === 'POST' || method === 'PATCH' || method === 'PUT')
+      const watch =
+        !signInWatchDisabled &&
+        !sessionEstablishedRef.current &&
+        isClerkAuthEndpoint(url) &&
+        (method === 'POST' || method === 'PATCH' || method === 'PUT')
 
       let requestEmail: string | null = null
       if (watch && typeof init?.body === 'string') {
@@ -169,9 +193,20 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
 
     return () => {
       stopArrowPatch()
-      window.fetch = originalFetch
+      if (window.fetch !== originalFetch) {
+        // Only unwind our wrapper. Clerk (or another layer) may have wrapped
+        // fetch after we did; blindly restoring would drop that wrapper.
+        window.fetch = originalFetch
+      }
     }
   }, [])
+
+  useEffect(() => {
+    if (!isLoaded || !isSignedIn) return
+    sessionEstablishedRef.current = true
+    signInWatchDisabled = true
+    setBridgeError(null)
+  }, [isLoaded, isSignedIn])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -235,13 +270,15 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
           <span data-testid="clerk-sign-in-error-message">{bridgeError.message}</span>
         </div>
       )}
-      <SignIn
-        routing="hash"
-        signUpUrl={signUpUrl ?? '/signup'}
-        forceRedirectUrl={forceRedirectUrl ?? '/dashboard'}
-        fallbackRedirectUrl={fallbackRedirectUrl}
-        appearance={appearance}
-      />
+      {!(isLoaded && isSignedIn) && (
+        <SignIn
+          routing="hash"
+          signUpUrl={signUpUrl ?? '/signup'}
+          forceRedirectUrl={forceRedirectUrl ?? '/dashboard'}
+          fallbackRedirectUrl={fallbackRedirectUrl}
+          appearance={appearance}
+        />
+      )}
     </div>
   )
 }
