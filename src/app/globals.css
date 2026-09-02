@@ -639,3 +639,22 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: var(--color-text-primary) !important;
   background: var(--color-accent-soft) !important;
 }
+
+/* OS-5947: /dashboard/memory metadata + Add CTA contrast.
+ * Dark cards (#221E18): VidMee flagged muted metadata (salience/chat) and a
+ * disabled-looking Add button. Bump meta to #9ca3af (neutral-400, 6.44:1 on
+ * #241F18 / 5.89:1 on #2C2620). Light cards keep a darker muted so AA holds. */
+.memory-meta {
+  color: #5C5652; /* 6.53:1 on cream */
+}
+[data-theme='dark'] .memory-meta {
+  color: #9ca3af !important; /* 7.04:1 on charcoal, 5.89:1+ on cards */
+}
+.memory-add-btn {
+  background: #8A6514;
+  color: #FFFFFF; /* 5.31:1 on gold */
+}
+[data-theme='dark'] .memory-add-btn {
+  background: #C79A48 !important;
+  color: #1A1712 !important; /* 6.93:1 — brighter accent, never white-on-gold */
+}

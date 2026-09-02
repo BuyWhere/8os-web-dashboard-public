@@ -155,7 +155,16 @@ export default function MemoryPage() {
             <button
               onClick={add}
               disabled={adding || newContent.trim().length < 2}
-              style={{ background: 'var(--color-accent)', border: 'none', borderRadius: 8, color: '#FFFFFF', fontSize: 13, fontWeight: 700, padding: '8px 16px', cursor: 'pointer', opacity: adding || newContent.trim().length < 2 ? 0.5 : 1 }}
+              className="memory-add-btn"
+              style={{
+                border: 'none',
+                borderRadius: 8,
+                fontSize: 13,
+                fontWeight: 700,
+                padding: '8px 16px',
+                cursor: adding || newContent.trim().length < 2 ? 'not-allowed' : 'pointer',
+                opacity: adding || newContent.trim().length < 2 ? 0.72 : 1,
+              }}
             >
               {adding ? 'Adding…' : 'Add'}
             </button>
@@ -229,9 +238,9 @@ export default function MemoryPage() {
                             </div>
                             <div
                               data-testid="memory-meta"
+                              className="memory-meta"
                               style={{
                                 marginTop: 6,
-                                color: 'var(--color-text-muted)',
                                 fontSize: 11,
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden',
