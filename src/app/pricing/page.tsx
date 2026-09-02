@@ -64,7 +64,7 @@ const TIERS = [
       { label: 'Monthly personalized reports', included: false },
     ],
     bestFor: 'AI power users, privacy-focused, developers with existing AI subscriptions',
-    note: 'Connect Claude, GPT, or any local LLM via API. You bring the AI tokens, we provide the structured data and infrastructure.',
+    note: 'Connect Claude, GPT, or a local LLM via API. You bring the tokens; we provide the structured data.',
   },
   {
     id: 'pro',
@@ -214,11 +214,11 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              {/* Always render the note slot so CSS subgrid can align rows
-                  across cards (OS-5934). Empty on tiers without a callout. */}
-              <div className="tier-note" style={tier.note ? tierNoteStyle : undefined}>
-                {tier.note ? <p style={tierNoteTextStyle}>{tier.note}</p> : null}
-              </div>
+              {tier.note ? (
+                <div className="tier-note" style={tierNoteStyle}>
+                  <p style={tierNoteTextStyle}>{tier.note}</p>
+                </div>
+              ) : null}
             </div>
           ))}
         </div>
@@ -308,37 +308,37 @@ const tiersGridResponsiveStyle = `
     --pricing-excluded-feature-color: #EDE7DD;
     --pricing-included-marker-color: #86EFAC;
   }
-  /* OS-5892 / OS-5934 / OS-5938: parent grid defines explicit row tracks so
-     subgrid on .tier-card inherits them. Order is header / desc / CTA /
-     features / note so CTAs share a baseline above the variable-height lists. */
+  /* OS-5960: flex column + align-items:start so each card hugs its own
+     feature list. Subgrid previously stretched empty .tier-note slots on
+     every card (~134px past the 1440x900 fold — VidMee clip band y≈915). */
   .tiers-grid {
     margin-bottom: 5rem;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: auto auto auto 1fr auto;
-    align-items: stretch;
+    align-items: start;
   }
   .tier-card {
     overflow: visible !important;
     max-height: none;
-    display: grid !important;
-    grid-template-rows: subgrid;
-    grid-row: span 5;
+    display: flex !important;
+    flex-direction: column;
   }
-  /* OS-5938: compact the comparison grid on standard 900px desktop heights
-     so strikethrough rows stay in view and CTAs stay on a shared baseline. */
+  /* OS-5938 / OS-5960: compact on 900px desktop so feature lists AND the
+     Agent Connect note stay above the fold. VidMee flags the note band
+     (y≈915, h≈85) as clipped card content. */
   @media (max-height: 960px) {
-    .pricing-inner { padding-top: 2rem !important; padding-bottom: 2.5rem !important; }
-    .pricing-page h1 { margin-bottom: 0.65rem !important; }
-    .tiers-grid { margin-bottom: 2.5rem; gap: 0.85rem; }
-    .tier-card { padding: 1.1rem !important; gap: 0.65rem !important; }
-    .tier-card ul { gap: 0.4rem !important; }
-    .tier-card ul li { line-height: 1.35 !important; }
-    .tier-footer { padding-top: 0.7rem !important; padding-bottom: 0.7rem !important; }
+    .pricing-inner { padding-top: 1.5rem !important; padding-bottom: 2rem !important; }
+    .pricing-page h1 { margin-bottom: 0.5rem !important; font-size: 1.7rem !important; }
+    .tiers-grid { margin-bottom: 2rem; gap: 0.75rem; }
+    .tier-card { padding: 0.95rem !important; gap: 0.5rem !important; }
+    .tier-card ul { gap: 0.28rem !important; }
+    .tier-card ul li { line-height: 1.3 !important; font-size: 0.8rem !important; }
+    .tier-footer { padding-top: 0.55rem !important; padding-bottom: 0.55rem !important; gap: 0.5rem !important; }
+    .tier-note { padding: 0.5rem 0.75rem !important; }
+    .tier-note p { font-size: 0.74rem !important; line-height: 1.4 !important; }
   }
-  /* OS-5914: removed height-based 3-col breakpoint — keep 4-col at all
-     widths ≥1101px so VidMee's pricing screenshot baseline (4 cards in
-     one row at 1440x900) is preserved. Subgrid on .tier-card aligns
-     CTAs across cards in the same row (OS-5934 / OS-5938). */
+  /* OS-5914 / OS-5938: keep 4-col at widths ≥1101px (VidMee 1440x900
+     baseline). CTAs sit above the feature list so they share a fold
+     row even without subgrid. */
   @media (max-width: 1100px) {
     .tiers-grid { grid-template-columns: repeat(2, 1fr) !important; }
   }
@@ -349,14 +349,14 @@ const tiersGridResponsiveStyle = `
 
 const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh', paddingBottom: '6rem' };
 const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '3.5rem 2rem', minWidth: 0 };
-const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '1.25rem' };
+const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '1rem' };
 const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-text-primary)' };
 const pageTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: 'clamp(1.4rem, 6vw, 2.25rem)', lineHeight: 1.15, letterSpacing: '-0.035em', fontWeight: 800 };
 const pageDescStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', color: 'var(--color-text-secondary)', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.65 };
 
 const tiersGridStyle: React.CSSProperties = { display: 'grid', gap: '1.25rem' };
 
-const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '1.35rem', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'grid', gap: '0.85rem', overflow: 'visible' };
+const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '1.35rem', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'flex', flexDirection: 'column', gap: '0.85rem', overflow: 'visible' };
 const tierHighlightedStyle: React.CSSProperties = { border: '2px solid #C87055', background: 'var(--color-accent-soft)', boxShadow: '0 0 0 1px var(--color-accent-soft)' };
 
 const popularBadgeStyle: React.CSSProperties = { position: 'absolute', top: '-12px', left: '50%', transform: 'translateX(-50%)', padding: '0.3rem 0.85rem', borderRadius: '999px', background: 'var(--color-accent-2)', color: '#fff', fontSize: '0.75rem', fontWeight: 700, whiteSpace: 'nowrap' };
