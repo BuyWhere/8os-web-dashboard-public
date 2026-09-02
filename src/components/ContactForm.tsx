@@ -36,6 +36,8 @@ const INITIAL: ContactFormData = {
 
 type Status = 'idle' | 'submitting' | 'success' | 'error';
 
+// OS-5736: native `name` attrs must stay on the client tree so hydration
+// does not drop SSR names (QA saw name=null + method=get after hydrate).
 export function ContactForm() {
   const [form, setForm] = useState<ContactFormData>(INITIAL);
   const [status, setStatus] = useState<Status>('idle');
