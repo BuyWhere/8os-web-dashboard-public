@@ -86,8 +86,8 @@ export default function SignupPage() {
                 card: { border: "none", boxShadow: "none", borderRadius: 0, padding: "0 24px" }, // OS-3873 r5: 24px horizontal padding so inputs/social buttons don't clip at card edges
                 header: { display: "none" }, // Hide Clerk's default logo/header branding
                 formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: LINK_DARK },
-                socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px", color: "#1F2937" },
-                socialButtonsBlockButtonText: { color: "#1F2937" },
+                socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px", color: "#221F1A" }, // OS-5928: dark social auth labels for WCAG contrast
+                socialButtonsBlockButtonText: { color: "#221F1A" },
                 formFieldInput: { minHeight: "44px", border: `1px solid ${BORDER}`, boxShadow: `0 0 0 1px ${BORDER}` },
                 formFieldLabel: { color: LINK_DARK }, // dark label for WCAG AA 12.4:1 on white
                 formFieldLabelRow: { color: LINK_DARK },
@@ -112,11 +112,16 @@ export default function SignupPage() {
       <style dangerouslySetInnerHTML={{ __html: `
         .signup-auth .cl-formFieldInput { border: 1px solid ${BORDER} !important; box-shadow: 0 0 0 1px ${BORDER} !important; }
         .signup-auth .cl-formFieldOptionalText { color: ${LINK_DARK} !important; }
-        .signup-auth .cl-socialButtonsBlockButton { border-color: ${BORDER} !important; border: 1px solid ${BORDER} !important; color: #1F2937 !important; }
+        .signup-auth .cl-socialButtonsBlockButton { border-color: ${BORDER} !important; border: 1px solid ${BORDER} !important; color: #221F1A !important; }
+        /* OS-5928: axe flagged social auth labels and terms copy because
+           production had white text on white/cream backgrounds. Force dark
+           WCAG-passing colors on the exact selectors QA reported. */
         .signup-auth .cl-socialButtonsBlockButtonText,
         .signup-auth .cl-socialButtonsBlockButtonText__apple,
         .signup-auth .cl-socialButtonsBlockButtonText__github,
-        .signup-auth .cl-socialButtonsBlockButtonText__google { color: #1F2937 !important; }
+        .signup-auth .cl-socialButtonsBlockButtonText__google {
+          color: #221F1A !important;
+        }
         .signup-auth > p { color: #4A4A4A !important; }
         .signup-auth .cl-formFieldHintText,
         .signup-auth .cl-footerActionLink { color: ${LINK_DARK} !important; }
