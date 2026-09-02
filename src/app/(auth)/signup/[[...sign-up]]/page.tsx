@@ -13,8 +13,9 @@ const CARD = "#FFFFFF"  // white card, --color-bg-card
 const INK = "#221F1A"   // ink, --color-text-primary
 const MUTED = "#221F1A" // ink body text for VidMee/WCAG-strong signup copy
 const LINK_DARK = "#000000" // black for WCAG-strong Clerk controls on gold/white
-const GOLD = "#8A6728"  // darkened gold: white text 5.18:1 (brand #B08637 is 3.33:1 with white)
+const CTA_BG = "#0D0D0F"  // OS-5912: dark charcoal (header bar color) for high contrast on beige
 const CTA_FG = "#FFFFFF"
+const ICON_GOLD = "#8A6728"  // gold for benefit icons (decorative, not WCAG-critical)
 const SOCIAL_FG = "#000000" // 21:1 on white — beats Clerk provider brand greys
 const BORDER = "#4A4A4A" // dark gray for WCAG input borders — 7.1:1 on white (was #767676 4.5:1, Clerk shorthand overrides border-color longhand)
 
@@ -51,7 +52,7 @@ export default function SignupPage() {
           <ul style={{ listStyle: "none", margin: 0, padding: 0, display: "grid", gap: "1.1rem" }}>
             {BENEFITS.map((b) => (
               <li key={b.title} style={{ display: "flex", gap: 12, alignItems: "flex-start" }}>
-                <span aria-hidden style={{ color: GOLD, fontSize: 20, lineHeight: 1.2, flexShrink: 0 }}>{b.icon}</span>
+                <span aria-hidden style={{ color: ICON_GOLD, fontSize: 20, lineHeight: 1.2, flexShrink: 0 }}>{b.icon}</span>
                 <span>
                   <span style={{ display: "block", fontWeight: 600, fontSize: "0.98rem" }}>{b.title}</span>
                   <span style={{ display: "block", color: MUTED, fontSize: "0.9rem", lineHeight: 1.45 }}>{b.body}</span>
@@ -80,7 +81,7 @@ export default function SignupPage() {
                 colorForeground: INK,
                 colorText: INK,
                 colorTextSecondary: MUTED,
-                colorPrimary: GOLD,
+                colorPrimary: CTA_BG,
                 colorPrimaryForeground: CTA_FG, // OS-5957: white on #8A6728 = 5.18:1 AA
                 colorNeutral: BORDER,
                 colorInput: CARD,
@@ -92,7 +93,7 @@ export default function SignupPage() {
                 rootBox: { border: `1px solid ${BORDER}`, borderRadius: "16px", overflow: "hidden", boxShadow: "0 4px 24px rgba(34,31,26,0.06)" },
                 card: { border: "none", boxShadow: "none", borderRadius: 0, padding: "0 24px" }, // OS-3873 r5: 24px horizontal padding so inputs/social buttons don't clip at card edges
                 header: { display: "none" }, // Hide Clerk's default logo/header branding
-                formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: CTA_FG, background: GOLD, backgroundColor: GOLD },
+                formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: CTA_FG, background: CTA_BG, backgroundColor: CTA_BG },
                 socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px", color: SOCIAL_FG },
                 socialButtonsBlockButtonText: { color: SOCIAL_FG },
                 formFieldInput: { minHeight: "44px", border: `1px solid ${BORDER}`, boxShadow: `0 0 0 1px ${BORDER}` },
@@ -138,14 +139,14 @@ export default function SignupPage() {
         .signup-auth > p { color: #4A4A4A !important; }
         .signup-auth .cl-formFieldHintText,
         .signup-auth .cl-footerActionLink { color: ${LINK_DARK} !important; }
-        /* OS-5957: white on #8A6728 = 5.18:1. Descendants + submit beat Clerk
+        /* OS-5912: white on dark charcoal = 19.3:1. Descendants + submit beat Clerk
            inner spans and the old globals.css * { color:#000 } trap. */
         .signup-auth .cl-formButtonPrimary,
         .signup-auth .cl-formButtonPrimary *,
         .signup-auth button[type="submit"] {
           color: ${CTA_FG} !important;
-          background-color: ${GOLD} !important;
-          background: ${GOLD} !important;
+          background-color: ${CTA_BG} !important;
+          background: ${CTA_BG} !important;
         }
         .signup-auth, .signup-auth .cl-rootBox, .signup-auth .cl-cardBox, .signup-auth .cl-card {
           max-width: 100% !important;
