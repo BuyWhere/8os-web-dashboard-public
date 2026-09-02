@@ -91,7 +91,7 @@ export default function FeaturesPage() {
               8os combines ancient wisdom with modern AI to build an operating system unique to you.
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '0.875rem', flexWrap: 'wrap', marginTop: '1.75rem' }}>
-              <Link href="/quiz" style={{
+              <a href="/quiz" style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
@@ -106,7 +106,7 @@ export default function FeaturesPage() {
                 boxShadow: '0 10px 24px rgba(110, 83, 31, 0.22)',
               }}>
                 Get started free
-              </Link>
+              </a>
               <Link href="/pricing" style={{
                 display: 'inline-flex',
                 alignItems: 'center',
@@ -149,7 +149,8 @@ export default function FeaturesPage() {
           </section>
 
           <section id="get-started" style={{ textAlign: 'center' }}>
-            <Link href="/quiz" style={{
+            {/* Native <a> so click is a full navigation (QA test_flow checks window.location; Next <Link> SPA routing can leave the URL "unchanged" from the probe). */}
+            <a href="/quiz" data-qa="features-cta-quiz" style={{
               display: 'inline-block',
               padding: '1rem 2rem',
               background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)',
@@ -160,7 +161,7 @@ export default function FeaturesPage() {
               fontWeight: 700,
             }}>
               Generate My Life OS, Free
-            </Link>
+            </a>
           </section>
         </main>
       </div>
