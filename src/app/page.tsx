@@ -239,7 +239,7 @@ export default function Home() {
               by an AI assistant that actually does the work.
             </p>
             <a
-              href="/signup"
+              href="/onboarding"
               className="landing-gold-fill"
               style={{
                 display: 'inline-flex',

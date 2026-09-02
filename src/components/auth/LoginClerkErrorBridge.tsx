@@ -1,7 +1,7 @@
 'use client'
 
-import { SignIn, useAuth } from '@clerk/nextjs'
-import { useEffect, useRef, useState, type FC } from 'react'
+import { SignIn } from '@clerk/nextjs'
+import { useEffect, useState, type FC } from 'react'
 import {
   classifySignin422,
   extractEmailFromBody,
@@ -9,8 +9,6 @@ import {
   looksLikeEmail,
   type AuthBridgeKind,
 } from './clerkEmailFormat'
-import { observeClerkContinueArrows } from './clerkContinueArrow'
-import { observeClerkAutocomplete } from './clerkAutocomplete'
 
 // OS-3647: Clerk's <SignIn> can return a 422 from /v1/client/sign_ins
 // without rendering its built-in error banner. OS-5954: show an email-format
@@ -27,17 +25,6 @@ interface BridgeError {
   endpoint: string
   at: number
   kind?: AuthBridgeKind
-}
-
-/** Once a Clerk session exists, leftover SignIn POSTs must not be logged. */
-let signInWatchDisabled = false
-
-export function disableSignInBridgeWatch(): void {
-  signInWatchDisabled = true
-}
-
-export function resetSignInBridgeWatchForTests(): void {
-  signInWatchDisabled = false
 }
 
 function classify(
@@ -86,20 +73,9 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
   fallbackRedirectUrl,
 }) => {
   const [bridgeError, setBridgeError] = useState<BridgeError | null>(null)
-  const { isLoaded, isSignedIn } = useAuth()
-  // OS-5571: Clerk keeps POSTing /v1/client/sign_ins after a session exists
-  // (soft nav + leftover SignIn widget). Skip watch/log once signed in.
-  const sessionEstablishedRef = useRef(false)
-  if (isLoaded && isSignedIn) {
-    sessionEstablishedRef.current = true
-    signInWatchDisabled = true
-  }
 
   useEffect(() => {
     if (typeof window === 'undefined') return
-    if (sessionEstablishedRef.current) return
-    const stopArrowPatch = observeClerkContinueArrows(document.body)
-    const stopAutocomplete = observeClerkAutocomplete(document.body, 'login')
     const originalFetch = window.fetch.bind(window)
 
     const isClerkAuthEndpoint = (url: string): boolean => {
@@ -123,11 +99,7 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
             ? input.toString()
             : input.url
       const method = (init?.method ?? (input instanceof Request ? input.method : 'GET')).toUpperCase()
-      const watch =
-        !signInWatchDisabled &&
-        !sessionEstablishedRef.current &&
-        isClerkAuthEndpoint(url) &&
-        (method === 'POST' || method === 'PATCH' || method === 'PUT')
+      const watch = isClerkAuthEndpoint(url) && (method === 'POST' || method === 'PATCH' || method === 'PUT')
 
       let requestEmail: string | null = null
       if (watch && typeof init?.body === 'string') {
@@ -194,22 +166,9 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
     }
 
     return () => {
-      stopArrowPatch()
-      stopAutocomplete()
-      if (window.fetch !== originalFetch) {
-        // Only unwind our wrapper. Clerk (or another layer) may have wrapped
-        // fetch after we did; blindly restoring would drop that wrapper.
-        window.fetch = originalFetch
-      }
+      window.fetch = originalFetch
     }
   }, [])
-
-  useEffect(() => {
-    if (!isLoaded || !isSignedIn) return
-    sessionEstablishedRef.current = true
-    signInWatchDisabled = true
-    setBridgeError(null)
-  }, [isLoaded, isSignedIn])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -273,15 +232,13 @@ export const LoginClerkErrorBridge: FC<LoginClerkErrorBridgeProps> = ({
           <span data-testid="clerk-sign-in-error-message">{bridgeError.message}</span>
         </div>
       )}
-      {!(isLoaded && isSignedIn) && (
-        <SignIn
-          routing="hash"
-          signUpUrl={signUpUrl ?? '/signup'}
-          forceRedirectUrl={forceRedirectUrl ?? '/dashboard'}
-          fallbackRedirectUrl={fallbackRedirectUrl}
-          appearance={appearance}
-        />
-      )}
+      <SignIn
+        routing="hash"
+        signUpUrl={signUpUrl ?? '/signup'}
+        forceRedirectUrl={forceRedirectUrl ?? '/dashboard'}
+        fallbackRedirectUrl={fallbackRedirectUrl}
+        appearance={appearance}
+      />
     </div>
   )
 }

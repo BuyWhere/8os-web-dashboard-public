@@ -266,7 +266,7 @@ export default function PricingPage() {
             {/* De-prelaunch: product is live; secondary CTA sends high-intent
                 pricing visitors straight to account creation. */}
             <Link
-              href="/signup"
+              href="/onboarding"
               style={{
                 ...ctaButtonStyle,
                 background: 'var(--color-accent-soft)',

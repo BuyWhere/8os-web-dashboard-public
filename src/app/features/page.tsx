@@ -91,7 +91,7 @@ export default function FeaturesPage() {
               8os combines ancient wisdom with modern AI to build an operating system unique to you.
             </p>
             <div style={{ display: 'flex', justifyContent: 'center', gap: '0.875rem', flexWrap: 'wrap', marginTop: '1.75rem' }}>
-              <a href="/quiz" style={{
+              <a href="/onboarding" style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 justifyContent: 'center',
