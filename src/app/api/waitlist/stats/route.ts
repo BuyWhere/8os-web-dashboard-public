@@ -1,22 +1,23 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db/prisma';
 
-// OS-1719: query waitlist_entries directly from the shared Postgres DB
-// via Prisma raw SQL, instead of proxying to the orchestrator (which no
-// longer serves api.8os.ai after the OS-1718 redeploy replaced it with
-// the Next.js frontend).
-//
-// OS-1847: removed ADMIN_SECRET gate — the orchestrator at api.8os.ai/waitlist/stats
-// already serves this data publicly (no auth). The frontend dashboard needs
-// unauthenticated access to display the waitlist count on the landing page.
-
-// OS-1885: force per-request SSR. Without `dynamic = 'force-dynamic'`, Next.js
-// ISR caches the entire route response at the Vercel edge and serves a stale
-// `{"count":0,"entries":[]}` snapshot even though Prisma is wired up. Mirrors
-// the working `/api/waitlist/count` route which sets the same directive.
+// OS-6030: restore ADMIN_SECRET gate. OS-1847 made this public so the
+// landing page could show a count, but GET /api/waitlist/count already
+// serves that without PII. Live 8os.ai /api/waitlist/stats was returning
+// every waitlist email in JSON. Canonical api.8os.ai returns 401.
 export const dynamic = 'force-dynamic';
 
-export async function GET(_request: NextRequest) {
+function unauthorized() {
+  return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+}
+
+export async function GET(request: NextRequest) {
+  const adminSecret = process.env.ADMIN_SECRET;
+  const authHeader = request.headers.get('authorization');
+  if (!adminSecret || authHeader !== `Bearer ${adminSecret}`) {
+    return unauthorized();
+  }
+
   try {
     const count = await prisma.$queryRaw<[{ count: bigint }]>`
       SELECT COUNT(*)::bigint AS count FROM waitlist_entries
@@ -50,6 +51,6 @@ export async function GET(_request: NextRequest) {
     });
   } catch (err) {
     console.error('Waitlist stats DB error:', err);
-    return NextResponse.json({ count: 0, entries: [] }, { status: 200 });
+    return unauthorized();
   }
 }
