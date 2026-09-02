@@ -120,7 +120,7 @@ const typeConfig: Record<ChangeType, { label: string; color: string; dot: string
 
 export default function ChangelogPage() {
   return (
-    <div style={{ background: 'var(--color-bg-primary)', minHeight: '100vh', color: 'var(--color-border)' }}>
+    <div style={{ background: 'var(--color-bg-primary)', minHeight: '100vh', color: 'var(--color-text-primary)' }}>
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '48px 24px' }}>
         {/* Header */}
         <div style={{ marginBottom: '56px' }}>
@@ -178,11 +178,12 @@ export default function ChangelogPage() {
                 <div style={{ marginBottom: '20px' }}>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: '14px', marginBottom: '4px' }}>
                     <h2 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-text-primary)' }}>{v.version}</h2>
-                    <span style={{ fontSize: '14px', fontWeight: 500, color: '#a5b4fc' }}>{v.label}</span>
+                    {/* Gold accent on cream 4.80:1 / charcoal 6.93:1 — WCAG AA (was #a5b4fc = 1.80:1 on cream) */}
+                    <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-accent)' }}>{v.label}</span>
                   </div>
                   <time
                     dateTime={v.isoDate}
-                    style={{ fontSize: '13px', color: '#475569' }}
+                    style={{ fontSize: '13px', color: 'var(--color-text-secondary)' }}
                   >
                     {v.date}
                   </time>
@@ -236,7 +237,7 @@ export default function ChangelogPage() {
                             >
                               {cfg.label}
                             </span>
-                            <span style={{ color: 'var(--color-text-muted)', fontSize: '14px', lineHeight: 1.6 }}>
+                            <span style={{ color: 'var(--color-text-secondary)', fontSize: '14px', lineHeight: 1.6 }}>
                               {change.text}
                             </span>
                           </div>
