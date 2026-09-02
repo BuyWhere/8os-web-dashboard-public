@@ -33,10 +33,27 @@
   border-radius: 9999px;
   font-size: 0.75rem;
   font-weight: 600;
+  /* Light: #7A5A1E on #F2E9D6 = 5.26:1 ✓. Dark token #9A7A3A on #3A3125 = 3.17:1 ✗ — override below. */
   color: var(--color-accent-border);
   letter-spacing: 0.05em;
   text-transform: uppercase;
   margin-bottom: 0.75rem;
+}
+
+/* OS-5959: page-local dark override. Do not change global --color-accent-border
+ * (used as an input border). Bright gold on the soft pill:
+ * #C79A48 on #3A3125 = 4.95:1 (AA normal text). */
+[data-theme='dark'] .eyebrow {
+  color: var(--color-accent);
+}
+
+.patternAffordance {
+  text-align: center;
+  /* Light: #6B6257 on cream = 5.41:1 ✓. Dark: #B8AF9F on charcoal = 7.63:1 ✓.
+   * Explicit token (not muted) so card/cue copy stays above AA. */
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  margin: 0.5rem auto 0.5rem;
 }
 
 .title {
@@ -51,13 +68,6 @@
   line-height: 1.45;
   max-width: 620px;
   margin: 0 auto;
-}
-
-.patternAffordance {
-  text-align: center;
-  color: var(--color-text-secondary);
-  font-size: 0.875rem;
-  margin: 0.5rem auto 0.5rem;
 }
 
 .archetypeGrid {
