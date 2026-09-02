@@ -371,13 +371,13 @@ export default function QuizPage() {
             <a
               href="/reveal"
               style={{
-                /* OS-5931: --color-accent-2 oxblood fails WCAG AA on dark charcoal
-                   (#B05E47 on #1A1712 ≈ 3.86:1). Gold accent is 4.80:1 on cream
-                   and 6.93:1 on charcoal. */
-                color: 'var(--color-accent)',
+                /* OS-5958: --color-accent #8A6514 on cream is only 4.80:1 — axe
+                   still flags a[href$='reveal'] as serious. Use accent-hover:
+                   light #745612 on #F7F3EC = 6.16:1; dark #A67F30 on #1A1712 = 4.85:1. */
+                color: 'var(--color-accent-hover)',
                 fontSize: '0.95rem',
                 textDecoration: 'none',
-                borderBottom: '1px solid color-mix(in srgb, var(--color-accent) 45%, transparent)',
+                borderBottom: '1px solid color-mix(in srgb, var(--color-accent-hover) 55%, transparent)',
                 fontWeight: 600,
               }}
             >
