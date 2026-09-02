@@ -26,7 +26,7 @@ const BENEFITS = [
 
 export default function SignupPage() {
   return (
-    <main style={{ minHeight: "100vh", background: BG, color: INK }}>
+    <main style={{ minHeight: "100vh", background: BG, color: INK, overflowX: "clip", maxWidth: "100%" }}>
       {/* OS-3873 / OS-4745: the 1440px desktop shell needs to use the available
           viewport instead of reading like a narrow ~900px card pinned left. Keep
           a 32px gutter, widen to 1360px, and right-align the auth card so the
@@ -34,7 +34,10 @@ export default function SignupPage() {
           also sit near the viewport edge. */}
       {/* OS-5655: 4rem (64px) gap left a visual disconnect between pitch and
           Clerk card. gap-12 (3rem) + items-center keeps a tight two-column hero. */}
-      <div className="signup-grid" style={{ maxWidth: 1360, margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(400px, 520px)", alignItems: "center", gap: "3rem", padding: "6rem 2rem 2rem" }}>
+      {/* OS-5893: minmax(400px, 520px) on the auth column beat the 860px 1fr
+          media override (inline style wins), so 375px viewports overflowed ~9px.
+          minmax(0, 520px) still prefers ~520px on desktop and can shrink on mobile. */}
+      <div className="signup-grid" style={{ maxWidth: 1360, width: "100%", boxSizing: "border-box", margin: "0 auto", minHeight: "100vh", display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 520px)", alignItems: "center", gap: "3rem", padding: "6rem 2rem 2rem" }}>
         {/* Left, product context. The 8os wordmark lives in the global Header, so
             we don't repeat it here — it would compete with the header and split
             attention across two brand marks on the same page. */}
@@ -63,7 +66,7 @@ export default function SignupPage() {
             OS-4316: wrapped in SignupClerkErrorBridge to catch Clerk 4xx/5xx
             errors (email already exists, rate limit, server errors) and show
             a clear inline message instead of a silent broken form. */}
-        <section className="signup-auth" style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", alignSelf: "center" }}>
+        <section className="signup-auth" style={{ display: "flex", flexDirection: "column", alignItems: "stretch", alignSelf: "center", width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box" }}>
           <SignupPlanIntent />
           <SignupClerkErrorBridge
             signInUrl="/login"
@@ -144,10 +147,16 @@ export default function SignupPage() {
           background-color: ${GOLD} !important;
           background: ${GOLD} !important;
         }
+        .signup-auth, .signup-auth .cl-rootBox, .signup-auth .cl-cardBox, .signup-auth .cl-card {
+          max-width: 100% !important;
+          width: 100% !important;
+          min-width: 0 !important;
+          box-sizing: border-box !important;
+        }
         @media (max-width: 860px) {
-          .signup-grid { grid-template-columns: 1fr !important; gap: 1.5rem !important; padding-top: 2.5rem !important; }
+          .signup-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 1.5rem !important; padding: 2.5rem 1rem 2rem !important; }
           .signup-pitch { max-width: 100% !important; text-align: center; }
-          .signup-pitch ul { text-align: left; max-width: 360px; margin: 0 auto !important; }
+          .signup-pitch ul { text-align: left; max-width: 360px; width: 100%; margin: 0 auto !important; }
         }
       ` }} />
     </main>
