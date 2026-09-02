@@ -564,14 +564,20 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: var(--color-text-primary);
 }
 
-/* OS-5813: fill the 1200px blog shell on desktop instead of a left-weighted
-   single column. Collapse to 1 col below 900px so cards stay readable. */
+/* OS-5813 / OS-5941: fill the 1360px blog shell on desktop instead of a
+   left-weighted single column. Collapse to 1 col below 900px so cards stay
+   readable. */
 .blog-post-grid {
   grid-template-columns: 1fr;
 }
 @media (min-width: 900px) {
   .blog-post-grid {
     grid-template-columns: 1fr 1fr;
+  }
+}
+@media (min-width: 1280px) {
+  .blog-post-grid {
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
 

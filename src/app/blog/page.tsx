@@ -19,11 +19,12 @@ export default function BlogPage() {
       padding: '4rem 2rem',
     }}>
       {/*
-        OS-5813: align with Header/Footer (1360px) and pricing (1200px).
-        An 800px column looked left-weighted against the full-width chrome
-        even with margin: 0 auto — VidMee flagged the listing as off-center.
+        OS-5941: match Header/Footer (1360px). A 1200px shell on a 1440
+        viewport still reads as a left-weighted column against 1360px
+        chrome even with margin: 0 auto. Index-only — article pages stay
+        narrow for reading.
       */}
-      <div className="blog-index-shell" style={{ maxWidth: '1200px', width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
+      <div className="blog-index-shell" style={{ maxWidth: '1360px', width: '100%', margin: '0 auto', boxSizing: 'border-box' }}>
         <Link href="/" style={{ color: 'var(--color-text-primary)', textDecoration: 'none', fontSize: '0.875rem', fontWeight: 500 }}>
           ← Back to 8os
         </Link>

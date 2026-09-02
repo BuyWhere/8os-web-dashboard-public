@@ -222,12 +222,14 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
         </div>
       </div>
 
-      {/* Category Filter Chips */}
+      {/* Category Filter Chips — wrap on one row when the 1360px shell
+          has room (OS-5941); still wrap cleanly at narrower widths. */}
       <div
+        className="blog-category-chips"
         style={{
           display: 'flex',
           flexWrap: 'wrap',
-          gap: '8px',
+          gap: '10px',
           marginBottom: '28px',
         }}
       >
