@@ -11,7 +11,7 @@ const features = [
   {
     icon: '🔮',
     title: 'BaZi Archetype Engine',
-    desc: 'Your birth chart generates one of 38 million+ possible configurations. No two operating systems are alike.',
+    desc: 'Your birth chart generates one of 17,280 possible configurations. No two operating systems are alike.',
   },
   {
     icon: '🤖',

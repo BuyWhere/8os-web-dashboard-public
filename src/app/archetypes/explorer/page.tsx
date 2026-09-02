@@ -59,7 +59,7 @@ export default function ArchetypeExplorerPage() {
         </Link>
 
         <header className={styles.hero}>
-          <div className={styles.eyebrow}>38M+ Configurations</div>
+          <div className={styles.eyebrow}>17,280 Core Configurations</div>
           <h1 className={styles.title}>Archetype Explorer</h1>
           <p className={styles.subtitle}>
             Every 8os is built on a BaZi-derived archetype. These are the five core patterns,
