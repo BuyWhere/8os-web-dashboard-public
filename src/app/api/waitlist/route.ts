@@ -120,10 +120,11 @@ export async function POST(request: NextRequest) {
     // signup. Fix the path so the existing form starts working too.
     // OS-1744: orchestrator returning 500 on all routes.
     // Write directly to database via Prisma instead of proxying.
+    // OS-6023: generate UUID for id column since DB expects it
     try {
       await prisma.$executeRaw`
-        INSERT INTO waitlist_entries (email, source, affiliate_opt_in)
-        VALUES (${email}, ${source}, ${affiliateOptIn})
+        INSERT INTO waitlist_entries (id, email, source, affiliate_opt_in)
+        VALUES (uuid_generate_v4(), ${email}, ${source}, ${affiliateOptIn})
       `;
     } catch (insertErr) {
       const msg = insertErr instanceof Error ? insertErr.message : '';
