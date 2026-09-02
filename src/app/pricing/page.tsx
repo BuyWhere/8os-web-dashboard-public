@@ -197,6 +197,14 @@ export default function PricingPage() {
 
               <p style={tierDescStyle}>{tier.description}</p>
 
+              {/* OS-5892: CTA sits above the feature list so all four buttons
+                  share a subgrid row that stays in the 1440x900 fold. Feature
+                  lists vary 7–11 items and previously pushed CTAs to ~y820+. */}
+              <div className="tier-footer" style={tierFooterStyle}>
+                <TierCta tier={tier} />
+                <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
+              </div>
+
               <ul style={featureListStyle} role="list">
                 {tier.features.map(({ label, included }) => (
                   <li key={label} style={featureItemStyle(included)}>
@@ -206,12 +214,7 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              <div className="tier-footer" style={tierFooterStyle}>
-                <TierCta tier={tier} />
-                <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
-              </div>
-
-              {/* Always render the note slot so CSS subgrid can align CTAs
+              {/* Always render the note slot so CSS subgrid can align rows
                   across cards (OS-5934). Empty on tiers without a callout. */}
               <div className="tier-note" style={tier.note ? tierNoteStyle : undefined}>
                 {tier.note ? <p style={tierNoteTextStyle}>{tier.note}</p> : null}
@@ -305,12 +308,13 @@ const tiersGridResponsiveStyle = `
     --pricing-excluded-feature-color: #EDE7DD;
     --pricing-included-marker-color: #86EFAC;
   }
-  /* OS-5934 / OS-5938: parent grid defines explicit row tracks so the
-     subgrid on .tier-card can inherit them and align CTA rows across cards. */
+  /* OS-5892 / OS-5934 / OS-5938: parent grid defines explicit row tracks so
+     subgrid on .tier-card inherits them. Order is header / desc / CTA /
+     features / note so CTAs share a baseline above the variable-height lists. */
   .tiers-grid {
     margin-bottom: 5rem;
     grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: auto auto 1fr auto auto;
+    grid-template-rows: auto auto auto 1fr auto;
     align-items: stretch;
   }
   .tier-card {
@@ -329,7 +333,7 @@ const tiersGridResponsiveStyle = `
     .tier-card { padding: 1.1rem !important; gap: 0.65rem !important; }
     .tier-card ul { gap: 0.4rem !important; }
     .tier-card ul li { line-height: 1.35 !important; }
-    .tier-footer { padding-top: 0.85rem !important; }
+    .tier-footer { padding-top: 0.7rem !important; padding-bottom: 0.7rem !important; }
   }
   /* OS-5914: removed height-based 3-col breakpoint — keep 4-col at all
      widths ≥1101px so VidMee's pricing screenshot baseline (4 cards in
@@ -345,7 +349,7 @@ const tiersGridResponsiveStyle = `
 
 const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh', paddingBottom: '6rem' };
 const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '3.5rem 2rem', minWidth: 0 };
-const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '1.75rem' };
+const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '1.25rem' };
 const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-text-primary)' };
 const pageTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: 'clamp(1.4rem, 6vw, 2.25rem)', lineHeight: 1.15, letterSpacing: '-0.035em', fontWeight: 800 };
 const pageDescStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', color: 'var(--color-text-secondary)', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.65 };
@@ -387,7 +391,7 @@ const featureCheckStyle = (included: boolean): React.CSSProperties => ({
   marginTop: '0.1rem',
 });
 
-const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', paddingTop: '1.25rem', marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem', overflow: 'visible' };
+const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)', paddingTop: '1rem', paddingBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', overflow: 'visible' };
 const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600 };
 const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--color-text-secondary)' };
 const tierCtaStyle: React.CSSProperties = { display: 'block', width: '100%', textAlign: 'center', padding: '0.9rem 1rem', borderRadius: '12px', fontWeight: 800, textDecoration: 'none', fontSize: '0.92rem', transition: 'transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s' };
