@@ -1,9 +1,10 @@
 'use client'
 
-// OS-5811: Clerk's Continue CTA appends a raw Unicode ▶ that fonts and
-// screen readers handle inconsistently. Replace it with a decorative SVG.
+// OS-5811 / OS-5895: Clerk's Continue CTA appends a raw Unicode ▶ / →
+// that fonts and screen readers handle inconsistently. Replace it with
+// a decorative SVG matching primary CTAs.
 
-const PLAY_GLYPH_RE = /[▶▷►▸▵]/g
+const PLAY_GLYPH_RE = /[▶▷►▸▵→➔➜➝➞➡︎]/g
 
 const SVG_MARKUP =
   '<svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true" data-os-continue-arrow="true">' +
@@ -20,7 +21,7 @@ function patchButton(btn: HTMLButtonElement) {
   if (btn.dataset.osContinueArrow === '1') {
     // Re-strip if Clerk re-rendered the glyph into a text node.
     const stillGlyph = Array.from(btn.childNodes).some(
-      (n) => n.nodeType === Node.TEXT_NODE && /[▶▷►▸▵]/.test(n.textContent || '')
+      (n) => n.nodeType === Node.TEXT_NODE && /[▶▷►▸▵→➔➜➝➞➡︎]/.test(n.textContent || '')
     )
     if (!stillGlyph && btn.querySelector('svg[data-os-continue-arrow]')) return
   }
@@ -28,7 +29,7 @@ function patchButton(btn: HTMLButtonElement) {
   for (const node of Array.from(btn.childNodes)) {
     if (node.nodeType !== Node.TEXT_NODE) continue
     const text = node.textContent || ''
-    if (!/[▶▷►▸▵]/.test(text)) continue
+    if (!/[▶▷►▸▵→➔➜➝➞➡︎]/.test(text)) continue
     const cleaned = text.replace(PLAY_GLYPH_RE, '').replace(/\s+$/, '')
     if (cleaned.length === 0) {
       node.remove()

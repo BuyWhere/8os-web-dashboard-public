@@ -1,14 +1,14 @@
 import * as fs from 'fs'
 import * as path from 'path'
 
-describe('clerkContinueArrow (OS-5811)', () => {
+describe('clerkContinueArrow (OS-5811 / OS-5895)', () => {
   const src = fs.readFileSync(
     path.join(__dirname, '../clerkContinueArrow.ts'),
     'utf8'
   )
 
   it('strips Unicode play/triangle glyphs from Continue copy', () => {
-    expect(src).toMatch(/PLAY_GLYPH_RE = \/\[[^\]]*▶[^\]]*\]\/g/)
+    expect(src).toMatch(/PLAY_GLYPH_RE = \/\[[^\]]*▶[^\]]*→[^\]]*\]\/g/)
   })
 
   it('injects a decorative SVG with aria-hidden', () => {
