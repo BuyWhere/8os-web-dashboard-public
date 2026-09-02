@@ -1,13 +1,21 @@
 import { test, expect } from '@playwright/test';
 
-const footerLinks = [
+const productLinks = [
+  { label: 'Features', path: '/features' },
+  { label: 'Pricing', path: '/pricing' },
+  { label: 'Reveal', path: '/reveal' },
+];
+
+const companyLinks = [
   { label: 'Blog', path: '/blog' },
   { label: 'Contact', path: '/contact' },
   { label: 'Privacy', path: '/privacy' },
   { label: 'Terms', path: '/terms' },
-  { label: 'Features', path: '/features' },
-  { label: 'Archetype Explorer', path: '/archetypes/explorer' },
 ];
+
+const footerLinks = [...productLinks, ...companyLinks];
+
+const publicPages = ['/', '/features', '/blog', '/contact', '/privacy', '/terms', '/quiz'];
 
 test('all footer links return 200', async ({ request }) => {
   for (const link of footerLinks) {
@@ -16,13 +24,19 @@ test('all footer links return 200', async ({ request }) => {
   }
 });
 
-test('footer links are present on homepage', async ({ page }) => {
-  await page.goto('/');
-  const footer = page.locator('footer');
-  await expect(footer).toBeVisible();
+for (const pagePath of publicPages) {
+  test(`shared Product/Company footer on ${pagePath}`, async ({ page }) => {
+    await page.goto(pagePath);
+    const footer = page.locator('footer');
+    await expect(footer).toBeVisible();
+    await expect(footer).toContainText('Product');
+    await expect(footer).toContainText('Company');
 
-  for (const link of footerLinks) {
-    const anchor = footer.locator(`a[href="${link.path}"]`);
-    await expect(anchor, `footer link to ${link.path} should exist`).toBeVisible();
-  }
-});
+    for (const link of footerLinks) {
+      const anchor = footer.locator(`a[href="${link.path}"]`);
+      await expect(anchor, `footer link to ${link.path} on ${pagePath}`).toBeVisible();
+    }
+
+    await expect(footer.locator('footer')).toHaveCount(0);
+  });
+}

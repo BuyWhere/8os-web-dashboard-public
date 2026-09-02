@@ -4,13 +4,17 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
-const FOOTER_LINKS = [
+const PRODUCT_LINKS = [
   { href: '/features', label: 'Features' },
+  { href: '/pricing', label: 'Pricing' },
+  { href: '/reveal', label: 'Reveal' },
+];
+
+const COMPANY_LINKS = [
   { href: '/blog', label: 'Blog' },
   { href: '/contact', label: 'Contact' },
   { href: '/privacy', label: 'Privacy' },
   { href: '/terms', label: 'Terms' },
-  { href: '/archetypes/explorer', label: 'Archetype Explorer' },
 ];
 
 const SOCIAL_LINKS = [
@@ -23,10 +27,6 @@ export function Footer() {
   useEffect(() => setYear(String(new Date().getFullYear())), []);
   const pathname = usePathname();
 
-  // The landing page ("/") ships its own warm editorial footer
-  // (see src/app/page.tsx). Suppress the global footer there.
-  if (pathname === '/') return null;
-
   // Inside the authenticated app the marketing footer is out of place —
   // the app is a full-height shell (sidebar + main). Suppress it there.
   const APP_PREFIXES = ['/dashboard', '/goals', '/calendar', '/settings', '/onboarding'];
@@ -37,7 +37,7 @@ export function Footer() {
       style={{
         background: 'var(--color-bg-primary)',
         borderTop: '1px solid var(--color-border)',
-        padding: '3rem 2rem',
+        padding: '3.5rem 1.5rem 2.5rem',
         marginTop: 'auto',
       }}
     >
@@ -45,23 +45,17 @@ export function Footer() {
         style={{
           maxWidth: '1360px',
           margin: '0 auto',
-          display: 'flex',
-          flexDirection: 'column',
-          gap: '2rem',
         }}
       >
-        {/* Main footer content */}
         <div
+          className="site-footer-grid"
           style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            gap: '2rem',
+            display: 'grid',
+            gridTemplateColumns: '1.6fr 1fr 1fr',
+            gap: '2.5rem',
           }}
         >
-          {/* Brand column */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+          <div>
             <Link
               href="/"
               style={{
@@ -76,135 +70,36 @@ export function Footer() {
             </Link>
             <p
               style={{
-                margin: 0,
-                fontSize: '0.875rem',
+                margin: '0.9rem 0 0',
+                fontSize: '0.9375rem',
+                lineHeight: 1.65,
                 color: 'var(--color-text-secondary)',
-                maxWidth: '280px',
+                maxWidth: '22rem',
               }}
             >
-              Your personalized life operating system. Free. No credit card. Works in your browser.
+              A life OS built on your real BaZi chart. Right goal, right season, the planner that knows when to push.
+            </p>
+            <p style={{ fontSize: '0.875rem', color: 'var(--color-text-secondary)', marginTop: '1.25rem' }}>
+              <a
+                href="mailto:hello@8os.ai"
+                style={{
+                  color: 'var(--color-text-secondary)',
+                  textDecoration: 'none',
+                  fontWeight: 500,
+                }}
+              >
+                hello@8os.ai
+              </a>
             </p>
           </div>
 
-          {/* Navigation columns */}
-          <nav
-            style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '3rem',
-            }}
-            aria-label="Footer navigation"
-          >
-            {/* Main links */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <span
-                style={{
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  color: 'var(--color-text-muted)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                }}
-              >
-                Navigation
-              </span>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {FOOTER_LINKS.slice(0, 3).map(({ href, label }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    style={{
-                      fontSize: '0.875rem',
-                      color: 'var(--color-text-secondary)',
-                      textDecoration: 'none',
-                      transition: 'color 0.15s',
-                    }}
-                  >
-                    {label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Legal links */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <span
-                style={{
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  color: 'var(--color-text-muted)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                }}
-              >
-                Legal
-              </span>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                {FOOTER_LINKS.slice(3).map(({ href, label }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    style={{
-                      fontSize: '0.875rem',
-                      color: 'var(--color-text-secondary)',
-                      textDecoration: 'none',
-                      transition: 'color 0.15s',
-                    }}
-                  >
-                    {label}
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Social links */}
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-              <span
-                style={{
-                  fontSize: '0.75rem',
-                  fontWeight: 600,
-                  color: 'var(--color-text-muted)',
-                  textTransform: 'uppercase',
-                  letterSpacing: '0.05em',
-                }}
-              >
-                Connect
-              </span>
-              <div style={{ display: 'flex', gap: '0.75rem' }}>
-                {SOCIAL_LINKS.map(({ href, label, icon }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={label}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      width: '36px',
-                      height: '36px',
-                      borderRadius: '8px',
-                      background: 'var(--color-bg-secondary)',
-                      border: '1px solid var(--color-border)',
-                      color: 'var(--color-text-secondary)',
-                      textDecoration: 'none',
-                      fontSize: '0.75rem',
-                      fontWeight: 600,
-                      transition: 'border-color 0.15s, color 0.15s',
-                    }}
-                  >
-                    {icon}
-                  </Link>
-                ))}
-              </div>
-            </div>
-          </nav>
+          <FooterCol heading="Product" links={PRODUCT_LINKS} />
+          <FooterCol heading="Company" links={COMPANY_LINKS} />
         </div>
 
-        {/* Bottom bar */}
         <div
           style={{
+            marginTop: '3rem',
             paddingTop: '1.5rem',
             borderTop: '1px solid var(--color-border)',
             display: 'flex',
@@ -217,23 +112,103 @@ export function Footer() {
           <p
             style={{
               margin: 0,
-              fontSize: '0.75rem',
-              color: 'var(--color-text-muted)',
+              fontSize: '0.8125rem',
+              color: 'var(--color-text-secondary)',
             }}
           >
             © {year} 8os. All rights reserved.
           </p>
-          <p
-            style={{
-              margin: 0,
-              fontSize: '0.75rem',
-              color: 'var(--color-text-muted)',
-            }}
-          >
-            Personalized OS for life
-          </p>
+          <nav aria-label="Social" style={{ display: 'flex', gap: '0.75rem' }}>
+            {SOCIAL_LINKS.map(({ href, label, icon }) => (
+              <Link
+                key={href}
+                href={href}
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label={label}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '8px',
+                  background: 'var(--color-bg-secondary)',
+                  border: '1px solid var(--color-border)',
+                  color: 'var(--color-text-secondary)',
+                  textDecoration: 'none',
+                  fontSize: '0.75rem',
+                  fontWeight: 600,
+                }}
+              >
+                {icon}
+              </Link>
+            ))}
+          </nav>
         </div>
       </div>
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+          @media (max-width: 900px) {
+            .site-footer-grid { grid-template-columns: 1fr 1fr !important; }
+          }
+          @media (max-width: 560px) {
+            .site-footer-grid { grid-template-columns: 1fr !important; }
+          }
+        `,
+        }}
+      />
     </footer>
+  );
+}
+
+function FooterCol({
+  heading,
+  links,
+}: {
+  heading: string;
+  links: { href: string; label: string }[];
+}) {
+  return (
+    <div>
+      <div
+        style={{
+          fontSize: '0.75rem',
+          fontWeight: 700,
+          letterSpacing: '0.08em',
+          textTransform: 'uppercase',
+          color: 'var(--color-text-secondary)',
+          marginBottom: '1rem',
+        }}
+      >
+        {heading}
+      </div>
+      <ul
+        style={{
+          listStyle: 'none',
+          padding: 0,
+          margin: 0,
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.65rem',
+        }}
+      >
+        {links.map((l) => (
+          <li key={l.href}>
+            <Link
+              href={l.href}
+              style={{
+                fontSize: '0.9375rem',
+                color: 'var(--color-text-primary)',
+                textDecoration: 'none',
+              }}
+            >
+              {l.label}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

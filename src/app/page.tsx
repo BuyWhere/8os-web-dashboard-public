@@ -519,80 +519,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* ───────────────────────────  FOOTER  ─────────────────────── */}
-      <footer
-        style={{
-          background: CREAM,
-          borderTop: `1px solid ${HAIRLINE}`,
-        }}
-      >
-        <div
-          style={{
-            maxWidth: MAXW,
-            margin: '0 auto',
-            padding: '3.5rem 1.5rem 2.5rem',
-          }}
-        >
-          <div
-            className="footer-grid"
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1.6fr 1fr 1fr',
-              gap: '2.5rem',
-            }}
-          >
-            <div>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '0.6rem', marginBottom: '0.9rem' }}>
-                <Mark size={26} />
-                <span style={{ fontFamily: serif, fontSize: '1.4rem', fontWeight: 600, color: INK }}>
-                  8os
-                </span>
-              </div>
-              <p style={{ fontSize: '0.9375rem', lineHeight: 1.65, color: GRAY, maxWidth: '22rem', margin: 0 }}>
-                A life OS built on your real BaZi chart. Right goal, right
-                season, the planner that knows when to push.
-              </p>
-              <p style={{ fontSize: '0.875rem', color: GRAY, marginTop: '1.25rem' }}>
-                <a href="mailto:hello@8os.ai" style={{ color: OXBLOOD, textDecoration: 'none', fontWeight: 500 }}>
-                  hello@8os.ai
-                </a>
-              </p>
-            </div>
-
-            <FooterCol
-              serif={serif}
-              heading="Product"
-              links={[
-                { href: '/features', label: 'Features' },
-                { href: '/pricing', label: 'Pricing' },
-                { href: '/reveal', label: 'Reveal' },
-              ]}
-            />
-            <FooterCol
-              serif={serif}
-              heading="Company"
-              links={[
-                { href: '/blog', label: 'Blog' },
-                { href: '/contact', label: 'Contact' },
-                { href: '/privacy', label: 'Privacy' },
-                { href: '/terms', label: 'Terms' },
-              ]}
-            />
-          </div>
-
-          <div
-            style={{
-              marginTop: '3rem',
-              paddingTop: '1.5rem',
-              borderTop: `1px solid ${HAIRLINE}`,
-              fontSize: '0.8125rem',
-              color: GRAY,
-            }}
-          >
-            © {new Date().getFullYear()} 8os. All rights reserved.
-          </div>
-        </div>
-      </footer>
+      {/* Footer comes from the shared <Footer /> in root layout (OS-5656). */}
 
       {/* Responsive rules scoped to the landing */}
       <style
@@ -603,12 +530,10 @@ export default function Home() {
             .hero-motif { max-width: 360px; }
             .cards-4 { grid-template-columns: repeat(2, 1fr) !important; }
             .cards-3 { grid-template-columns: repeat(2, 1fr) !important; }
-            .footer-grid { grid-template-columns: 1fr 1fr !important; }
           }
           @media (max-width: 560px) {
             .cards-4 { grid-template-columns: 1fr !important; }
             .cards-3 { grid-template-columns: 1fr !important; }
-            .footer-grid { grid-template-columns: 1fr !important; }
           }
         `,
         }}
@@ -656,45 +581,6 @@ function SectionHead({
       >
         {title}
       </h2>
-    </div>
-  )
-}
-
-function FooterCol({
-  heading,
-  links,
-  serif,
-}: {
-  heading: string
-  links: { href: string; label: string }[]
-  serif: string
-}) {
-  return (
-    <div>
-      <div
-        style={{
-          fontSize: '0.75rem',
-          fontWeight: 700,
-          letterSpacing: '0.08em',
-          textTransform: 'uppercase',
-          color: 'var(--color-text-secondary)',
-          marginBottom: '1rem',
-        }}
-      >
-        {heading}
-      </div>
-      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '0.65rem' }}>
-        {links.map((l) => (
-          <li key={l.href}>
-            <a
-              href={l.href}
-              style={{ fontSize: '0.9375rem', color: 'var(--color-text-primary)', textDecoration: 'none' }}
-            >
-              {l.label}
-            </a>
-          </li>
-        ))}
-      </ul>
     </div>
   )
 }
