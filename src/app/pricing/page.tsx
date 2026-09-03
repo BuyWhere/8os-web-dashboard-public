@@ -401,8 +401,11 @@ const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--c
 const tierCtaStyle: React.CSSProperties = { display: 'block', width: '100%', textAlign: 'center', padding: '0.9rem 1rem', borderRadius: '12px', fontWeight: 800, textDecoration: 'none', fontSize: '0.92rem', transition: 'transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s' };
 /* Secondary CTAs: outline, no terracotta fill — Pro is the only solid primary. */
 const tierCtaSecondaryStyle: React.CSSProperties = { background: 'transparent', border: '1.5px solid var(--color-accent-border)', color: 'var(--color-accent-border)', boxShadow: 'none' };
-/* Primary Pro CTA: gold fill + elevation. White on #8A6514 = 5.31:1 AA. */
-const tierCtaHighlightedStyle: React.CSSProperties = { background: 'var(--color-accent)', border: '1px solid var(--color-accent)', color: '#fff', fontSize: '1rem', padding: '1.05rem 1rem', boxShadow: '0 14px 32px rgba(138, 101, 20, 0.35)' };
+/* Primary Pro CTA: gold fill + elevation.
+ * bg = var(--color-accent): light #8A6514 (5.31:1 white) / dark #d4a366 (7.85:1 charcoal).
+ * text = var(--color-on-accent): light #fff (5.0:1) / dark #1A1712 (7.85:1).
+ * Both combos ≥4.5:1 AA — fixes OS-5961 axe color-contrast reopen. */
+const tierCtaHighlightedStyle: React.CSSProperties = { background: 'var(--color-accent)', border: '1px solid var(--color-accent)', color: 'var(--color-on-accent)', fontSize: '1rem', padding: '1.05rem 1rem', boxShadow: '0 14px 32px rgba(138, 101, 20, 0.35)' };
 
 const tableSection: React.CSSProperties = { marginBottom: '4rem' };
 const sectionTitleStyle: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', letterSpacing: '-0.03em' };
