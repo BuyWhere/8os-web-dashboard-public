@@ -351,6 +351,17 @@ const tiersGridResponsiveStyle = `
     color: #F5E8D0 !important;
     border-color: #d4a366 !important;
   }
+  /* OS-6101: pin .cta-highlighted independently of --color-accent /
+     --color-on-accent. Dark theme brightens accent to #d4a366; white on
+     that gold is 2.28:1 (axe WCAG2AA). VidMee/axe also fail when html
+     has no data-theme yet (system dark + :root white-on-#8A6514 is fine,
+     but a late theme paint can pair :root --color-on-accent #fff with
+     dark --color-accent). White on #8A6514 = 5.31:1 AA in both themes. */
+  .pricing-page .cta-highlighted {
+    background: #8A6514 !important;
+    border-color: #8A6514 !important;
+    color: #ffffff !important;
+  }
 `;
 
 const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh', paddingBottom: '6rem' };
@@ -402,10 +413,10 @@ const tierCtaStyle: React.CSSProperties = { display: 'block', width: '100%', tex
 /* Secondary CTAs: outline, no terracotta fill — Pro is the only solid primary. */
 const tierCtaSecondaryStyle: React.CSSProperties = { background: 'transparent', border: '1.5px solid var(--color-accent-border)', color: 'var(--color-accent-border)', boxShadow: 'none' };
 /* Primary Pro CTA: gold fill + elevation.
- * bg = var(--color-accent): light #8A6514 (5.31:1 white) / dark #d4a366 (7.85:1 charcoal).
- * text = var(--color-on-accent): light #fff (5.0:1) / dark #1A1712 (7.85:1).
- * Both combos ≥4.5:1 AA — fixes OS-5961 axe color-contrast reopen. */
-const tierCtaHighlightedStyle: React.CSSProperties = { background: 'var(--color-accent)', border: '1px solid var(--color-accent)', color: 'var(--color-on-accent)', fontSize: '1rem', padding: '1.05rem 1rem', boxShadow: '0 14px 32px rgba(138, 101, 20, 0.35)' };
+ * Hexes (not theme tokens) so dark --color-accent #d4a366 never pairs with
+ * white text. White on #8A6514 = 5.31:1 AA. Page-local CSS !important
+ * (OS-6101) is the axe-visible computed color. */
+const tierCtaHighlightedStyle: React.CSSProperties = { background: '#8A6514', border: '1px solid #8A6514', color: '#ffffff', fontSize: '1rem', padding: '1.05rem 1rem', boxShadow: '0 14px 32px rgba(138, 101, 20, 0.35)' };
 
 const tableSection: React.CSSProperties = { marginBottom: '4rem' };
 const sectionTitleStyle: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', letterSpacing: '-0.03em' };
