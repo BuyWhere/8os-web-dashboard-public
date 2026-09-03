@@ -302,11 +302,14 @@ const tiersGridResponsiveStyle = `
     --pricing-excluded-feature-color: #EDE7DD;
     --pricing-included-marker-color: #86EFAC;
   }
-  /* OS-5961: marginTop:auto on .tier-footer pins every CTA to a shared
-     baseline row even when align-items:start lets cards hug content
-     (OS-5960 — subgrid stretch pushed the Agent Connect note ~134px past
-     the 1440x900 fold). Row-level baseline + hug-content coexist. */
-  .tiers-grid { margin-bottom: 5rem; grid-template-columns: repeat(4, 1fr); align-items: start; }
+  /* OS-5961: equal-height cards + footer marginTop:auto is the only
+     mechanism that truly aligns CTAs — bottom-anchored footers share a
+     baseline row by construction. align-items:start can never align CTAs
+     because each card hugs its own height, leaving no free space for
+     marginTop:auto to absorb (footer rides each card's feature-list
+     length). The Agent Connect note renders below the CTA so it is the
+     only element past the fold, not a stretched empty slot on every card. */
+  .tiers-grid { margin-bottom: 5rem; grid-template-columns: repeat(4, 1fr); align-items: stretch; }
   .tier-card {
     overflow: visible !important;
     min-height: fit-content;
@@ -324,8 +327,15 @@ const tiersGridResponsiveStyle = `
     .tier-card ul li { line-height: 1.3 !important; font-size: 0.8rem !important; }
     .tier-footer { padding-top: 0.55rem !important; padding-bottom: 0.55rem !important; gap: 0.5rem !important; }
   }
+  /* OS-5961: pin every tier footer to the same offset from the card top so
+     all CTAs share one baseline row. Cards keep hugging content
+     (align-items:start) so the Agent Connect note stays above the fold
+     (OS-5960), but the footer no longer rides each card's feature-list
+     length. Best-For line flows after the CTA and may wrap freely. */
+  .tier-footer { margin-top: auto; }
+  .tiers-grid .tier-card { padding-bottom: 0.95rem; }
   /* OS-5961: 2-col rows share a baseline pair (rows 1-2 / 3-4); 1-col
-     stacks are inherently aligned. marginTop:auto does the pinning. */
+     stacks are inherently aligned. */
   @media (max-width: 1100px) {
     .tiers-grid { grid-template-columns: repeat(2, 1fr) !important; align-items: stretch; }
   }
