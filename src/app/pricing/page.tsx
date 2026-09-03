@@ -139,6 +139,9 @@ function TierCta({ tier }: { tier: (typeof TIERS)[number] }) {
     ...tierCtaStyle,
     ...(tier.highlighted ? tierCtaHighlightedStyle : tierCtaSecondaryStyle),
   };
+  // OS-6088: class lets page-local CSS beat dark --color-accent-border (#9A7A3A
+  // on #221E18 = 4.12:1 FAIL). Inline color still used as the light-theme default.
+  const className = tier.highlighted ? 'cta-highlighted' : 'cta-primary';
 
   if (tier.id === 'agent-connect' || tier.id === 'pro') {
     return (
@@ -146,12 +149,13 @@ function TierCta({ tier }: { tier: (typeof TIERS)[number] }) {
         tier={tier.id as 'agent-connect' | 'pro'}
         label={tier.cta}
         style={style}
+        className={className}
       />
     );
   }
 
   return (
-    <Link href={tier.ctaHref} style={style}>
+    <Link href={tier.ctaHref} style={style} className={className}>
       {tier.cta}
     </Link>
   );
@@ -340,6 +344,12 @@ const tiersGridResponsiveStyle = `
   }
   @media (max-width: 600px) {
     .tiers-grid { grid-template-columns: 1fr !important; }
+  }
+  /* OS-6088: dark outline CTAs. Label #F5E8D0 on card #221E18 = 13.68:1.
+     Border #d4a366 on #221E18 = 7.29:1 (was --color-accent-border #9A7A3A = 4.12:1). */
+  [data-theme='dark'] .pricing-page .cta-primary {
+    color: #F5E8D0 !important;
+    border-color: #d4a366 !important;
   }
 `;
 
