@@ -107,7 +107,7 @@
   --color-accent-hover: #A67F30; /* darker gold — hover state */
   --color-accent-border: #9A7A3A; /* WCAG-AA border for inputs on dark — 5.2:1 on charcoal */
   --color-accent-gradient: linear-gradient(135deg, #d4a366 0%, #9A6A28 100%); /* gold gradient */
-  --color-on-accent: #fff;       /* button text on gold bg — 3.33:1 light / 12.27:1 dark */
+  --color-on-accent: #1A1712;    /* charcoal on gold fill — 7.85:1 on #d4a366 (OS-6090; was #fff = 2.28:1 FAIL AA) */
   --color-accent-2: #B05E47;     /* oxblood — 4.63:1 on dark bg (was #C06B54 = 3.84:1 FAIL AA) */
   --color-accent-soft: #3A3125;  /* warm dark tint — active nav / badges */
   --color-element-fire: #D97706;  /* amber — 5.4:1 on charcoal */
