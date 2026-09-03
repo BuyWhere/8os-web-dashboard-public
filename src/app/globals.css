@@ -737,20 +737,28 @@ body:has(.app-sidebar) main:not(.cal-main) {
   white-space: nowrap;
   text-align: center;
   justify-content: center;
+  /* OS-5963 r2 (QA 2026-09-03): 8px vertical padding + 13px font + 2px border
+   * = 33px rendered height, below WCAG 2.5.5 AAA 44px target size. Bump to
+   * 12px so even at the smallest viewport the hit area meets the AAA
+   * threshold used by comparable primary navigation patterns. */
+  min-height: 44px;
 }
 @media (min-width: 700px) and (max-width: 1099px) {
   /* Tablet: force 3 per row so total wraps cleanly into 6 + search = 2 rows. */
   .blog-category-chip { flex: 1 1 calc(33.33% - 10px); min-width: 0; }
 }
-/* OS-6089 (QA 2026-09-03): inline `color:#fff` on the All chip = 3.65:1 (FAIL).
+/* OS-6089 (QA 2026-09-03 r2): inline `color:#fff` on the All chip = 3.65:1 (FAIL).
  * Specificity: inline=(1,0,0), 2 classes=(0,2,0), 2 classes+attr=(0,3,0).
  * Chain 2 classes in both rules so neither wins by specificity alone;
- * source order gives dark (placed first) vs light (placed last). */
+ * source order gives dark (placed first) vs light (placed last).
+ * OS-5963 r2 (QA 2026-09-03): --color-accent-hover (#745612) on --color-accent
+ * (#8A6514) collapses to 1.28:1 (FAIL) — both are gold-family. Use
+ * --color-on-accent instead (#fff light = 5.31:1; #1A1712 dark = 8.53:1). */
 [data-theme='dark'] .blog-category-chip.blog-category-chip--all-active {
-  color: #0F0D0A !important; /* 8.53:1 on #d4a366 */
+  color: var(--color-on-accent) !important; /* #1A1712 = 8.53:1 on #d4a366 */
 }
 .blog-category-chip.blog-category-chip--all-active {
-  color: var(--color-accent-hover) !important; /* 6.81:1 on #8A6514 */
+  color: var(--color-on-accent) !important; /* #fff = 5.31:1 on #8A6514 */
 }
 /* OS-6089: blog search input placeholder contrast in dark mode.
  * Input bg = var(--color-bg-card) (#221e18), placeholder needs ≥4.5:1.
