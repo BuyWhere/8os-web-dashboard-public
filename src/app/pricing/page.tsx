@@ -267,13 +267,8 @@ export default function PricingPage() {
                 pricing visitors straight to account creation. */}
             <Link
               href="/onboarding"
-              style={{
-                ...ctaButtonStyle,
-                background: 'var(--color-accent-soft)',
-                border: '1px solid var(--color-accent-soft)',
-                boxShadow: 'none',
-                color: 'var(--color-accent)',
-              }}
+              className="cta-secondary"
+              style={ctaSecondaryStyle}
             >
               Get started
             </Link>
@@ -342,6 +337,22 @@ const tiersGridResponsiveStyle = `
   }
   @media (max-width: 600px) {
     .tiers-grid { grid-template-columns: 1fr !important; align-items: stretch; }
+  }
+  /* OS-5960 r2: secondary CTA "Get started" used --color-accent on
+     --color-accent-soft = 4.4:1 (axe WCAG2AA FAIL on the bottom CTA box).
+     --color-accent-border passes light (5.26:1 on #F2E9D6) but dark
+     (#9A7A3A on #3A3125 = 3.17:1 FAIL). Pin a per-theme gold for the
+     outline-style CTA pair: #7A5A1E light / #d4a366 dark — both ≥4.95:1
+     on the soft tint. */
+  .pricing-page .cta-secondary {
+    background: var(--color-accent-soft);
+    border-color: #7A5A1E;
+    color: #7A5A1E;
+  }
+  [data-theme='dark'] .pricing-page .cta-secondary {
+    background: var(--color-accent-soft);
+    border-color: #d4a366;
+    color: #d4a366;
   }
 `;
 
@@ -433,3 +444,8 @@ const ctaBoxStyle: React.CSSProperties = { textAlign: 'center', padding: '4rem 2
 const ctaTitleStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: 'clamp(1.75rem, 4vw, 2.5rem)', letterSpacing: '-0.04em' };
 const ctaDescStyle: React.CSSProperties = { margin: '0 0 2rem', fontSize: '1rem', color: 'var(--color-text-secondary)' };
 const ctaButtonStyle: React.CSSProperties = { display: 'inline-block', padding: '1rem 2rem', borderRadius: '12px', background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)', color: '#fff', fontWeight: 700, fontSize: '1rem', textDecoration: 'none', boxShadow: '0 12px 32px var(--color-accent-soft)' };
+// OS-5960 r2: secondary CTA "Get started" sits in the bottom CTA box. The
+// .cta-secondary class (in the page <style> block) sets the AA-passing
+// gold color; we leave color off this style object so the class wins.
+// Outline-only button — softer than primary, but text must stay readable.
+const ctaSecondaryStyle: React.CSSProperties = { ...ctaButtonStyle, background: 'var(--color-accent-soft)', border: '1px solid var(--color-accent-soft)', boxShadow: 'none', color: undefined as unknown as string };
