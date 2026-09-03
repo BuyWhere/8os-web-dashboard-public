@@ -204,8 +204,8 @@ export default function PricingPage() {
               </ul>
 
               <div className="tier-footer" style={tierFooterStyle}>
-                <TierCta tier={tier} />
                 <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
+                <TierCta tier={tier} />
               </div>
 
               {tier.note && (
@@ -378,6 +378,11 @@ const featureCheckStyle = (included: boolean): React.CSSProperties => ({
   marginTop: '0.1rem',
 });
 
+// OS-5961: CTA renders LAST in the footer so its top edge sits at a fixed
+// offset below the feature list on every card — CTAs share a baseline row
+// even while cards hug content (align-items:start). marginTop:auto cannot
+// align hugged cards because each card is exactly its own content height.
+// The "Best for" line flows after the CTA and may wrap without moving it.
 const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', paddingTop: '1.25rem', marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem', overflow: 'visible' };
 const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600 };
 const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--color-text-secondary)' };
