@@ -356,6 +356,8 @@ const tiersGridResponsiveStyle = `
     .tier-footer a, .tier-footer button { padding: 0.6rem 0.75rem !important; font-size: 0.78rem !important; }
     .tier-footer p { font-size: 0.7rem !important; }
   }
+  /* OS-5960: prevent mid-word breaks in card text */
+  .tier-card { word-wrap: break-word; overflow-wrap: break-word; }
   /* OS-5914 / OS-5938: keep 4-col at widths ≥1101px (VidMee 1440x900
      baseline). CTAs sit above the feature list so they share a fold
      row even without subgrid. */
