@@ -324,17 +324,37 @@ const tiersGridResponsiveStyle = `
     display: flex !important;
     flex-direction: column;
   }
-  /* OS-5938 / OS-5960: compact on 900px desktop so feature lists AND the
+  /* OS-5960: compact on 900px desktop so feature lists AND the
      Agent Connect note stay above the fold. VidMee flags the note band
      (y≈915, h≈85) as clipped card content. */
   @media (max-height: 960px) {
     .pricing-inner { padding-top: 1.5rem !important; padding-bottom: 2rem !important; }
     .pricing-page h1 { margin-bottom: 0.5rem !important; font-size: 1.7rem !important; }
     .tiers-grid { margin-bottom: 2rem; gap: 0.75rem; }
-    .tier-card { padding: 0.95rem !important; gap: 0.5rem !important; }
-    .tier-card ul { gap: 0.28rem !important; }
-    .tier-card ul li { line-height: 1.3 !important; font-size: 0.8rem !important; }
-    .tier-footer { padding-top: 0.55rem !important; padding-bottom: 0.55rem !important; gap: 0.5rem !important; }
+    .tier-card { padding: 0.95rem !important; gap: 0.4rem !important; }
+    .tier-card ul { gap: 0.2rem !important; }
+    .tier-card ul li { line-height: 1.25 !important; font-size: 0.78rem !important; }
+    .tier-footer { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; gap: 0.4rem !important; }
+  }
+  /* OS-5960 revisit: ensure CTAs visible on common 1366x768 laptop viewport.
+     Aggressive compact for viewports under 820px height. */
+  @media (max-height: 820px) {
+    .pricing-inner { padding-top: 1rem !important; padding-bottom: 1.5rem !important; }
+    .pricing-page h1 { margin-bottom: 0.25rem !important; font-size: 1.5rem !important; }
+    .pricing-page > div > p:nth-of-type(2) { display: none; }
+    .tiers-grid { margin-bottom: 1.5rem; gap: 0.5rem; }
+    .tier-card { padding: 0.75rem !important; gap: 0.25rem !important; border-radius: 12px !important; }
+    .tier-card > div:first-child > div:first-child { top: -6px !important; font-size: 0.6rem !important; padding: 0.15rem 0.5rem !important; }
+    .tier-card > div:first-of-type + p { min-height: auto !important; margin-bottom: 0.25rem !important; font-size: 0.8rem !important; }
+    .tier-card > div p:nth-of-type(2) { font-size: 0.7rem !important; }
+    .tier-card > div + p + div span:first-child { font-size: 1.4rem !important; }
+    .tier-card > div + p + div span:last-child { font-size: 0.65rem !important; }
+    .tier-card ul { gap: 0.12rem !important; }
+    .tier-card ul li { line-height: 1.2 !important; font-size: 0.72rem !important; }
+    .tier-card ul li span:first-child { font-size: 0.7rem !important; }
+    .tier-footer { padding-top: 0.4rem !important; padding-bottom: 0.4rem !important; gap: 0.3rem !important; }
+    .tier-footer a, .tier-footer button { padding: 0.6rem 0.75rem !important; font-size: 0.78rem !important; }
+    .tier-footer p { font-size: 0.7rem !important; }
   }
   /* OS-5914 / OS-5938: keep 4-col at widths ≥1101px (VidMee 1440x900
      baseline). CTAs sit above the feature list so they share a fold
