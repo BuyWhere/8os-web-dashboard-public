@@ -312,6 +312,13 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
 
   return (
     <div>
+      {/* OS-5944: Clerk <SignUp> is client-only. First HTML (and first
+          interaction before widget hydrate) has no input[name=email], so
+          VidMee/automation miss the field and users see a layout shift.
+          Keep a native email input in the document until Clerk paints its
+          own field, then hide the skeleton. Same name/id/autocomplete as
+          Clerk's identifier so first-load fill is robust. */}
+      <SignupEmailSkeleton />
       {bridgeError && (
         <div
           role="alert"
@@ -356,6 +363,88 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
         signInUrl={signInUrl ?? '/login'}
         fallbackRedirectUrl={fallbackRedirectUrl ?? '/onboarding'}
         appearance={appearance}
+      />
+    </div>
+  )
+}
+
+function SignupEmailSkeleton() {
+  const [clerkReady, setClerkReady] = useState(false)
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const root = document.querySelector('.signup-auth') ?? document.body
+    const clerkEmail = () =>
+      root.querySelector<HTMLInputElement>(
+        'input.cl-formFieldInput, input[name="emailAddress"], input[name="identifier"]'
+      )
+    const handoff = () => {
+      const clerk = clerkEmail()
+      if (!clerk) return false
+      const skeleton = root.querySelector<HTMLInputElement>(
+        'input[data-testid="signup-email-input"]'
+      )
+      if (skeleton?.value && !clerk.value) {
+        clerk.value = skeleton.value
+        clerk.dispatchEvent(new Event('input', { bubbles: true }))
+        clerk.dispatchEvent(new Event('change', { bubbles: true }))
+      }
+      // Stable selector for automation after Clerk hydrates (OS-5944).
+      if (!clerk.getAttribute('name') || clerk.getAttribute('name') === 'emailAddress') {
+        clerk.setAttribute('data-email-alias', 'email')
+      }
+      setClerkReady(true)
+      return true
+    }
+    if (handoff()) return
+    const observer = new MutationObserver(() => {
+      if (handoff()) observer.disconnect()
+    })
+    observer.observe(root, { childList: true, subtree: true })
+    return () => observer.disconnect()
+  }, [])
+
+  if (clerkReady) return null
+
+  return (
+    <div
+      data-testid="signup-email-skeleton"
+      aria-hidden={false}
+      style={{ padding: '24px 24px 0' }}
+    >
+      <label
+        htmlFor="email"
+        style={{
+          display: 'block',
+          color: '#000000',
+          fontSize: 13,
+          fontWeight: 600,
+          marginBottom: 8,
+        }}
+      >
+        Email address
+      </label>
+      <input
+        id="email"
+        name="email"
+        type="email"
+        autoComplete="email"
+        inputMode="email"
+        placeholder="Enter your email address"
+        aria-label="Email address"
+        data-testid="signup-email-input"
+        style={{
+          width: '100%',
+          minHeight: 44,
+          boxSizing: 'border-box',
+          border: '1px solid #4A4A4A',
+          boxShadow: '0 0 0 1px #4A4A4A',
+          borderRadius: 12,
+          padding: '0 12px',
+          fontSize: 15,
+          color: '#221F1A',
+          background: '#FFFFFF',
+        }}
       />
     </div>
   )
