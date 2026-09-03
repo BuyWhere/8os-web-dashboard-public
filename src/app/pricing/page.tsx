@@ -200,14 +200,13 @@ export default function PricingPage() {
 
               <p style={tierDescStyle}>{tier.description}</p>
 
-              {/* OS-5892: CTA sits above the feature list so all four buttons
-                  share a subgrid row that stays in the 1440x900 fold. Feature
-                  lists vary 7–11 items and previously pushed CTAs to ~y820+. */}
-              <div className="tier-footer" style={tierFooterStyle}>
-                <TierCta tier={tier} />
-                <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
-              </div>
-
+              {/* OS-5961 r2: feature list precedes CTA-footer in DOM so the
+                  subgrid 1fr row lands on the feature list (absorb slack)
+                  and the CTA sits in the auto row directly below it. Every
+                  card's CTA baseline matches because the rows above it
+                  (header + desc) are both auto and identical. The 5th row
+                  track from OS-5938 (.tier-note) is gone — that empty slot
+                  was what made cards stretch past the 1440x900 fold. */}
               <ul style={featureListStyle} role="list">
                 {tier.features.map(({ label, included }) => (
                   <li key={label} style={featureItemStyle(included)}>
@@ -217,10 +216,10 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              {/* OS-5960: no in-card note. The Agent Connect callout used to
-                  occupy a shared subgrid track and stretch every card past
-                  the 1440x900 fold. BYO-AI detail lives in the comparison
-                  table ("AI Journaling: BYO AI"). */}
+              <div className="tier-footer" style={tierFooterStyle}>
+                <TierCta tier={tier} />
+                <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
+              </div>
             </div>
           ))}
         </div>
@@ -294,9 +293,13 @@ export default function PricingPage() {
 }
 
 // OS-5923: do not set min-height: fit-content on .tier-card — that blocks stretch.
-// OS-5934: parent-row subgrid so every card's CTA (4th in-flow row) shares a
-// baseline even when Agent Connect has a callout in the 5th row. The popular
-// badge is absolutely positioned and does not occupy a subgrid track.
+// OS-5934 / OS-5938 / OS-5961 r2: parent grid defines 4 explicit row tracks
+// (header / desc / features-1fr / footer-with-CTA) and subgrid on .tier-card
+// inherits them so every card's CTA shares the same baseline regardless of
+// feature-list length. The 5th .tier-note row from OS-5938 is GONE (OS-5960
+// removed the in-card callout); that empty track was what forced subgrid to
+// stretch cards past the 1440x900 fold. 4 rows + no empty track = subgrid
+// alignment restored without the fold-clip regression.
 const tiersGridResponsiveStyle = `
   .pricing-page {
     --pricing-excluded-feature-color: #A1A1AA;
@@ -310,19 +313,24 @@ const tiersGridResponsiveStyle = `
     --pricing-excluded-feature-color: #EDE7DD;
     --pricing-included-marker-color: #86EFAC;
   }
-  /* OS-5960: flex column + align-items:start so each card hugs its own
-     feature list. Subgrid previously stretched empty .tier-note slots on
-     every card (~134px past the 1440x900 fold — VidMee clip band y≈915). */
+  /* OS-5934 / OS-5938 / OS-5961 r2: parent grid defines 4 explicit row tracks
+     so the subgrid on .tier-card can inherit them and align CTA rows across
+     cards. Tracks = header (auto) / desc (auto) / features (1fr) / footer
+     (auto). align-items:stretch so all cards reach the tallest card's height;
+     the empty bottom of shorter cards is filled by the 1fr features track
+     (CTA still sits directly above features, baseline aligned). */
   .tiers-grid {
     margin-bottom: 5rem;
     grid-template-columns: repeat(4, 1fr);
-    align-items: start;
+    grid-template-rows: auto auto 1fr auto;
+    align-items: stretch;
   }
   .tier-card {
     overflow: visible !important;
     max-height: none;
-    display: flex !important;
-    flex-direction: column;
+    display: grid !important;
+    grid-template-rows: subgrid;
+    grid-row: span 4;
   }
   /* OS-5960: compact on 900px desktop so feature lists AND the
      Agent Connect note stay above the fold. VidMee flags the note band
@@ -336,8 +344,10 @@ const tiersGridResponsiveStyle = `
     .tier-card ul li { line-height: 1.25 !important; font-size: 0.78rem !important; }
     .tier-footer { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; gap: 0.4rem !important; }
   }
-  /* OS-5960 revisit: ensure CTAs visible on common 1366x768 laptop viewport.
-     Aggressive compact for viewports under 820px height. */
+  /* OS-5960 revisit / OS-5961 r2: ensure CTAs visible on common 1366x768 laptop
+     viewport. Aggressive compact for viewports under 820px height. Selectors
+     target via DOM-child indices instead of "+ p + div" so they survive the
+     header/desc/ul/footer reorder. */
   @media (max-height: 820px) {
     .pricing-inner { padding-top: 1rem !important; padding-bottom: 1.5rem !important; }
     .pricing-page h1 { margin-bottom: 0.25rem !important; font-size: 1.5rem !important; }
@@ -345,10 +355,15 @@ const tiersGridResponsiveStyle = `
     .tiers-grid { margin-bottom: 1.5rem; gap: 0.5rem; }
     .tier-card { padding: 0.75rem !important; gap: 0.25rem !important; border-radius: 12px !important; }
     .tier-card > div:first-child > div:first-child { top: -6px !important; font-size: 0.6rem !important; padding: 0.15rem 0.5rem !important; }
-    .tier-card > div:first-of-type + p { min-height: auto !important; margin-bottom: 0.25rem !important; font-size: 0.8rem !important; }
-    .tier-card > div p:nth-of-type(2) { font-size: 0.7rem !important; }
-    .tier-card > div + p + div span:first-child { font-size: 1.4rem !important; }
-    .tier-card > div + p + div span:last-child { font-size: 0.65rem !important; }
+    /* DOM order: header(div#1) > desc(p#2) > ul(ul#3) > footer(div#4).
+       Header tagline = first-div > p:nth-of-type(2).
+       Description = first-div + p.
+       Price block lives inside the header so we target header > div:last-child
+       (tierPriceBlockStyle). */
+    .tier-card > div:first-child p:nth-of-type(2) { font-size: 0.7rem !important; }
+    .tier-card > div:first-child + p { min-height: auto !important; margin-bottom: 0.25rem !important; font-size: 0.8rem !important; }
+    .tier-card > div:first-child > div:last-child span:first-child { font-size: 1.4rem !important; }
+    .tier-card > div:first-child > div:last-child span:last-child { font-size: 0.65rem !important; }
     .tier-card ul { gap: 0.12rem !important; }
     .tier-card ul li { line-height: 1.2 !important; font-size: 0.72rem !important; }
     .tier-card ul li span:first-child { font-size: 0.7rem !important; }
@@ -431,14 +446,20 @@ const featureCheckStyle = (included: boolean): React.CSSProperties => ({
 const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)', paddingTop: '1rem', paddingBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', overflow: 'visible' };
 const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600 };
 const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--color-text-secondary)' };
-const tierCtaStyle: React.CSSProperties = { display: 'block', width: '100%', textAlign: 'center', padding: '0.9rem 1rem', borderRadius: '12px', fontWeight: 800, textDecoration: 'none', fontSize: '0.92rem', transition: 'transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s' };
+/* OS-5961 r2: every CTA shares the same padding/font so all four buttons
+ * render at the same computed height (~56px incl. 1px border). Earlier Pro
+ * was 64px vs outline 56px (8px bottom diff VidMee flagged). */
+const tierCtaStyle: React.CSSProperties = { display: 'block', width: '100%', textAlign: 'center', padding: '1rem 1rem', borderRadius: '12px', fontWeight: 800, textDecoration: 'none', fontSize: '0.95rem', lineHeight: 1.2, transition: 'transform 0.2s, background 0.2s, border-color 0.2s, box-shadow 0.2s' };
 /* Secondary CTAs: outline, no terracotta fill — Pro is the only solid primary. */
 const tierCtaSecondaryStyle: React.CSSProperties = { background: 'transparent', border: '1.5px solid var(--color-accent-border)', color: 'var(--color-accent-border)', boxShadow: 'none' };
 /* Primary Pro CTA: gold fill + elevation.
- * Hexes (not theme tokens) so dark --color-accent #d4a366 never pairs with
- * white text. White on #8A6514 = 5.31:1 AA. Page-local CSS !important
- * (OS-6101) is the axe-visible computed color. */
-const tierCtaHighlightedStyle: React.CSSProperties = { background: '#8A6514', border: '1px solid #8A6514', color: '#ffffff', fontSize: '1rem', padding: '1.05rem 1rem', boxShadow: '0 14px 32px rgba(138, 101, 20, 0.35)' };
+ * OS-5961 r2: same font-size + padding as outline CTAs so all four buttons
+ * render at the same height (~52px text-block + padding). The earlier
+ * `fontSize:1rem; padding:1.05rem 1rem` made Pro 64px vs outline 56px —
+ * the 8px diff VidMee flagged. Hex bg (not theme token) so dark
+ * --color-accent #d4a366 never pairs with white text. White on #8A6514
+ * = 5.31:1 AA (OS-6101). */
+const tierCtaHighlightedStyle: React.CSSProperties = { background: '#8A6514', border: '1px solid #8A6514', color: '#ffffff', boxShadow: '0 14px 32px rgba(138, 101, 20, 0.35)' };
 
 const tableSection: React.CSSProperties = { marginBottom: '4rem' };
 const sectionTitleStyle: React.CSSProperties = { margin: '0 0 1.5rem', fontSize: 'clamp(1.4rem, 3vw, 1.9rem)', letterSpacing: '-0.03em' };
