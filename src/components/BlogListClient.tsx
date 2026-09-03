@@ -199,6 +199,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
           </svg>
           <input
             type="search"
+            className="blog-search-input"
             placeholder="Search articles by title or keyword…"
             value={searchQuery}
             onChange={(e) => {

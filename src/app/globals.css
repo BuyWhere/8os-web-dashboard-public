@@ -659,6 +659,26 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: var(--color-text-primary) !important; /* cream on #3A3125 = 10.95:1 */
   border-color: var(--color-accent) !important;
 }
+/* OS-6089 QA reopen: unselected chips in dark mode need explicit colors.
+ * Inline uses var(--color-text-primary) which resolves correctly, but add
+ * explicit override for safety. */
+[data-theme='dark'] .blog-category-chip:not(.blog-category-chip--all-active):not(.blog-category-chip--active) {
+  background: var(--color-bg-card) !important;
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border) !important;
+}
+/* OS-6089 QA reopen: prevent orphan chip on tablet. Use align-items to keep
+ * chips together and avoid single-chip rows at tablet widths. */
+.blog-category-chips {
+  align-items: center;
+}
+/* OS-6089: blog search input placeholder contrast in dark mode.
+ * Input bg = var(--color-bg-card) (#221e18), placeholder needs ≥4.5:1.
+ * Light: #5c5652 on #fff = 10.89:1. Dark: use --color-text-muted (#b8af9f). */
+.blog-search-input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
 
 /* OS-5947: /dashboard/memory metadata + Add CTA contrast.
  * Dark cards (#221E18): VidMee flagged muted metadata (salience/chat) and a
