@@ -211,13 +211,18 @@
 
 html {
   scroll-behavior: smooth;
+  /* OS-6100: color-scheme:dark (theme boot) paints the UA canvas #000 when
+     body has no painted pixels (RSC hang, empty main, or invalid var()). */
+  min-height: 100%;
+  background: var(--color-bg-primary, #F7F3EC);
 }
 
 body {
   margin: 0;
+  min-height: 100vh;
   font-family: var(--font-sans), Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background: var(--color-bg-primary, #F7F3EC);
+  color: var(--color-text-primary, #221F1A);
   padding-top: var(--header-height);
   -webkit-font-smoothing: antialiased;
 }

@@ -38,6 +38,8 @@ function applyCSP(res: NextResponse): NextResponse {
 // Routes that require authentication
 const isProtectedRoute = createRouteMatcher([
   '/dashboard(.*)',
+  '/goals(.*)',
+  '/calendar(.*)',
   '/onboarding(.*)',
   '/settings(.*)',
   '/admin(.*)',

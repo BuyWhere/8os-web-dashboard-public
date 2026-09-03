@@ -27,18 +27,20 @@ export default function Error({
         gap: '1rem',
         padding: '2rem',
         textAlign: 'center',
+        background: 'var(--color-bg-primary, #F7F3EC)',
+        color: 'var(--color-text-primary, #221F1A)',
       }}
     >
-      <h2 style={{ fontSize: '1.5rem', fontWeight: 600 }}>Something went wrong</h2>
-      <p style={{ color: '#888', maxWidth: 400 }}>
-        We've been notified and are looking into it. Please try again.
+      <h2 style={{ fontSize: '1.5rem', fontWeight: 600, color: '#221F1A' }}>Something went wrong</h2>
+      <p style={{ color: '#5C5652', maxWidth: 400 }}>
+        We&apos;ve been notified and are looking into it. Please try again.
       </p>
       <button
         onClick={reset}
         style={{
           padding: '0.5rem 1.25rem',
-          background: 'var(--color-border)',
-          color: '#0a0a0a',
+          background: '#8A6514',
+          color: '#FFFFFF',
           border: 'none',
           borderRadius: 6,
           cursor: 'pointer',
