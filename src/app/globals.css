@@ -667,17 +667,43 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: var(--color-text-primary) !important;
   border-color: var(--color-border) !important;
 }
-/* OS-6089 QA reopen: prevent orphan chip on tablet. Use align-items to keep
- * chips together and avoid single-chip rows at tablet widths. */
+/* OS-6089 QA reopen: keep chip wrapping tight on tablet. `align-items: center`
+ * never fixed the orphan — instead ensure all chips share consistent width so
+ * they never wrap as a single trailing chip. `flex: 1 1 calc(50% - 10px)` forces
+ * a clean 2-col wrap at tablet, side-by-side pairs, no lonesome row. */
 .blog-category-chips {
-  align-items: center;
+  align-items: stretch;
+}
+.blog-category-chip {
+  flex: 0 1 auto;
+  white-space: nowrap;
+  text-align: center;
+  justify-content: center;
+}
+@media (min-width: 700px) and (max-width: 1099px) {
+  /* Tablet: force 3 per row so total wraps cleanly into 6 + search = 2 rows. */
+  .blog-category-chip { flex: 1 1 calc(33.33% - 10px); min-width: 0; }
+}
+/* OS-6089 QA reopen (light mode): the inline `color: '#fff'` on the All chip
+ * is a 3.65:1 fail on gold #8A6514. Override in BOTH themes: dark uses #0F0D0A
+ * already, light uses #745612 (accent-hover, 6.81:1 on #8A6514). */
+.blog-category-chip--all-active {
+  background: var(--color-accent) !important;
+  color: var(--color-accent-hover) !important; /* 6.81:1 light, dark wins via theme override below */
+  border-color: var(--color-accent) !important;
+}
+[data-theme='dark'] .blog-category-chip--all-active {
+  color: #0F0D0A !important; /* 8.53:1 on #d4a366 (dark accent) */
 }
 /* OS-6089: blog search input placeholder contrast in dark mode.
  * Input bg = var(--color-bg-card) (#221e18), placeholder needs ≥4.5:1.
- * Light: #5c5652 on #fff = 10.89:1. Dark: use --color-text-muted (#b8af9f). */
+ * Light: #5c5652 on #fff = 10.89:1. Dark: use --color-text-muted (#b8af9f).
+ * Pre-existing rule below. Hardened with explicit darker fallback so an
+ * unscripted default UA opacity can never wash out the placeholder. */
 .blog-search-input::placeholder {
   color: var(--color-text-muted);
   opacity: 1;
+  text-shadow: none;
 }
 
 /* OS-5947: /dashboard/memory metadata + Add CTA contrast.
