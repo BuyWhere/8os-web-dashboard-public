@@ -204,8 +204,8 @@ export default function PricingPage() {
               </ul>
 
               <div className="tier-footer" style={tierFooterStyle}>
-                <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
                 <TierCta tier={tier} />
+                <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
               </div>
 
               {tier.note && (
@@ -389,7 +389,10 @@ const featureCheckStyle = (included: boolean): React.CSSProperties => ({
 // align hugged cards because each card is exactly its own content height.
 // The "Best for" line flows after the CTA and may wrap without moving it.
 const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', paddingTop: '1.25rem', marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem', overflow: 'visible' };
-const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600 };
+// OS-5961: min-height reserves the two-line slot so the CTA (rendered
+// first, above this line) sits at a fixed offset from the feature list
+// on every card — regardless of how the Best-For text wraps.
+const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600, minHeight: '2.4em' };
 const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--color-text-secondary)' };
 const tierCtaStyle: React.CSSProperties = { display: 'block', width: '100%', textAlign: 'center', padding: '0.9rem 1rem', borderRadius: '12px', background: 'var(--color-accent)', border: '1px solid var(--color-accent)', color: 'var(--skin-button-primary-text)', fontWeight: 800, textDecoration: 'none', fontSize: '0.92rem', boxShadow: '0 10px 24px rgba(34, 31, 26, 0.12)', transition: 'transform 0.2s, background 0.2s, border-color 0.2s' };
 const tierCtaVisibleStyle: React.CSSProperties = { background: 'var(--color-accent-2)', border: '1px solid var(--color-accent-2)', color: '#fff' };
