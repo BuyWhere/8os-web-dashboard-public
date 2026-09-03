@@ -173,24 +173,58 @@
  * login's gold fill and broke white-on-gold contrast.
  */
 
-/* ── Clerk input placeholders (OS-5953) ────────────────────────────────────
+/* ── Clerk input placeholders (OS-5953 / OS-5953-r1) ─────────────────────
  * VidMee/agent analysis 2026-09-03 flagged input placeholder text on /login
  * and /signup <3:1 on the white card. Clerk's default placeholder is too
- * light to pass AA. Override with --color-text-muted at full opacity (same
- * pattern as OS-3982 contact form / OS-6089 blog search): light value #5C5652
- * on white card = 7.22:1 ✓ (also 6.53:1 on cream so safe if the input ever
- * paints on a cream surface). Scoped to auth surfaces only so we don't
- * disturb other pages' placeholder styling.
+ * light to pass AA. We previously bound to var(--color-text-muted), but
+ * that token flips in dark mode (#5C5652 → #B8AF9F) — and /login + /signup
+ * keep their LIGHT cream/white card surfaces regardless of theme, so the
+ * light-on-light token breaks. QA 2026-09-03T09:42Z reopen confirmed:
+ * dark-mode users saw #B8AF9F placeholder on a white card = 2.17:1 ✗.
+ *
+ * Pin to literal #5C5652 (7.22:1 on white, 6.53:1 on cream) under BOTH
+ * data-theme values so theme tokens can't flip the contrast.
+ * Scoped to .login-auth / .signup-auth so we don't disturb other pages.
  */
 .login-auth ::placeholder,
 .signup-auth ::placeholder {
-  color: var(--color-text-muted);
-  opacity: 1;
+  color: #5C5652 !important;
+  opacity: 1 !important;
 }
 .login-auth .cl-formFieldInput::placeholder,
 .signup-auth .cl-formFieldInput::placeholder {
-  color: var(--color-text-muted) !important;
+  color: #5C5652 !important;
   opacity: 1 !important;
+}
+/* OS-5953-r1: formFieldHint/ErrorText and forgot-password link are bound
+ * to colorTextSecondary in Clerk's appearance. Our /login + /signup pass
+ * colorTextSecondary as a literal hex (MUTED #6B6257 = 5.98:1 on white,
+ * PASSES AA) — but Clerk also renders small hint text on the input field
+ * (e.g. "Email address", "code from email") that inherits theme tokens.
+ * Pin those explicitly to keep dark-mode users seeing dark text on white. */
+.login-auth .cl-formFieldHintText,
+.login-auth .cl-formFieldErrorText,
+.login-auth .cl-formFieldSuccessText,
+.login-auth .cl-formFieldWarningText,
+.login-auth .cl-formResendCodeLink,
+.login-auth .cl-footerActionText,
+.login-auth .cl-footerActionLink,
+.login-auth .cl-internal-icon,
+.signup-auth .cl-formFieldHintText,
+.signup-auth .cl-formFieldErrorText,
+.signup-auth .cl-formFieldSuccessText,
+.signup-auth .cl-formFieldWarningText,
+.signup-auth .cl-formResendCodeLink,
+.signup-auth .cl-footerActionText,
+.signup-auth .cl-footerActionLink,
+.signup-auth .cl-internal-icon {
+  color: #5C5652 !important;
+}
+/* OS-5953-r1: forgot-password link needs explicit dark text on white card. */
+.login-auth .cl-footerActionLink,
+.signup-auth .cl-footerActionLink {
+  color: #221F1A !important;
+  font-weight: 600 !important;
 }
 
 /* ── Contact form affordance overrides ─────────────────────────────────────
