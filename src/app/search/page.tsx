@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { Suspense } from 'react'
 import { getAllBlogPosts } from '@/lib/content/blog'
 import SearchPageClient, { type SearchDoc } from './SearchPageClient'
 
-// OS-6096 / OS-2671: public /search must return HTTP 200 for logged-out users.
+// OS-6096 / OS-2671: public /search must return HTTP 200 with a working,
+// server-rendered search input and ranked results for logged-out users.
 // Keep noindex so this utility page does not compete with canonical content.
 export const metadata: Metadata = {
   title: 'Search, 8os',
@@ -32,7 +32,32 @@ const PAGES: SearchDoc[] = [
   { href: '/terms', title: 'Terms', description: 'Terms of use for 8os.ai.', kind: 'Page' },
 ]
 
-export default function SearchPage() {
+function rankDocs(docs: SearchDoc[], q: string): SearchDoc[] {
+  const query = q.trim()
+  if (!query) return docs
+  const terms = query.toLowerCase().split(/\s+/).filter(Boolean)
+  const scored = docs
+    .map((doc) => {
+      const hay = `${doc.title} ${doc.description} ${doc.kind}`.toLowerCase()
+      let s = 0
+      for (const term of terms) {
+        if (doc.title.toLowerCase().includes(term)) s += 5
+        if (hay.includes(term)) s += 2
+      }
+      return { doc, s }
+    })
+    .filter((row) => row.s > 0)
+    .sort((a, b) => b.s - a.s)
+  return scored.map((row) => row.doc)
+}
+
+type SearchPageProps = {
+  searchParams?: { q?: string | string[] }
+}
+
+export default function SearchPage({ searchParams }: SearchPageProps) {
+  const rawQ = searchParams?.q
+  const query = (Array.isArray(rawQ) ? rawQ[0] : rawQ) || ''
   const docs: SearchDoc[] = [
     ...PAGES,
     ...getAllBlogPosts().map((post) => ({
@@ -42,10 +67,7 @@ export default function SearchPage() {
       kind: 'Blog' as const,
     })),
   ]
+  const results = rankDocs(docs, query)
 
-  return (
-    <Suspense fallback={<div style={{ padding: '4rem 2rem' }}>Loading search…</div>}>
-      <SearchPageClient docs={docs} />
-    </Suspense>
-  )
+  return <SearchPageClient docs={docs} initial={{ query, results }} />
 }

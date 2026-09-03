@@ -1,14 +1,18 @@
 'use client'
 
 import Link from 'next/link'
-import { useMemo, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useEffect, useMemo, useState } from 'react'
 
 export type SearchDoc = {
   href: string
   title: string
   description: string
   kind: 'Page' | 'Blog' | 'FAQ'
+}
+
+export type InitialSearchView = {
+  query: string
+  results: SearchDoc[]
 }
 
 function score(doc: SearchDoc, q: string): number {
@@ -23,19 +27,41 @@ function score(doc: SearchDoc, q: string): number {
   return s
 }
 
-export default function SearchPageClient({ docs }: { docs: SearchDoc[] }) {
-  const params = useSearchParams()
-  const initial = params.get('q') || ''
-  const [query, setQuery] = useState(initial)
+// Live, client-side ranking for the docs the server already shipped.
+// Keeps the input + first-paint results server-rendered (OS-2671 follow-up:
+// QA reopened saying the page showed a "placeholder state with no functional
+// search input" — root cause was the <Suspense fallback> wrapped around a
+// `useSearchParams` client component, so first paint was just "Loading
+// search…"). Now the input and initial results are server-rendered, and this
+// component only re-ranks as they type.
+export default function SearchPageClient({
+  docs,
+  initial,
+}: {
+  docs: SearchDoc[]
+  initial: InitialSearchView
+}) {
+  const [query, setQuery] = useState(initial.query)
+
+  // Keep the URL in sync so the result is shareable, but never trigger a
+  // server round-trip on every keystroke.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const next = new URL(window.location.href)
+    if (query.trim()) next.searchParams.set('q', query.trim())
+    else next.searchParams.delete('q')
+    window.history.replaceState({}, '', next.toString())
+  }, [query])
 
   const results = useMemo(() => {
     const q = query.trim()
+    if (q === initial.query.trim()) return initial.results
     const ranked = docs
       .map((doc) => ({ doc, s: score(doc, q) }))
       .filter((row) => row.s > 0)
       .sort((a, b) => b.s - a.s)
     return ranked.map((row) => row.doc)
-  }, [docs, query])
+  }, [docs, query, initial.query, initial.results])
 
   return (
     <div
@@ -47,10 +73,20 @@ export default function SearchPageClient({ docs }: { docs: SearchDoc[] }) {
       }}
     >
       <div style={{ maxWidth: '800px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: 'var(--color-accent)', textDecoration: 'none', fontSize: '0.875rem' }}>
+        <Link
+          href="/"
+          style={{ color: 'var(--color-accent)', textDecoration: 'none', fontSize: '0.875rem' }}
+        >
           ← Back to 8os
         </Link>
-        <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '2rem', marginBottom: '0.5rem' }}>
+        <h1
+          style={{
+            fontSize: '2.5rem',
+            fontWeight: 800,
+            marginTop: '2rem',
+            marginBottom: '0.5rem',
+          }}
+        >
           Search
         </h1>
         <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1.5rem' }}>
@@ -59,16 +95,22 @@ export default function SearchPageClient({ docs }: { docs: SearchDoc[] }) {
         <form
           action="/search"
           method="get"
+          role="search"
           onSubmit={(e) => {
+            // Form submits via GET to /search?q=... and the server re-renders
+            // with the same code path, so even users without JS get a working
+            // search.
             e.preventDefault()
-            const next = new URL(window.location.href)
-            if (query.trim()) next.searchParams.set('q', query.trim())
-            else next.searchParams.delete('q')
-            window.history.replaceState({}, '', next.toString())
+            const form = e.currentTarget as HTMLFormElement
+            const input = form.elements.namedItem('q') as HTMLInputElement | null
+            if (input) input.form?.submit()
           }}
           style={{ marginBottom: '2rem' }}
         >
-          <label htmlFor="site-search" style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem' }}>
+          <label
+            htmlFor="site-search"
+            style={{ display: 'block', fontSize: '0.875rem', marginBottom: '0.5rem' }}
+          >
             Search 8os
           </label>
           <input
@@ -79,6 +121,7 @@ export default function SearchPageClient({ docs }: { docs: SearchDoc[] }) {
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Try BaZi, pricing, archetypes…"
             autoFocus
+            aria-label="Search 8os"
             style={{
               width: '100%',
               padding: '0.85rem 1rem',
@@ -90,7 +133,10 @@ export default function SearchPageClient({ docs }: { docs: SearchDoc[] }) {
             }}
           />
         </form>
-        <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem' }}>
+        <p
+          aria-live="polite"
+          style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem' }}
+        >
           {results.length} result{results.length === 1 ? '' : 's'}
           {query.trim() ? ` for “${query.trim()}”` : ''}
         </p>
@@ -114,10 +160,24 @@ export default function SearchPageClient({ docs }: { docs: SearchDoc[] }) {
               >
                 {doc.kind}
               </div>
-              <Link href={doc.href} style={{ color: 'var(--color-accent)', fontWeight: 600, fontSize: '1.125rem' }}>
+              <Link
+                href={doc.href}
+                style={{
+                  color: 'var(--color-accent)',
+                  fontWeight: 600,
+                  fontSize: '1.125rem',
+                }}
+              >
                 {doc.title}
               </Link>
-              <p style={{ margin: '0.35rem 0 0', color: 'var(--color-text-secondary)' }}>{doc.description}</p>
+              <p
+                style={{
+                  margin: '0.35rem 0 0',
+                  color: 'var(--color-text-secondary)',
+                }}
+              >
+                {doc.description}
+              </p>
             </li>
           ))}
         </ul>
