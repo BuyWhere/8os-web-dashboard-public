@@ -103,10 +103,10 @@
   --color-text-primary: #EDE7DD; /* warm cream text */
   --color-text-secondary: #B8AF9F; /* muted warm gray */
   --color-text-muted: #B8AF9F;   /* 8.23:1 on charcoal — WCAG AA (was #9A9184 / #8A8175) */
-  --color-accent: #C79A48;       /* gold, brightened for dark — 6.93:1 on #1A1712 */
+  --color-accent: #d4a366;       /* gold — 7.85:1 on #1A1712 (OS-5952; was #C79A48 = 6.93:1, VidMee still flagged hero eyebrow) */
   --color-accent-hover: #A67F30; /* darker gold — hover state */
   --color-accent-border: #9A7A3A; /* WCAG-AA border for inputs on dark — 5.2:1 on charcoal */
-  --color-accent-gradient: linear-gradient(135deg, #C79A48 0%, #9A6A28 100%); /* gold gradient — 6.1:1 on charcoal */
+  --color-accent-gradient: linear-gradient(135deg, #d4a366 0%, #9A6A28 100%); /* gold gradient */
   --color-on-accent: #fff;       /* button text on gold bg — 3.33:1 light / 12.27:1 dark */
   --color-accent-2: #B05E47;     /* oxblood — 4.63:1 on dark bg (was #C06B54 = 3.84:1 FAIL AA) */
   --color-accent-soft: #3A3125;  /* warm dark tint — active nav / badges */
@@ -119,9 +119,9 @@
   --color-element-metal: #9A9184;   /* warm gray — 5.9:1 on charcoal */
 
   /* Archetype-skin base tokens (dark defaults; skins re-tint accents only) */
-  --skin-color-primary: #C79A48;
+  --skin-color-primary: #d4a366;
   --skin-color-primary-muted: #3A3125;
-  --skin-color-accent: #C79A48;
+  --skin-color-accent: #d4a366;
   --skin-color-surface: #221E18;
   --skin-color-surface-alt: #1F1B15;
   --skin-color-text: #EDE7DD;
@@ -133,20 +133,20 @@
   --skin-color-badge-text: #E4CB94;
   --skin-gradient-hero: linear-gradient(135deg, #221E18 0%, #2A2419 100%);
   --skin-gradient-card: linear-gradient(135deg, #24201A 0%, #1F1B15 100%);
-  --skin-gradient-button: linear-gradient(135deg, #C79A48 0%, #A67F30 100%);
+  --skin-gradient-button: linear-gradient(135deg, #d4a366 0%, #A67F30 100%);
   --skin-glow-primary: 0 8px 24px rgba(0, 0, 0, 0.4);
   --skin-glow-hover: 0 12px 30px rgba(0, 0, 0, 0.5);
   --skin-card-bg: #221E18;
   --skin-card-border: #362F26;
   --skin-card-hover-bg: #2A2419;
   --skin-card-hover-border: #493F31;
-  --skin-button-primary-bg: #C79A48;
+  --skin-button-primary-bg: #d4a366;
   --skin-button-primary-text: #1A1712;
   --skin-button-primary-hover: #D8AB58;
   --skin-button-secondary-bg: #2E281F;
   --skin-button-secondary-text: #E4CB94;
   --skin-button-secondary-border: #362F26;
-  --skin-icon-color: #C79A48;
+  --skin-icon-color: #d4a366;
   --skin-badge-color: #E4CB94;
   --skin-divider: #362F26;
 }
@@ -589,7 +589,7 @@ body:has(.app-sidebar) main:not(.cal-main) {
 /* ── OS-5654 public-page WCAG AA ───────────────────────────────────────────
  * Gold-on-dark and muted-on-dark failures named by QA. Page-local where a
  * global token would break cream (light) contrast. Computed ratios:
- *   --color-accent #C79A48 on #1A1712 = 6.93:1
+ *   --color-accent #d4a366 on #1A1712 = 7.85:1 (OS-5952; was #C79A48 = 6.93:1)
  *   --color-text-secondary #B8AF9F on #1A1712 = 8.23:1
  *   --color-text-muted (dark) #B8AF9F on #1A1712 = 8.23:1
  *   #8FA0D4 on #282522 = 5.91:1 (tag pill, was #6C7CB3 = 3.75:1)
@@ -597,13 +597,13 @@ body:has(.app-sidebar) main:not(.cal-main) {
 
 /* Homepage eyebrow / CTA fill uses --color-accent-border in light (#7A5A1E
  * on cream 5.74:1). In dark that token is #9A7A3A (~3.1:1 on charcoal) so
- * swap to bright gold. White CTA text on #C79A48 is 2.58:1 — use ink. */
+ * swap to bright gold. White CTA text on #d4a366 is 2.28:1 — use ink. */
 [data-theme='dark'] .landing-gold {
   color: var(--color-accent) !important;
 }
 [data-theme='dark'] .landing-gold-fill {
   background: var(--color-accent) !important;
-  color: #0F0D0A !important; /* 4.66:1 on #C79A48 */
+  color: #0F0D0A !important; /* 8.53:1 on #d4a366 */
 }
 
 /* Quiz badge sits on the #0f0a1e hero gradient, not page cream.
@@ -625,7 +625,7 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: var(--color-accent);
 }
 [data-theme='dark'] .sidebar-nav-link[data-active='true'] {
-  color: var(--color-accent); /* #C79A48 on charcoal 6.93:1 */
+  color: var(--color-accent); /* #d4a366 on charcoal 7.85:1 */
 }
 
 /* Blog list hardcoded #4a4a5a separators fail on dark (2.06:1). */
