@@ -61,13 +61,15 @@ export function DailyBig3({ onChanged }: { onChanged?: () => void }) {
     try {
       const res = await fetch('/api/today/big3', { cache: 'no-store' })
       if (!res.ok) {
-        // 404 = no birth profile; hide the block quietly rather than error the page.
-        setData(null); setLoading(false); return
+        // 404 = no birth profile; show empty state rather than hiding the card entirely.
+        setData(null); setPicks([]); setPool([]); setLoading(false); return
       }
       const d = (await res.json()) as Big3Data
       setData(d); setPicks(d.big3 || []); setPool(d.alternates || [])
     } catch (e) {
       console.error('big3 load failed', e)
+      // On error, show empty state instead of blank card
+      setData(null); setPicks([]); setPool([])
     } finally {
       setLoading(false)
     }
