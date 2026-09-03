@@ -358,7 +358,12 @@ const tierDescStyle: React.CSSProperties = { margin: 0, minHeight: '2.75rem', fo
 const tierNoteStyle: React.CSSProperties = { padding: '0.85rem 1rem', borderRadius: '10px', background: 'rgba(167,139,250,0.08)', border: '1px solid rgba(167,139,250,0.15)' };
 const tierNoteTextStyle: React.CSSProperties = { margin: 0, fontSize: '0.82rem', lineHeight: 1.6, color: 'var(--color-text-secondary)', fontStyle: 'italic' };
 
-const featureListStyle: React.CSSProperties = { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 };
+// OS-5961: no flex:1 here. flex:1 grew the UL to fill the card height
+// under stretch, so each footer (and CTA) was pushed down by the UL-height
+// difference — the 321px CTA spread QA measured. With natural-height ULs
+// every footer sits at a fixed offset below its feature list, so all CTAs
+// share one baseline row while cards hug content (align-items:start).
+const featureListStyle: React.CSSProperties = { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem' };
 const excludedFeatureTextColor = 'var(--pricing-excluded-feature-color)';
 const featureItemStyle = (included: boolean): React.CSSProperties => ({
   display: 'flex',
