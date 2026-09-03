@@ -684,11 +684,16 @@ body:has(.app-sidebar) main:not(.cal-main) {
   /* Tablet: force 3 per row so total wraps cleanly into 6 + search = 2 rows. */
   .blog-category-chip { flex: 1 1 calc(33.33% - 10px); min-width: 0; }
 }
-/* OS-6089 QA reopen: All chip should match the canonical --color-on-accent
- * (#fff light / #1a1712 dark) so the inline 'color: #fff' from the component
- * is replaced by the token at the source. No light-mode override is needed —
- * white on #8A6514 = 5.31:1 (AA PASS). The dark block above is the only
- * override required. */
+/* OS-6089 (QA 2026-09-03): inline `color:#fff` on the All chip = 3.65:1 (FAIL).
+ * Specificity: inline=(1,0,0), 2 classes=(0,2,0), 2 classes+attr=(0,3,0).
+ * Chain 2 classes in both rules so neither wins by specificity alone;
+ * source order gives dark (placed first) vs light (placed last). */
+[data-theme='dark'] .blog-category-chip.blog-category-chip--all-active {
+  color: #0F0D0A !important; /* 8.53:1 on #d4a366 */
+}
+.blog-category-chip.blog-category-chip--all-active {
+  color: var(--color-accent-hover) !important; /* 6.81:1 on #8A6514 */
+}
 /* OS-6089: blog search input placeholder contrast in dark mode.
  * Input bg = var(--color-bg-card) (#221e18), placeholder needs ≥4.5:1.
  * Light: #5c5652 on #fff = 10.89:1. Dark: use --color-text-muted (#b8af9f).
