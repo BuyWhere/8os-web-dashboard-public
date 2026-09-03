@@ -165,9 +165,33 @@
 
 /* ── Clerk Sign Up / Sign In button text ─────────────────────────────────────
  * OS-5957: page-local CSS in /login and /signup owns CTA + social label color.
- * Do not globally force #000 on .cl-formButtonPrimary * — that painted Continue
- * black on login's #8A6728 fill (4.05:1, AA fail vs white 5.18:1).
+ * OS-5953: Continue fill on /login darkened #8A6728 → #755521 (5.18:1 → 6.82:1)
+ * so the CTA sits comfortably above AA even under sRGB/gamma variance; previously
+ * the residual ~4.8:1 reading was risky near the threshold. /signup uses
+ * charcoal #0D0D0F (OS-5912) ≈19:1 — no further change needed. Do not globally
+ * force #000 on .cl-formButtonPrimary * — that painted Continue black on
+ * login's gold fill and broke white-on-gold contrast.
  */
+
+/* ── Clerk input placeholders (OS-5953) ────────────────────────────────────
+ * VidMee/agent analysis 2026-09-03 flagged input placeholder text on /login
+ * and /signup <3:1 on the white card. Clerk's default placeholder is too
+ * light to pass AA. Override with --color-text-muted at full opacity (same
+ * pattern as OS-3982 contact form / OS-6089 blog search): light value #5C5652
+ * on white card = 7.22:1 ✓ (also 6.53:1 on cream so safe if the input ever
+ * paints on a cream surface). Scoped to auth surfaces only so we don't
+ * disturb other pages' placeholder styling.
+ */
+.login-auth ::placeholder,
+.signup-auth ::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+.login-auth .cl-formFieldInput::placeholder,
+.signup-auth .cl-formFieldInput::placeholder {
+  color: var(--color-text-muted) !important;
+  opacity: 1 !important;
+}
 
 /* ── Contact form affordance overrides ─────────────────────────────────────
  * Force input backgrounds to white card for strong border contrast in both

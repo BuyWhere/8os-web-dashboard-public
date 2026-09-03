@@ -17,9 +17,12 @@ const CARD = "#FFFFFF"  // white card surface, matches --color-bg-card
 const INK = "#221F1A"   // ink, matches --color-text-primary
 const MUTED = "#6B6257"    // muted body/hint text (5.47:1 on cream)
 const LINK_DARK = "#221F1A" // dark ink for WCAG-strong elements (links, labels)
-// OS-5929: Continue uses white text. Brand gold #B08637 is only 3.33:1 with
-// white, so darken the CTA fill to #8A6728 (5.18:1). Social labels use black.
-const GOLD = "#8A6728"
+// OS-5953: Continue uses white text. Brand gold #B08637 is only 3.33:1 with
+// white. OS-5929 darkened to #8A6728 (5.18:1 AA) but QA 2026-09-03 still
+// measured ~4.8:1 near the AA threshold — risky under sRGB/gamma variance.
+// Drop to #755521 (6.82:1) per QA's explicit suggestion: comfortably above the
+// >5.5:1 target they specified. Social labels stay black (21:1 on white).
+const GOLD = "#755521"
 const CTA_FG = "#FFFFFF"
 const SOCIAL_FG = "#000000" // 21:1 on white — beats Clerk's muted provider colors
 const BORDER = "#767676" // dark gray for WCAG input borders (was #E7DFD2, 1.46:1 fails)
@@ -52,7 +55,7 @@ export default function LoginPage() {
             colorTextSecondary: MUTED,
             // Brand
             colorPrimary: GOLD,
-            colorPrimaryForeground: CTA_FG, // OS-5929: white on #8A6728 = 5.18:1 AA
+            colorPrimaryForeground: CTA_FG, // OS-5953: white on #755521 = 6.82:1 AA
             // Borders & dividers
             colorNeutral: BORDER,
             // Inputs: light surface, dark text
@@ -75,7 +78,7 @@ export default function LoginPage() {
         }}
       />
       <style dangerouslySetInnerHTML={{ __html: `
-        /* OS-5957 / OS-5929: force white on #8A6728 including descendants;
+        /* OS-5957 / OS-5953 / OS-5929: force white on #755521 including descendants;
            social labels black including provider-suffixed classes axe targets. */
         .login-auth .cl-formButtonPrimary,
         .login-auth .cl-formButtonPrimary *,
