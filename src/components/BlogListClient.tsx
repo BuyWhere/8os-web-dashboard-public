@@ -115,6 +115,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                 {CATEGORY_CONFIG[featured.category].icon}
               </span>
               <span
+                className="blog-tag-pill"
                 style={{
                   fontSize: '12px',
                   fontWeight: 600,
@@ -234,6 +235,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
         }}
       >
         <button
+          className={`blog-category-chip${!activeCategory ? ' blog-category-chip--all-active' : ''}`}
           onClick={() => {
             setActiveCategory(null)
             setVisibleCount(POSTS_PER_PAGE)
@@ -258,6 +260,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
           return (
             <button
               key={cat}
+              className={`blog-category-chip${isActive ? ' blog-category-chip--active' : ''}`}
               onClick={() => {
                 setActiveCategory(isActive ? null : cat)
                 setVisibleCount(POSTS_PER_PAGE)

@@ -640,6 +640,21 @@ body:has(.app-sidebar) main:not(.cal-main) {
   background: var(--color-accent-soft) !important;
 }
 
+/* OS-6089: /blog filter chips. Light: white on #8A6514 = 5.31:1 (All
+ * selected) and darkened category inks on #F2E9D6 ≥4.92:1. Dark: those
+ * same inks on --color-accent-soft (#3A3125) collapse to 1.5–2.0:1, and
+ * white on #d4a366 is 2.28:1. Override via class so inline styles lose. */
+[data-theme='dark'] .blog-category-chip--all-active {
+  background: var(--color-accent) !important;
+  color: #0F0D0A !important; /* 8.53:1 on #d4a366 */
+  border-color: var(--color-accent) !important;
+}
+[data-theme='dark'] .blog-category-chip--active {
+  background: var(--color-accent-soft) !important;
+  color: var(--color-text-primary) !important; /* cream on #3A3125 = 10.95:1 */
+  border-color: var(--color-accent) !important;
+}
+
 /* OS-5947: /dashboard/memory metadata + Add CTA contrast.
  * Dark cards (#221E18): VidMee flagged muted metadata (salience/chat) and a
  * disabled-looking Add button. Bump meta to #9ca3af (neutral-400, 6.44:1 on
