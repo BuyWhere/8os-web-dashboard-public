@@ -32,6 +32,16 @@ const ACCENT = 'var(--skin-color-accent, #6366f1)'
 
 const CATEGORY_SUGGESTIONS = ['career', 'wealth', 'health', 'relationships', 'learning', 'lifestyle', 'legacy']
 
+// Starter inspiration cards shown when board is empty (OS-5950)
+const STARTER_ITEMS = [
+  { title: 'Run a marathon', note: 'Crossing the finish line, strong and healthy', category: 'health' },
+  { title: 'Dream home', note: 'A peaceful place I can truly call home', category: 'lifestyle' },
+  { title: 'Financial freedom', note: 'Passive income covering all expenses', category: 'wealth' },
+  { title: 'Published book', note: 'My ideas in print, on shelves', category: 'career' },
+  { title: 'Deep relationships', note: 'Meaningful connections with family and friends', category: 'relationships' },
+  { title: 'Master a new skill', note: 'Fluency in a language or instrument', category: 'learning' },
+]
+
 export default function VisionBoardPage() {
   const [items, setItems] = useState<VisionItem[]>([])
   const [goals, setGoals] = useState<Goal[]>([])
@@ -163,6 +173,7 @@ export default function VisionBoardPage() {
             onChange={(e) => setTitle(e.target.value)}
             placeholder="What future are you picturing? e.g. Run a marathon next year"
             style={inputStyle}
+            className="vision-input"
           />
           <textarea
             value={note}
@@ -170,6 +181,7 @@ export default function VisionBoardPage() {
             placeholder="Why it matters / what it looks like (optional)"
             rows={2}
             style={{ ...inputStyle, resize: 'vertical' }}
+            className="vision-input"
           />
           <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
             <input
@@ -177,6 +189,7 @@ export default function VisionBoardPage() {
               onChange={(e) => setImageUrl(e.target.value)}
               placeholder="Image URL (paste, optional)"
               style={{ ...inputStyle, flex: '2 1 220px' }}
+              className="vision-input"
             />
             <input
               value={category}
@@ -184,6 +197,7 @@ export default function VisionBoardPage() {
               placeholder="Category (optional)"
               list="vision-categories"
               style={{ ...inputStyle, flex: '1 1 140px' }}
+              className="vision-input"
             />
             <datalist id="vision-categories">
               {CATEGORY_SUGGESTIONS.map((c) => <option key={c} value={c} />)}
@@ -199,8 +213,10 @@ export default function VisionBoardPage() {
             <button
               type="submit"
               disabled={!title.trim() || saving}
+              className="vision-add-btn"
               style={{
-                background: ACCENT, border: 'none', borderRadius: 8, color: '#fff',
+                background: ACCENT, border: 'none', borderRadius: 8,
+                color: '#1A1712', // ink on gold: 4.93:1 light / 7.85:1 dark
                 padding: '8px 18px', fontSize: 13, fontWeight: 600,
                 cursor: !title.trim() || saving ? 'not-allowed' : 'pointer',
                 opacity: !title.trim() || saving ? 0.5 : 1, flexShrink: 0,
@@ -214,9 +230,34 @@ export default function VisionBoardPage() {
         {loading ? (
           <div style={{ color: 'var(--color-text-secondary)' }}>Loading your vision board…</div>
         ) : items.length === 0 ? (
-          <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 14, padding: 40, textAlign: 'center' }}>
-            <div style={{ fontSize: 32, marginBottom: 12 }}>❖</div>
-            <div style={{ color: 'var(--color-text-secondary)' }}>Your vision board is empty. Add the futures you&apos;re working toward above, or ask the assistant to add one for you.</div>
+          <div>
+            <p style={{ margin: '0 0 12px', color: 'var(--color-text-secondary)', fontSize: 13 }}>
+              Start with inspiration — click any card to add it to your board, then edit it to make it yours.
+            </p>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))', gap: 16 }}>
+              {STARTER_ITEMS.map((item, i) => (
+                <div
+                  key={i}
+                  style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 14, padding: 14, display: 'flex', flexDirection: 'column', gap: 6, cursor: 'pointer', transition: 'border-color 0.15s' }}
+                  onClick={() => {
+                    setTitle(item.title)
+                    setNote(item.note)
+                    setCategory(item.category)
+                    // Scroll to form
+                    window.scrollTo({ top: 0, behavior: 'smooth' })
+                  }}
+                  onMouseEnter={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = ACCENT }}
+                  onMouseLeave={(e) => { (e.currentTarget as HTMLDivElement).style.borderColor = 'var(--color-border)' }}
+                >
+                  <div style={{ fontSize: 12, fontWeight: 700, color: ACCENT, textTransform: 'uppercase', letterSpacing: 0.6, marginBottom: 2 }}>
+                    {item.category}
+                  </div>
+                  <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--color-text-primary)' }}>{item.title}</div>
+                  {item.note && <div style={{ fontSize: 13, color: 'var(--color-text-secondary)', lineHeight: 1.4 }}>{item.note}</div>}
+                  <div style={{ marginTop: 4, fontSize: 11, color: 'var(--color-text-muted)' }}>+ Add to board</div>
+                </div>
+              ))}
+            </div>
           </div>
         ) : (
           groups.map((group) => (
@@ -255,7 +296,7 @@ export default function VisionBoardPage() {
                             style={{ ...inputStyle, resize: 'vertical' }}
                           />
                           <div style={{ display: 'flex', gap: 8 }}>
-                            <button onClick={() => saveEdit(item)} style={{ ...smallBtn, background: ACCENT, color: '#fff', border: 'none' }}>Save</button>
+                            <button onClick={() => saveEdit(item)} style={{ ...smallBtn, background: ACCENT, color: '#1A1712', border: 'none' }}>Save</button>
                             <button onClick={() => setEditingId(null)} style={smallBtn}>Cancel</button>
                           </div>
                         </>

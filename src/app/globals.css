@@ -658,3 +658,22 @@ body:has(.app-sidebar) main:not(.cal-main) {
   background: #C79A48 !important;
   color: #1A1712 !important; /* 6.93:1 — brighter accent, never white-on-gold */
 }
+
+/* ── Vision board form placeholders (OS-5950) ────────────────────────────────
+ * Inline styles can't set :placeholder, so override via class.
+ * Input bg = --color-bg-primary (#F7F3EC / #1A1712)
+ * Light: #5C5652 on #F7F3EC = 6.53:1 ✓
+ * Dark:  #B8AF9F on #1A1712 = 8.23:1 ✓
+ */
+.vision-input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+/* Vision board Add button: use dark text in dark mode for AA on accent gold.
+ * Light: #221F1A on #B08637 = 4.93:1 ✓
+ * Dark:  #1A1712 on #d4a366 = 7.85:1 ✓ (was #EDE7DD = 1.85:1 ✗)
+ */
+.vision-add-btn {
+  color: #1A1712 !important; /* ink on gold — 4.93:1 light / 7.85:1 dark */
+}
