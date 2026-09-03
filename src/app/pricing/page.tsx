@@ -203,7 +203,7 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              <div style={tierFooterStyle}>
+              <div className="tier-footer" style={tierFooterStyle}>
                 <TierCta tier={tier} />
                 <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
               </div>
@@ -302,21 +302,35 @@ const tiersGridResponsiveStyle = `
     --pricing-excluded-feature-color: #EDE7DD;
     --pricing-included-marker-color: #86EFAC;
   }
-  .tiers-grid { margin-bottom: 5rem; grid-template-columns: repeat(4, 1fr); align-items: stretch; }
+  /* OS-5961: marginTop:auto on .tier-footer pins every CTA to a shared
+     baseline row even when align-items:start lets cards hug content
+     (OS-5960 — subgrid stretch pushed the Agent Connect note ~134px past
+     the 1440x900 fold). Row-level baseline + hug-content coexist. */
+  .tiers-grid { margin-bottom: 5rem; grid-template-columns: repeat(4, 1fr); align-items: start; }
   .tier-card {
     overflow: visible !important;
     min-height: fit-content;
     max-height: none;
   }
+  /* OS-5938 / OS-5960: compact on 900px desktop so feature lists AND the
+     Agent Connect note stay above the fold. VidMee flags the note band
+     (y≈915, h≈85) as clipped card content. */
   @media (max-height: 960px) {
-    .pricing-inner { padding-top: 2.5rem !important; padding-bottom: 3rem !important; }
-    .tiers-grid { margin-bottom: 3rem; gap: 1rem; }
+    .pricing-inner { padding-top: 1.5rem !important; padding-bottom: 2rem !important; }
+    .pricing-page h1 { margin-bottom: 0.5rem !important; font-size: 1.7rem !important; }
+    .tiers-grid { margin-bottom: 2rem; gap: 0.75rem; }
+    .tier-card { padding: 0.95rem !important; gap: 0.5rem !important; }
+    .tier-card ul { gap: 0.28rem !important; }
+    .tier-card ul li { line-height: 1.3 !important; font-size: 0.8rem !important; }
+    .tier-footer { padding-top: 0.55rem !important; padding-bottom: 0.55rem !important; gap: 0.5rem !important; }
   }
+  /* OS-5961: 2-col rows share a baseline pair (rows 1-2 / 3-4); 1-col
+     stacks are inherently aligned. marginTop:auto does the pinning. */
   @media (max-width: 1100px) {
-    .tiers-grid { grid-template-columns: repeat(2, 1fr) !important; }
+    .tiers-grid { grid-template-columns: repeat(2, 1fr) !important; align-items: stretch; }
   }
   @media (max-width: 600px) {
-    .tiers-grid { grid-template-columns: 1fr !important; }
+    .tiers-grid { grid-template-columns: 1fr !important; align-items: stretch; }
   }
 `;
 
