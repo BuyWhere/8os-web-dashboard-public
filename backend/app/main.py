@@ -234,24 +234,96 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
-@app.get("/health", response_model=HealthResponse)
-async def health() -> HealthResponse:
-    database = "ok"
-    redis_status = "ok"
+def _tool_call_route_registered(app: FastAPI) -> bool:
+    """
+    OS-6138: in-process router introspection for POST /api/alignment/tool-call.
 
+    Probes the *route registration*, not the manifest string. The manifest
+    is a static literal that has advertised toolCall through every window
+    where the route was 404, so probing it is tautological.
+
+    Also avoids the Railway 60s health-check timeout: this is a cheap in-memory
+    check with no outbound HTTP.
+    """
+    for route in app.routes:
+        path = getattr(route, "path", None)
+        if path != "/api/alignment/tool-call":
+            continue
+        methods = getattr(route, "methods", None) or set()
+        if "POST" in methods:
+            return True
+    return False
+
+
+async def _alignment_probe() -> tuple[bool, str]:
+    """Return (registered, detail). detail is human-readable for log/response."""
+    try:
+        if _tool_call_route_registered(app):
+            return True, "registered"
+        return False, "POST /api/alignment/tool-call not registered in app.routes"
+    except Exception as exc:  # noqa: BLE001
+        return False, f"probe_error={type(exc).__name__}: {exc}"
+
+
+async def _ping_database() -> bool:
+    """Returns True if the database is reachable, False otherwise."""
     try:
         async with engine.connect() as connection:
             await connection.execute(text("SELECT 1"))
+        return True
     except Exception:
-        database = "error"
+        return False
 
+
+async def _ping_redis() -> bool:
+    """Returns True if Redis is reachable, False otherwise."""
     try:
         await app.state.redis.ping()
+        return True
     except Exception:
-        redis_status = "error"
+        return False
 
-    status_text = "ok" if database == "ok" and redis_status == "ok" else "degraded"
-    return HealthResponse(status=status_text, database=database, redis=redis_status)
+
+async def _build_health_response() -> tuple[HealthResponse, int]:
+    """Probe DB, Redis, and the alignment route. Return (response, status_code).
+
+    Status is 200 only if all three probes succeed; otherwise 503 so the
+    Railway deploy gate fails the new deploy (OS-6138 acceptance test).
+    """
+    db_ok = await _ping_database()
+    redis_ok = await _ping_redis()
+    tool_call_ok, tool_call_detail = await _alignment_probe()
+
+    database = "ok" if db_ok else "error"
+    redis_status = "ok" if redis_ok else "error"
+    alignment_probe = "ok" if tool_call_ok else "not_registered"
+
+    overall_ok = db_ok and redis_ok and tool_call_ok
+    status_text = "ok" if overall_ok else "degraded"
+
+    response = HealthResponse(
+        status=status_text,
+        database=database,
+        redis=redis_status,
+        alignment_probe=alignment_probe,
+        alignment_probe_detail=None if tool_call_ok else tool_call_detail,
+    )
+    return response, 200 if overall_ok else 503
+
+
+@app.get("/health", response_model=HealthResponse)
+async def health() -> JSONResponse:
+    body, status_code = await _build_health_response()
+    # Drop response_model so we can return 503 without it complaining.
+    return JSONResponse(content=body.model_dump(), status_code=status_code)
+
+
+@app.get("/api/health", response_model=HealthResponse)
+async def api_health() -> JSONResponse:
+    # OS-6138: expose the same probe under the /api/ prefix that Railway's
+    # deploy gate hits (api.8os.ai/api/health).
+    body, status_code = await _build_health_response()
+    return JSONResponse(content=body.model_dump(), status_code=status_code)
 
 
 @app.post("/auth/register", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
