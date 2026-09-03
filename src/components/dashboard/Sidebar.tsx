@@ -66,7 +66,7 @@ const NAV_GROUPS: NavGroup[] = [
 ]
 
 interface Goal { id: string; domainId: string; name: string; progress: number }
-interface Props { goals?: Goal[]; initialCollapsed?: boolean }
+interface Props { goals?: Goal[]; initialCollapsed?: boolean; hideGoals?: boolean }
 
 // ── The 8os mark — identical to the landing header ────────────────────────
 function Mark({ size = 24 }: { size?: number }) {
@@ -79,7 +79,7 @@ function Mark({ size = 24 }: { size?: number }) {
   )
 }
 
-export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
+export function Sidebar({ goals = [], initialCollapsed = false, hideGoals = false }: Props) {
   // Collapse state was per-page (useState only; half the pages never passed
   // initialCollapsed), so EVERY navigation remounted the sidebar at a different
   // width and the whole nav (logo included) jumped on each click. localStorage
@@ -216,7 +216,7 @@ export function Sidebar({ goals = [], initialCollapsed = false }: Props) {
       </nav>
 
       {/* Goals momentum, compact, warm */}
-      {!collapsed && goals.length > 0 && (
+      {!hideGoals && !collapsed && goals.length > 0 && (
         <div style={{ padding: '14px 18px', borderTop: `1px solid ${HAIRLINE}`, background: CREAM }}>
           <div style={{ color: MUTED, fontSize: 10.5, fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.1em', marginBottom: 10 }}>
             Your goals

@@ -1,8 +1,31 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type CSSProperties } from 'react'
 import Link from 'next/link'
 import { DashboardPageStyles, ErrorCard, LoadingMessage, SectionCard, SkeletonBlock } from './page-state'
+
+// OS-5949: cards were hard-left at 800px, leaving a vast right-side void on
+// desktop. Center a wider column (same 896px as inbox OS-5945). Chrome copy
+// uses --color-text-secondary so muted labels stay AA on cream/card.
+const BRIEFING_CONTAINER: CSSProperties = {
+  width: '100%',
+  maxWidth: 896,
+  margin: '0 auto',
+}
+
+const chromeLink: CSSProperties = {
+  color: 'var(--color-text-secondary)',
+  fontSize: 13,
+  textDecoration: 'none',
+  display: 'block',
+  marginBottom: 4,
+}
+
+const chromeMeta: CSSProperties = {
+  margin: '4px 0 0',
+  color: 'var(--color-text-secondary)',
+  fontSize: 14,
+}
 
 interface BriefingPayload {
   todayDate: string
@@ -57,7 +80,7 @@ function getArchetypeIcon(archetypeId?: string) {
 
 export function BriefingSkeleton({ showSlowMessage }: { showSlowMessage: boolean }) {
   return (
-    <div style={{ display: 'grid', gap: 20, maxWidth: 800 }}>
+    <div style={{ ...BRIEFING_CONTAINER, display: 'grid', gap: 20 }}>
       <LoadingMessage>
         {showSlowMessage ? 'Generating your briefing...' : 'Loading your briefing...'}
       </LoadingMessage>
@@ -162,10 +185,10 @@ export function BriefingContent() {
     return (
       <>
         <DashboardPageStyles />
-        <div style={{ marginBottom: 28 }}>
-          <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+        <div style={{ ...BRIEFING_CONTAINER, marginBottom: 28 }}>
+          <Link href="/dashboard" style={chromeLink}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Daily Briefing</h1>
-          <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: 14 }}>{todayDate}</p>
+          <p style={chromeMeta}>{todayDate}</p>
         </div>
         <BriefingSkeleton showSlowMessage={showSlowMessage} />
       </>
@@ -176,17 +199,19 @@ export function BriefingContent() {
     return (
       <>
         <DashboardPageStyles />
-        <div style={{ marginBottom: 28 }}>
-          <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+        <div style={{ ...BRIEFING_CONTAINER, marginBottom: 28 }}>
+          <Link href="/dashboard" style={chromeLink}>← Dashboard</Link>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Daily Briefing</h1>
-          <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: 14 }}>{todayDate}</p>
+          <p style={chromeMeta}>{todayDate}</p>
         </div>
-        <ErrorCard
-          title="Could not load your daily briefing"
-          message={state.message}
-          actionLabel="Try again"
-          onAction={() => setRequestKey((value) => value + 1)}
-        />
+        <div style={BRIEFING_CONTAINER}>
+          <ErrorCard
+            title="Could not load your daily briefing"
+            message={state.message}
+            actionLabel="Try again"
+            onAction={() => setRequestKey((value) => value + 1)}
+          />
+        </div>
       </>
     )
   }
@@ -196,19 +221,19 @@ export function BriefingContent() {
   return (
     <>
       <DashboardPageStyles />
-      <div style={{ marginBottom: 28 }}>
-        <Link href="/dashboard" style={{ color: 'var(--color-text-muted)', fontSize: 13, textDecoration: 'none', display: 'block', marginBottom: 4 }}>← Dashboard</Link>
+      <div style={{ ...BRIEFING_CONTAINER, marginBottom: 28 }}>
+        <Link href="/dashboard" style={chromeLink}>← Dashboard</Link>
         <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Daily Briefing</h1>
-        <p style={{ margin: '4px 0 0', color: 'var(--color-text-muted)', fontSize: 14 }}>{data.todayDate}</p>
+        <p style={chromeMeta}>{data.todayDate}</p>
       </div>
 
-      <div style={{ display: 'grid', gap: 20, maxWidth: 800 }}>
+      <div style={{ ...BRIEFING_CONTAINER, display: 'grid', gap: 20 }}>
         <SectionCard accent="var(--color-accent)">
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
             <span style={{ fontSize: 20 }}>{getArchetypeIcon(data.archetype?.archetypeId)}</span>
             <div>
               <div style={{ fontWeight: 600, fontSize: 14 }}>Today&apos;s Insight</div>
-              <div style={{ color: 'var(--color-text-muted)', fontSize: 11 }}>
+              <div style={{ color: 'var(--color-text-secondary)', fontSize: 11 }}>
                 {data.archetype?.archetypeName ?? 'Personalized'} · {data.insight.date}
               </div>
             </div>
@@ -221,10 +246,10 @@ export function BriefingContent() {
         <SectionCard>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
             <h2 style={{ margin: 0, fontSize: 15, fontWeight: 600 }}>Today&apos;s Tasks</h2>
-            <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>{data.todayTasks.length} scheduled</span>
+            <span style={{ color: 'var(--color-text-secondary)', fontSize: 12 }}>{data.todayTasks.length} scheduled</span>
           </div>
           {data.todayTasks.length === 0 ? (
-            <div style={{ color: 'var(--color-text-muted)', fontSize: 13, textAlign: 'center', padding: '16px 0' }}>
+            <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, textAlign: 'center', padding: '16px 0' }}>
               No tasks scheduled for today.
             </div>
           ) : (
@@ -263,7 +288,7 @@ export function BriefingContent() {
                       {task.name}
                     </div>
                     {task.scheduledAt && (
-                      <div style={{ fontSize: 11, color: 'var(--color-text-muted)', marginTop: 1 }}>
+                      <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginTop: 1 }}>
                         {new Date(task.scheduledAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                         {task.duration ? ` · ${task.duration}m` : ''}
                       </div>
@@ -309,7 +334,7 @@ export function BriefingContent() {
                   <div style={{ width: 3, height: 32, borderRadius: 2, background: event.color ?? 'var(--color-accent)', flexShrink: 0 }} />
                   <div>
                     <div style={{ fontSize: 13, color: 'var(--color-text-primary)' }}>{event.title}</div>
-                    <div style={{ fontSize: 11, color: 'var(--color-text-muted)', marginTop: 1 }}>
+                    <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginTop: 1 }}>
                       {new Date(event.startAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' })}
                     </div>
                   </div>
@@ -334,7 +359,7 @@ export function BriefingContent() {
                       <div style={{ height: '100%', width: `${goal.progress * 100}%`, background: 'var(--color-accent)', borderRadius: 2 }} />
                     </div>
                   </div>
-                  <span style={{ color: 'var(--color-text-muted)', fontSize: 12, flexShrink: 0 }}>{Math.round(goal.progress * 100)}%</span>
+                  <span style={{ color: 'var(--color-text-secondary)', fontSize: 12, flexShrink: 0 }}>{Math.round(goal.progress * 100)}%</span>
                 </div>
               ))}
             </div>

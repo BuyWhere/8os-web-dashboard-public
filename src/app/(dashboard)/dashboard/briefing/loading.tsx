@@ -7,14 +7,14 @@ export default function Loading() {
     <div style={pageShellStyle}>
       <main style={pageMainStyle}>
         <DashboardPageStyles />
-        <div style={{ marginBottom: 28 }}>
-          <div style={{ color: '#555', fontSize: 13, marginBottom: 4 }}>← Dashboard</div>
+        <div style={{ width: '100%', maxWidth: 896, margin: '0 auto 28px' }}>
+          <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginBottom: 4 }}>← Dashboard</div>
           <h1 style={{ margin: 0, fontSize: 22, fontWeight: 700 }}>Daily Briefing</h1>
           {/* Stable placeholder, avoid `new Date()` here so the SSR suspense
               fallback and any client reconciliation emit identical text (no
               server-zone vs browser-zone hydration mismatch). The real date
               arrives with the briefing payload in BriefingContent. */}
-          <p style={{ margin: '4px 0 0', color: '#666', fontSize: 14 }}>Today</p>
+          <p style={{ margin: '4px 0 0', color: 'var(--color-text-secondary)', fontSize: 14 }}>Today</p>
         </div>
         <BriefingSkeleton showSlowMessage={false} />
       </main>
