@@ -203,16 +203,16 @@ export default function PricingPage() {
                 ))}
               </ul>
 
-              <div className="tier-footer" style={tierFooterStyle}>
-                <TierCta tier={tier} />
-                <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
-              </div>
-
               {tier.note && (
                 <div style={tierNoteStyle}>
                   <p style={tierNoteTextStyle}>{tier.note}</p>
                 </div>
               )}
+
+              <div className="tier-footer" style={tierFooterStyle}>
+                <TierCta tier={tier} />
+                <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
+              </div>
             </div>
           ))}
         </div>
@@ -307,8 +307,9 @@ const tiersGridResponsiveStyle = `
      baseline row by construction. align-items:start can never align CTAs
      because each card hugs its own height, leaving no free space for
      marginTop:auto to absorb (footer rides each card's feature-list
-     length). The Agent Connect note renders below the CTA so it is the
-     only element past the fold, not a stretched empty slot on every card. */
+     length). The Agent Connect note renders just above the footer (after
+     the feature list) so the footer is the last element and truly
+     bottom-anchors; the note lands mid-card, above the CTA row. */
   .tiers-grid { margin-bottom: 5rem; grid-template-columns: repeat(4, 1fr); align-items: stretch; }
   .tier-card {
     overflow: visible !important;
@@ -399,10 +400,12 @@ const featureCheckStyle = (included: boolean): React.CSSProperties => ({
 // align hugged cards because each card is exactly its own content height.
 // The "Best for" line flows after the CTA and may wrap without moving it.
 const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', paddingTop: '1.25rem', marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '0.75rem', overflow: 'visible' };
-// OS-5961: min-height reserves the two-line slot so the CTA (rendered
-// first, above this line) sits at a fixed offset from the feature list
-// on every card — regardless of how the Best-For text wraps.
-const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600, minHeight: '2.4em' };
+// OS-5961: reserve the two-line Best-For slot (a wrapped line is ~45px at
+// this size) so the CTA above it sits at a fixed offset from the feature
+// list on every card — regardless of how the Best-For text wraps. Without
+// this, a one-line Best-For (Free) shortens the footer and pushes its CTA
+// up ~15px vs the two-line cards.
+const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600, minHeight: '45px' };
 const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--color-text-secondary)' };
 const tierCtaStyle: React.CSSProperties = { display: 'block', width: '100%', textAlign: 'center', padding: '0.9rem 1rem', borderRadius: '12px', background: 'var(--color-accent)', border: '1px solid var(--color-accent)', color: 'var(--skin-button-primary-text)', fontWeight: 800, textDecoration: 'none', fontSize: '0.92rem', boxShadow: '0 10px 24px rgba(34, 31, 26, 0.12)', transition: 'transform 0.2s, background 0.2s, border-color 0.2s' };
 const tierCtaVisibleStyle: React.CSSProperties = { background: 'var(--color-accent-2)', border: '1px solid var(--color-accent-2)', color: '#fff' };
