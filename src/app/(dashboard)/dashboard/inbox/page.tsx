@@ -206,6 +206,26 @@ export default function InboxPage() {
     }
   }
 
+  // OS-5946: dismiss/archive an individual message
+  const [dismissing, setDismissing] = useState<Record<string, boolean>>({})
+  async function dismissMessage(id: string) {
+    setDismissing((s) => ({ ...s, [id]: true }))
+    try {
+      const res = await fetch('/api/inbox/messages', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ids: [id] }),
+      })
+      if (res.ok) {
+        const msg = messages.find((m) => m.id === id)
+        setMessages((ms) => ms.filter((m) => m.id !== id))
+        setUnreadCount((c) => (msg && !msg.read ? Math.max(0, c - 1) : c))
+      }
+    } catch { /* best-effort */ } finally {
+      setDismissing((s) => ({ ...s, [id]: false }))
+    }
+  }
+
   return (
     <div style={{ display: 'flex', minHeight: 'calc(100vh - var(--header-height))', background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)' }}>
       <Sidebar goals={[]} />
@@ -282,6 +302,27 @@ export default function InboxPage() {
                   {m.title || 'Message'}
                 </div>
                 <div style={{ color: 'var(--color-text-muted)', fontSize: 11, whiteSpace: 'nowrap' }}>{fmtWhen(m.createdAt)}</div>
+                {/* OS-5946: per-item dismiss button */}
+                <button
+                  onClick={(e) => { e.stopPropagation(); dismissMessage(m.id) }}
+                  disabled={!!dismissing[m.id]}
+                  title="Dismiss"
+                  aria-label="Dismiss this message"
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    color: 'var(--color-text-muted)',
+                    cursor: dismissing[m.id] ? 'default' : 'pointer',
+                    padding: '2px 6px',
+                    borderRadius: 4,
+                    fontSize: 14,
+                    lineHeight: 1,
+                    opacity: dismissing[m.id] ? 0.5 : 1,
+                    flexShrink: 0,
+                  }}
+                >
+                  ×
+                </button>
                 <span
                   aria-hidden
                   style={{

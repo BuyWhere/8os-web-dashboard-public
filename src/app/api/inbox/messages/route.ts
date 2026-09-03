@@ -1,15 +1,17 @@
 /**
- * /api/inbox/messages — the web-inbox channel's read/mark API (OS-2652).
+ * /api/inbox/messages — the web-inbox channel's read/mark/delete API (OS-2652, OS-5946).
  *
  * NOTE: this deliberately lives UNDER /api/inbox rather than replacing it —
  * GET /api/inbox is the pre-existing TASK inbox (unscheduled tasks, consumed
  * by InboxList.tsx) and must keep working unchanged.
  *
- * GET   — list the user's inbox_messages, reverse-chron, + unreadCount.
- *         ?countOnly=1 returns just { unreadCount } (Sidebar badge).
- *         ?limit=N (default 50, max 200).
- * PATCH — mark read/unread: { ids: string[] } or { all: true }, optional
- *         { read: boolean } (default true). userId-scoped updateMany.
+ * GET    — list the user's inbox_messages, reverse-chron, + unreadCount.
+ *          ?countOnly=1 returns just { unreadCount } (Sidebar badge).
+ *          ?limit=N (default 50, max 200).
+ * PATCH  — mark read/unread: { ids: string[] } or { all: true }, optional
+ *          { read: boolean } (default true). userId-scoped updateMany.
+ * DELETE — dismiss/archive messages: { ids: string[] } or { all: true }.
+ *          userId-scoped deleteMany (OS-5946).
  */
 import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
@@ -80,5 +82,35 @@ export async function PATCH(req: NextRequest) {
   } catch (e) {
     console.error('[inbox/messages] PATCH failed:', e)
     return NextResponse.json({ error: 'Could not update inbox messages.' }, { status: 500 })
+  }
+}
+
+// OS-5946: dismiss/archive individual messages
+export async function DELETE(req: NextRequest) {
+  const auth = await requireAuth(req)
+  if (auth instanceof NextResponse) return auth
+  const userId = auth.userId
+
+  let body: { ids?: unknown; all?: unknown }
+  try {
+    body = await req.json()
+  } catch {
+    return NextResponse.json({ error: 'Invalid JSON body' }, { status: 400 })
+  }
+
+  const all = body.all === true
+  const ids = Array.isArray(body.ids) ? body.ids.filter((x): x is string => typeof x === 'string').slice(0, 200) : []
+  if (!all && ids.length === 0) {
+    return NextResponse.json({ error: 'Provide ids: string[] or all: true' }, { status: 400 })
+  }
+
+  try {
+    const result = await prisma.inboxMessage.deleteMany({
+      where: { userId, ...(all ? {} : { id: { in: ids } }) },
+    })
+    return NextResponse.json({ deleted: result.count })
+  } catch (e) {
+    console.error('[inbox/messages] DELETE failed:', e)
+    return NextResponse.json({ error: 'Could not delete inbox messages.' }, { status: 500 })
   }
 }
