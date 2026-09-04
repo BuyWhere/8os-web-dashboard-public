@@ -2,6 +2,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { SidebarNav } from '@/components/SidebarNav';
 import { ContactForm } from '@/components/ContactForm';
+import { CopyEmailButton } from '@/components/CopyEmailButton';
 
 export const metadata: Metadata = {
   title: 'Contact, 8os',
@@ -81,9 +82,29 @@ export default function ContactPage() {
                   <div className="landing-gold" style={{ fontSize: '0.75rem', fontWeight: 600, color: 'var(--color-accent-border)', textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.5rem' }}>
                     {item.label}
                   </div>
-                  <a href={`mailto:${item.email}`} style={{ color: 'var(--color-text-primary)', textDecoration: 'none', fontSize: '1rem', fontWeight: 500 }}>
-                    {item.email}
-                  </a>
+                  {/* OS-5935: mailto anchor now uses the gold accent token with
+                      an underline + hover state so the link is visually distinct
+                      from the surrounding paragraph text. The CopyEmailButton
+                      beside it gives a second affordance for users who don't have
+                      a mail client configured. */}
+                  <div className="contact-email-row" style={{ display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: '0.25rem' }}>
+                    <a
+                      href={`mailto:${item.email}`}
+                      className="contact-email-link"
+                      style={{
+                        color: 'var(--color-accent)',
+                        textDecoration: 'underline',
+                        textDecorationThickness: '1.5px',
+                        textUnderlineOffset: '3px',
+                        fontSize: '1rem',
+                        fontWeight: 500,
+                        transition: 'color 120ms ease',
+                      }}
+                    >
+                      {item.email}
+                    </a>
+                    <CopyEmailButton email={item.email} />
+                  </div>
                   <p style={{ color: 'var(--color-text-secondary)', fontSize: '0.875rem', marginTop: '0.5rem', lineHeight: 1.5 }}>
                     {item.desc}
                   </p>

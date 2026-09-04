@@ -257,6 +257,33 @@
   color: #FFFFFF !important;
 }
 
+/* ── Contact email link affordance (OS-5935) ───────────────────────────────
+ * QA's previous fix wrapped the address in <a href="mailto:…"> but the inline
+ * style used the same color as the body text and explicitly stripped the
+ * underline, so the link was functionally a mailto but visually
+ * indistinguishable from a paragraph. This rule gives the anchor a visible
+ * gold accent (already WCAG AA on the card surface in both themes) plus a
+ * hover state that thickens the underline and darkens the color. The copy
+ * button next to it gives users without a mail client a second affordance.
+ */
+.contact-email-link {
+  color: var(--color-accent) !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 1.5px !important;
+  text-underline-offset: 3px !important;
+}
+.contact-email-link:hover,
+.contact-email-link:focus-visible {
+  color: var(--color-accent-hover) !important;
+  text-decoration-thickness: 2.5px !important;
+  outline: none;
+}
+.contact-email-link:focus-visible {
+  outline: 2px solid var(--color-accent-border);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 *,
 *::before,
 *::after {
