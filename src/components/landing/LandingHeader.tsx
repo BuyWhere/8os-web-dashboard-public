@@ -48,7 +48,7 @@ export default function LandingHeader() {
         style={{
           maxWidth: 1360,
           margin: '0 auto',
-          padding: '0 2rem',
+          padding: '0 1.5rem',
           height: '68px',
           display: 'flex',
           alignItems: 'center',
