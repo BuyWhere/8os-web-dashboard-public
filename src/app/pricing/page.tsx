@@ -285,16 +285,26 @@ export default function PricingPage() {
 // Keep overflow visible (no clip). Move Agent Connect note below the CTA
 // so the footer slot stays aligned. Tighten hero padding on short desktops.
 const tiersGridResponsiveStyle = `
+  /* OS-2779 r2: WCAG AA contrast on excluded feature items.
+   * VidMee reopen (2026-09-04) on vidmee_ss_9d5b38b6d76b7d1ca14dd282
+   * measured the prior values against card backgrounds:
+   *   #A1A1AA on white (default card) = 2.56:1  FAIL AA
+   *   #EDE7DD on white (in light theme if dark var is inherited) = 1.23:1  FAIL
+   * Replacements computed against globals.css card backgrounds:
+   *   #52525B on #FFFFFF = 7.73:1  PASS AAA
+   *   #A8A29E on #221E18 = 6.57:1  PASS AA
+   * line-through is preserved: it's a legitimate "not included" affordance,
+   * and the original OS-2779 fix (91945819) shipped with it. */
   .pricing-page {
-    --pricing-excluded-feature-color: #A1A1AA;
+    --pricing-excluded-feature-color: #52525B;
     --pricing-included-marker-color: #15803D;
     overflow: visible;
   }
   [data-theme='light'] .pricing-page {
-    --pricing-excluded-feature-color: #6B6257;
+    --pricing-excluded-feature-color: #52525B;
   }
   [data-theme='dark'] .pricing-page {
-    --pricing-excluded-feature-color: #EDE7DD;
+    --pricing-excluded-feature-color: #A8A29E;
     --pricing-included-marker-color: #86EFAC;
   }
   /* OS-5961: equal-height cards + footer marginTop:auto is the only
