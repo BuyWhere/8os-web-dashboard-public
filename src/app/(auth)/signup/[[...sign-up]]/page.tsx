@@ -104,6 +104,12 @@ export default function SignupPage() {
                 elements: {
                   rootBox: { border: "none", borderRadius: 0, boxShadow: "none", background: "transparent" }, // OS-5940: outer wrapper owns the border so the legal <p> below sits flush inside the card
                   card: { border: "none", boxShadow: "none", borderRadius: 0, padding: "24px 24px 0" }, // OS-3873 r5: 24px horizontal padding so inputs/social buttons don't clip at card edges
+                  // OS-6190: Clerk paints an internal 3-layer shadow + 1px ring on
+                  // .cl-cardBox that sits on top of the outer .signup-auth-card and
+                  // produces a nested-card artifact (x=848,y=700 on the live build).
+                  // Strip shadow + border so the inner Clerk card has no chrome of
+                  // its own and the outer wrapper is the only visible card surface.
+                  cardBox: { boxShadow: "none", border: "none", borderRadius: 0, background: "transparent" },
                   header: { display: "none" }, // Hide Clerk's default logo/header branding
                   formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: CTA_FG, background: CTA_BG, backgroundColor: CTA_BG },
                   socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px", color: SOCIAL_FG },
@@ -114,7 +120,7 @@ export default function SignupPage() {
                   formFieldHintText: { color: LINK_DARK },
                   formFieldOptionalText: { color: LINK_DARK }, // dark "Optional" label for WCAG AA 12.4:1
                   footerActionLink: { color: LINK_DARK, fontWeight: 600 }, // dark "Sign in" link for WCAG AA 12.4:1
-                  footer: { padding: "0 24px 20px" }, // OS-5940: keep Clerk's own footer (sign-in link) inside the card
+                  footer: { padding: "0 24px 20px", background: "transparent", boxShadow: "none", border: "none", borderRadius: 0 }, // OS-6190: drop Clerk footer's own chrome so it sits flush against the legal <p>
                 },
               }}
             />
@@ -171,6 +177,11 @@ export default function SignupPage() {
           min-width: 0 !important;
           box-sizing: border-box !important;
         }
+        /* OS-6190: kill Clerk's internal nested-card chrome so only the outer
+           .signup-auth-card has visible borders/shadow. Belt-and-suspenders backup
+           in case the appearance.elements.cardBox override misses the cascade. */
+        .signup-auth .cl-cardBox { box-shadow: none !important; border: none !important; }
+        .signup-auth .cl-card { box-shadow: none !important; border: none !important; background: transparent !important; }
         @media (max-width: 860px) {
           .signup-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 1.5rem !important; padding: 2.5rem 1rem 2rem !important; }
           .signup-pitch { max-width: 100% !important; text-align: center; }
