@@ -79,6 +79,9 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
   const { isLoaded, signUp, setActive } = useSignUp()
   const router = useRouter()
   const advancing = useRef(false)
+  const lastInternalErrorText = useRef('')
+  const bannerRef = useRef<HTMLDivElement | null>(null)
+  const lastBannerAt = useRef<number>(0)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -221,6 +224,62 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, signUp?.status, signUp?.createdSessionId, signUp?.unverifiedFields?.join(',')])
 
+  // OS-6340: Clerk's SignUp widget renders internal error text inside its
+  // iframe-less shadow DOM as `.cl-formFieldErrorText`, `.cl-alert`, and a
+  // generic `.cl-internal-error` variant. Sometimes our fetch patch catches
+  // the upstream call and we own the banner; sometimes Clerk renders an alert
+  // on its own (e.g., retry-exhausted, captcha-required) without going through
+  // fetch at all. Mirror any visible Clerk-internal error text into our banner
+  // so the user always sees one error — not a silent widget re-render.
+  useEffect(() => {
+    if (typeof window === 'undefined') return
+    const root = document.querySelector('.signup-auth') ?? document.body
+    const collectInternalError = (): { text: string; kind: AuthBridgeKind } | null => {
+      const candidates = root.querySelectorAll<HTMLElement>(
+        '.cl-formFieldErrorText, .cl-formFieldError, .cl-alert, .cl-internal-error, [data-clerk-error], [role="alert"]'
+      )
+      // Skip our own banner — its text is already authoritative.
+      for (const el of Array.from(candidates)) {
+        if (el.closest('[data-testid="clerk-sign-up-error"]')) continue
+        const txt = (el.textContent ?? '').trim()
+        if (!txt) continue
+        const lower = txt.toLowerCase()
+        const kind: AuthBridgeKind =
+          lower.includes('password') ? 'password' :
+          lower.includes('already') || lower.includes('exists') ? 'exists' :
+          lower.includes('valid email') || lower.includes('invalid email') ? 'format' :
+          'generic'
+        return { text: txt, kind }
+      }
+      return null
+    }
+
+    const tryMirror = () => {
+      const found = collectInternalError()
+      const text = found?.text ?? ''
+      if (text === lastInternalErrorText.current) return
+      lastInternalErrorText.current = text
+      if (!text) return
+      setBridgeError((prev) => {
+        // Don't clobber an existing explicit fetch-patch error within the same tick.
+        if (prev && Date.now() - prev.at < 250) return prev
+        return {
+          status: prev?.status ?? 422,
+          message: text,
+          endpoint: 'clerk-internal-render',
+          at: Date.now(),
+          kind: found?.kind ?? prev?.kind ?? 'generic',
+        }
+      })
+    }
+
+    tryMirror()
+    const observer = new MutationObserver(() => tryMirror())
+    observer.observe(root, { childList: true, subtree: true, characterData: true })
+    return () => observer.disconnect()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
   // OS-5954 / OS-5915: intercept submit + Continue click. Clerk's type=text
   // fields skip native required/email validation, so empty Continue is a no-op.
   useEffect(() => {
@@ -310,6 +369,21 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
     }
   }, [])
 
+  // OS-6340: when an error fires, scroll the banner into view so it can't be
+  // missed below the fold on tall forms. Also clear any leftover Clerk-internal
+  // .cl-formFieldErrorText so the user sees ONE source of truth.
+  useEffect(() => {
+    if (!bridgeError || typeof window === 'undefined') return
+    if (bridgeError.at === lastBannerAt.current) return
+    lastBannerAt.current = bridgeError.at
+    requestAnimationFrame(() => {
+      const el = bannerRef.current
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      }
+    })
+  }, [bridgeError])
+
   return (
     <div>
       {/* OS-5944: Clerk <SignUp> is client-only. First HTML (and first
@@ -321,6 +395,7 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
       <SignupEmailSkeleton />
       {bridgeError && (
         <div
+          ref={bannerRef}
           role="alert"
           aria-live="polite"
           data-testid="clerk-sign-up-error"
@@ -328,18 +403,19 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
           data-kind={bridgeError.kind ?? 'generic'}
           style={{
             margin: '0 auto 1rem auto',
-            maxWidth: 420,
-            padding: '0.75rem 1rem',
+            maxWidth: 480,
+            padding: '0.875rem 1rem 0.875rem 1.1rem',
             borderRadius: 10,
-            border: '1px solid #E0BFA0',
+            border: '1px solid #B45309',
+            borderLeft: '4px solid #B45309',
             background: '#FFF6EC',
-            color: '#7A3F12',
+            color: '#5C2F0E',
             fontSize: 14,
-            lineHeight: 1.4,
-            boxShadow: '0 1px 2px rgba(122,63,18,0.06)',
+            lineHeight: 1.45,
+            boxShadow: '0 2px 8px rgba(180,83,9,0.10)',
           }}
         >
-          <strong style={{ display: 'block', marginBottom: 2, color: '#5C2F0E' }}>
+          <strong data-testid="clerk-sign-up-error-heading" style={{ display: 'block', marginBottom: 2, color: '#5C2F0E', fontSize: 14 }}>
             {bridgeError.status === 0
               ? 'Connection problem'
               : bridgeError.status === 429
