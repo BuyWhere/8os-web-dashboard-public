@@ -15,15 +15,19 @@ const fraunces = Inter({
   display: 'swap',
 });
 
-// ── Dark header palette (guarantees WCAG AA contrast on every page) ───────
-// Hard-coded light values so the header is readable regardless of the global
-// light/dark theme or any future token changes.
-const INK = '#FFFFFF';
-const GRAY = 'rgba(255, 255, 255, 0.9)';
+// ── Marketing header palette ───────────────────────────────────────────────
+// OS-6344: the dark `rgba(13,13,15,0.92)` header broke the warm cream aesthetic
+// of public pages (notably /signup). Switch to theme tokens so light and dark
+// both inherit the right surface/text/border. The accent ring in the wordmark
+// stays gold; the ink ring now follows --color-text-primary (ink in light, cream
+// in dark) so it reads on either surface.
+const INK = 'var(--color-text-primary)';
+const GRAY = 'var(--color-text-secondary)';
+const HAIRLINE = 'var(--color-border)';
+const HAIRLINE_STRONG = 'var(--color-border-strong)';
 const CREAM = 'var(--color-bg-primary)';
 const GOLD = 'var(--color-accent)';
 const OXBLOOD = '#C06B54';
-const HAIRLINE = 'rgba(255, 255, 255, 0.1)';
 
 const NAV_LINKS = [
   { href: '/features', label: 'Features' },
@@ -40,12 +44,11 @@ function isAppRoute(pathname: string): boolean {
 }
 
 // ── The shared 8os wordmark (same mark as LandingHeader) ──────────────────
-function Mark({ size = 24, on = 'light' }: { size?: number; on?: 'light' | 'cream' }) {
-  const ink = on === 'light' ? INK : INK;
+function Mark({ size = 24 }: { size?: number }) {
   return (
     <svg width={size} height={size} viewBox="0 0 32 32" fill="none" aria-hidden="true">
       <circle cx="16" cy="10.5" r="6" stroke={GOLD} strokeWidth="2" />
-      <circle cx="16" cy="21.5" r="6.5" stroke={ink} strokeWidth="2" />
+      <circle cx="16" cy="21.5" r="6.5" stroke={INK} strokeWidth="2" />
       <path d="M16 6.5 L16 14.5 M12.5 10.5 L19.5 10.5" stroke={OXBLOOD} strokeWidth="1.6" strokeLinecap="round" />
     </svg>
   );
@@ -154,14 +157,17 @@ export function Header() {
   // ── Marketing header (warm editorial, matches the landing) ──────────────
   return (
     <header
-      className={fraunces.variable}
+      className={`${fraunces.variable} marketing-header`}
       style={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         height: 'var(--header-height)',
-        background: 'rgba(13, 13, 15, 0.92)',
+        // OS-6344: warm cream surface instead of near-black. Falls back to the
+        // opaque cream token when backdrop-filter isn't supported so the bar
+        // never disappears into the page background.
+        background: 'rgba(247, 243, 236, 0.85)',
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
         borderBottom: `1px solid ${HAIRLINE}`,
@@ -235,7 +241,11 @@ export function Header() {
                 display: 'inline-flex',
                 alignItems: 'center',
                 background: 'var(--color-accent)',
-                color: '#fff',
+                // OS-6344: use the on-accent token so the CTA text flips with
+                // the theme (white on gold in light = 5.0:1; charcoal on gold
+                // in dark = 7.85:1). The previous #fff hardcode failed AA in
+                // dark mode against the brightened #d4a366 accent.
+                color: 'var(--color-on-accent)',
                 padding: '8px 18px',
                 borderRadius: 8,
                 textDecoration: 'none',
@@ -283,6 +293,35 @@ export function Header() {
           </ClerkLoaded>
         </div>
       </div>
+      {/* OS-6344: in dark mode the cream translucent bar disappears against the
+          warm-charcoal page bg. Re-tint to a dark translucent surface so the
+          bar stays visible AND keeps its hairline + ink contrast. Also adds
+          hover/focus darkening on nav links and the archetype CTA so the bar
+          feels responsive without inline hover handlers. */}
+      <style
+        dangerouslySetInnerHTML={{
+          __html: `
+          [data-theme='dark'] header.marketing-header {
+            background: rgba(26, 23, 18, 0.85) !important;
+          }
+          header.marketing-header { background-color: var(--color-bg-primary); }
+          header.marketing-header nav.header-nav-links a:hover,
+          header.marketing-header nav.header-nav-links a:focus-visible {
+            color: var(--color-text-primary) !important;
+          }
+          header.marketing-header a[href="/login"]:hover,
+          header.marketing-header a[href="/dashboard"]:hover,
+          header.marketing-header a[href="/login"]:focus-visible,
+          header.marketing-header a[href="/dashboard"]:focus-visible {
+            color: var(--color-accent-hover) !important;
+          }
+          header.marketing-header a[href="/onboarding"]:hover,
+          header.marketing-header a[href="/onboarding"]:focus-visible {
+            background: var(--color-accent-hover) !important;
+          }
+        `,
+        }}
+      />
     </header>
   );
 }
