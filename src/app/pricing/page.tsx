@@ -302,7 +302,7 @@ export default function PricingPage() {
 // alignment restored without the fold-clip regression.
 const tiersGridResponsiveStyle = `
   .pricing-page {
-    --pricing-excluded-feature-color: #A1A1AA;
+    --pricing-excluded-feature-color: #767676;
     --pricing-included-marker-color: #15803D;
     overflow: visible;
   }
