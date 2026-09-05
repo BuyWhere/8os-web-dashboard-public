@@ -300,26 +300,24 @@ export default function PricingPage() {
 // removed the in-card callout); that empty track was what forced subgrid to
 // stretch cards past the 1440x900 fold. 4 rows + no empty track = subgrid
 // alignment restored without the fold-clip regression.
+/* OS-6341 r2: use theme-aware var(--color-text-secondary) directly instead of
+   a custom var. --color-text-secondary is contrast-tested for AA in BOTH themes
+   on every card surface:
+     light #6B6257 on #FFFFFF = 5.98:1, on #F2E9D6 (Pro) = 4.96:1
+     dark  #B8AF9F on #221E18 = 7.63:1, on #3A3125 (Pro) = 5.88:1
+   The previous --pricing-excluded-feature-color (#767676 base / #EDE7DD dark)
+   failed axe on the gold-tinted Pro card in light mode (#767676 on #F2E9D6
+   = 3.76:1) and would fail even harder if a dark-mode override leaked onto a
+   light surface. Theme-aware secondary is always correct against the card it
+   sits on. --pricing-included-marker-color stays a custom token because green
+   contrast semantics differ from text. */
 const tiersGridResponsiveStyle = `
   .pricing-page {
-    --pricing-excluded-feature-color: #767676;
     --pricing-included-marker-color: #15803D;
     overflow: visible;
   }
-  [data-theme='light'] .pricing-page {
-    --pricing-excluded-feature-color: #6B6257;
-  }
   [data-theme='dark'] .pricing-page {
-    --pricing-excluded-feature-color: #EDE7DD;
     --pricing-included-marker-color: #86EFAC;
-  }
-  /* OS-6341: fallback when data-theme isn't set (SSR race). Works on both
-     light (#ffffff) and dark (#221E18) card backgrounds. */
-  @media (prefers-color-scheme: dark) {
-    .pricing-page {
-      --pricing-excluded-feature-color: #EDE7DD;
-      --pricing-included-marker-color: #86EFAC;
-    }
   }
   /* OS-5934 / OS-5938 / OS-5961 r2: parent grid defines 4 explicit row tracks
      so the subgrid on .tier-card can inherit them and align CTA rows across
@@ -432,7 +430,13 @@ const tierPeriodStyle: React.CSSProperties = { display: 'block', fontSize: '0.75
 const tierDescStyle: React.CSSProperties = { margin: 0, minHeight: '2.75rem', fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-text-secondary)' };
 
 const featureListStyle: React.CSSProperties = { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 };
-const excludedFeatureTextColor = 'var(--pricing-excluded-feature-color)';
+/* OS-6341 r2: var(--color-text-secondary) is theme-aware and contrast-tested
+   against every card surface (white, gold-tinted Pro, charcoal, warm-tinted
+   Pro dark). Inline this on the <li> / <span> for axe — the previous
+   --pricing-excluded-feature-color (#767676 base) failed on the gold-tinted
+   Pro card (3.76:1) and the dark override (#EDE7DD) failed on the same Pro
+   card in light mode (1.02:1). Theme-aware secondary eliminates both. */
+const excludedFeatureTextColor = 'var(--color-text-secondary)';
 const featureItemStyle = (included: boolean): React.CSSProperties => ({
   display: 'flex',
   alignItems: 'flex-start',
