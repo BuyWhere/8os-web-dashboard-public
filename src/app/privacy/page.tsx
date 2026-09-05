@@ -1,23 +1,10 @@
 import Link from 'next/link'
-import { revalidate } from 'next/cache'
-
-export const dynamic = 'force-dynamic'
-export const revalidate = 3600  // Revalidate every hour
-
-function getCurrentDate(): string {
-  return new Date().toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric'
-  })
-}
 
 // This is a plain server component — no 'use client' needed.
 // All colours are CSS variables, resolved by globals.css against data-theme
 // (set synchronously by the boot script before first paint).
 // Dark-mode overrides for legal-page text are in globals.css.
 export default function PrivacyPage() {
-  const lastUpdated = getCurrentDate()
   return (
     <main style={{
       minHeight: '100vh',
@@ -33,7 +20,7 @@ export default function PrivacyPage() {
         <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '2rem', marginBottom: '0.5rem' }}>
           Privacy Policy
         </h1>
-        <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem' }}>Updated: {new Date().toISOString().slice(0,10)}</p>
+        <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem' }}>Last updated: September 5, 2026</p>
 
         <div style={{ lineHeight: 1.8, color: 'var(--color-text-secondary)' }}>
           <section style={{ marginBottom: '2.5rem' }}>

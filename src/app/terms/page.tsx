@@ -1,20 +1,7 @@
 import Link from 'next/link'
-import { revalidate } from 'next/cache'
-
-export const dynamic = 'force-dynamic'
-export const revalidate = 3600  // Revalidate every hour
-
-function getCurrentDate(): string {
-  return new Date().toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric'
-  })
-}
 
 // Plain server component — colours resolved by globals.css against data-theme.
 export default function TermsPage() {
-  const lastUpdated = getCurrentDate()
   return (
     <main style={{
       minHeight: '100vh',
@@ -30,7 +17,7 @@ export default function TermsPage() {
         <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '2rem', marginBottom: '0.5rem' }}>
           Terms of Service
         </h1>
-        <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem' }}>Last updated: {lastUpdated}</p>
+        <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem' }}>Last updated: September 5, 2026</p>
 
         <div style={{ lineHeight: 1.8, color: 'var(--color-text-secondary)' }}>
           <section style={{ marginBottom: '2.5rem' }}>
