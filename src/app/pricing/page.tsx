@@ -313,6 +313,14 @@ const tiersGridResponsiveStyle = `
     --pricing-excluded-feature-color: #EDE7DD;
     --pricing-included-marker-color: #86EFAC;
   }
+  /* OS-6341: fallback when data-theme isn't set (SSR race). Works on both
+     light (#ffffff) and dark (#221E18) card backgrounds. */
+  @media (prefers-color-scheme: dark) {
+    .pricing-page {
+      --pricing-excluded-feature-color: #EDE7DD;
+      --pricing-included-marker-color: #86EFAC;
+    }
+  }
   /* OS-5934 / OS-5938 / OS-5961 r2: parent grid defines 4 explicit row tracks
      so the subgrid on .tier-card can inherit them and align CTA rows across
      cards. Tracks = header (auto) / desc (auto) / features (1fr) / footer
