@@ -43,10 +43,10 @@ export default function SignupPage() {
           extending to full viewport and leaving ~68px of empty space at the
           bottom. Combined with align-items:center this vertically centers the
           hero copy and the auth card at 1440x900 with no orphaned whitespace. */}
-      {/* OS-5655 r2: Constrain left column to 440px max to prevent the pitch from
-          stretching and leaving excessive whitespace between it and the Clerk card.
-          The 500px→440px reduction eliminates ~120px of unallocated grid space. */}
-      <div className="signup-grid" style={{ maxWidth: 1360, width: "100%", boxSizing: "border-box", margin: "0 auto", minHeight: "calc(100vh - var(--header-height))", display: "grid", gridTemplateColumns: "minmax(0, 440px) minmax(0, 520px)", alignItems: "center", gap: "3rem", padding: "2rem 2rem 2rem" }}>
+      {/* OS-5655 r3: Set left column to match pitch content width (460px). The pitch
+          max-width is 460px, so matching the column to that size eliminates the
+          whitespace between the pitch text and the right column. */}
+      <div className="signup-grid" style={{ maxWidth: 1360, width: "100%", boxSizing: "border-box", margin: "0 auto", minHeight: "calc(100vh - var(--header-height))", display: "grid", gridTemplateColumns: "minmax(0, 460px) minmax(0, 520px)", alignItems: "center", gap: "3rem", padding: "2rem 2rem 2rem" }}>
         {/* Left, product context. The 8os wordmark lives in the global Header, so
             we don't repeat it here — it would compete with the header and split
             attention across two brand marks on the same page. */}
