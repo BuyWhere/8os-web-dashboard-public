@@ -1,7 +1,16 @@
 import Link from 'next/link'
 
+function getCurrentDate(): string {
+  return new Date().toLocaleDateString('en-US', {
+    month: 'long',
+    day: 'numeric',
+    year: 'numeric'
+  })
+}
+
 // Plain server component — colours resolved by globals.css against data-theme.
 export default function TermsPage() {
+  const lastUpdated = getCurrentDate()
   return (
     <main style={{
       minHeight: '100vh',
@@ -17,7 +26,7 @@ export default function TermsPage() {
         <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '2rem', marginBottom: '0.5rem' }}>
           Terms of Service
         </h1>
-        <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem' }}>Last updated: September 4, 2026</p>
+        <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem' }}>Last updated: {lastUpdated}</p>
 
         <div style={{ lineHeight: 1.8, color: 'var(--color-text-secondary)' }}>
           <section style={{ marginBottom: '2.5rem' }}>
