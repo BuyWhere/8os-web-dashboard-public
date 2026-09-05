@@ -43,7 +43,7 @@ export default function SignupPage() {
           extending to full viewport and leaving ~68px of empty space at the
           bottom. Combined with align-items:center this vertically centers the
           hero copy and the auth card at 1440x900 with no orphaned whitespace. */}
-      <div className="signup-grid" style={{ maxWidth: 1360, width: "100%", boxSizing: "border-box", margin: "0 auto", minHeight: "calc(100vh - var(--header-height))", display: "grid", gridTemplateColumns: "minmax(0, 1fr) minmax(0, 520px)", alignItems: "center", gap: "3rem", padding: "2rem 2rem 2rem" }}>
+      <div className="signup-grid" style={{ maxWidth: 1360, width: "100%", boxSizing: "border-box", margin: "0 auto", minHeight: "calc(100vh - var(--header-height))", display: "grid", gridTemplateColumns: "minmax(0, 500px) minmax(0, 520px)", alignItems: "center", gap: "3rem", padding: "2rem 2rem 2rem" }}>
         {/* Left, product context. The 8os wordmark lives in the global Header, so
             we don't repeat it here — it would compete with the header and split
             attention across two brand marks on the same page. */}
