@@ -1,6 +1,8 @@
 import Link from 'next/link'
+import { revalidate } from 'next/cache'
 
 export const dynamic = 'force-dynamic'
+export const revalidate = 3600  // Revalidate every hour
 
 function getCurrentDate(): string {
   return new Date().toLocaleDateString('en-US', {
