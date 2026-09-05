@@ -443,8 +443,13 @@ const featureCheckStyle = (included: boolean): React.CSSProperties => ({
   marginTop: '0.1rem',
 });
 
+// OS-6350: footer uses flex column with CTA first, "Best for" below.
+  // Varying text lengths (34-77 chars) made footer heights differ and CTA
+  // buttons misalign. Set min-height on "Best for" container to normalize.
 const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)', paddingTop: '1rem', paddingBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', overflow: 'visible' };
-const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600 };
+// OS-6350: "Best for" text varies 34-77 chars, causing footer heights to differ
+// and CTA buttons to misalign. Set min-height to normalize footer height.
+const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600, minHeight: '2.4em', display: 'flex', alignItems: 'flex-start' };
 const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--color-text-secondary)' };
 /* OS-5961 r2: every CTA shares the same padding/font so all four buttons
  * render at the same computed height (~56px incl. 1px border). Earlier Pro
