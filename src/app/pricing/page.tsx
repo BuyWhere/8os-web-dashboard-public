@@ -423,7 +423,11 @@ const popularBadgeStyle: React.CSSProperties = { position: 'absolute', top: '-12
 
 const tierHeaderStyle: React.CSSProperties = { display: 'flex', flexDirection: 'column', gap: '0.75rem' };
 const tierNameStyle: React.CSSProperties = { margin: '0 0 0.2rem', fontSize: '1.15rem', fontWeight: 800 };
-const tierTaglineStyle: React.CSSProperties = { margin: 0, fontSize: '0.8rem', color: 'var(--skin-badge-color)', fontWeight: 700 };
+// OS-6348: var(--skin-badge-color) varies by archetype skin (bronze #7A5A1E light /
+// #E4CB94 dark) and fails AA on some card surfaces. Switch to theme-aware
+// var(--color-text-secondary) which passes AA on all card backgrounds in both
+// light and dark modes (5.98:1 / 4.96:1 / 7.63:1 / 5.88:1).
+const tierTaglineStyle: React.CSSProperties = { margin: 0, fontSize: '0.8rem', color: 'var(--color-text-secondary)', fontWeight: 700 };
 const tierPriceBlockStyle: React.CSSProperties = { textAlign: 'left' };
 const tierPriceStyle: React.CSSProperties = { display: 'block', fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1 };
 const tierPeriodStyle: React.CSSProperties = { display: 'block', fontSize: '0.75rem', color: 'var(--color-text-primary)', marginTop: '0.15rem' };
