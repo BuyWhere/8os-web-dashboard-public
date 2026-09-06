@@ -50,7 +50,8 @@ const nextConfig = {
       // OS-6358: /privacy+ (trailing plus, e.g. from copy-pasted or auto-linked
       // URLs) 404s — there is no literal `privacy+` App Router segment. The
       // canonical legal page is /privacy. Redirect instead of a generic 404.
-      { source: '/privacy+', destination: '/privacy', permanent: false },
+      // Note: + is a regex special char in Next.js redirects, must escape as \\+
+      { source: '/privacy\\+', destination: '/privacy', permanent: false },
     ]
   },
 }
