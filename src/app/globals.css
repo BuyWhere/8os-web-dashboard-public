@@ -723,6 +723,12 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: var(--color-text-muted) !important;
 }
 
+/* OS-6403: blog readTime metadata needs explicit dark override.
+ * Uses #9ca3af (neutral-400) = 6.53:1 on #221e18. */
+[data-theme='dark'] .blog-read-time {
+  color: #9ca3af !important;
+}
+
 /* Article/list tag pills: cream on dark accent-soft (10.95:1). Light uses
  * darkened category colors on #F2E9D6 (see BlogListClient). */
 [data-theme='dark'] .blog-tag-pill {
@@ -787,15 +793,21 @@ body:has(.app-sidebar) main:not(.cal-main) {
 .blog-category-chip.blog-category-chip--all-active {
   color: var(--color-on-accent) !important; /* #fff = 5.31:1 on #8A6514 */
 }
-/* OS-6089: blog search input placeholder contrast in dark mode.
- * Input bg = var(--color-bg-card) (#221e18), placeholder needs ≥4.5:1.
- * Light: #5c5652 on #fff = 10.89:1. Dark: use --color-text-muted (#b8af9f).
- * Pre-existing rule below. Hardened with explicit darker fallback so an
- * unscripted default UA opacity can never wash out the placeholder. */
+/* OS-6403: blog search input placeholder + icon contrast in dark mode.
+ * Input bg = var(--color-bg-card), text needs ≥4.5:1.
+ * Light: #5c5652 on #fff = 10.89:1. Dark: use #9ca3af (neutral-400)
+ * = 6.53:1 on #221e18. Component uses inline color for icon, override here. */
 .blog-search-input::placeholder {
   color: var(--color-text-muted);
   opacity: 1;
   text-shadow: none;
+}
+[data-theme='dark'] .blog-search-input::placeholder {
+  color: #9ca3af !important;
+}
+/* OS-6403: search icon in blog uses var(--color-text-secondary), needs dark override. */
+[data-theme='dark'] .blog-search-icon {
+  color: #9ca3af !important;
 }
 
 /* OS-5947: /dashboard/memory metadata + Add CTA contrast.

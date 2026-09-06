@@ -153,7 +153,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
               <div style={{ display: 'flex', gap: '12px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
                 <time dateTime={featured.isoDate}>{featured.date}</time>
                 <span>·</span>
-                <span>{featured.readTime}</span>
+                <span className="blog-read-time">{featured.readTime}</span>
               </div>
               <span
                 style={{
@@ -185,6 +185,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
             viewBox="0 0 16 16"
             fill="none"
             aria-hidden="true"
+            className="blog-search-icon"
             style={{
               position: 'absolute',
               left: '12px',
@@ -340,7 +341,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                     </time>
                   )}
                   {post.readTime && <span className="blog-meta-dot" style={{ color: 'var(--color-text-muted)', fontSize: '12px' }}>·</span>}
-                  {post.readTime && <span style={{ color: 'var(--color-text-secondary)', fontSize: '12px' }}>{post.readTime}</span>}
+                  {post.readTime && <span className="blog-read-time" style={{ color: 'var(--color-text-secondary)', fontSize: '12px' }}>{post.readTime}</span>}
                 </div>
                 <h2
                   style={{
