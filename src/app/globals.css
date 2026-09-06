@@ -714,8 +714,15 @@ body:has(.app-sidebar) main:not(.cal-main) {
 .sidebar-nav-link[data-active='true'] {
   color: var(--color-accent);
 }
+[data-theme='dark'] .sidebar-nav-link {
+  color: var(--color-text-secondary); /* #B8AF9F on #1A1712 = 8.23:1 */
+}
 [data-theme='dark'] .sidebar-nav-link[data-active='true'] {
   color: var(--color-accent); /* #d4a366 on charcoal 7.85:1 */
+}
+/* OS-6414: sidebar "ON THIS PAGE" label needs explicit dark override */
+[data-theme='dark'] .sidebar-nav-label {
+  color: var(--color-text-muted) !important; /* #B8AF9F on #1A1712 = 8.23:1 */
 }
 
 /* Blog list hardcoded #4a4a5a separators fail on dark (2.06:1). */

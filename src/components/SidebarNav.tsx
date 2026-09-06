@@ -102,6 +102,7 @@ export function SidebarNav({ sections }: { sections: NavSection[] }) {
       >
         <div className="sidebar-nav-inner" onClick={(e) => e.stopPropagation()}>
           <p
+            className="sidebar-nav-label"
             style={{
               fontSize: '0.6875rem',
               fontWeight: 600,
@@ -132,6 +133,7 @@ export function SidebarNav({ sections }: { sections: NavSection[] }) {
         }}
       >
         <p
+          className="sidebar-nav-label"
           style={{
             fontSize: '0.6875rem',
             fontWeight: 600,
