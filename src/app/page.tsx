@@ -359,12 +359,13 @@ export default function Home() {
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
+              alignItems: 'stretch',
               gap: '2rem 2.5rem',
               marginTop: '2.75rem',
             }}
           >
             {FEATURES.map((f) => (
-              <div key={f.title}>
+              <div key={f.title} style={{ height: '100%' }}>
                 <div
                   style={{
                     width: '2.25rem',

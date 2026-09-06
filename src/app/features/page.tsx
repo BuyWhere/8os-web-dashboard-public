@@ -134,8 +134,10 @@ export default function FeaturesPage() {
 
           <section id="all-features" style={{ marginBottom: '4rem', width: '100%' }}>
             {/* OS-5939: 280px minmax so 1440x900 with sidebar is 3 cols, not cramped 4. */}
+            {/* OS-6415: align-items: stretch + height: 100% for equal card heights */}
             <div className="features-card-grid" style={{
               display: 'grid',
+              alignItems: 'stretch',
               width: '100%',
               gap: '1.5rem',
             }}>
@@ -145,6 +147,7 @@ export default function FeaturesPage() {
                   border: '1px solid var(--color-border)',
                   borderRadius: '12px',
                   padding: '1.75rem',
+                  height: '100%',
                 }}>
                   <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{f.icon}</div>
                   <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '0.5rem', color: 'var(--color-text-primary)' }}>
