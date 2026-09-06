@@ -33,6 +33,7 @@ const NAV_LINKS = [
   { href: '/features', label: 'Features' },
   { href: '/pricing', label: 'Pricing' },
   { href: '/blog', label: 'Blog' },
+  { href: '/about', label: 'About' },
 ];
 
 // Authenticated app routes — inside these the header shows the logged-in
