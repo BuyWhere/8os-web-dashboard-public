@@ -50,7 +50,7 @@ const TIERS = [
     period: 'per month',
     description: 'Full dashboard + goal tracking. Connect your own AI agent for journaling and insights.',
     cta: 'Start Agent Connect',
-    ctaHref: '/onboarding',
+    ctaHref: '/signup?plan=agent-connect',
     highlighted: false,
     features: [
       { label: 'Everything in Free', included: true },
