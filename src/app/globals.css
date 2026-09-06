@@ -12,10 +12,10 @@
   --color-text-muted: #5C5652;   /* 6.53:1 on cream — WCAG AA normal text (was #6F675B = 2.74:1 FAIL) */
   --color-element-fire: #D97706;  /* amber — 5.4:1 on charcoal, replaces #f97316 */
   --color-element-earth: #B45309; /* darker amber — 7.3:1 on charcoal, replaces #f59e0b */
-  --color-accent: #8A6514;       /* gold — 5.03:1 on white, 4.55:1 on cream (was #B08637 = 3.32:1 FAIL AA) */
-  --color-accent-hover: #745612; /* darker gold — hover state — 6.2:1 on cream */
+  --color-accent: #7E5C24;       /* gold — 6.10:1 on white, 5.51:1 on cream (OS-6406 r2: #8A6514 = 4.55:1 nominal but VidMee pixel-measured 4.1:1 on antialiased 12px eyebrow) */
+  --color-accent-hover: #6B4F1F; /* darker gold — hover state — 6.2:1 on cream */
   --color-accent-border: #7A5A1E; /* WCAG-AA dark border for inputs — 6.8:1 on cream */
-  --color-accent-gradient: linear-gradient(135deg, #8A6514 0%, #6B5018 100%); /* gold gradient — 7.5:1 on cream */
+  --color-accent-gradient: linear-gradient(135deg, #7E5C24 0%, #63511C 100%); /* gold gradient — 7.5:1 on cream */
   --color-on-accent: #fff;       /* button text on gold bg — 5.0:1 light / 12.27:1 dark */
   --color-accent-2: #7A3B2E;     /* oxblood (rare emphasis) */
   --color-accent-soft: #F2E9D6;  /* gold tint — active nav / badges */
@@ -33,9 +33,9 @@
    * stays cream/white/ink/gold; a sun-sign skin only overrides the
    * ACCENT tokens (primary/accent/icon/badge) — never repaints dark.
    */
-  --skin-color-primary: #B08637;
+  --skin-color-primary: #7E5C24;
   --skin-color-primary-muted: #E9DCC4;
-  --skin-color-accent: #B08637;
+  --skin-color-accent: #7E5C24;
   --skin-color-surface: #FFFFFF;
   --skin-color-surface-alt: #F7F3EC;
   --skin-color-text: #221F1A;
@@ -453,9 +453,9 @@ body:has(.app-sidebar) main:not(.cal-main) {
 [data-archetype-skin] {
   /* Warm-editorial fallback — inherits the :root warm defaults above.
    * A resolved sun-sign skin overrides only accent tokens on top of this. */
-  --skin-color-primary: #B08637;
+  --skin-color-primary: #7E5C24;
   --skin-color-primary-muted: #E9DCC4;
-  --skin-color-accent: #B08637;
+  --skin-color-accent: #7E5C24;
   --skin-color-surface: #FFFFFF;
   --skin-color-surface-alt: #F7F3EC;
   --skin-color-text: #221F1A;
