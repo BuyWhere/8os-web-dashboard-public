@@ -52,6 +52,11 @@ const nextConfig = {
       // canonical legal page is /privacy. Redirect instead of a generic 404.
       // Note: + is a regex special char in Next.js redirects, must escape as \\+
       { source: '/privacy\\+', destination: '/privacy', permanent: false },
+      // OS-6496: /join was 404 on Railway (no vercel.json redirect). Belt-and-suspenders
+      // alongside the Vercel platform layer so Railway standalone builds also work.
+      { source: '/join', destination: '/signup', permanent: false },
+      // OS-6496: bare /waitlist/join (without /api prefix) should also work.
+      { source: '/waitlist/join', destination: '/api/waitlist/join', permanent: false },
     ]
   },
 }
