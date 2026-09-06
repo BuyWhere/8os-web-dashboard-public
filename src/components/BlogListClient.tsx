@@ -267,17 +267,23 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
         </div>
       </div>
 
-      {/* Category Filter Chips — wrap on one row when the 1360px shell
-          has room (OS-5941); still wrap cleanly at narrower widths. */}
+      {/* Category Filter Chips — compact single row on desktop (OS-6404).
+          nowrap + overflow-x ensures no orphan second row regardless of
+          available width. */}
       <div
         className="blog-category-chips"
         style={{
           display: 'flex',
-          flexWrap: 'wrap',
-          gap: '6px',
+          flexWrap: 'nowrap',
+          overflowX: 'auto',
+          gap: '4px',
           marginBottom: '28px',
+          scrollbarWidth: 'none',
         }}
       >
+        <style>{`
+          .blog-category-chips::-webkit-scrollbar { display: none; }
+        `}</style>
         <button
           className={`blog-category-chip${!activeCategory ? ' blog-category-chip--all-active' : ''}`}
           onClick={() => {
@@ -289,11 +295,13 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
             color: !activeCategory ? '#fff' : 'var(--color-text-primary)',
             border: `1px solid ${!activeCategory ? 'var(--color-accent)' : 'var(--color-border)'}`,
             borderRadius: '8px',
-            padding: '6px 12px',
+            padding: '5px 10px',
             fontSize: '12px',
             fontWeight: 500,
             cursor: 'pointer',
             transition: 'all 0.2s',
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
           }}
         >
           All ({posts.length})
@@ -314,14 +322,16 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                 color: isActive ? config.color : 'var(--color-text-primary)',
                 border: `1px solid ${isActive ? config.color + '40' : 'var(--color-border)'}`,
                 borderRadius: '8px',
-                padding: '6px 12px',
+                padding: '5px 10px',
                 fontSize: '12px',
                 fontWeight: 500,
                 cursor: 'pointer',
                 transition: 'all 0.2s',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
+                gap: '4px',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
               }}
             >
               <span>{config.icon}</span>
