@@ -102,6 +102,13 @@ interface AssistantChatProps {
   onClose?: () => void
 }
 
+const SUGGESTED_PROMPTS = [
+  'What should I focus on today?',
+  'Summarize this week',
+  'Help me plan tomorrow',
+  'What are my open goals?',
+]
+
 const TOOL_NAMES: Record<string, string> = {
   get_goals: 'Reading goals', update_goal: 'Updating goal',
   get_projects: 'Reading projects', create_project: 'Creating project', update_project: 'Updating project',
@@ -132,7 +139,6 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
   const [captureNote, setCaptureNote] = useState<string | null>(null)
   const [micSupported, setMicSupported] = useState(false)
   const [isRecording, setIsRecording] = useState(false)
-  const [bootstrapped, setBootstrapped] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const recognitionRef = useRef<AnySpeechRecognition | null>(null)
@@ -185,20 +191,13 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
             }
           }
         }
-      } catch { /* ignore — welcome greeting will show */ }
-      if (!cancelled) setBootstrapped(true)
+      } catch { /* ignore — empty state will show */ }
     })()
     return () => { cancelled = true }
   }, [])
 
-  useEffect(() => {
-    if (bootstrapped && messages.length === 0 && !conversationId) {
-      setMessages([{
-        id: 'welcome', role: 'assistant',
-        content: "Hi, I'm your 8os Coach. I can shape your goals, projects, tasks, and calendar around your archetype, or just capture a quick thought.\n\nWhat's on your mind?",
-      }])
-    }
-  }, [bootstrapped, conversationId, messages.length])
+  // First-run empty state (greeting + prompt chips) is rendered in the chat
+  // body when there are no user messages yet — no synthetic welcome bubble.
 
   const loadConversations = useCallback(async () => {
     setIsLoadingHistory(true)
@@ -220,9 +219,10 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
     setMessages([]); setConversationId(null); setShowHistory(false)
   }, [])
 
-  const sendMessage = useCallback(async () => {
-    if (!input.trim() || isLoading) return
-    const userMessage: Message = { id: `user_${Date.now()}`, role: 'user', content: input.trim() }
+  const sendMessage = useCallback(async (preset?: string) => {
+    const text = (preset ?? input).trim()
+    if (!text || isLoading) return
+    const userMessage: Message = { id: `user_${Date.now()}`, role: 'user', content: text }
     setMessages((prev) => [...prev, userMessage])
     setInput('')
     setIsLoading(true)
@@ -270,6 +270,13 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
       setMessages((prev) => [...prev, { id: `error_${Date.now()}`, role: 'assistant', content: 'Sorry, I encountered an error. Please try again.' }])
     } finally { setIsLoading(false); setIsExecutingTool(false) }
   }, [input, isLoading, conversationId])
+
+  const visibleMessages = messages.filter((message) => (
+    message.role !== 'tool' &&
+    !(message.role === 'assistant' && !message.content?.trim() && !(message.toolCalls && message.toolCalls.length))
+  ))
+  const isFirstRun = !conversationId && !visibleMessages.some((m) => m.role === 'user')
+  const showEmptyState = mode === 'chat' && !isLoading && isFirstRun
 
   // Quick-capture: same endpoint QuickAdd used (/api/nlp).
   const sendCapture = useCallback(async () => {
@@ -431,12 +438,44 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
       {/* Messages / capture body */}
       {mode === 'chat' ? (
         <div style={{ flex: 1, overflowY: 'auto', padding: 16, display: 'flex', flexDirection: 'column', gap: 12, background: CREAM }}>
-          {messages.filter((message) => (
-            // Never show raw tool-output ('tool' role = internal JSON) or empty
-            // assistant plumbing messages — only real conversation.
-            message.role !== 'tool' &&
-            !(message.role === 'assistant' && !message.content?.trim() && !(message.toolCalls && message.toolCalls.length))
-          )).map((message) => (
+          {showEmptyState && (
+            <div
+              data-testid="coach-empty-state"
+              style={{
+                flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center',
+                alignItems: 'flex-start', gap: 14, padding: '8px 4px',
+              }}
+            >
+              <div>
+                <p style={{ margin: 0, fontFamily: 'var(--font-serif-coach), Georgia, serif', fontSize: 18, fontWeight: 600, color: INK, letterSpacing: '-0.01em' }}>
+                  Hi, I&apos;m your 8os Coach
+                </p>
+                <p style={{ margin: '8px 0 0', fontSize: 13.5, lineHeight: 1.55, color: GRAY }}>
+                  I can shape your goals, projects, tasks, and calendar around your archetype — or just capture a quick thought. Try a prompt to get started.
+                </p>
+              </div>
+              <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }} role="list" aria-label="Suggested prompts">
+                {SUGGESTED_PROMPTS.map((prompt) => (
+                  <button
+                    key={prompt}
+                    type="button"
+                    role="listitem"
+                    onClick={() => void sendMessage(prompt)}
+                    disabled={isLoading}
+                    style={{
+                      padding: '7px 12px', borderRadius: 999, background: SURFACE,
+                      border: `1px solid ${HAIRLINE}`, color: INK, fontSize: 12.5,
+                      cursor: isLoading ? 'not-allowed' : 'pointer', textAlign: 'left',
+                      lineHeight: 1.35, fontFamily: 'inherit',
+                    }}
+                  >
+                    {prompt}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+          {!showEmptyState && visibleMessages.map((message) => (
             <div key={message.id} style={{ display: 'flex', justifyContent: message.role === 'user' ? 'flex-end' : 'flex-start' }}>
               <div style={{ maxWidth: '86%', borderRadius: 14,
                 borderTopRightRadius: message.role === 'user' ? 4 : 14,
@@ -509,7 +548,7 @@ export default function AssistantChat({ isLarge = false, onToggleSize, onClose }
             placeholder={mode === 'capture' ? 'Capture a task or thought...' : 'Ask your coach anything...'} rows={1}
             style={{ flex: 1, background: CREAM, color: INK, borderRadius: 10, padding: '9px 13px', fontSize: 13.5, resize: 'none',
               border: `1px solid ${HAIRLINE}`, outline: 'none', minHeight: 40, maxHeight: 120, fontFamily: 'inherit', lineHeight: 1.5 }} />
-          <button onClick={() => (mode === 'capture' ? sendCapture() : sendMessage())} disabled={!input.trim() || isLoading} aria-label="Send"
+          <button onClick={() => (mode === 'capture' ? sendCapture() : void sendMessage())} disabled={!input.trim() || isLoading} aria-label="Send"
             style={{ flexShrink: 0, width: 40, height: 40, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center',
               background: `linear-gradient(135deg, ${GOLD} 0%, ${GOLD_DARK} 100%)`, color: '#fff', border: 'none',
               cursor: (!input.trim() || isLoading) ? 'not-allowed' : 'pointer', opacity: (!input.trim() || isLoading) ? 0.5 : 1, transition: 'opacity 0.12s' }}>

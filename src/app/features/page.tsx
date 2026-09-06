@@ -74,11 +74,18 @@ export default function FeaturesPage() {
       color: 'var(--color-text-primary)',
       padding: '4rem 2rem',
     }}>
-      <div style={{ maxWidth: '1360px', margin: '0 auto', display: 'flex', gap: '2.5rem', alignItems: 'flex-start' }}>
+      <div style={{
+        width: '100%',
+        maxWidth: '1360px',
+        margin: '0 auto',
+        display: 'flex',
+        gap: '2.5rem',
+        alignItems: 'flex-start',
+      }}>
 
         <SidebarNav sections={SECTIONS} />
 
-        <main style={{ flex: 1, minWidth: 0 }}>
+        <main style={{ flex: '1 1 0%', minWidth: 0, width: '100%', paddingBottom: '6rem' }}>
           <Link href="/" style={{ color: 'var(--color-accent)', textDecoration: 'none', fontSize: '0.875rem' }}>
             ← Back to 8os
           </Link>
@@ -99,7 +106,7 @@ export default function FeaturesPage() {
                 background: 'var(--color-accent)',
                 border: '1px solid var(--color-accent)',
                 borderRadius: '12px',
-                color: '#fff',
+                color: 'var(--color-on-accent)',
                 textDecoration: 'none',
                 fontSize: '0.95rem',
                 fontWeight: 700,
@@ -125,10 +132,13 @@ export default function FeaturesPage() {
             </div>
           </section>
 
-          <section id="all-features" style={{ marginBottom: '4rem' }}>
-            <div style={{
+          <section id="all-features" style={{ marginBottom: '4rem', width: '100%' }}>
+            {/* OS-5939: 280px minmax so 1440x900 with sidebar is 3 cols, not cramped 4. */}
+            {/* OS-6415: align-items: stretch + height: 100% for equal card heights */}
+            <div className="features-card-grid" style={{
               display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+              alignItems: 'stretch',
+              width: '100%',
               gap: '1.5rem',
             }}>
               {features.map((f) => (
@@ -137,6 +147,7 @@ export default function FeaturesPage() {
                   border: '1px solid var(--color-border)',
                   borderRadius: '12px',
                   padding: '1.75rem',
+                  height: '100%',
                 }}>
                   <div style={{ fontSize: '2rem', marginBottom: '0.75rem' }}>{f.icon}</div>
                   <h3 style={{ fontSize: '1rem', fontWeight: 600, marginBottom: '0.5rem', color: 'var(--color-text-primary)' }}>
@@ -155,7 +166,7 @@ export default function FeaturesPage() {
               padding: '1rem 2rem',
               background: 'linear-gradient(135deg, var(--color-accent) 0%, var(--color-accent) 100%)',
               borderRadius: '12px',
-              color: '#fff',
+              color: 'var(--color-on-accent)',
               textDecoration: 'none',
               fontSize: '1rem',
               fontWeight: 700,
@@ -165,6 +176,16 @@ export default function FeaturesPage() {
           </section>
         </main>
       </div>
+      <style>{`
+        .features-card-grid {
+          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        }
+        @media (max-width: 700px) {
+          .features-card-grid {
+            grid-template-columns: 1fr;
+          }
+        }
+      `}</style>
     </div>
   );
 }

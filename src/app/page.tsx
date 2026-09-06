@@ -44,8 +44,8 @@ const GRAY = 'var(--color-text-secondary)'
 const CREAM = 'var(--color-bg-primary)'
 const SURFACE = 'var(--color-bg-card)'
 // Theme-aware gold: light --color-accent-border #7A5A1E on cream ≈ 5.74:1;
-// dark --color-accent #C79A48 on charcoal ≈ 6.93:1. Hardcoded #6E531F was
-// 6.50:1 on cream but only 2.48:1 on dark (OS-5654).
+// dark --color-accent #d4a366 on charcoal ≈ 7.85:1 (OS-5952). Hardcoded
+// #6E531F was 6.50:1 on cream but only 2.48:1 on dark (OS-5654).
 const GOLD = 'var(--color-accent-border)'
 const HAIRLINE = 'var(--color-border)'
 const OXBLOOD = 'var(--color-accent-2)'
@@ -359,12 +359,13 @@ export default function Home() {
             style={{
               display: 'grid',
               gridTemplateColumns: 'repeat(3, 1fr)',
+              alignItems: 'stretch',
               gap: '2rem 2.5rem',
               marginTop: '2.75rem',
             }}
           >
             {FEATURES.map((f) => (
-              <div key={f.title}>
+              <div key={f.title} style={{ height: '100%' }}>
                 <div
                   style={{
                     width: '2.25rem',

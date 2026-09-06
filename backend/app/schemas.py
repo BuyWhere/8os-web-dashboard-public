@@ -35,6 +35,11 @@ class HealthResponse(BaseModel):
     status: str
     database: str
     redis: str
+    # OS-6138: in-process probe of POST /api/alignment/tool-call route
+    # registration. "ok" when registered, "not_registered" when missing.
+    # Drives Railway deploy gate via the response status code (200/503).
+    alignment_probe: str = "ok"
+    alignment_probe_detail: str | None = None
 
 
 class AppleExchangeRequest(BaseModel):

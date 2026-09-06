@@ -7,13 +7,14 @@ interface CheckoutButtonProps {
   tier: 'agent-connect' | 'pro';
   label: string;
   style?: React.CSSProperties;
+  className?: string;
 }
 
 function signupHref(tier: CheckoutButtonProps['tier']) {
   return `/signup?plan=${encodeURIComponent(tier)}`;
 }
 
-export function CheckoutButton({ tier, label, style }: CheckoutButtonProps) {
+export function CheckoutButton({ tier, label, style, className }: CheckoutButtonProps) {
   const { isLoaded, isSignedIn } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -31,7 +32,7 @@ export function CheckoutButton({ tier, label, style }: CheckoutButtonProps) {
   // Never POST /api/stripe/checkout unauthenticated — that 401s and looks like a dead CTA (OS-5647).
   if (!isLoaded || !isSignedIn) {
     return (
-      <a href={signupHref(tier)} style={sharedStyle}>
+      <a href={signupHref(tier)} style={sharedStyle} className={className}>
         {label}
       </a>
     );
@@ -76,6 +77,7 @@ export function CheckoutButton({ tier, label, style }: CheckoutButtonProps) {
       <button
         onClick={handleClick}
         disabled={loading}
+        className={className}
         style={{
           ...sharedStyle,
           opacity: loading ? 0.7 : 1,

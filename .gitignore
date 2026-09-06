@@ -2,60 +2,48 @@
 node_modules/
 .pnp
 .pnp.js
-.yarn/install-state.gz
 
-# Testing
-coverage/
-test-results/
-playwright-report/
-playwright/.cache/
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+env/
+dist/
+*.egg-info/
 
-# Next.js
+# Build outputs
+dist/
+build/
 .next/
 out/
-build/
-
-# Production
-dist/
-
-# Logs
-*.log
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
 # Environment
 .env
-.env*.local
-.env.development
-.env.production
+.env.local
+.env.*.local
 
-# Vercel
-.vercel
-
-# Railway
-.railway
-
-# IDE
-.vscode/
+# IDE / OS
+.DS_Store
 .idea/
+.vscode/
 *.swp
 *.swo
-.DS_Store
+Thumbs.db
 
-# Misc
-.tsbuildinfo
-*.tsbuildinfo
-tsbuildinfo
-.env.*
-*.env
-.secrets
-*.secrets
-__pycache__/
-*.pyc
-.venv/
-venv/
-.turbo/
-*.sqlite
-tsconfig.tsbuildinfo
-node_modules
+# Logs
+*.log
+logs/
+
+# Docker
+docker-compose.override.yml
+
+# Coverage
+coverage/
+.nyc_output/
+
+# Secrets
+*.pem
+*.key
+*.p12

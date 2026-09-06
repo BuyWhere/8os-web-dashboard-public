@@ -2,7 +2,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import { patchClerkAutocomplete } from '../clerkAutocomplete'
 
-describe('clerkAutocomplete (OS-5894)', () => {
+describe('clerkAutocomplete (OS-5894 / OS-5937)', () => {
   const src = fs.readFileSync(path.join(__dirname, '../clerkAutocomplete.ts'), 'utf8')
 
   it('maps login password to current-password and signup to new-password', () => {
@@ -30,5 +30,11 @@ describe('clerkAutocomplete (OS-5894)', () => {
       return
     }
     patchClerkAutocomplete(root, 'login')
+  })
+
+  it('wraps document.createElement so password inputs get autocomplete before insert', () => {
+    expect(src).toContain('wrapCreateElement')
+    expect(src).toContain('patchedCreateElement')
+    expect(src).toContain("tagName.toLowerCase() === 'input'")
   })
 })

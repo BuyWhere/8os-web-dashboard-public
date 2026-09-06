@@ -36,8 +36,8 @@ export function ProtectedSessionGuard({ children }: { children: React.ReactNode 
           alignItems: 'center',
           justifyContent: 'center',
           padding: '2rem',
-          color: 'var(--color-text-secondary, #555)',
-          background: 'var(--color-bg-primary, #fafaf8)',
+          color: 'var(--color-text-secondary, #5C5652)',
+          background: 'var(--color-bg-primary, #F7F3EC)',
         }}
       >
         Checking session…
@@ -58,8 +58,8 @@ export function ProtectedSessionGuard({ children }: { children: React.ReactNode 
           gap: '0.75rem',
           padding: '2rem',
           textAlign: 'center',
-          background: 'var(--color-bg-primary, #fafaf8)',
-          color: 'var(--color-text-primary, #1a1a1a)',
+          background: 'var(--color-bg-primary, #F7F3EC)',
+          color: 'var(--color-text-primary, #221F1A)',
         }}
       >
         <p style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>

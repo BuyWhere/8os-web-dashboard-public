@@ -173,8 +173,12 @@
 }
 
 .metal { color: var(--color-text-primary); }
-.wood { color: #15803d; }
-.fire { color: #b45309; }
+
+/* OS-5959 r2: darker element colors for AA margin on white.
+ * Light: #166534 on #ffffff = 7.13:1 ✓ (was #15803d = 5.02:1 marginal).
+ * Light: #a3420e on #ffffff = 6.28:1 ✓ (was #b45309 = 5.02:1 marginal). */
+.wood { color: #166534; }
+.fire { color: #a3420e; }
 .water { color: #0369a1; }
 .earth { color: #92400e; }
 

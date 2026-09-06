@@ -9,8 +9,8 @@ export default function DashboardLoading() {
         alignItems: 'center',
         justifyContent: 'center',
         padding: '2rem',
-        color: 'var(--color-text-secondary, #555)',
-        background: 'var(--color-bg-primary, #fafaf8)',
+        color: 'var(--color-text-secondary, #5C5652)',
+        background: 'var(--color-bg-primary, #F7F3EC)',
       }}
     >
       Loading…

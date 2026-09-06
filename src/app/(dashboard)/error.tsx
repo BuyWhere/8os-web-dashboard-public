@@ -25,7 +25,8 @@ export default function DashboardError({
         gap: '0.75rem',
         padding: '2rem',
         textAlign: 'center',
-        background: 'var(--color-bg-primary, #fafaf8)',
+        background: 'var(--color-bg-primary, #F7F3EC)',
+        color: 'var(--color-text-primary, #221F1A)',
       }}
     >
       <h2 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 600 }}>

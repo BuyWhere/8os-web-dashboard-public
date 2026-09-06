@@ -1,10 +1,17 @@
 'use client'
 
-// OS-5894: Clerk hosted <SignIn>/<SignUp> inputs often omit autocomplete, so
-// Chrome warns "[DOM] Input elements should have autocomplete attributes
-// (suggested: current-password)" and password managers get weaker hints.
-// Patch after mount + on DOM mutations. Login passwords use current-password;
-// signup passwords use new-password; email/identifier use email.
+// OS-5894 / OS-5937: Clerk hosted <SignIn>/<SignUp> inputs often omit
+// autocomplete, so Chrome warns "[DOM] Input elements should have
+// autocomplete attributes (suggested: current-password)" at create time
+// and password managers get weaker hints.
+//
+// Chrome logs the warning when the <input> is first inserted without the
+// attribute, so a post-mount MutationObserver is too late to silence the
+// console. We also wrap document.createElement so password/email inputs
+// get autocomplete before Clerk appends them.
+//
+// Login passwords use current-password; signup passwords use new-password;
+// email/identifier use email.
 
 export type ClerkAutocompleteMode = 'login' | 'signup'
 
@@ -35,6 +42,14 @@ function desiredAutocomplete(input: HTMLInputElement, mode: ClerkAutocompleteMod
   return null
 }
 
+export function applyAutocomplete(input: HTMLInputElement, mode: ClerkAutocompleteMode): void {
+  const next = desiredAutocomplete(input, mode)
+  if (!next) return
+  const current = input.getAttribute('autocomplete')
+  if (current === next) return
+  input.setAttribute('autocomplete', next)
+}
+
 export function patchClerkAutocomplete(
   root: ParentNode = document,
   mode: ClerkAutocompleteMode = 'login'
@@ -42,18 +57,55 @@ export function patchClerkAutocomplete(
   const inputs = root.querySelectorAll('input')
   inputs.forEach((el) => {
     if (!(el instanceof HTMLInputElement)) return
-    const next = desiredAutocomplete(el, mode)
-    if (!next) return
-    const current = el.getAttribute('autocomplete')
-    if (current === next) return
-    el.setAttribute('autocomplete', next)
+    applyAutocomplete(el, mode)
   })
+}
+
+function wrapCreateElement(mode: ClerkAutocompleteMode): () => void {
+  if (typeof document === 'undefined') return () => {}
+  const proto = Document.prototype
+  const original = proto.createElement
+  proto.createElement = function patchedCreateElement(
+    this: Document,
+    tagName: string,
+    options?: ElementCreationOptions
+  ) {
+    const el = original.call(this, tagName, options)
+    if (typeof tagName === 'string' && tagName.toLowerCase() === 'input' && el instanceof HTMLInputElement) {
+      const apply = () => applyAutocomplete(el, mode)
+      const origSet = el.setAttribute.bind(el)
+      el.setAttribute = ((name: string, value: string) => {
+        origSet(name, value)
+        if (name === 'type' || name === 'name' || name === 'id') apply()
+      }) as HTMLInputElement['setAttribute']
+      const origType = Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'type')
+      if (origType?.set) {
+        Object.defineProperty(el, 'type', {
+          configurable: true,
+          enumerable: origType.enumerable,
+          get() {
+            return origType.get?.call(el) ?? ''
+          },
+          set(v: string) {
+            origType.set!.call(el, v)
+            apply()
+          },
+        })
+      }
+      queueMicrotask(apply)
+    }
+    return el
+  } as typeof original
+  return () => {
+    proto.createElement = original
+  }
 }
 
 export function observeClerkAutocomplete(
   container: ParentNode,
   mode: ClerkAutocompleteMode
 ): () => void {
+  const unwrap = wrapCreateElement(mode)
   patchClerkAutocomplete(container, mode)
   const mo = new MutationObserver(() => patchClerkAutocomplete(container, mode))
   mo.observe(container instanceof Element ? container : document.body, {
@@ -62,5 +114,8 @@ export function observeClerkAutocomplete(
     attributes: true,
     attributeFilter: ['name', 'type', 'id', 'autocomplete'],
   })
-  return () => mo.disconnect()
+  return () => {
+    mo.disconnect()
+    unwrap()
+  }
 }

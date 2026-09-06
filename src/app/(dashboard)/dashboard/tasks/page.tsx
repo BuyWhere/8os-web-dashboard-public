@@ -351,10 +351,10 @@ export default function TasksPage() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  const group = (title: string, list: Task[], empty: string, opts?: { overdue?: boolean }) => (
+  const group = (title: string, list: Task[], empty: string, opts?: { overdue?: boolean; addable?: boolean }) => (
     <TaskGroup
       key={title}
-      title={title} taskList={list} emptyMessage={empty} overdue={opts?.overdue}
+      title={title} taskList={list} emptyMessage={empty} overdue={opts?.overdue} addable={opts?.addable}
       toggleComplete={toggleComplete} startEdit={startEdit} saveEdit={saveEdit}
       editingId={editingId} editValue={editValue} setEditValue={setEditValue}
       completing={completing} setEditingId={setEditingId}
@@ -400,9 +400,11 @@ export default function TasksPage() {
           {/* Search + filters */}
           <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
             <input
+              className="tasks-search-input"
               value={search}
               onChange={e => setSearch(e.target.value)}
               placeholder="Search tasks…"
+              aria-label="Search tasks"
               style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 6, color: 'var(--color-text-primary)', padding: '6px 10px', fontSize: 12, width: 170 }}
             />
             <select
@@ -445,17 +447,28 @@ export default function TasksPage() {
           <div style={{ background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 14, padding: 40, textAlign: 'center' }}>
             <div style={{ fontSize: 32, marginBottom: 12 }}>✦</div>
             <div style={{ color: 'var(--color-text-secondary)', marginBottom: 16 }}>No tasks yet. Press ⌘K to add your first task.</div>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true }))}
+              style={{
+                fontSize: 13, fontWeight: 600, padding: '8px 16px', borderRadius: 8,
+                border: '1px solid var(--color-border-strong)', background: 'transparent',
+                color: 'var(--color-text-primary)', cursor: 'pointer',
+              }}
+            >
+              + Add task
+            </button>
           </div>
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 400px), 1fr))', gap: 20 }}>
             <div>
               {overdueTasks.length > 0 && group('Overdue', overdueTasks, '', { overdue: true })}
-              {group('In Progress', inProgressTasks, 'No tasks in progress')}
-              {group('Today', todayTasks, 'Nothing scheduled for today')}
-              {group('Upcoming', upcomingTasks, 'No upcoming tasks')}
+              {group('In Progress', inProgressTasks, 'No tasks in progress', { addable: true })}
+              {group('Today', todayTasks, 'Nothing scheduled for today', { addable: true })}
+              {group('Upcoming', upcomingTasks, 'No upcoming tasks', { addable: true })}
             </div>
             <div>
-              {group('Unscheduled', unscheduledTasks, 'All tasks are scheduled')}
+              {group('Unscheduled', unscheduledTasks, 'All tasks are scheduled', { addable: true })}
               {group('Recently Done', doneTasks, 'No completed tasks yet')}
             </div>
           </div>
@@ -465,6 +478,23 @@ export default function TasksPage() {
       <QuickAdd />
 
       {/* Undo toast */}
+      <style jsx global>{`
+        /* Placeholder is often 50–60% opacity of inherited color — bump to a
+           full-opacity AA token on the card surface (OS-5948).
+           Light: #5C5652 on #FFFFFF = 7.08:1; Dark: #B8AF9F on #221E18 = 8.23:1. */
+        .tasks-search-input::placeholder {
+          color: var(--color-text-muted);
+          opacity: 1;
+        }
+        .tasks-search-input::-webkit-input-placeholder {
+          color: var(--color-text-muted);
+          opacity: 1;
+        }
+        .tasks-search-input::-moz-placeholder {
+          color: var(--color-text-muted);
+          opacity: 1;
+        }
+      `}</style>
       {toast && (
         <div style={{ position: 'fixed', bottom: 24, left: '50%', transform: 'translateX(-50%)', zIndex: 60, display: 'flex', alignItems: 'center', gap: 14, background: 'var(--color-bg-card)', border: '1px solid var(--color-border)', borderRadius: 10, padding: '10px 16px', boxShadow: '0 8px 24px rgba(0,0,0,0.3)', fontSize: 13, color: 'var(--color-text-primary)', maxWidth: '90vw' }}>
           <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{toast.msg}</span>
@@ -480,6 +510,7 @@ function TaskGroup(props: {
   taskList: Task[]
   emptyMessage: string
   overdue?: boolean
+  addable?: boolean
   toggleComplete: (t: Task) => void
   startEdit: (t: Task) => void
   saveEdit: (t: Task) => void
@@ -502,7 +533,7 @@ function TaskGroup(props: {
   saveSubtasks: (t: Task, subtasks: { id: string; text: string; done: boolean }[]) => void
   selectedId: string | null
 }) {
-  const { title, taskList, emptyMessage, overdue, bulkDefer, replanOverdue, replanning } = props
+  const { title, taskList, emptyMessage, overdue, addable, bulkDefer, replanOverdue, replanning } = props
   return (
     <div style={{ marginBottom: 24 }}>
       <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
@@ -522,7 +553,42 @@ function TaskGroup(props: {
         )}
       </div>
       {taskList.length === 0 ? (
-        <div style={{ color: 'var(--color-text-muted)', fontSize: 13, padding: '12px 0' }}>{emptyMessage}</div>
+        <div
+          style={{
+            color: 'var(--color-text-muted)',
+            fontSize: 13,
+            padding: 16,
+            borderRadius: 10,
+            border: '1px dashed var(--color-border-strong)',
+            background: 'var(--color-bg-card)',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'flex-start',
+            gap: 10,
+          }}
+        >
+          <span>{emptyMessage}</span>
+          {addable && (
+            <button
+              type="button"
+              onClick={() => {
+                window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', metaKey: true, bubbles: true }))
+              }}
+              style={{
+                fontSize: 12,
+                fontWeight: 600,
+                padding: '6px 12px',
+                borderRadius: 6,
+                border: '1px solid var(--color-border-strong)',
+                background: 'transparent',
+                color: 'var(--color-text-primary)',
+                cursor: 'pointer',
+              }}
+            >
+              + Add task
+            </button>
+          )}
+        </div>
       ) : (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           {taskList.map(t => <TaskTile key={t.id} t={t} overdue={overdue} {...props} />)}

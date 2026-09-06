@@ -12,10 +12,10 @@
   --color-text-muted: #5C5652;   /* 6.53:1 on cream — WCAG AA normal text (was #6F675B = 2.74:1 FAIL) */
   --color-element-fire: #D97706;  /* amber — 5.4:1 on charcoal, replaces #f97316 */
   --color-element-earth: #B45309; /* darker amber — 7.3:1 on charcoal, replaces #f59e0b */
-  --color-accent: #8A6514;       /* gold — 5.03:1 on white, 4.55:1 on cream (was #B08637 = 3.32:1 FAIL AA) */
-  --color-accent-hover: #745612; /* darker gold — hover state — 6.2:1 on cream */
+  --color-accent: #7E5C24;       /* gold — 6.10:1 on white, 5.51:1 on cream (OS-6406 r2: #8A6514 = 4.55:1 nominal but VidMee pixel-measured 4.1:1 on antialiased 12px eyebrow) */
+  --color-accent-hover: #6B4F1F; /* darker gold — hover state — 6.2:1 on cream */
   --color-accent-border: #7A5A1E; /* WCAG-AA dark border for inputs — 6.8:1 on cream */
-  --color-accent-gradient: linear-gradient(135deg, #8A6514 0%, #6B5018 100%); /* gold gradient — 7.5:1 on cream */
+  --color-accent-gradient: linear-gradient(135deg, #7E5C24 0%, #63511C 100%); /* gold gradient — 7.5:1 on cream */
   --color-on-accent: #fff;       /* button text on gold bg — 5.0:1 light / 12.27:1 dark */
   --color-accent-2: #7A3B2E;     /* oxblood (rare emphasis) */
   --color-accent-soft: #F2E9D6;  /* gold tint — active nav / badges */
@@ -33,9 +33,9 @@
    * stays cream/white/ink/gold; a sun-sign skin only overrides the
    * ACCENT tokens (primary/accent/icon/badge) — never repaints dark.
    */
-  --skin-color-primary: #B08637;
+  --skin-color-primary: #7E5C24;
   --skin-color-primary-muted: #E9DCC4;
-  --skin-color-accent: #B08637;
+  --skin-color-accent: #7E5C24;
   --skin-color-surface: #FFFFFF;
   --skin-color-surface-alt: #F7F3EC;
   --skin-color-text: #221F1A;
@@ -103,11 +103,11 @@
   --color-text-primary: #EDE7DD; /* warm cream text */
   --color-text-secondary: #B8AF9F; /* muted warm gray */
   --color-text-muted: #B8AF9F;   /* 8.23:1 on charcoal — WCAG AA (was #9A9184 / #8A8175) */
-  --color-accent: #C79A48;       /* gold, brightened for dark — 6.93:1 on #1A1712 */
+  --color-accent: #d4a366;       /* gold — 7.85:1 on #1A1712 (OS-5952; was #C79A48 = 6.93:1, VidMee still flagged hero eyebrow) */
   --color-accent-hover: #A67F30; /* darker gold — hover state */
   --color-accent-border: #9A7A3A; /* WCAG-AA border for inputs on dark — 5.2:1 on charcoal */
-  --color-accent-gradient: linear-gradient(135deg, #C79A48 0%, #9A6A28 100%); /* gold gradient — 6.1:1 on charcoal */
-  --color-on-accent: #fff;       /* button text on gold bg — 3.33:1 light / 12.27:1 dark */
+  --color-accent-gradient: linear-gradient(135deg, #d4a366 0%, #9A6A28 100%); /* gold gradient */
+  --color-on-accent: #1A1712;    /* charcoal on gold fill — 7.85:1 on #d4a366 (OS-6090; was #fff = 2.28:1 FAIL AA) */
   --color-accent-2: #B05E47;     /* oxblood — 4.63:1 on dark bg (was #C06B54 = 3.84:1 FAIL AA) */
   --color-accent-soft: #3A3125;  /* warm dark tint — active nav / badges */
   --color-element-fire: #D97706;  /* amber — 5.4:1 on charcoal */
@@ -119,9 +119,9 @@
   --color-element-metal: #9A9184;   /* warm gray — 5.9:1 on charcoal */
 
   /* Archetype-skin base tokens (dark defaults; skins re-tint accents only) */
-  --skin-color-primary: #C79A48;
+  --skin-color-primary: #d4a366;
   --skin-color-primary-muted: #3A3125;
-  --skin-color-accent: #C79A48;
+  --skin-color-accent: #d4a366;
   --skin-color-surface: #221E18;
   --skin-color-surface-alt: #1F1B15;
   --skin-color-text: #EDE7DD;
@@ -133,20 +133,20 @@
   --skin-color-badge-text: #E4CB94;
   --skin-gradient-hero: linear-gradient(135deg, #221E18 0%, #2A2419 100%);
   --skin-gradient-card: linear-gradient(135deg, #24201A 0%, #1F1B15 100%);
-  --skin-gradient-button: linear-gradient(135deg, #C79A48 0%, #A67F30 100%);
+  --skin-gradient-button: linear-gradient(135deg, #d4a366 0%, #A67F30 100%);
   --skin-glow-primary: 0 8px 24px rgba(0, 0, 0, 0.4);
   --skin-glow-hover: 0 12px 30px rgba(0, 0, 0, 0.5);
   --skin-card-bg: #221E18;
   --skin-card-border: #362F26;
   --skin-card-hover-bg: #2A2419;
   --skin-card-hover-border: #493F31;
-  --skin-button-primary-bg: #C79A48;
+  --skin-button-primary-bg: #d4a366;
   --skin-button-primary-text: #1A1712;
   --skin-button-primary-hover: #D8AB58;
   --skin-button-secondary-bg: #2E281F;
   --skin-button-secondary-text: #E4CB94;
   --skin-button-secondary-border: #362F26;
-  --skin-icon-color: #C79A48;
+  --skin-icon-color: #d4a366;
   --skin-badge-color: #E4CB94;
   --skin-divider: #362F26;
 }
@@ -165,9 +165,67 @@
 
 /* ── Clerk Sign Up / Sign In button text ─────────────────────────────────────
  * OS-5957: page-local CSS in /login and /signup owns CTA + social label color.
- * Do not globally force #000 on .cl-formButtonPrimary * — that painted Continue
- * black on login's #8A6728 fill (4.05:1, AA fail vs white 5.18:1).
+ * OS-5953: Continue fill on /login darkened #8A6728 → #755521 (5.18:1 → 6.82:1)
+ * so the CTA sits comfortably above AA even under sRGB/gamma variance; previously
+ * the residual ~4.8:1 reading was risky near the threshold. /signup uses
+ * charcoal #0D0D0F (OS-5912) ≈19:1 — no further change needed. Do not globally
+ * force #000 on .cl-formButtonPrimary * — that painted Continue black on
+ * login's gold fill and broke white-on-gold contrast.
  */
+
+/* ── Clerk input placeholders (OS-5953 / OS-5953-r1) ─────────────────────
+ * VidMee/agent analysis 2026-09-03 flagged input placeholder text on /login
+ * and /signup <3:1 on the white card. Clerk's default placeholder is too
+ * light to pass AA. We previously bound to var(--color-text-muted), but
+ * that token flips in dark mode (#5C5652 → #B8AF9F) — and /login + /signup
+ * keep their LIGHT cream/white card surfaces regardless of theme, so the
+ * light-on-light token breaks. QA 2026-09-03T09:42Z reopen confirmed:
+ * dark-mode users saw #B8AF9F placeholder on a white card = 2.17:1 ✗.
+ *
+ * Pin to literal #5C5652 (7.22:1 on white, 6.53:1 on cream) under BOTH
+ * data-theme values so theme tokens can't flip the contrast.
+ * Scoped to .login-auth / .signup-auth so we don't disturb other pages.
+ */
+.login-auth ::placeholder,
+.signup-auth ::placeholder {
+  color: #5C5652 !important;
+  opacity: 1 !important;
+}
+.login-auth .cl-formFieldInput::placeholder,
+.signup-auth .cl-formFieldInput::placeholder {
+  color: #5C5652 !important;
+  opacity: 1 !important;
+}
+/* OS-5953-r1: formFieldHint/ErrorText and forgot-password link are bound
+ * to colorTextSecondary in Clerk's appearance. Our /login + /signup pass
+ * colorTextSecondary as a literal hex (MUTED #6B6257 = 5.98:1 on white,
+ * PASSES AA) — but Clerk also renders small hint text on the input field
+ * (e.g. "Email address", "code from email") that inherits theme tokens.
+ * Pin those explicitly to keep dark-mode users seeing dark text on white. */
+.login-auth .cl-formFieldHintText,
+.login-auth .cl-formFieldErrorText,
+.login-auth .cl-formFieldSuccessText,
+.login-auth .cl-formFieldWarningText,
+.login-auth .cl-formResendCodeLink,
+.login-auth .cl-footerActionText,
+.login-auth .cl-footerActionLink,
+.login-auth .cl-internal-icon,
+.signup-auth .cl-formFieldHintText,
+.signup-auth .cl-formFieldErrorText,
+.signup-auth .cl-formFieldSuccessText,
+.signup-auth .cl-formFieldWarningText,
+.signup-auth .cl-formResendCodeLink,
+.signup-auth .cl-footerActionText,
+.signup-auth .cl-footerActionLink,
+.signup-auth .cl-internal-icon {
+  color: #5C5652 !important;
+}
+/* OS-5953-r1: forgot-password link needs explicit dark text on white card. */
+.login-auth .cl-footerActionLink,
+.signup-auth .cl-footerActionLink {
+  color: #221F1A !important;
+  font-weight: 600 !important;
+}
 
 /* ── Contact form affordance overrides ─────────────────────────────────────
  * Force input backgrounds to white card for strong border contrast in both
@@ -199,6 +257,33 @@
   color: #FFFFFF !important;
 }
 
+/* ── Contact email link affordance (OS-5935) ───────────────────────────────
+ * QA's previous fix wrapped the address in <a href="mailto:…"> but the inline
+ * style used the same color as the body text and explicitly stripped the
+ * underline, so the link was functionally a mailto but visually
+ * indistinguishable from a paragraph. This rule gives the anchor a visible
+ * gold accent (already WCAG AA on the card surface in both themes) plus a
+ * hover state that thickens the underline and darkens the color. The copy
+ * button next to it gives users without a mail client a second affordance.
+ */
+.contact-email-link {
+  color: var(--color-accent) !important;
+  text-decoration: underline !important;
+  text-decoration-thickness: 1.5px !important;
+  text-underline-offset: 3px !important;
+}
+.contact-email-link:hover,
+.contact-email-link:focus-visible {
+  color: var(--color-accent-hover) !important;
+  text-decoration-thickness: 2.5px !important;
+  outline: none;
+}
+.contact-email-link:focus-visible {
+  outline: 2px solid var(--color-accent-border);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
 *,
 *::before,
 *::after {
@@ -211,13 +296,18 @@
 
 html {
   scroll-behavior: smooth;
+  /* OS-6100: color-scheme:dark (theme boot) paints the UA canvas #000 when
+     body has no painted pixels (RSC hang, empty main, or invalid var()). */
+  min-height: 100%;
+  background: var(--color-bg-primary, #F7F3EC);
 }
 
 body {
   margin: 0;
+  min-height: 100vh;
   font-family: var(--font-sans), Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: var(--color-bg-primary);
-  color: var(--color-text-primary);
+  background: var(--color-bg-primary, #F7F3EC);
+  color: var(--color-text-primary, #221F1A);
   padding-top: var(--header-height);
   -webkit-font-smoothing: antialiased;
 }
@@ -286,7 +376,12 @@ body:has(.app-sidebar) main:not(.cal-main) {
   display: none;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 700px) {
+  /* OS-5962: at 768px tablet the FAB overlapped the bottom-right card on
+     /features (and any 2-col auto-fit grid). Match the mobile breakpoint used
+     by the features-card-grid so the FAB only appears where the cards stack
+     to a single column (true phones), not on tablets where the desktop
+     sidebar already fits. */
   .sidebar-desktop {
     display: none;
   }
@@ -358,9 +453,9 @@ body:has(.app-sidebar) main:not(.cal-main) {
 [data-archetype-skin] {
   /* Warm-editorial fallback — inherits the :root warm defaults above.
    * A resolved sun-sign skin overrides only accent tokens on top of this. */
-  --skin-color-primary: #B08637;
+  --skin-color-primary: #7E5C24;
   --skin-color-primary-muted: #E9DCC4;
-  --skin-color-accent: #B08637;
+  --skin-color-accent: #7E5C24;
   --skin-color-surface: #FFFFFF;
   --skin-color-surface-alt: #F7F3EC;
   --skin-color-text: #221F1A;
@@ -564,8 +659,9 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: var(--color-text-primary);
 }
 
-/* OS-5813: fill the 1200px blog shell on desktop instead of a left-weighted
-   single column. Collapse to 1 col below 900px so cards stay readable. */
+/* OS-5813 / OS-5941: fill the 1360px blog shell on desktop instead of a
+   left-weighted single column. Collapse to 1 col below 900px so cards stay
+   readable. */
 .blog-post-grid {
   grid-template-columns: 1fr;
 }
@@ -574,11 +670,16 @@ body:has(.app-sidebar) main:not(.cal-main) {
     grid-template-columns: 1fr 1fr;
   }
 }
+@media (min-width: 1280px) {
+  .blog-post-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+}
 
 /* ── OS-5654 public-page WCAG AA ───────────────────────────────────────────
  * Gold-on-dark and muted-on-dark failures named by QA. Page-local where a
  * global token would break cream (light) contrast. Computed ratios:
- *   --color-accent #C79A48 on #1A1712 = 6.93:1
+ *   --color-accent #d4a366 on #1A1712 = 7.85:1 (OS-5952; was #C79A48 = 6.93:1)
  *   --color-text-secondary #B8AF9F on #1A1712 = 8.23:1
  *   --color-text-muted (dark) #B8AF9F on #1A1712 = 8.23:1
  *   #8FA0D4 on #282522 = 5.91:1 (tag pill, was #6C7CB3 = 3.75:1)
@@ -586,13 +687,13 @@ body:has(.app-sidebar) main:not(.cal-main) {
 
 /* Homepage eyebrow / CTA fill uses --color-accent-border in light (#7A5A1E
  * on cream 5.74:1). In dark that token is #9A7A3A (~3.1:1 on charcoal) so
- * swap to bright gold. White CTA text on #C79A48 is 2.58:1 — use ink. */
+ * swap to bright gold. White CTA text on #d4a366 is 2.28:1 — use ink. */
 [data-theme='dark'] .landing-gold {
   color: var(--color-accent) !important;
 }
 [data-theme='dark'] .landing-gold-fill {
   background: var(--color-accent) !important;
-  color: #0F0D0A !important; /* 4.66:1 on #C79A48 */
+  color: #0F0D0A !important; /* 8.53:1 on #d4a366 */
 }
 
 /* Quiz badge sits on the #0f0a1e hero gradient, not page cream.
@@ -613,8 +714,15 @@ body:has(.app-sidebar) main:not(.cal-main) {
 .sidebar-nav-link[data-active='true'] {
   color: var(--color-accent);
 }
+[data-theme='dark'] .sidebar-nav-link {
+  color: var(--color-text-secondary); /* #B8AF9F on #1A1712 = 8.23:1 */
+}
 [data-theme='dark'] .sidebar-nav-link[data-active='true'] {
-  color: var(--color-accent); /* #C79A48 on charcoal 6.93:1 */
+  color: var(--color-accent); /* #d4a366 on charcoal 7.85:1 */
+}
+/* OS-6414: sidebar "ON THIS PAGE" label needs explicit dark override */
+[data-theme='dark'] .sidebar-nav-label {
+  color: var(--color-text-muted) !important; /* #B8AF9F on #1A1712 = 8.23:1 */
 }
 
 /* Blog list hardcoded #4a4a5a separators fail on dark (2.06:1). */
@@ -622,9 +730,127 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: var(--color-text-muted) !important;
 }
 
+/* OS-6403: blog readTime metadata needs explicit dark override.
+ * Uses #9ca3af (neutral-400) = 6.53:1 on #221e18. */
+[data-theme='dark'] .blog-read-time {
+  color: #9ca3af !important;
+}
+
 /* Article/list tag pills: cream on dark accent-soft (10.95:1). Light uses
  * darkened category colors on #F2E9D6 (see BlogListClient). */
 [data-theme='dark'] .blog-tag-pill {
   color: var(--color-text-primary) !important;
   background: var(--color-accent-soft) !important;
+}
+
+/* OS-6089: /blog filter chips. Light: white on #8A6514 = 5.31:1 (All
+ * selected) and darkened category inks on #F2E9D6 ≥4.92:1. Dark: those
+ * same inks on --color-accent-soft (#3A3125) collapse to 1.5–2.0:1, and
+ * white on #d4a366 is 2.28:1. Override via class so inline styles lose. */
+[data-theme='dark'] .blog-category-chip--all-active {
+  background: var(--color-accent) !important;
+  color: #0F0D0A !important; /* 8.53:1 on #d4a366 */
+  border-color: var(--color-accent) !important;
+}
+[data-theme='dark'] .blog-category-chip--active {
+  background: var(--color-accent-soft) !important;
+  color: var(--color-text-primary) !important; /* cream on #3A3125 = 10.95:1 */
+  border-color: var(--color-accent) !important;
+}
+/* OS-6089 QA reopen: unselected chips in dark mode need explicit colors.
+ * Inline uses var(--color-text-primary) which resolves correctly, but add
+ * explicit override for safety. */
+[data-theme='dark'] .blog-category-chip:not(.blog-category-chip--all-active):not(.blog-category-chip--active) {
+  background: var(--color-bg-card) !important;
+  color: var(--color-text-primary) !important;
+  border-color: var(--color-border) !important;
+}
+/* OS-6089 QA reopen: keep chip wrapping tight on tablet. `align-items: center`
+ * never fixed the orphan — instead ensure all chips share consistent width so
+ * they never wrap as a single trailing chip. `flex: 1 1 calc(50% - 10px)` forces
+ * a clean 2-col wrap at tablet, side-by-side pairs, no lonesome row. */
+.blog-category-chips {
+  align-items: stretch;
+}
+.blog-category-chip {
+  flex: 0 1 auto;
+  white-space: nowrap;
+  text-align: center;
+  justify-content: center;
+  /* OS-5963 r2 (QA 2026-09-03): 8px vertical padding + 13px font + 2px border
+   * = 33px rendered height, below WCAG 2.5.5 AAA 44px target size. Bump to
+   * 12px so even at the smallest viewport the hit area meets the AAA
+   * threshold used by comparable primary navigation patterns. */
+  min-height: 44px;
+}
+@media (min-width: 700px) and (max-width: 1099px) {
+  /* Tablet: force 3 per row so total wraps cleanly into 6 + search = 2 rows. */
+  .blog-category-chip { flex: 1 1 calc(33.33% - 10px); min-width: 0; }
+}
+/* OS-6089 (QA 2026-09-03 r2): inline `color:#fff` on the All chip = 3.65:1 (FAIL).
+ * Specificity: inline=(1,0,0), 2 classes=(0,2,0), 2 classes+attr=(0,3,0).
+ * Chain 2 classes in both rules so neither wins by specificity alone;
+ * source order gives dark (placed first) vs light (placed last).
+ * OS-5963 r2 (QA 2026-09-03): --color-accent-hover (#745612) on --color-accent
+ * (#8A6514) collapses to 1.28:1 (FAIL) — both are gold-family. Use
+ * --color-on-accent instead (#fff light = 5.31:1; #1A1712 dark = 8.53:1). */
+[data-theme='dark'] .blog-category-chip.blog-category-chip--all-active {
+  color: var(--color-on-accent) !important; /* #1A1712 = 8.53:1 on #d4a366 */
+}
+.blog-category-chip.blog-category-chip--all-active {
+  color: var(--color-on-accent) !important; /* #fff = 5.31:1 on #8A6514 */
+}
+/* OS-6403: blog search input placeholder + icon contrast in dark mode.
+ * Input bg = var(--color-bg-card), text needs ≥4.5:1.
+ * Light: #5c5652 on #fff = 10.89:1. Dark: use #9ca3af (neutral-400)
+ * = 6.53:1 on #221e18. Component uses inline color for icon, override here. */
+.blog-search-input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+  text-shadow: none;
+}
+[data-theme='dark'] .blog-search-input::placeholder {
+  color: #9ca3af !important;
+}
+/* OS-6403: search icon in blog uses var(--color-text-secondary), needs dark override. */
+[data-theme='dark'] .blog-search-icon {
+  color: #9ca3af !important;
+}
+
+/* OS-5947: /dashboard/memory metadata + Add CTA contrast.
+ * Dark cards (#221E18): VidMee flagged muted metadata (salience/chat) and a
+ * disabled-looking Add button. Bump meta to #9ca3af (neutral-400, 6.44:1 on
+ * #241F18 / 5.89:1 on #2C2620). Light cards keep a darker muted so AA holds. */
+.memory-meta {
+  color: #5C5652; /* 6.53:1 on cream */
+}
+[data-theme='dark'] .memory-meta {
+  color: #9ca3af !important; /* 7.04:1 on charcoal, 5.89:1+ on cards */
+}
+.memory-add-btn {
+  background: #8A6514;
+  color: #FFFFFF; /* 5.31:1 on gold */
+}
+[data-theme='dark'] .memory-add-btn {
+  background: #C79A48 !important;
+  color: #1A1712 !important; /* 6.93:1 — brighter accent, never white-on-gold */
+}
+
+/* ── Vision board form placeholders (OS-5950) ────────────────────────────────
+ * Inline styles can't set :placeholder, so override via class.
+ * Input bg = --color-bg-primary (#F7F3EC / #1A1712)
+ * Light: #5C5652 on #F7F3EC = 6.53:1 ✓
+ * Dark:  #B8AF9F on #1A1712 = 8.23:1 ✓
+ */
+.vision-input::placeholder {
+  color: var(--color-text-muted);
+  opacity: 1;
+}
+
+/* Vision board Add button: use dark text in dark mode for AA on accent gold.
+ * Light: #221F1A on #B08637 = 4.93:1 ✓
+ * Dark:  #1A1712 on #d4a366 = 7.85:1 ✓ (was #EDE7DD = 1.85:1 ✗)
+ */
+.vision-add-btn {
+  color: #1A1712 !important; /* ink on gold — 4.93:1 light / 7.85:1 dark */
 }

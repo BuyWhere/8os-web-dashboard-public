@@ -2,37 +2,51 @@ import { NextResponse } from 'next/server'
 import { prisma } from '@/lib/db/prisma'
 
 export async function GET() {
+  // OS-6134: Railway deploy gate evaluates HTTP status code + 60s timeout.
+  // - Return 200: Railway marks deployment SUCCESS
+  // - Return 503: Railway marks deployment FAILED (BLOCKS the new deploy, keeps old version live)
+  //
+  // Alignment probe: Railway only supports GET health checks, so we validate via the
+  // /api/alignment GET manifest which lists registered routes including toolCall.
+  const alignmentProbe = await _probeAlignmentToolCall()
+
+  const status = alignmentProbe.ok ? 200 : 503
+  return NextResponse.json(
+    {
+      status: alignmentProbe.ok ? 'ok' : 'degraded',
+      alignment_probe: alignmentProbe.ok ? 'ok' : '404_not_registered',
+      alignment_probe_detail: alignmentProbe.detail,
+      timestamp: new Date().toISOString(),
+    },
+    { status },
+  )
+}
+
+async function _probeAlignmentToolCall(): Promise<{
+  ok: boolean
+  detail: string
+}> {
   try {
-    const rows = await prisma.$queryRaw<
-      { active: bigint; idle: bigint; total: bigint }[]
-    >`
-      SELECT
-        count(*) FILTER (WHERE state = 'active') AS active,
-        count(*) FILTER (WHERE state = 'idle')   AS idle,
-        count(*)                                  AS total
-      FROM pg_stat_activity
-      WHERE datname = current_database()
-    `
-
-    const pool = rows[0]
-
-    return NextResponse.json({
-      status: 'ok',
-      db: {
-        pool: {
-          active: Number(pool.active),
-          idle: Number(pool.idle),
-          total: Number(pool.total),
-        },
-      },
+    const baseUrl = process.env.NEXT_PUBLIC_APP_URL ?? 'https://api.8os.ai'
+    const res = await fetch(`${baseUrl}/api/alignment`, {
+      next: { revalidate: 0 },
+      signal: AbortSignal.timeout(5000),
     })
+    if (!res.ok) {
+      return { ok: false, detail: `HTTP ${res.status}` }
+    }
+    const data = (await res.json()) as {
+      routes?: { toolCall?: string }
+    }
+    const toolCall = data?.routes?.toolCall
+    if (!toolCall || !toolCall.includes('/api/alignment/tool-call')) {
+      return { ok: false, detail: 'routes.toolCall missing from /api/alignment manifest' }
+    }
+    return { ok: true, detail: 'ok' }
   } catch (err) {
-    return NextResponse.json(
-      {
-        status: 'error',
-        db: { error: err instanceof Error ? err.message : 'unknown' },
-      },
-      { status: 503 },
-    )
+    return {
+      ok: false,
+      detail: err instanceof Error ? err.message : 'fetch error',
+    }
   }
 }

@@ -43,6 +43,15 @@ const nextConfig = {
       // to the existing contact/support page instead of a generic 404.
       { source: '/help', destination: '/contact', permanent: false },
       { source: '/--help', destination: '/contact', permanent: false },
+      // OS-5932: /docs 404ed (no App Router page). Canonical docs surface is
+      // /developers. Edge + next.config belt-and-suspenders like /help.
+      { source: '/docs', destination: '/developers', permanent: false },
+      { source: '/docs/:path*', destination: '/developers', permanent: false },
+      // OS-6358: /privacy+ (trailing plus, e.g. from copy-pasted or auto-linked
+      // URLs) 404s — there is no literal `privacy+` App Router segment. The
+      // canonical legal page is /privacy. Redirect instead of a generic 404.
+      // Note: + is a regex special char in Next.js redirects, must escape as \\+
+      { source: '/privacy\\+', destination: '/privacy', permanent: false },
     ]
   },
 }

@@ -1,8 +1,26 @@
-export type AuthBridgeKind = 'format' | 'exists' | 'credentials' | 'generic' | 'password'
+export type AuthBridgeKind = 'format' | 'exists' | 'credentials' | 'generic' | 'password' | 'required'
 
 export const EMAIL_FORMAT_MESSAGE = 'Please enter a valid email address.'
+export const EMAIL_REQUIRED_MESSAGE = 'Email is required.'
+export const PASSWORD_REQUIRED_MESSAGE = 'Password is required.'
 export const PASSWORD_FALLBACK_MESSAGE =
   'Your password does not meet the requirements. Use 8 or more characters.'
+
+export interface SignupRequiredFields {
+  email: string
+  password: string
+  firstName?: string
+  lastName?: string
+}
+
+/** OS-5915: Clerk often no-ops on empty Continue (type=text, no native required). */
+export function signupRequiredFieldMessage(fields: SignupRequiredFields): string | null {
+  const missing: string[] = []
+  if (!fields.email.trim()) missing.push(EMAIL_REQUIRED_MESSAGE)
+  if (!fields.password.trim()) missing.push(PASSWORD_REQUIRED_MESSAGE)
+  if (missing.length === 0) return null
+  return missing.join(' ')
+}
 
 export function looksLikeEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim())

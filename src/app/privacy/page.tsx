@@ -20,7 +20,7 @@ export default function PrivacyPage() {
         <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginTop: '2rem', marginBottom: '0.5rem' }}>
           Privacy Policy
         </h1>
-        <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem' }}>Last updated: September 2026</p>
+        <p style={{ color: 'var(--color-text-muted)', marginBottom: '3rem' }}>Last updated: September 5, 2026</p>
 
         <div style={{ lineHeight: 1.8, color: 'var(--color-text-secondary)' }}>
           <section style={{ marginBottom: '2.5rem' }}>

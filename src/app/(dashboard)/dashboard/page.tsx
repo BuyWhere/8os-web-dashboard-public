@@ -63,9 +63,15 @@ export default async function DashboardPage() {
 
   // On-view freshness: pull recent Google changes so "This week" reflects the
   // real calendar (incremental, best-effort, ≤60s-throttled).
-  await Promise.all([
-    syncStaleGoogleSources(userId).catch(() => {}),
-    syncStaleMicrosoftSources(userId).catch(() => {}),
+  // OS-6100: never let a hung calendar sync leave the dashboard unrendered —
+  // race against a 4s cap so the page still paints.
+  const syncBudget = new Promise<void>((resolve) => setTimeout(resolve, 4000))
+  await Promise.race([
+    Promise.all([
+      syncStaleGoogleSources(userId).catch(() => {}),
+      syncStaleMicrosoftSources(userId).catch(() => {}),
+    ]),
+    syncBudget,
   ])
 
   const now = new Date()

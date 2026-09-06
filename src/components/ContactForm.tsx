@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 // Shared input/textarea styles — WCAG-AA border contrast + clear affordance
 const INPUT_STYLE: React.CSSProperties = {
@@ -42,6 +42,16 @@ export function ContactForm() {
   const [form, setForm] = useState<ContactFormData>(INITIAL);
   const [status, setStatus] = useState<Status>('idle');
   const [errorMsg, setErrorMsg] = useState<string>('');
+  const successRef = useRef<HTMLDivElement | null>(null);
+
+  // OS-6231: when the submission succeeds, scroll the in-place success
+  // card into view so users who were focused on the form see the feedback
+  // even though the contact form sits below the fold on most viewports.
+  useEffect(() => {
+    if (status === 'success' && successRef.current) {
+      successRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  }, [status]);
 
   const update = (k: keyof ContactFormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setForm(prev => ({ ...prev, [k]: e.target.value }));
@@ -89,17 +99,54 @@ export function ContactForm() {
 
   if (status === 'success') {
     return (
-      <div
-        role="status"
-        aria-live="polite"
-        style={{
-          background: 'var(--color-bg-card)',
-          border: '1px solid var(--color-border)',
-          borderRadius: '12px',
-          padding: '2rem',
-          textAlign: 'center',
-        }}
-      >
+      <>
+        {/* OS-6231: fixed banner at viewport top so success feedback is
+            always above the fold regardless of how far down the form sat.
+            role="status" + aria-live="polite" announces the confirmation
+            to screen readers without stealing focus. */}
+        <div
+          role="status"
+          aria-live="polite"
+          data-testid="contact-success-toast"
+          style={{
+            position: 'fixed',
+            top: '1rem',
+            left: '50%',
+            transform: 'translateX(-50%)',
+            zIndex: 1000,
+            maxWidth: 'min(560px, calc(100vw - 2rem))',
+            background: 'var(--color-bg-card)',
+            border: '1px solid var(--color-accent-border)',
+            borderRadius: '12px',
+            padding: '0.875rem 1.25rem',
+            boxShadow: '0 8px 24px rgba(0,0,0,0.18)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            fontSize: '0.9375rem',
+            fontWeight: 500,
+            color: 'var(--color-text-primary)',
+          }}
+        >
+          <span aria-hidden style={{
+            color: 'var(--color-accent)',
+            fontSize: '1.25rem',
+            lineHeight: 1,
+          }}>✓</span>
+          <span>Message sent — we&apos;ll reply within 1-2 business days.</span>
+        </div>
+        <div
+          ref={successRef}
+          role="status"
+          aria-live="polite"
+          style={{
+            background: 'var(--color-bg-card)',
+            border: '1px solid var(--color-border)',
+            borderRadius: '12px',
+            padding: '2rem',
+            textAlign: 'center',
+          }}
+        >
         <h3 style={{ fontSize: '1.25rem', fontWeight: 700, marginBottom: '0.5rem' }}>
           Thanks, message received.
         </h3>
@@ -123,6 +170,7 @@ export function ContactForm() {
           Send another message
         </button>
       </div>
+      </>
     );
   }
 

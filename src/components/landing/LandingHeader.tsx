@@ -48,7 +48,7 @@ export default function LandingHeader() {
         style={{
           maxWidth: 1360,
           margin: '0 auto',
-          padding: '0 2rem',
+          padding: '0 1.5rem',
           height: '68px',
           display: 'flex',
           alignItems: 'center',
@@ -200,7 +200,7 @@ export default function LandingHeader() {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-          @media (max-width: 840px) {
+          @media (max-width: 768px) {
             .lh-desktop-nav { display: none !important; }
             .lh-desktop-auth { display: none !important; }
             .lh-hamburger { display: flex !important; }

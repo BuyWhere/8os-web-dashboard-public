@@ -28,7 +28,11 @@ export default async function BriefingPage() {
 
   return (
     <div style={pageShellStyle}>
-      <Sidebar goals={sidebarGoals} initialCollapsed={settings?.sidebarCollapsed ?? false} />
+      <Sidebar
+        goals={sidebarGoals}
+        initialCollapsed={settings?.sidebarCollapsed ?? false}
+        hideGoals
+      />
       <main style={pageMainStyle}>
         <BriefingContent />
       </main>

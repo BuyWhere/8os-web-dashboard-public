@@ -61,13 +61,15 @@ export function DailyBig3({ onChanged }: { onChanged?: () => void }) {
     try {
       const res = await fetch('/api/today/big3', { cache: 'no-store' })
       if (!res.ok) {
-        // 404 = no birth profile; hide the block quietly rather than error the page.
-        setData(null); setLoading(false); return
+        // 404 = no birth profile; show empty state rather than hiding the card entirely.
+        setData(null); setPicks([]); setPool([]); setLoading(false); return
       }
       const d = (await res.json()) as Big3Data
       setData(d); setPicks(d.big3 || []); setPool(d.alternates || [])
     } catch (e) {
       console.error('big3 load failed', e)
+      // On error, show empty state instead of blank card
+      setData(null); setPicks([]); setPool([])
     } finally {
       setLoading(false)
     }
@@ -107,8 +109,49 @@ export function DailyBig3({ onChanged }: { onChanged?: () => void }) {
     else setErr('No free slots left today for these. They stay flagged as your focus.')
   }
 
-  if (loading) return null
-  if (!data || picks.length === 0) return null
+  if (loading) {
+    return (
+      <div role="status" aria-live="polite" aria-label="Loading today’s focus">
+        <div style={{ height: 16, width: 140, borderRadius: 6, background: 'var(--color-border)', marginBottom: 12 }} />
+        <div style={{ height: 12, width: '80%', borderRadius: 6, background: 'var(--color-border)', marginBottom: 16, opacity: 0.7 }} />
+        {[0, 1, 2].map((i) => (
+          <div key={i} style={{ height: 48, borderRadius: 10, background: 'var(--color-bg-primary)', border: '1px solid var(--color-border)', marginBottom: 8 }} />
+        ))}
+      </div>
+    )
+  }
+
+  if (!data || picks.length === 0) {
+    return (
+      <div
+        role="status"
+        aria-label="No focus items"
+        style={{ textAlign: 'center', padding: '20px 8px 8px' }}
+      >
+        <div style={{ fontSize: 15, fontWeight: 650, color: 'var(--color-text-primary)', marginBottom: 6 }}>
+          No focus items
+        </div>
+        <p style={{ margin: '0 0 14px', fontSize: 13.5, color: 'var(--color-text-secondary)', lineHeight: 1.5 }}>
+          Select a goal or task to focus on today.
+        </p>
+        <a
+          href="/dashboard/inbox"
+          style={{
+            display: 'inline-block',
+            background: 'var(--color-accent)',
+            color: '#fff',
+            textDecoration: 'none',
+            padding: '9px 16px',
+            borderRadius: 8,
+            fontSize: 13,
+            fontWeight: 600,
+          }}
+        >
+          Add task
+        </a>
+      </div>
+    )
+  }
 
   return (
     <section

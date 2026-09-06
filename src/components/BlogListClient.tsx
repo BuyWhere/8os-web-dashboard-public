@@ -69,6 +69,16 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
 
   return (
     <div>
+      <style>{`
+        @media (max-width: 640px) {
+          .featured-article-grid {
+            grid-template-columns: 1fr !important;
+          }
+          .featured-visual {
+            height: 120px !important;
+          }
+        }
+      `}</style>
       {/* Featured Article */}
       {showFeatured && (
         <Link
@@ -76,14 +86,20 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
           style={{ textDecoration: 'none', display: 'block', marginBottom: '32px' }}
         >
           <article
+            className="featured-article-grid"
             style={{
               background: 'linear-gradient(135deg, var(--color-bg-card) 0%, var(--color-bg-card) 50%, var(--color-bg-card) 100%)',
               border: '1px solid var(--color-bg-card)',
               borderRadius: '16px',
-              padding: '32px',
+              padding: '24px',
               position: 'relative',
               overflow: 'hidden',
               transition: 'border-color 0.2s, transform 0.2s',
+              display: 'grid',
+              gridTemplateColumns: '180px 1fr',
+              gap: '24px',
+              alignItems: 'center',
+              minHeight: '200px',
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.borderColor = 'var(--color-accent)'
@@ -94,82 +110,109 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
               e.currentTarget.style.transform = 'translateY(0)'
             }}
           >
-            <span
-              className="blog-featured-badge"
+            {/* Visual element - abstract decorative panel */}
+            <div
+              className="featured-visual"
               style={{
-                position: 'absolute',
-                top: '16px',
-                right: '16px',
-                fontSize: '11px',
-                fontWeight: 600,
-                padding: '4px 10px',
-                borderRadius: '6px',
-                textTransform: 'uppercase',
-                letterSpacing: '0.5px',
+                background: 'linear-gradient(135deg, var(--color-accent-soft) 0%, var(--color-bg-primary) 100%)',
+                borderRadius: '12px',
+                height: '160px',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                position: 'relative',
+                overflow: 'hidden',
               }}
+              aria-hidden="true"
             >
-              Featured
-            </span>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '16px' }}>
-              <span style={{ fontSize: '24px' }}>
+              <span style={{ fontSize: '48px', opacity: 0.7 }}>
                 {CATEGORY_CONFIG[featured.category].icon}
               </span>
-              <span
+              {/* Subtle decorative pattern */}
+              <div
                 style={{
-                  fontSize: '12px',
+                  position: 'absolute',
+                  inset: 0,
+                  background: 'radial-gradient(circle at 30% 30%, var(--color-accent) 0%, transparent 50%), radial-gradient(circle at 70% 70%, var(--color-accent-border) 0%, transparent 40%)',
+                  opacity: 0.15,
+                }}
+              />
+            </div>
+            <div>
+              <span
+                className="blog-featured-badge"
+                style={{
+                  fontSize: '11px',
                   fontWeight: 600,
-                  color: CATEGORY_CONFIG[featured.category].color,
-                  background: CATEGORY_CONFIG[featured.category].bg,
                   padding: '4px 10px',
                   borderRadius: '6px',
+                  textTransform: 'uppercase',
+                  letterSpacing: '0.5px',
+                  display: 'inline-block',
+                  marginBottom: '12px',
                 }}
               >
-                {featured.category}
+                Featured
               </span>
-            </div>
-            <h2
-              style={{
-                fontSize: '24px',
-                fontWeight: 700,
-                color: 'var(--color-text-primary)',
-                lineHeight: 1.3,
-                marginBottom: '12px',
-              }}
-            >
-              {featured.title}
-            </h2>
-            <p
-              style={{
-                fontSize: '15px',
-                color: 'var(--color-text-muted)',
-                lineHeight: 1.6,
-                marginBottom: '16px',
-              }}
-            >
-              {featured.excerpt}
-            </p>
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
-              <div style={{ display: 'flex', gap: '12px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
-                <time dateTime={featured.isoDate}>{featured.date}</time>
-                <span>·</span>
-                <span>{featured.readTime}</span>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '12px' }}>
+                <span
+                  className="blog-tag-pill"
+                  style={{
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    color: CATEGORY_CONFIG[featured.category].color,
+                    background: CATEGORY_CONFIG[featured.category].bg,
+                    padding: '4px 10px',
+                    borderRadius: '6px',
+                  }}
+                >
+                  {featured.category}
+                </span>
               </div>
-              <span
+              <h2
                 style={{
-                  fontSize: '13px',
-                  fontWeight: 600,
+                  fontSize: '22px',
+                  fontWeight: 700,
                   color: 'var(--color-text-primary)',
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: '4px',
+                  lineHeight: 1.3,
+                  marginBottom: '10px',
                 }}
-                aria-hidden="true"
               >
-                Read article
-                <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-                  <path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </span>
+                {featured.title}
+              </h2>
+              <p
+                style={{
+                  fontSize: '14px',
+                  color: 'var(--color-text-muted)',
+                  lineHeight: 1.6,
+                  marginBottom: '14px',
+                }}
+              >
+                {featured.excerpt}
+              </p>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px' }}>
+                <div style={{ display: 'flex', gap: '12px', color: 'var(--color-text-secondary)', fontSize: '13px' }}>
+                  <time dateTime={featured.isoDate}>{featured.date}</time>
+                  <span>·</span>
+                  <span className="blog-read-time">{featured.readTime}</span>
+                </div>
+                <span
+                  style={{
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    color: 'var(--color-text-primary)',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    gap: '4px',
+                  }}
+                  aria-hidden="true"
+                >
+                  Read article
+                  <svg width="12" height="12" viewBox="0 0 12 12" fill="none" aria-hidden="true">
+                    <path d="M2.5 6h7M6.5 3l3 3-3 3" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </span>
+              </div>
             </div>
           </article>
         </Link>
@@ -184,6 +227,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
             viewBox="0 0 16 16"
             fill="none"
             aria-hidden="true"
+            className="blog-search-icon"
             style={{
               position: 'absolute',
               left: '12px',
@@ -198,6 +242,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
           </svg>
           <input
             type="search"
+            className="blog-search-input"
             placeholder="Search articles by title or keyword…"
             value={searchQuery}
             onChange={(e) => {
@@ -222,16 +267,25 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
         </div>
       </div>
 
-      {/* Category Filter Chips */}
+      {/* Category Filter Chips — compact single row on desktop (OS-6404).
+          nowrap + overflow-x ensures no orphan second row regardless of
+          available width. */}
       <div
+        className="blog-category-chips"
         style={{
           display: 'flex',
-          flexWrap: 'wrap',
-          gap: '8px',
+          flexWrap: 'nowrap',
+          overflowX: 'auto',
+          gap: '4px',
           marginBottom: '28px',
+          scrollbarWidth: 'none',
         }}
       >
+        <style>{`
+          .blog-category-chips::-webkit-scrollbar { display: none; }
+        `}</style>
         <button
+          className={`blog-category-chip${!activeCategory ? ' blog-category-chip--all-active' : ''}`}
           onClick={() => {
             setActiveCategory(null)
             setVisibleCount(POSTS_PER_PAGE)
@@ -241,11 +295,13 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
             color: !activeCategory ? '#fff' : 'var(--color-text-primary)',
             border: `1px solid ${!activeCategory ? 'var(--color-accent)' : 'var(--color-border)'}`,
             borderRadius: '8px',
-            padding: '8px 16px',
-            fontSize: '13px',
+            padding: '5px 10px',
+            fontSize: '12px',
             fontWeight: 500,
             cursor: 'pointer',
             transition: 'all 0.2s',
+            whiteSpace: 'nowrap',
+            flexShrink: 0,
           }}
         >
           All ({posts.length})
@@ -256,6 +312,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
           return (
             <button
               key={cat}
+              className={`blog-category-chip${isActive ? ' blog-category-chip--active' : ''}`}
               onClick={() => {
                 setActiveCategory(isActive ? null : cat)
                 setVisibleCount(POSTS_PER_PAGE)
@@ -265,14 +322,16 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                 color: isActive ? config.color : 'var(--color-text-primary)',
                 border: `1px solid ${isActive ? config.color + '40' : 'var(--color-border)'}`,
                 borderRadius: '8px',
-                padding: '8px 16px',
-                fontSize: '13px',
+                padding: '5px 10px',
+                fontSize: '12px',
                 fontWeight: 500,
                 cursor: 'pointer',
                 transition: 'all 0.2s',
                 display: 'flex',
                 alignItems: 'center',
-                gap: '6px',
+                gap: '4px',
+                whiteSpace: 'nowrap',
+                flexShrink: 0,
               }}
             >
               <span>{config.icon}</span>
@@ -334,7 +393,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                     </time>
                   )}
                   {post.readTime && <span className="blog-meta-dot" style={{ color: 'var(--color-text-muted)', fontSize: '12px' }}>·</span>}
-                  {post.readTime && <span style={{ color: 'var(--color-text-secondary)', fontSize: '12px' }}>{post.readTime}</span>}
+                  {post.readTime && <span className="blog-read-time" style={{ color: 'var(--color-text-secondary)', fontSize: '12px' }}>{post.readTime}</span>}
                 </div>
                 <h2
                   style={{
@@ -360,7 +419,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                 </p>
                 <span
                   style={{
-                    fontSize: '13px',
+                    fontSize: '12px',
                     fontWeight: 500,
                     color: 'var(--color-text-primary)',
                     display: 'inline-flex',
