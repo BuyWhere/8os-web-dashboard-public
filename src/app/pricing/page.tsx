@@ -456,7 +456,14 @@ const tierNameStyle: React.CSSProperties = { margin: '0 0 0.2rem', fontSize: '1.
 const tierTaglineStyle: React.CSSProperties = { margin: 0, fontSize: '0.8rem', color: 'var(--color-text-secondary)', fontWeight: 700 };
 const tierPriceBlockStyle: React.CSSProperties = { textAlign: 'left' };
 const tierPriceStyle: React.CSSProperties = { display: 'block', fontSize: '1.75rem', fontWeight: 800, letterSpacing: '-0.04em', lineHeight: 1 };
-const tierPeriodStyle: React.CSSProperties = { display: 'block', fontSize: '0.75rem', color: 'var(--color-text-primary)', marginTop: '0.15rem' };
+// OS-6348 r2: billing cadence text ('forever', 'per month', 'contact us') was
+// color:var(--color-text-primary). On the highlighted Pro card the period element
+// sits on --color-accent-soft (#F2E9D6 light / #3A3125 dark) which is visually
+// distinct from the default card bg — secondary text (var(--color-text-secondary))
+// is the right semantic level. Contrast on Pro card: 4.96:1 (light) / 5.88:1
+// (dark), both pass AA. On default cards the secondary reads fine too (5.98:1 /
+// 8.23:1 AAA). Matches the OS-6348 tagline fix approach.
+const tierPeriodStyle: React.CSSProperties = { display: 'block', fontSize: '0.75rem', color: 'var(--color-text-secondary)', marginTop: '0.15rem' };
 const tierDescStyle: React.CSSProperties = { margin: 0, minHeight: '2.75rem', fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-text-secondary)' };
 
 const featureListStyle: React.CSSProperties = { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 };
