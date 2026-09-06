@@ -157,7 +157,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
               </div>
               <span
                 style={{
-                  fontSize: '13px',
+                  fontSize: '12px',
                   fontWeight: 600,
                   color: 'var(--color-text-primary)',
                   display: 'inline-flex',
@@ -232,7 +232,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
         style={{
           display: 'flex',
           flexWrap: 'wrap',
-          gap: '10px',
+          gap: '6px',
           marginBottom: '28px',
         }}
       >
@@ -247,8 +247,8 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
             color: !activeCategory ? '#fff' : 'var(--color-text-primary)',
             border: `1px solid ${!activeCategory ? 'var(--color-accent)' : 'var(--color-border)'}`,
             borderRadius: '8px',
-            padding: '8px 16px',
-            fontSize: '13px',
+            padding: '6px 12px',
+            fontSize: '12px',
             fontWeight: 500,
             cursor: 'pointer',
             transition: 'all 0.2s',
@@ -272,8 +272,8 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                 color: isActive ? config.color : 'var(--color-text-primary)',
                 border: `1px solid ${isActive ? config.color + '40' : 'var(--color-border)'}`,
                 borderRadius: '8px',
-                padding: '8px 16px',
-                fontSize: '13px',
+                padding: '6px 12px',
+                fontSize: '12px',
                 fontWeight: 500,
                 cursor: 'pointer',
                 transition: 'all 0.2s',
@@ -367,7 +367,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
                 </p>
                 <span
                   style={{
-                    fontSize: '13px',
+                    fontSize: '12px',
                     fontWeight: 500,
                     color: 'var(--color-text-primary)',
                     display: 'inline-flex',
