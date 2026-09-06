@@ -1,6 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "nextjs",
+  "redirects": [
+    {
+      "source": "/join",
+      "destination": "/signup",
+      "statusCode": 307
+    }
+  ],
   "rewrites": [
     {
       "source": "/telegram/webhook",
