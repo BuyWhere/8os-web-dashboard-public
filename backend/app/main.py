@@ -451,7 +451,7 @@ async def join_waitlist(
     )
 
 
-@app.get("/waitlist/stats", response_model=WaitlistStatsResponse)
+@app.get("/waitlist/stats", response_model=WaitlistStatsResponse, dependencies=[Depends(require_admin)])
 async def get_waitlist_stats(
     db: AsyncSession = Depends(get_db_session),
 ) -> WaitlistStatsResponse:
