@@ -178,7 +178,12 @@ export default function FeaturesPage() {
       </div>
       <style>{`
         .features-card-grid {
-          grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+          grid-template-columns: repeat(3, 1fr);
+        }
+        @media (max-width: 1100px) {
+          .features-card-grid {
+            grid-template-columns: repeat(2, 1fr);
+          }
         }
         @media (max-width: 700px) {
           .features-card-grid {
