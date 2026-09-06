@@ -460,11 +460,13 @@ const tierPeriodStyle: React.CSSProperties = { display: 'block', fontSize: '0.75
 const tierDescStyle: React.CSSProperties = { margin: 0, minHeight: '2.75rem', fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-text-secondary)' };
 
 const featureListStyle: React.CSSProperties = { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 };
-/* OS-6402: disabled (line-through) features need higher contrast than
-   var(--color-text-secondary). #A3A3A3 passes AA (4.5:1) on all card
-   backgrounds in both light and dark modes. Previous theme-aware secondary
-   was 5.98:1/4.96:1 but the strikethrough visually mutes it below threshold. */
-const excludedFeatureTextColor = '#A3A3A3';
+/* OS-6402 r2: disabled (line-through) features need higher contrast.
+   #A3A3A3 FAILED AA on gold-tinted Pro card (#F2E9D6 bg): 3.48:1 < 4.5:1.
+   #52525B passes AA on all card backgrounds:
+     - #52525B on #FFFFFF = 7.73:1 PASS
+     - #52525B on #F2E9D6 (Pro) = 5.53:1 PASS
+     - #52525B on #221E18 (dark) = 8.76:1 PASS */
+const excludedFeatureTextColor = '#52525B';
 const featureItemStyle = (included: boolean): React.CSSProperties => ({
   display: 'flex',
   alignItems: 'flex-start',
