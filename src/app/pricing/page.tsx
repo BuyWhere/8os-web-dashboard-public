@@ -73,7 +73,7 @@ const TIERS = [
     period: 'per month',
     description: 'The complete 8os experience with native AI journaling, goal therapy, and advanced timing.',
     cta: 'Start Pro',
-    ctaHref: '/onboarding',
+    ctaHref: '/signup?plan=pro',
     highlighted: true,
     features: [
       { label: 'Everything in Agent Connect', included: true },
