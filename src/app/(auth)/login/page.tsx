@@ -30,18 +30,6 @@ const BORDER = "#767676" // dark gray for WCAG input borders (was #E7DFD2, 1.46:
 export default function LoginPage() {
   return (
     <>
-      {/* OS-6399: set body class immediately on page load, before React hydrates.
-          This ensures the header override CSS applies on first paint (no flash).
-          The :has() selector needs the class on body, not just on <main>. */}
-      <script
-        dangerouslySetInnerHTML={{
-          __html: `
-            (function() {
-              document.body.classList.add('login-auth');
-            })();
-          `,
-        }}
-      />
       <main
         className="login-auth"
         style={{
@@ -91,23 +79,6 @@ export default function LoginPage() {
           }}
         />
         <style dangerouslySetInnerHTML={{ __html: `
-          /* OS-6399: override marketing header on login to match the warm cream canvas.
-             The header's dark background (rgba(13,13,15,0.92)) creates a visual disconnect
-             on the light login page (cream #F7F3EC). This override uses :has() to target
-             the header when login-auth class is present on body. */
-          body.login-auth header.marketing-header {
-            background: rgba(247, 243, 236, 0.85) !important;
-            backdrop-filter: blur(12px) !important;
-            -webkit-backdrop-filter: blur(12px) !important;
-            border-bottom-color: var(--color-border) !important;
-          }
-          body.login-auth header.marketing-header * {
-            color: var(--color-text-primary) !important;
-          }
-          /* Dark mode override for login header */
-          body.login-auth[data-theme="dark"] header.marketing-header {
-            background: rgba(26, 23, 18, 0.85) !important;
-          }
           /* OS-5957 / OS-5953 / OS-5929: force white on #755521 including descendants;
              social labels black including provider-suffixed classes axe targets. */
           .login-auth .cl-formButtonPrimary,

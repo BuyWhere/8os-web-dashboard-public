@@ -27,7 +27,14 @@ const BENEFITS = [
 
 export default function SignupPage() {
   return (
-    <main style={{ minHeight: "100vh", background: BG, color: INK, overflowX: "clip", maxWidth: "100%" }}>
+    <>
+      {/* OS-6399: reinforce signup-auth body class for SSR'd content.
+          The root layout <script> should have already set this, but adding it
+          here as well ensures the class is present even if the SSR HTML is
+          cached without the layout-level script's effect (e.g., Vercel edge
+          caching). */}
+      <script dangerouslySetInnerHTML={{ __html: `document.body.classList.add('signup-auth');` }} />
+      <main style={{ minHeight: "100vh", background: BG, color: INK, overflowX: "clip", maxWidth: "100%" }}>
       {/* OS-3873 / OS-4745: the 1440px desktop shell needs to use the available
           viewport instead of reading like a narrow ~900px card pinned left. Keep
           a 32px gutter, widen to 1360px, and right-align the auth card so the
@@ -205,5 +212,6 @@ export default function SignupPage() {
         }
       ` }} />
     </main>
+    </>
   )
 }

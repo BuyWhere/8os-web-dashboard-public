@@ -114,6 +114,15 @@ export default function RootLayout({
               persisted choice + OS preference, BEFORE first paint. Must run
               before any styled content renders. See src/lib/theme.ts. */}
           <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
+          {/* OS-6399: add auth-page body class BEFORE React hydrates so the
+              marketing header override (body.login-auth header.marketing-header)
+              applies on first paint. Synchronous (not async/defer) so it runs
+              before the browser paints. */}
+          <script
+            dangerouslySetInnerHTML={{
+              __html: `(function(){var p=window.location.pathname;if(p==='/login'||p==='/sign-in'||p==='/signin'){document.body.classList.add('login-auth');}if(p==='/signup'||p==='/sign-up'||p==='/signout'){document.body.classList.add('signup-auth');}})();`,
+            }}
+          />
           <script
             type="application/ld+json"
             dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}

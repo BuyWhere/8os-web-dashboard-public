@@ -227,6 +227,35 @@
   font-weight: 600 !important;
 }
 
+/* OS-6399: override marketing header on auth pages to match the warm cream canvas.
+   The default marketing header uses a dark near-black bg (rgba(13,13,15,0.92))
+   which creates a sharp tonal break against the light login/signup surface.
+   Using the same warm cream + blur treatment as the OS-6344 fix keeps visual
+   consistency across all marketing and auth pages.
+   NOTE: The body.login-auth / body.signup-auth class is set by a synchronous
+   inline <script> in layout.tsx BEFORE React hydrates, so this applies on SSR.
+   For /signup the class is added client-side via page <script> as a fallback. */
+body.login-auth header.marketing-header,
+body.signup-auth header.marketing-header {
+  background: rgba(247, 243, 236, 0.85) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-bottom-color: var(--color-border) !important;
+}
+body.login-auth header.marketing-header *,
+body.signup-auth header.marketing-header * {
+  color: var(--color-text-primary) !important;
+}
+/* Dark mode: keep the auth-page header warm, not the default dark charcoal. */
+body.login-auth[data-theme="dark"] header.marketing-header,
+body.signup-auth[data-theme="dark"] header.marketing-header {
+  background: rgba(26, 23, 18, 0.85) !important;
+}
+body.login-auth[data-theme="dark"] header.marketing-header *,
+body.signup-auth[data-theme="dark"] header.marketing-header * {
+  color: var(--color-text-primary) !important;
+}
+
 /* ── Contact form affordance overrides ─────────────────────────────────────
  * Force input backgrounds to white card for strong border contrast in both
  * themes, and ensure button text is legible via theme-aware color.
