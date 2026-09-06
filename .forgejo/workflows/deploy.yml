@@ -1,20 +1,171 @@
 name: deploy
+
+# ZHC push-to-deploy. THERE IS NO GITHUB IN THIS PIPELINE.
+#
+#   git push vault main
+#     -> /mnt/paperclip_scrape_data/git/8os-web-dashboard.git  (post-receive hook)
+#     -> mirrors `main` to our self-hosted Forgejo on Railway
+#     -> this workflow, executed by forgejo-runner on the droplet (runs-on: host)
+#     -> railway up
+#
+# OS-6497 (Wex, 2026-09-06): checkout now authenticates with the FORGE_TOKEN
+# repo secret, NOT `${{ github.token }}`. On this Forgejo 12.0.4 + runner v6.3.1
+# host-mode setup, `github.token` expands to the EMPTY STRING, so the clone URL
+# became `https://token:@forge/...` and every deploy died in ~2s at the checkout
+# step. That is why no commit reached production between 2026-07-24 and
+# 2026-09-06 (197 consecutive failed runs) even though the code was correct.
+# Proven on branch wex-diag: identical clone fails with github.token (run 304)
+# and succeeds with FORGE_TOKEN (run 306). Do not reintroduce github.token here.
+# The only host this workflow contacts for source is our own forge.
+#
+# NOTE: `.github/workflows/*.yml` in this repo are inert legacy GitHub Actions
+# files. Nothing executes them. Do not add deploy logic there.
+#
+# SERVICE MAP (verified against Railway 2026-07-30 — earlier notes were wrong):
+#   repo root (Next.js)  -> web-dashboard   serves 8os.ai, www, apex, telly
+#   repo root (Next.js)  -> frontend        serves dash.8os.ai, sites.8os.ai
+#   backend/  (FastAPI)  -> orchestrator    serves api.8os.ai
+#
+# The previous version of this file deployed backend/ (FastAPI) to
+# web-dashboard, which is the service serving 8os.ai. That would have replaced
+# the homepage with a JSON API. Do not reintroduce that mapping.
+
 on:
   push:
     branches: [main]
+
+concurrency:
+  group: 8os-deploy
+  cancel-in-progress: false
+
 jobs:
   deploy:
     runs-on: host
     steps:
-      - name: Checkout
+      - name: Checkout from Forgejo (self-hosted; actions/checkout is unreliable in host mode)
         run: |
+          set -euo pipefail
           rm -rf "$RUNNER_TEMP/src"
-          git clone --depth 1 --branch main "https://token:${{ github.token }}@forgejo-production-4fb0.up.railway.app/${{ github.repository }}.git" "$RUNNER_TEMP/src"
-      - name: Deploy frontend
-        run: cd "$RUNNER_TEMP/src" && railway up --service frontend --ci
+          git clone --branch main \
+            "https://richmond:${FORGE_TOKEN}@forgejo-production-4fb0.up.railway.app/richmond/8os-web-dashboard.git" \
+            "$RUNNER_TEMP/src"
+        env:
+          FORGE_TOKEN: ${{ secrets.FORGE_TOKEN }}
+
+      - name: Guard - refuse to ship the waitlist landing page to 8os.ai
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/src"
+
+          # The fleet has repeatedly shipped a "coming soon" waitlist homepage to
+          # the apex domain (OS-1070/5160/5167/5189, cancelled 2026-07-29). Note
+          # that waitlist tree lived only in an ephemeral agent workspace
+          # (aab1170f) and is in NO branch - so a blocklist grep would not have
+          # caught it. This gate is therefore a POSITIVE assertion: the homepage
+          # must be the real landing page, whatever someone replaced it with.
+          if ! grep -q 'Right goal, right season' src/app/page.tsx; then
+            echo "REFUSING TO DEPLOY: src/app/page.tsx is not the real 8os landing page."
+            echo "Expected the homepage metadata title '8os: Right goal, right season'."
+            echo "If the homepage was legitimately retitled, update this guard in the same commit."
+            exit 1
+          fi
+          # Belt and braces: the orphaned waitlist components must stay unimported.
+          if grep -qE 'ComingSoonForm|LiveCounter' src/app/page.tsx; then
+            echo "REFUSING TO DEPLOY: homepage imports a waitlist component."
+            exit 1
+          fi
+
+          # Shape checks: the Next.js tree must actually be the Next.js tree.
+          # NOTE: railway-start.sh is NOT in the repo - it is generated inside
+          # the Docker build. Do not assert on it here; that fails every deploy.
+          test -f Dockerfile       || { echo "REFUSING: Dockerfile missing";       exit 1; }
+          test -f railway.toml     || { echo "REFUSING: railway.toml missing";     exit 1; }
+          test -f src/app/page.tsx || { echo "REFUSING: src/app/page.tsx missing"; exit 1; }
+          grep -q '"next"' package.json || { echo "REFUSING: not a Next.js tree"; exit 1; }
+          echo "guard ok - homepage is the real app"
+
+      - name: Deploy Next.js -> web-dashboard (serves 8os.ai)
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/src"
+          railway up --service web-dashboard --ci
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-      - name: Deploy web-dashboard
-        run: cd "$RUNNER_TEMP/src/backend" && railway up --service web-dashboard --ci
+
+      - name: Deploy Next.js -> frontend (serves dash.8os.ai)
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/src"
+          railway up --service frontend --ci
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: Deploy FastAPI -> orchestrator (serves api.8os.ai), only when backend/ changed
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/src"
+
+          BEFORE="${{ github.event.before }}"
+          DEPLOY_BACKEND=1
+          if [ -n "$BEFORE" ] \
+             && [ "$BEFORE" != "0000000000000000000000000000000000000000" ] \
+             && git cat-file -e "${BEFORE}^{commit}" 2>/dev/null; then
+            if git diff --name-only "$BEFORE" HEAD -- backend/ | grep -q .; then
+              DEPLOY_BACKEND=1
+            else
+              DEPLOY_BACKEND=0
+            fi
+          fi
+          # If the previous revision is unknown we deploy rather than skip -
+          # silently not shipping code is worse than an extra rebuild.
+
+          if [ "$DEPLOY_BACKEND" = "1" ]; then
+            cd backend
+            railway up --service orchestrator --ci
+          else
+            echo "backend/ unchanged in this push - skipping orchestrator deploy"
+          fi
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+
+      - name: Verify 8os.ai actually serves the real app
+        run: |
+          set -euo pipefail
+          # A brief 502 during the instance swap is normal on this service.
+          for i in $(seq 1 20); do
+            T="$(curl -sS -m 15 https://8os.ai/ 2>/dev/null | grep -o '<title>[^<]*</title>' || true)"
+            case "$T" in
+              *"Right goal, right season"*)
+                echo "VERIFIED: $T"
+                exit 0
+                ;;
+            esac
+            echo "attempt $i/20: ${T:-<no title yet>}"
+            sleep 15
+          done
+          echo "FAILED: 8os.ai did not serve the real app within 5 minutes."
+          echo "If the title still reads 'Your Personalized Life Operating System', the waitlist is live."
+          exit 1
+
+      - name: Verify waitlist PII is gated on both stats paths (OS-6497)
+        run: |
+          set -euo pipefail
+          # OS-6030 gated BOTH /api/waitlist/stats and /waitlist/stats behind
+          # ADMIN_SECRET. Both must return 401 unauthenticated. If ADMIN_SECRET is
+          # unset in the service env the routes close-fail to 401, which is also
+          # acceptable here - the point is that no subscriber email is public.
+          fail=0
+          for path in /api/waitlist/stats /waitlist/stats; do
+            code="$(curl -sS -o /dev/null -w '%{http_code}' -m 20 "https://8os.ai${path}" || echo 000)"
+            echo "GET 8os.ai${path} -> ${code}"
+            if [ "$code" = "200" ]; then
+              echo "LEAK: ${path} serves waitlist entries unauthenticated."
+              fail=1
+            fi
+          done
+          # The public counter must still work (it must NOT be gated).
+          ccode="$(curl -sS -o /dev/null -w '%{http_code}' -m 20 https://8os.ai/api/waitlist/count || echo 000)"
+          echo "GET 8os.ai/api/waitlist/count -> ${ccode}"
+          [ "$ccode" = "200" ] || { echo "REGRESSION: public waitlist count is not 200."; fail=1; }
+          [ "$fail" = "0" ] || exit 1
+          echo "waitlist stats gated on both paths; public count intact"
