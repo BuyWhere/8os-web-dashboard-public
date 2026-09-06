@@ -13,3 +13,4 @@ See [docs](docs/) for setup instructions.
 ## License
 
 Proprietary — 8os.ai © 2026
+
