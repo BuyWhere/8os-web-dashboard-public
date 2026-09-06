@@ -78,6 +78,24 @@ export default function LoginPage() {
         }}
       />
       <style dangerouslySetInnerHTML={{ __html: `
+        /* OS-6399: override marketing header on login to match the warm cream canvas.
+           The header's dark background (rgba(13,13,15,0.92)) creates a visual disconnect
+           on the light login page (cream #F7F3EC). The fix is in OS-6344 (forge/main
+           commit afdbec8), but not yet deployed. This override uses :has() to target
+           the header when login-auth is present in the DOM. */
+        body:has(.login-auth) header.marketing-header {
+          background: rgba(247, 243, 236, 0.85) !important;
+          backdrop-filter: blur(12px) !important;
+          -webkit-backdrop-filter: blur(12px) !important;
+          border-bottom-color: var(--color-border) !important;
+        }
+        body:has(.login-auth) header.marketing-header * {
+          color: var(--color-text-primary) !important;
+        }
+        /* Dark mode override for login header */
+        body:has(.login-auth)[data-theme="dark"] header.marketing-header {
+          background: rgba(26, 23, 18, 0.85) !important;
+        }
         /* OS-5957 / OS-5953 / OS-5929: force white on #755521 including descendants;
            social labels black including provider-suffixed classes axe targets. */
         .login-auth .cl-formButtonPrimary,
