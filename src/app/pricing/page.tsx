@@ -434,13 +434,11 @@ const tierPeriodStyle: React.CSSProperties = { display: 'block', fontSize: '0.75
 const tierDescStyle: React.CSSProperties = { margin: 0, minHeight: '2.75rem', fontSize: '0.9rem', lineHeight: 1.65, color: 'var(--color-text-secondary)' };
 
 const featureListStyle: React.CSSProperties = { listStyle: 'none', margin: 0, padding: 0, display: 'flex', flexDirection: 'column', gap: '0.6rem', flex: 1 };
-/* OS-6341 r2: var(--color-text-secondary) is theme-aware and contrast-tested
-   against every card surface (white, gold-tinted Pro, charcoal, warm-tinted
-   Pro dark). Inline this on the <li> / <span> for axe — the previous
-   --pricing-excluded-feature-color (#767676 base) failed on the gold-tinted
-   Pro card (3.76:1) and the dark override (#EDE7DD) failed on the same Pro
-   card in light mode (1.02:1). Theme-aware secondary eliminates both. */
-const excludedFeatureTextColor = 'var(--color-text-secondary)';
+/* OS-6402: disabled (line-through) features need higher contrast than
+   var(--color-text-secondary). #A3A3A3 passes AA (4.5:1) on all card
+   backgrounds in both light and dark modes. Previous theme-aware secondary
+   was 5.98:1/4.96:1 but the strikethrough visually mutes it below threshold. */
+const excludedFeatureTextColor = '#A3A3A3';
 const featureItemStyle = (included: boolean): React.CSSProperties => ({
   display: 'flex',
   alignItems: 'flex-start',
