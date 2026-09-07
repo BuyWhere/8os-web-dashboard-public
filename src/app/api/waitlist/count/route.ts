@@ -1,18 +1,22 @@
 import { NextResponse } from 'next/server';
-import { prisma } from '@/lib/db/prisma';
 
-// OS-1752: query DB directly instead of proxying to the orchestrator
-// (which has no /waitlist/stats route and returns 500).
-// Public waitlist count endpoint — no auth required.
-// Used by the social proof counter on /coming-soon and landing page.
+const CANONICAL_API_URL = 'https://api.8os.ai';
+
+// OS-6030 / OS-4794: the apex frontend DB is not the waitlist source of
+// truth. Live 8os.ai was serving count=141 from local prisma while
+// api.8os.ai had 3065. Always proxy the canonical public count.
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const result = await prisma.$queryRaw<[{ count: bigint }]>`
-      SELECT COUNT(*)::bigint AS count FROM waitlist_entries
-    `;
-    return NextResponse.json({ count: Number(result[0].count) });
+    const r = await fetch(`${CANONICAL_API_URL}/api/waitlist/count`, {
+      cache: 'no-store',
+    });
+    if (!r.ok) {
+      return NextResponse.json({ count: 0 }, { status: 200 });
+    }
+    const data = (await r.json()) as { count?: number };
+    return NextResponse.json({ count: data.count ?? 0 });
   } catch {
     return NextResponse.json({ count: 0 }, { status: 200 });
   }
