@@ -49,6 +49,14 @@ export default function AboutPage() {
               <em>what</em> kind of success will actually make you happy. Not someone else&apos;s version of success.
               Yours.
             </p>
+
+            {/* Mid-story conversion CTA — OS-6554 */}
+            <div style={midCtaWrapStyle}>
+              <Link href="/signup" style={primaryLinkStyle}>
+                Try it free
+              </Link>
+              <span style={midCtaHintStyle}>Free. No credit card. Works in your browser.</span>
+            </div>
           </div>
         </section>
 
@@ -69,11 +77,14 @@ export default function AboutPage() {
         <section style={ctaSectionStyle}>
           <h2 style={ctaTitleStyle}>Ready to find your operating manual?</h2>
           <div style={ctaLinksStyle}>
-            <Link href="/onboarding" style={primaryLinkStyle}>
-              Get Your Free Archetype →
+            <Link href="/signup" style={primaryLinkStyle}>
+              Try it free
+            </Link>
+            <Link href="/onboarding" style={secondaryLinkStyle}>
+              Get your free archetype →
             </Link>
             <Link href="/philosophy" style={secondaryLinkStyle}>
-              Read Our Philosophy
+              Read our philosophy
             </Link>
           </div>
         </section>
@@ -217,6 +228,19 @@ const ctaTitleStyle: React.CSSProperties = {
   margin: '0 0 1.5rem',
   fontSize: '1.75rem',
   letterSpacing: '-0.03em',
+};
+
+const midCtaWrapStyle: React.CSSProperties = {
+  display: 'flex',
+  flexWrap: 'wrap',
+  alignItems: 'center',
+  gap: '1rem',
+  marginTop: '0.5rem',
+};
+
+const midCtaHintStyle: React.CSSProperties = {
+  fontSize: '0.88rem',
+  color: 'var(--color-text-secondary)',
 };
 
 const ctaLinksStyle: React.CSSProperties = {
