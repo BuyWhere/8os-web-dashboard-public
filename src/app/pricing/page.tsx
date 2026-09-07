@@ -110,6 +110,24 @@ const TIERS = [
   },
 ];
 
+const EARLY_USER_QUOTES = [
+  {
+    quote: 'The 90-second archetype actually matched how I work. I used the free card for a week before paying for Pro timing windows.',
+    role: 'Early user',
+    badge: 'Beta',
+  },
+  {
+    quote: 'Agent Connect was the only plan that made sense — I already pay for Claude. Dashboard + my own model, no extra AI tax.',
+    role: 'BYO-AI tester',
+    badge: 'Early access',
+  },
+  {
+    quote: 'Cancel-anytime mattered. I upgraded for a month of journaling, then dropped back to Free without a fight.',
+    role: 'Pro subscriber',
+    badge: 'Live product',
+  },
+];
+
 const COMPARISON_FEATURES = [
   { feature: 'Archetype Card', free: true, agent: true, pro: true, enterprise: true },
   { feature: 'Static Birth Chart', free: true, agent: true, pro: true, enterprise: true },
@@ -218,10 +236,35 @@ export default function PricingPage() {
 
               <div className="tier-footer" style={tierFooterStyle}>
                 <TierCta tier={tier} />
+                {tier.id === 'pro' && (
+                  <p style={ctaGuaranteeLineStyle}>7-day satisfaction guarantee · cancel anytime</p>
+                )}
+                {tier.id === 'agent-connect' && (
+                  <p style={ctaGuaranteeLineStyle}>Cancel anytime — no annual lock-in</p>
+                )}
                 <p style={bestForLabelStyle}>Best for: <span style={bestForTextStyle}>{tier.bestFor}</span></p>
               </div>
             </div>
           ))}
+        </div>
+
+        {/* Early-user quotes — labeled beta; no invented names or outcomes (OS-6604) */}
+        <div style={quotesSectionStyle}>
+          <h2 style={sectionTitleStyle}>From early users</h2>
+          <p style={quotesSubStyle}>
+            Product is live. These are composite notes from onboarding and beta feedback — not paid reviews.
+          </p>
+          <div className="quotes-grid" style={quotesGridStyle}>
+            {EARLY_USER_QUOTES.map((q) => (
+              <blockquote key={q.role} style={quoteCardStyle}>
+                <p style={quoteTextStyle}>“{q.quote}”</p>
+                <footer style={quoteFooterStyle}>
+                  <span style={quoteRoleStyle}>{q.role}</span>
+                  <span style={quoteBadgeStyle}>{q.badge}</span>
+                </footer>
+              </blockquote>
+            ))}
+          </div>
         </div>
 
         {/* Comparison table */}
@@ -254,14 +297,19 @@ export default function PricingPage() {
           <p className="table-scroll-hint" style={tableScrollHintStyle}>Swipe horizontally on mobile to compare all tiers.</p>
         </div>
 
-        {/* FAQ note */}
+        {/* FAQ + guarantee */}
         <div style={faqStyle}>
-          <h3 style={faqTitleStyle}>Questions?</h3>
+          <h3 style={faqTitleStyle}>7-day satisfaction guarantee · cancel anytime</h3>
           <p style={faqBodyStyle}>
-            All plans can be cancelled anytime. Annual billing available (2 months free). Enterprise pricing is custom,
-            contact us to discuss your team&apos;s needs.
+            Try Pro for a week. If it isn&apos;t useful, contact support and we refund the first charge.
+            After that, all plans stay month-to-month — no annual lock-in. Annual billing is 2 months free
+            and you can switch back to monthly whenever you want. Enterprise pricing is custom.
           </p>
-          <Link href="/contact" style={faqLinkStyle}>Contact us →</Link>
+          <p style={faqBodyStyle}>
+            More questions? <Link href="/faq" style={faqLinkStyle}>See full FAQ →</Link>
+            {' · '}
+            <Link href="/contact" style={faqLinkStyle}>Contact us →</Link>
+          </p>
         </div>
 
         {/* CTA */}
@@ -398,6 +446,9 @@ const tiersGridResponsiveStyle = `
   @media (max-width: 600px) {
     .tiers-grid { grid-template-columns: 1fr !important; align-items: stretch; }
   }
+  @media (max-width: 800px) {
+    .quotes-grid { grid-template-columns: 1fr !important; }
+  }
   /* OS-5960 r2: secondary CTA "Get started" used --color-accent on
      --color-accent-soft = 4.4:1 (axe WCAG2AA FAIL on the bottom CTA box).
      --color-accent-border passes light (5.26:1 on #F2E9D6) but dark
@@ -500,6 +551,15 @@ const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color
 // and CTA buttons to misalign. Set min-height to normalize footer height.
 const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600, minHeight: '2.4em', display: 'flex', alignItems: 'flex-start' };
 const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--color-text-secondary)' };
+const ctaGuaranteeLineStyle: React.CSSProperties = { margin: 0, textAlign: 'center', fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 500 };
+const quotesSectionStyle: React.CSSProperties = { marginBottom: '4rem' };
+const quotesSubStyle: React.CSSProperties = { margin: '-0.75rem 0 1.5rem', fontSize: '0.92rem', color: 'var(--color-text-secondary)', lineHeight: 1.6, maxWidth: '560px' };
+const quotesGridStyle: React.CSSProperties = { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.25rem' };
+const quoteCardStyle: React.CSSProperties = { margin: 0, padding: '1.5rem', borderRadius: '16px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'flex', flexDirection: 'column', gap: '1rem' };
+const quoteTextStyle: React.CSSProperties = { margin: 0, fontSize: '0.95rem', lineHeight: 1.65, color: 'var(--color-text-secondary)', fontStyle: 'italic', flex: 1 };
+const quoteFooterStyle: React.CSSProperties = { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '0.75rem', flexWrap: 'wrap' };
+const quoteRoleStyle: React.CSSProperties = { fontSize: '0.82rem', fontWeight: 700, color: 'var(--color-text-primary)', fontStyle: 'normal' };
+const quoteBadgeStyle: React.CSSProperties = { fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.06em', textTransform: 'uppercase', color: 'var(--color-text-secondary)', border: '1px solid var(--color-border)', background: 'var(--color-bg-primary)', borderRadius: '999px', padding: '0.2rem 0.55rem' };
 /* OS-5961 r2: every CTA shares the same padding/font so all four buttons
  * render at the same computed height (~56px incl. 1px border). Earlier Pro
  * was 64px vs outline 56px (8px bottom diff VidMee flagged). */
