@@ -139,7 +139,33 @@ export async function POST(request: NextRequest) {
           { status: 409 }
         );
       }
-      console.error('Waitlist insert error:', insertErr);
+      // OS-6519: Prisma/DB write failing in production (500 "Failed to join
+      // waitlist"). Fall back to the healthy orchestrator /waitlist/join so
+      // signups still land even when this service's DATABASE_URL is stale.
+      console.error('Waitlist insert error, falling back to orchestrator:', insertErr);
+      try {
+        const upstream = await fetch(`${ORCHESTRATOR_URL}/waitlist/join`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            source,
+            affiliate_opt_in: affiliateOptIn,
+          }),
+        });
+        const text = await upstream.text();
+        let payload: unknown = text;
+        try {
+          payload = JSON.parse(text);
+        } catch {
+          /* keep raw */
+        }
+        if (upstream.ok || upstream.status === 409) {
+          return NextResponse.json(payload, { status: upstream.status });
+        }
+      } catch (upstreamErr) {
+        console.error('Waitlist orchestrator fallback failed:', upstreamErr);
+      }
       return NextResponse.json(
         { error: 'Failed to join waitlist' },
         { status: 500 }

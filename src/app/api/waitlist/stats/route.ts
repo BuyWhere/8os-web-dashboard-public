@@ -14,6 +14,8 @@ function unauthorized() {
 export async function GET(request: NextRequest) {
   const adminSecret = process.env.ADMIN_SECRET;
   const authHeader = request.headers.get('authorization');
+  // OS-6519: public /api/waitlist/stats must never return entries/emails.
+  // Match api.8os.ai 401. Count-only lives at /api/waitlist/count.
   if (!adminSecret || authHeader !== `Bearer ${adminSecret}`) {
     return unauthorized();
   }
