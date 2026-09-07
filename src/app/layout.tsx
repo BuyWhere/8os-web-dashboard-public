@@ -101,34 +101,37 @@ export default function RootLayout({
 }: {
   children: React.ReactNode
 }) {
+  // OS-6536: ClerkProvider MUST sit inside <html>/<body>. Wrapping the document
+  // root can leave client hooks (useAuth in CheckoutButton / Header) without
+  // context on public marketing pages and crash /pricing into the error boundary.
   return (
-    <ClerkProvider
-      signInUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL ?? '/login'}
-      signUpUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL ?? '/signup'}
-      signInFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL ?? '/dashboard'}
-      signUpFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL ?? '/onboarding'}
-    >
-      <html lang="en" className={inter.variable} suppressHydrationWarning>
-        <head>
-          {/* No-flash theme boot, sets <html data-theme> synchronously from the
-              persisted choice + OS preference, BEFORE first paint. Must run
-              before any styled content renders. See src/lib/theme.ts. */}
-          <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
-          {/* OS-6399: add auth-page body class BEFORE React hydrates so the
-              marketing header override (body.login-auth header.marketing-header)
-              applies on first paint. Synchronous (not async/defer) so it runs
-              before the browser paints. */}
-          <script
-            dangerouslySetInnerHTML={{
-              __html: `(function(){var p=window.location.pathname;if(p==='/login'||p==='/sign-in'||p==='/signin'){document.body.classList.add('login-auth');}if(p==='/signup'||p==='/sign-up'||p==='/signout'){document.body.classList.add('signup-auth');}})();`,
-            }}
-          />
-          <script
-            type="application/ld+json"
-            dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
-          />
-        </head>
-        <body suppressHydrationWarning>
+    <html lang="en" className={inter.variable} suppressHydrationWarning>
+      <head>
+        {/* No-flash theme boot, sets <html data-theme> synchronously from the
+            persisted choice + OS preference, BEFORE first paint. Must run
+            before any styled content renders. See src/lib/theme.ts. */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_BOOT_SCRIPT }} />
+        {/* OS-6399: add auth-page body class BEFORE React hydrates so the
+            marketing header override (body.login-auth header.marketing-header)
+            applies on first paint. Synchronous (not async/defer) so it runs
+            before the browser paints. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){var p=window.location.pathname;if(p==='/login'||p==='/sign-in'||p==='/signin'){document.body.classList.add('login-auth');}if(p==='/signup'||p==='/sign-up'||p==='/signout'){document.body.classList.add('signup-auth');}})();`,
+          }}
+        />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(softwareSchema) }}
+        />
+      </head>
+      <body suppressHydrationWarning>
+        <ClerkProvider
+          signInUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_URL ?? '/login'}
+          signUpUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_URL ?? '/signup'}
+          signInFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL ?? '/dashboard'}
+          signUpFallbackRedirectUrl={process.env.NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL ?? '/onboarding'}
+        >
           {/* ThemeProvider wraps all chrome (Header/Footer) + content so the
               whole tree can read/toggle the light/dark theme via useTheme(). */}
           <ThemeProvider>
@@ -145,8 +148,8 @@ export default function RootLayout({
             </div>
             <Footer />
           </ThemeProvider>
-        </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   )
 }

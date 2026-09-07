@@ -10,10 +10,15 @@ export default function Error({
   error: Error & { digest?: string }
   reset: () => void
 }) {
+  // PostHogProvider only wraps (dashboard). Public marketing pages have no
+  // provider — usePostHog() still returns undefined, but keep capture guarded.
   const posthog = usePostHog()
   useEffect(() => {
-    // Pillar 3: emit $exception to PostHog error dashboard
-    if (posthog) posthog.captureException(error)
+    try {
+      if (posthog) posthog.captureException(error)
+    } catch {
+      /* never let telemetry crash the recovery UI */
+    }
   }, [error, posthog])
 
   return (
@@ -39,7 +44,7 @@ export default function Error({
         onClick={reset}
         style={{
           padding: '0.5rem 1.25rem',
-          background: '#8A6514',
+          background: '#1A1B4B',
           color: '#FFFFFF',
           border: 'none',
           borderRadius: 6,
