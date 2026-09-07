@@ -17,6 +17,8 @@ const CTA_BG = "#0D0D0F"  // OS-5912: dark charcoal (header bar color) for high 
 const CTA_FG = "#FFFFFF"
 const ICON_GOLD = "#8A6728"  // gold for benefit icons (decorative, not WCAG-critical)
 const SOCIAL_FG = "#000000" // 21:1 on white — beats Clerk provider brand greys
+const SOCIAL_BG = "#FFFFFF" // pin social buttons to white even if Clerk card/theme goes dark
+const LEGAL_FG = "#221F1A" // 16.6:1 on white — axe targets `.signup-auth > p` (was #4A4A4A, fails if measured vs dark card)
 const BORDER = "#4A4A4A" // dark gray for WCAG input borders — 7.1:1 on white (was #767676 4.5:1, Clerk shorthand overrides border-color longhand)
 
 const BENEFITS = [
@@ -122,7 +124,7 @@ export default function SignupPage() {
                   cardBox: { boxShadow: "none", border: "none", borderRadius: 0, background: "transparent" },
                   header: { display: "none" }, // Hide Clerk's default logo/header branding
                   formButtonPrimary: { minHeight: "44px", fontSize: "15px", color: CTA_FG, background: CTA_BG, backgroundColor: CTA_BG },
-                  socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px", color: SOCIAL_FG },
+                  socialButtonsBlockButton: { minHeight: "44px", border: `1px solid ${BORDER}`, borderRadius: "8px", color: SOCIAL_FG, background: SOCIAL_BG, backgroundColor: SOCIAL_BG },
                   socialButtonsBlockButtonText: { color: SOCIAL_FG },
                   formFieldInput: { minHeight: "44px", border: `1px solid ${BORDER}`, boxShadow: `0 0 0 1px ${BORDER}` },
                   formFieldLabel: { color: LINK_DARK }, // dark label for WCAG AA 12.4:1 on white
@@ -139,7 +141,7 @@ export default function SignupPage() {
                 on Dashboard settings; these links are always visible regardless.
                 OS-5940: the <p> now lives inside .signup-auth-card so it visually
                 attaches to the card border (no gap) and matches the card width. */}
-            <p style={{ margin: 0, padding: "16px 24px 20px", fontSize: "0.85rem", color: "#4A4A4A", textAlign: "center", lineHeight: 1.4, borderTop: `1px solid rgba(74,74,74,0.12)` }}>
+            <p style={{ margin: 0, padding: "16px 24px 20px", fontSize: "0.85rem", color: LEGAL_FG, textAlign: "center", lineHeight: 1.4, borderTop: `1px solid rgba(74,74,74,0.12)` }}>
               By creating an account you agree to our{" "}
               <a href="/terms" style={{ color: LINK_DARK, textDecoration: "underline" }}>Terms of Service</a>
               {" "}and{" "}
@@ -152,24 +154,46 @@ export default function SignupPage() {
       <style dangerouslySetInnerHTML={{ __html: `
         .signup-auth .cl-formFieldInput { border: 1px solid ${BORDER} !important; box-shadow: 0 0 0 1px ${BORDER} !important; }
         .signup-auth .cl-formFieldOptionalText { color: ${LINK_DARK} !important; }
-        .signup-auth .cl-socialButtonsBlockButton { border-color: ${BORDER} !important; border: 1px solid ${BORDER} !important; color: ${SOCIAL_FG} !important; }
-        .signup-auth .cl-socialButtonsBlockButton * { color: ${SOCIAL_FG} !important; fill: ${SOCIAL_FG} !important; }
-        /* OS-5957 / OS-5928 / OS-5655: Apple labels ship as Clerk --colorTextSecondary
-           / muted grey and look disabled vs GitHub/Google. Force every provider
-           suffix + inner span/svg to SOCIAL_FG (#000, 21:1 on white). */
+        /* OS-6397: pin social buttons to white + black labels. Live QA (2026-09-07)
+           still fails axe on .cl-socialButtonsBlockButtonText__apple/github/google
+           when Clerk paints labels against a dark card. White fill + #000 text = 21:1. */
+        .signup-auth .cl-socialButtonsBlockButton,
+        .signup-auth .cl-socialButtonsBlockButton__apple,
+        .signup-auth .cl-socialButtonsBlockButton__github,
+        .signup-auth .cl-socialButtonsBlockButton__google,
+        .signup-auth button[data-provider="apple"],
+        .signup-auth button[data-provider="github"],
+        .signup-auth button[data-provider="google"] {
+          border-color: ${BORDER} !important;
+          border: 1px solid ${BORDER} !important;
+          color: ${SOCIAL_FG} !important;
+          background: ${SOCIAL_BG} !important;
+          background-color: ${SOCIAL_BG} !important;
+        }
+        .signup-auth .cl-socialButtonsBlockButton *,
         .signup-auth .cl-socialButtonsBlockButtonText,
         .signup-auth .cl-socialButtonsBlockButtonText__apple,
         .signup-auth .cl-socialButtonsBlockButtonText__github,
         .signup-auth .cl-socialButtonsBlockButtonText__google,
+        .signup-auth .cl-socialButtonsProviderIcon,
         .signup-auth .cl-socialButtonsProviderIcon__apple,
-        .signup-auth button[data-provider="apple"],
-        .signup-auth button[data-provider="apple"] * {
+        .signup-auth .cl-socialButtonsProviderIcon__github,
+        .signup-auth .cl-socialButtonsProviderIcon__google,
+        .signup-auth button[data-provider="apple"] *,
+        .signup-auth button[data-provider="github"] *,
+        .signup-auth button[data-provider="google"] * {
           color: ${SOCIAL_FG} !important;
           fill: ${SOCIAL_FG} !important;
           opacity: 1 !important;
         }
+        html[data-theme="dark"] .signup-auth .cl-socialButtonsBlockButton,
+        html[data-theme="dark"] .signup-auth .cl-socialButtonsBlockButton * {
+          color: ${SOCIAL_FG} !important;
+          background: ${SOCIAL_BG} !important;
+          background-color: ${SOCIAL_BG} !important;
+        }
         .signup-auth > p,
-        .signup-auth-card > p { color: #4A4A4A !important; }
+        .signup-auth-card > p { color: ${LEGAL_FG} !important; }
         .signup-auth .cl-formFieldHintText,
         .signup-auth .cl-footerActionLink { color: ${LINK_DARK} !important; }
         /* OS-5912: white on dark charcoal = 19.3:1. Descendants + submit beat Clerk
