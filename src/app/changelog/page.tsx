@@ -112,10 +112,13 @@ const versions: Version[] = [
   },
 ]
 
+// OS-5815: every text color on this page is theme-aware + AA-tested.
+// text-secondary = 5.41:1 light / 8.23:1 dark. Dots keep semantic color
+// for visual differentiation but are non-text UI markers.
 const typeConfig: Record<ChangeType, { label: string; color: string; dot: string }> = {
-  new: { label: 'New', color: '#22c55e', dot: '#22c55e' },
-  improvement: { label: 'Improvement', color: '#38bdf8', dot: '#38bdf8' },
-  fix: { label: 'Fix', color: 'var(--color-accent)', dot: 'var(--color-accent)' },
+  new: { label: 'New', color: 'var(--color-text-secondary)', dot: '#15803d' },
+  improvement: { label: 'Improvement', color: 'var(--color-text-secondary)', dot: '#0369a1' },
+  fix: { label: 'Fix', color: 'var(--color-text-secondary)', dot: 'var(--color-accent)' },
 }
 
 export default function ChangelogPage() {
@@ -178,8 +181,8 @@ export default function ChangelogPage() {
                 <div style={{ marginBottom: '20px' }}>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: '14px', marginBottom: '4px' }}>
                     <h2 style={{ fontSize: '22px', fontWeight: 700, color: 'var(--color-text-primary)' }}>{v.version}</h2>
-                    {/* Gold accent on cream 4.80:1 / charcoal 6.93:1 — WCAG AA (was #a5b4fc = 1.80:1 on cream) */}
-                    <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-accent)' }}>{v.label}</span>
+                    {/* text-secondary = 5.41:1 cream / 8.23:1 charcoal — WCAG AA both modes (was #a5b4fc = 1.80:1 fail; was --color-accent light #b08637 = 3.01 fail) */}
+                    <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--color-text-secondary)' }}>{v.label}</span>
                   </div>
                   <time
                     dateTime={v.isoDate}
