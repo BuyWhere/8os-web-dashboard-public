@@ -234,6 +234,106 @@ async def unhandled_exception_handler(request: Request, exc: Exception) -> JSONR
 # ---------------------------------------------------------------------------
 # Routes
 # ---------------------------------------------------------------------------
+_PRODUCT_CATALOG = [
+    {
+        "id": "pro_monthly",
+        "name": "8os Pro Monthly",
+        "description": "Personalized operating system with daily AI coaching.",
+        "price": {
+            "amount": 1800,
+            "currency": "usd",
+            "interval": "month",
+            "lookupKey": "pro_monthly",
+        },
+        "mode": "subscription",
+        "features": [
+            "Unlimited archetype readings",
+            "Daily AI coaching",
+            "Archetype skin customization",
+            "Energy & commitment tracking",
+            "Priority support",
+        ],
+    },
+    {
+        "id": "pro_yearly",
+        "name": "8os Pro Yearly",
+        "description": "Annual Pro access with two months free.",
+        "price": {
+            "amount": 11900,
+            "currency": "usd",
+            "interval": "year",
+            "lookupKey": "pro_yearly",
+        },
+        "mode": "subscription",
+        "features": [
+            "Everything in Pro Monthly",
+            "Save $97/year vs monthly",
+            "2 months free",
+            "Early access to new features",
+            "Priority support",
+        ],
+    },
+    {
+        "id": "life_report",
+        "name": "8os Life Report",
+        "description": "One-time comprehensive 8OS archetype report.",
+        "price": {
+            "amount": 5900,
+            "currency": "usd",
+            "interval": None,
+            "lookupKey": "life_report",
+        },
+        "mode": "payment",
+        "features": [
+            "One-time purchase, yours forever",
+            "Comprehensive 8OS archetype report",
+            "36-page PDF delivered instantly",
+            "Includes bazi and five elements deep-dive",
+            "Lifetime updates",
+        ],
+    },
+]
+
+
+def _find_product(product_id: str) -> dict | None:
+    normalized = product_id.strip().lower()
+    for product in _PRODUCT_CATALOG:
+        price = product["price"]
+        if normalized in {product["id"], price["lookupKey"]}:
+            return product
+    return None
+
+
+@app.get("/api/products")
+@app.get("/products")
+async def list_products() -> dict:
+    """Public product catalog used by the api.8os.ai product surface."""
+    return {"products": _PRODUCT_CATALOG}
+
+
+@app.get("/api/products/trending")
+@app.get("/products/trending")
+async def trending_products() -> dict:
+    """Compatibility endpoint for product-surface probes."""
+    return {"products": _PRODUCT_CATALOG}
+
+
+@app.get("/api/products/search")
+@app.get("/products/search")
+async def search_products() -> dict:
+    """Compatibility endpoint for product-surface probes."""
+    return {"products": _PRODUCT_CATALOG}
+
+
+@app.get("/api/products/{product_id}")
+@app.get("/products/{product_id}")
+async def get_product(product_id: str) -> dict:
+    product = _find_product(product_id)
+    if product is None:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return {"product": product}
+
+
 def _tool_call_route_registered(app: FastAPI) -> bool:
     """
     OS-6138: in-process router introspection for POST /api/alignment/tool-call.
