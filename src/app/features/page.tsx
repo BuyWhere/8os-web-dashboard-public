@@ -2,6 +2,9 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { SidebarNav } from '@/components/SidebarNav';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0; // OS-5908: bust stale ISR (s-maxage HIT of 38 million+)
+
 export const metadata: Metadata = {
   title: 'Features, 8os',
   description: 'Discover the features that make 8os the most personalized productivity system on Earth.',
