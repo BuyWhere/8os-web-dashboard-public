@@ -371,10 +371,12 @@ const tiersGridResponsiveStyle = `
    * line-through is preserved: it's a legitimate "not included" affordance,
    * and the original OS-2779 fix (91945819) shipped with it. */
   .pricing-page {
+    --pricing-excluded-feature-color: #6B6257;
     --pricing-included-marker-color: #15803D;
     overflow: visible;
   }
   [data-theme='dark'] .pricing-page {
+    --pricing-excluded-feature-color: #EDE7DD;
     --pricing-included-marker-color: #86EFAC;
   }
   /* OS-5934 / OS-5938 / OS-5961 r2: parent grid defines 4 explicit row tracks
@@ -524,7 +526,7 @@ const featureListStyle: React.CSSProperties = { listStyle: 'none', margin: 0, pa
      - #52525B on #FFFFFF = 7.73:1 PASS
      - #52525B on #F2E9D6 (Pro) = 5.53:1 PASS
      - #52525B on #221E18 (dark) = 8.76:1 PASS */
-const excludedFeatureTextColor = '#52525B';
+const excludedFeatureTextColor = 'var(--pricing-excluded-feature-color)';
 const featureItemStyle = (included: boolean): React.CSSProperties => ({
   display: 'flex',
   alignItems: 'flex-start',
