@@ -1,5 +1,8 @@
 'use client';
 
+import { useAuth } from '@clerk/nextjs';
+import { CheckoutButtonInner } from './CheckoutButtonInner';
+
 interface CheckoutButtonProps {
   tier: 'agent-connect' | 'pro';
   label: string;
@@ -11,24 +14,32 @@ function signupHref(tier: CheckoutButtonProps['tier']) {
   return `/signup?plan=${encodeURIComponent(tier)}`;
 }
 
+/**
+ * OS-6536 fix: useAuth must never be called during module-level evaluation
+ * (e.g. during a server-rendered import of a Client Component page).
+ * Split into two files so the inner component — which is a React boundary
+ * island — is never synchronously evaluated at import time.
+ *
+ * This wrapper calls useAuth *inside* the ClerkProvider context (it is itself
+ * 'use client') so the context is always present before useAuth fires.
+ */
 export function CheckoutButton({ tier, label, style, className }: CheckoutButtonProps) {
-  // OS-6536: do not call Clerk auth hooks on the public /pricing page. Those
-  // hooks throw when provider context is missing and the whole route crashes
-  // into the error boundary. Marketing CTAs always go to /signup?plan=
-  // (OS-5647 / OS-5891). Authenticated Stripe checkout remains on dashboard
-  // upgrade surfaces.
-  const sharedStyle: React.CSSProperties = {
-    ...style,
-    display: 'block',
-    textAlign: 'center',
-    textDecoration: 'none',
-    boxSizing: 'border-box',
-    width: '100%',
-  };
+  const { isLoaded, isSignedIn } = useAuth();
+
+  if (!isLoaded || !isSignedIn) {
+    return (
+      <a href={signupHref(tier)} style={style} className={className}>
+        {label}
+      </a>
+    );
+  }
 
   return (
-    <a href={signupHref(tier)} style={sharedStyle} className={className}>
-      {label}
-    </a>
+    <CheckoutButtonInner
+      tier={tier}
+      label={label}
+      style={style}
+      className={className}
+    />
   );
 }
