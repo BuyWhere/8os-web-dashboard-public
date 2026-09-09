@@ -47,6 +47,15 @@
   color: #D4AF37;
 }
 
+/* OS-6638: eyebrow fails WCAG AA in dark mode when no data-theme attr is set yet
+ * (system dark + no-JS / SSR paint). --color-accent-border (#9A7A3A) on
+ * --color-accent-soft (#3A3125) = 3.17:1 FAIL. Pin page-local gold unconditionally. */
+@media (prefers-color-scheme: dark) {
+  .eyebrow {
+    color: #D4AF37;
+  }
+}
+
 .title {
   font-size: clamp(2rem, 4vw, 2.5rem);
   font-weight: 800;
