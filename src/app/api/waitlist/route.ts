@@ -114,17 +114,79 @@ export async function POST(request: NextRequest) {
     // schema defaults it to False so existing callers stay unchanged.
     const affiliateOptIn = body.affiliate_opt_in === true;
 
-    // OS-1173: the FastAPI route is /waitlist/join (not /waitlist). The
-    // previous proxy posted to /waitlist which returned 404, so the live
-    // 8os.ai waitlist form was silently broken and never captured a single
-    // signup. Fix the path so the existing form starts working too.
-    // OS-1744: orchestrator returning 500 on all routes.
-    // Write directly to database via Prisma instead of proxying.
-    // OS-6053: use crypto.randomUUID() instead of uuid_generate_v4().
-    // The uuid-ossp extension is present on the original DB (endearing-miracle)
-    // but absent on the new Railway Postgres instance used by the `frontend`
-    // service. crypto.randomUUID() is a built-in Node.js API (v16+) with no
-    // DB dependency and produces RFC-4122-compliant v4 UUIDs.
+    // OS-6729: write to the canonical DB via the orchestrator FIRST.
+    // apex.8os.ai and telly.8os.ai are served by a separate Railway
+    // "frontend" deployment whose DATABASE_URL points to a secondary Postgres
+    // (~517 rows) instead of the canonical one (~3677). Writing to the local DB
+    // silently lost signups because count reads proxy to api.8os.ai (canonical)
+    // but join writes went to the secondary DB.
+    // OS-1173/OS-1744: orchestrator was a fallback; it is now primary so all
+    // surfaces write to the same canonical DB regardless of their local DATABASE_URL.
+    // Fall back to local Prisma only if the orchestrator is unreachable.
+    let joinResponse: Response;
+    try {
+      const upstream = await fetch(`${ORCHESTRATOR_URL}/waitlist/join`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email,
+          source,
+          affiliate_opt_in: affiliateOptIn,
+        }),
+      });
+      joinResponse = upstream;
+    } catch (orchestratorErr) {
+      // Orchestrator unreachable — fall back to local Prisma write (OS-6519)
+      console.error('Orchestrator unreachable, falling back to local Prisma:', orchestratorErr);
+      const id = crypto.randomUUID();
+      try {
+        await prisma.$executeRaw`
+          INSERT INTO waitlist_entries (id, email, source, affiliate_opt_in)
+          VALUES (${id}, ${email}, ${source}, ${affiliateOptIn})
+        `;
+      } catch (insertErr) {
+        const msg = insertErr instanceof Error ? insertErr.message : '';
+        if (msg.includes('unique') || msg.includes('duplicate')) {
+          return NextResponse.json(
+            { error: 'Email already on waitlist' },
+            { status: 409 }
+          );
+        }
+        return NextResponse.json(
+          { error: 'Failed to join waitlist' },
+          { status: 500 }
+        );
+      }
+      // Compute position and total from local DB (fallback path only)
+      const posRow = await prisma.$queryRaw<[{ position: bigint; total: bigint }]>`
+        SELECT
+          (SELECT COUNT(*)::bigint FROM waitlist_entries WHERE email <= ${email}) AS position,
+          (SELECT COUNT(*)::bigint FROM waitlist_entries) AS total
+      `;
+      return NextResponse.json({
+        success: true,
+        message: 'Successfully joined waitlist',
+        position: Number(posRow[0].position),
+        total: Number(posRow[0].total),
+      });
+    }
+
+    // Orchestrator succeeded — forward its response
+    const text = await joinResponse!.text();
+    let payload: unknown = text;
+    try {
+      payload = JSON.parse(text);
+    } catch {
+      /* keep raw */
+    }
+    if (joinResponse!.ok) {
+      return NextResponse.json(payload, { status: 200 });
+    }
+    if (joinResponse!.status === 409) {
+      return NextResponse.json(payload, { status: 409 });
+    }
+    // Orchestrator returned non-OK/non-409 — try local Prisma as last resort
+    console.error(`Orchestrator returned ${joinResponse!.status}, falling back to local Prisma`);
     const id = crypto.randomUUID();
     try {
       await prisma.$executeRaw`
@@ -139,46 +201,16 @@ export async function POST(request: NextRequest) {
           { status: 409 }
         );
       }
-      // OS-6519: Prisma/DB write failing in production (500 "Failed to join
-      // waitlist"). Fall back to the healthy orchestrator /waitlist/join so
-      // signups still land even when this service's DATABASE_URL is stale.
-      console.error('Waitlist insert error, falling back to orchestrator:', insertErr);
-      try {
-        const upstream = await fetch(`${ORCHESTRATOR_URL}/waitlist/join`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email,
-            source,
-            affiliate_opt_in: affiliateOptIn,
-          }),
-        });
-        const text = await upstream.text();
-        let payload: unknown = text;
-        try {
-          payload = JSON.parse(text);
-        } catch {
-          /* keep raw */
-        }
-        if (upstream.ok || upstream.status === 409) {
-          return NextResponse.json(payload, { status: upstream.status });
-        }
-      } catch (upstreamErr) {
-        console.error('Waitlist orchestrator fallback failed:', upstreamErr);
-      }
       return NextResponse.json(
         { error: 'Failed to join waitlist' },
         { status: 500 }
       );
     }
-
-    // Compute position and total directly from the database
     const posRow = await prisma.$queryRaw<[{ position: bigint; total: bigint }]>`
       SELECT
         (SELECT COUNT(*)::bigint FROM waitlist_entries WHERE email <= ${email}) AS position,
         (SELECT COUNT(*)::bigint FROM waitlist_entries) AS total
     `;
-
     return NextResponse.json({
       success: true,
       message: 'Successfully joined waitlist',
@@ -186,11 +218,8 @@ export async function POST(request: NextRequest) {
       total: Number(posRow[0].total),
     });
   } catch (err) {
-    // OS-1173: distinguish upstream/orchestrator failures from a malformed
-    // request body. The catch wraps both `request.json()` and the fetch to
-    // the orchestrator, so report the failure accurately so the form can
-    // show a useful message.
-    console.error('Waitlist proxy error:', err);
+    // Catch only truly unexpected errors (malformed JSON, etc.)
+    console.error('Waitlist POST unexpected error:', err);
     const msg = err instanceof Error ? err.message : 'Unknown error';
     if (msg.includes('JSON')) {
       return NextResponse.json(
@@ -199,8 +228,8 @@ export async function POST(request: NextRequest) {
       );
     }
     return NextResponse.json(
-      { error: 'Upstream waitlist service unavailable' },
-      { status: 502 }
+      { error: 'Failed to join waitlist' },
+      { status: 500 }
     );
   }
 }
