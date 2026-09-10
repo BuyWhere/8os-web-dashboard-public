@@ -43,10 +43,11 @@ const INK = 'var(--color-text-primary)'
 const GRAY = 'var(--color-text-secondary)'
 const CREAM = 'var(--color-bg-primary)'
 const SURFACE = 'var(--color-bg-card)'
-// Theme-aware gold: light --color-accent-border #7A5A1E on cream ≈ 5.74:1;
-// dark --color-accent #d4a366 on charcoal ≈ 7.85:1 (OS-5952). Hardcoded
-// #6E531F was 6.50:1 on cream but only 2.48:1 on dark (OS-5654).
-const GOLD = 'var(--color-accent-border)'
+// Theme-aware gold: light --color-accent #7E5C24 on cream ≈ 5.51:1;
+// dark --color-accent #d4a366 on charcoal ≈ 7.85:1 (OS-5952). Using accent
+// instead of accent-border because accent-border #9A7A3A fails 4.5:1 in dark
+// (4.44:1). OS-6800.
+const GOLD = 'var(--color-accent)'
 const HAIRLINE = 'var(--color-border)'
 const OXBLOOD = 'var(--color-accent-2)'
 const MAXW = 1360

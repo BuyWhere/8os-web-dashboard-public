@@ -716,9 +716,11 @@ body:has(.app-sidebar) main:not(.cal-main) {
 
 /* Homepage eyebrow / CTA fill uses --color-accent-border in light (#7A5A1E
  * on cream 5.74:1). In dark that token is #9A7A3A (~3.1:1 on charcoal) so
- * swap to bright gold. White CTA text on #d4a366 is 2.28:1 — use ink. */
+ * swap to bright gold. White CTA text on #d4a366 is 2.28:1 — use ink.
+ * OS-6800: Use literal #d4a366 instead of var() for extra robustness against
+ * specificity issues. Contrast: #d4a366 on #1A1712 = 7.85:1 ✓ */
 [data-theme='dark'] .landing-gold {
-  color: var(--color-accent) !important;
+  color: #d4a366 !important;
 }
 [data-theme='dark'] .landing-gold-fill {
   background: var(--color-accent) !important;
