@@ -175,7 +175,7 @@ export default function Home() {
         style={{
           maxWidth: MAXW,
           margin: '0 auto',
-          padding: '5.5rem 1.5rem 4rem',
+          padding: '5.5rem 2rem 4rem',
         }}
       >
         <div
@@ -279,7 +279,7 @@ export default function Home() {
         style={{
           maxWidth: MAXW,
           margin: '0 auto',
-          padding: '4rem 1.5rem',
+          padding: '4rem 2rem',
           scrollMarginTop: '90px',
         }}
       >
@@ -348,7 +348,7 @@ export default function Home() {
           scrollMarginTop: '72px',
         }}
       >
-        <div style={{ maxWidth: MAXW, margin: '0 auto', padding: '4.5rem 1.5rem' }}>
+        <div style={{ maxWidth: MAXW, margin: '0 auto', padding: '4.5rem 2rem' }}>
           <SectionHead
             eyebrow="What it does"
             title="A system that runs your goals, not a reading."
@@ -395,7 +395,7 @@ export default function Home() {
       </section>
 
       {/* ─────────────────────── FREE REVEAL BAND ─────────────────── */}
-      <section style={{ maxWidth: MAXW, margin: '0 auto', padding: '4.5rem 1.5rem' }}>
+      <section style={{ maxWidth: MAXW, margin: '0 auto', padding: '4.5rem 2rem' }}>
         <div
           style={{
             background: CREAM,
@@ -458,7 +458,7 @@ export default function Home() {
           style={{
             maxWidth: MAXW,
             margin: '0 auto',
-            padding: '4.5rem 1.5rem',
+            padding: '4.5rem 2rem',
             textAlign: 'center',
           }}
         >
