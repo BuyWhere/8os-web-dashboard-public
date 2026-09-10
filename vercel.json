@@ -58,6 +58,38 @@
       "destination": "https://orchestrator-production-1643.up.railway.app/v1/archetype/:archetype_id"
     },
     {
+      "source": "/waitlist/entry/:entry_id",
+      "destination": "https://orchestrator-production-1643.up.railway.app/waitlist/entry/:entry_id"
+    },
+    {
+      "source": "/waitlist/join",
+      "destination": "https://orchestrator-production-1643.up.railway.app/waitlist/join"
+    },
+    {
+      "source": "/waitlist/send-early-access",
+      "destination": "https://orchestrator-production-1643.up.railway.app/waitlist/send-early-access"
+    },
+    {
+      "source": "/waitlist/stats",
+      "destination": "https://orchestrator-production-1643.up.railway.app/waitlist/stats"
+    },
+    {
+      "source": "/api/waitlist",
+      "destination": "https://orchestrator-production-1643.up.railway.app/waitlist/join"
+    },
+    {
+      "source": "/api/waitlist/(.*)",
+      "destination": "https://orchestrator-production-1643.up.railway.app/waitlist/$1"
+    },
+    {
+      "source": "/api/waitlist/stats",
+      "destination": "https://orchestrator-production-1643.up.railway.app/waitlist/stats"
+    },
+    {
+      "source": "/api/join",
+      "destination": "https://orchestrator-production-1643.up.railway.app/waitlist/join"
+    },
+    {
       "source": "/health",
       "destination": "https://orchestrator-production-1643.up.railway.app/health"
     }
