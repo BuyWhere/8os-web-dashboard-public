@@ -6,10 +6,12 @@ import { prisma } from '@/lib/db/prisma';
 // the OS-1718 redeploy, api.8os.ai now serves the Next.js frontend.
 // OS-1719: default to the direct Railway orchestrator URL so POST/join
 // still works even without the env var override.
+// OS-6793: changed fallback from Railway internal URL to api.8os.ai
+// because the Railway internal URL routes to a secondary DB with different data.
 const ORCHESTRATOR_URL =
-  process.env.NEXT_PUBLIC_API_URL ||
   process.env.ORCHESTRATOR_URL ||
-  'https://orchestrator-production-1643.up.railway.app';
+  process.env.NEXT_PUBLIC_API_URL ||
+  'https://api.8os.ai';
 
 // OS-1173: allow the prelaunch /coming-soon landing page to attribute its
 // signups (vs the dashboard waitlist form, telegram bot, and 8os.ai homepage).
