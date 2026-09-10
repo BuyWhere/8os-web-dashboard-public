@@ -1,6 +1,5 @@
 'use client';
 
-import { useAuth } from '@clerk/nextjs';
 import { CheckoutButtonInner } from './CheckoutButtonInner';
 
 interface CheckoutButtonProps {
@@ -15,25 +14,17 @@ function signupHref(tier: CheckoutButtonProps['tier']) {
 }
 
 /**
- * OS-6536 fix: useAuth must never be called during module-level evaluation
- * (e.g. during a server-rendered import of a Client Component page).
- * Split into two files so the inner component — which is a React boundary
- * island — is never synchronously evaluated at import time.
+ * OS-6795 r1: useAuth removed — CheckoutButtonInner already handles the 401
+ * (unauthenticated) case by redirecting to /signup internally. The plain <a>
+ * fallback is therefore redundant; always render CheckoutButtonInner so the
+ * full loading/error states work on the marketing page.
  *
- * This wrapper calls useAuth *inside* the ClerkProvider context (it is itself
- * 'use client') so the context is always present before useAuth fires.
+ * OS-6536 original fix intent: pricing CTAs should always link to /signup
+ * for unauthenticated visitors. The CheckoutButtonInner 401 handler achieves
+ * the same UX without importing @clerk/nextjs here, avoiding any risk of
+ * useAuth being called outside ClerkProvider context.
  */
 export function CheckoutButton({ tier, label, style, className }: CheckoutButtonProps) {
-  const { isLoaded, isSignedIn } = useAuth();
-
-  if (!isLoaded || !isSignedIn) {
-    return (
-      <a href={signupHref(tier)} style={style} className={className}>
-        {label}
-      </a>
-    );
-  }
-
   return (
     <CheckoutButtonInner
       tier={tier}
