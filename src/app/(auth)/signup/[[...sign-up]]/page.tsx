@@ -55,7 +55,9 @@ export default function SignupPage() {
       {/* OS-5655 r3: Set left column to match pitch content width (460px). The pitch
           max-width is 460px, so matching the column to that size eliminates the
           whitespace between the pitch text and the right column. */}
-      <div className="signup-grid" style={{ maxWidth: 1360, width: "100%", boxSizing: "border-box", margin: "0 auto", minHeight: "calc(100vh - var(--header-height))", display: "grid", gridTemplateColumns: "minmax(0, 460px) minmax(0, 520px)", alignItems: "center", gap: "3rem", padding: "2rem 2rem 2rem" }}>
+      {/* OS-6798: align-items: flex-start aligns both columns to the same top baseline
+          instead of centering the shorter hero column against the taller signup card. */}
+      <div className="signup-grid" style={{ maxWidth: 1360, width: "100%", boxSizing: "border-box", margin: "0 auto", minHeight: "calc(100vh - var(--header-height))", display: "grid", gridTemplateColumns: "minmax(0, 460px) minmax(0, 520px)", alignItems: "flex-start", gap: "3rem", padding: "2rem 2rem 2rem" }}>
         {/* Left, product context. The 8os wordmark lives in the global Header, so
             we don't repeat it here — it would compete with the header and split
             attention across two brand marks on the same page. */}
