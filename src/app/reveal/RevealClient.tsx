@@ -228,7 +228,7 @@ export default function RevealClient() {
               Your archetype
             </div>
             <h2 style={{ fontSize: '2.1rem', fontWeight: 800, letterSpacing: '-0.03em', margin: '0 0 0.75rem', color: 'var(--color-text-primary)' }}>
-              {result.archetypeName}
+              {result.archetypeName || 'Your Archetype'}
             </h2>
             <div style={{ display: 'inline-flex', gap: '0.4rem', alignItems: 'center', padding: '0.35rem 0.9rem', borderRadius: 999, border: `1px solid ${color}55`, color, fontSize: '0.8rem', fontWeight: 600, marginBottom: '1rem' }}>
               {result.elementLabel} · {result.sunSignName} · {result.strength} Day Master
