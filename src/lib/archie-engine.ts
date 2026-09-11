@@ -306,8 +306,8 @@ function generateArchetypeName(
   // Compositional generation
   const signWords = SUN_SIGN_NAME_WORDS[sunSignKey] ?? ['Star']
   const elementWords = DAY_MASTER_MODIFIERS[dayElement] ?? ['Core']
-  const qualifiers = STRENGTH_QUALIFIERS[strength] ?? ['Hidden', 'Quiet', 'Still', 'Soft', 'Veiled']
-  const suffixes = PERSONALITY_SUFFIXES[personalityCode] ?? ['Command', 'Summit', 'Throne', 'Apex']
+  const qualifiers = STRENGTH_QUALIFIERS[strength] ?? ['Hidden', 'Quiet', 'Still', 'Soft', 'Veiled', 'Mystic', 'Silent', 'Unknown', 'Secret']
+  const suffixes = PERSONALITY_SUFFIXES[personalityCode] ?? ['Command', 'Summit', 'Throne', 'Apex', 'Path', 'Way', 'Journey', 'Realm', 'Cycle']
 
   // Use deterministic selection based on hash of inputs
   const hashVal = hashInputs(sunSignKey, dayElement, strength, personalityCode, hourIndex ?? -1)
