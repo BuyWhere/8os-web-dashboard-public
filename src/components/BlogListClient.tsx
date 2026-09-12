@@ -292,7 +292,7 @@ export default function BlogListClient({ posts }: BlogListClientProps) {
           }}
           style={{
             background: !activeCategory ? 'var(--color-accent)' : 'var(--color-bg-card)',
-            color: !activeCategory ? '#fff' : 'var(--color-text-primary)',
+            color: !activeCategory ? 'var(--color-on-accent)' : 'var(--color-text-primary)',
             border: `1px solid ${!activeCategory ? 'var(--color-accent)' : 'var(--color-border)'}`,
             borderRadius: '8px',
             padding: '5px 10px',
