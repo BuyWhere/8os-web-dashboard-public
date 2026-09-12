@@ -309,15 +309,18 @@ function generateArchetypeName(
   const qualifiers = STRENGTH_QUALIFIERS[strength] ?? ['Hidden', 'Quiet', 'Still', 'Soft', 'Veiled', 'Mystic', 'Silent', 'Unknown', 'Secret']
   const suffixes = PERSONALITY_SUFFIXES[personalityCode] ?? ['Command', 'Summit', 'Throne', 'Apex', 'Path', 'Way', 'Journey', 'Realm', 'Cycle']
 
-  // Use deterministic selection based on hash of inputs
+  // Use deterministic selection based on hash of inputs.
+  // hashInputs returns unsigned 32-bit, but intermediate right-shifts can
+  // produce negative values in JS (signed 32-bit).  Normalize with >>> 0 before
+  // each modulo so the index is always non-negative.
   const hashVal = hashInputs(sunSignKey, dayElement, strength, personalityCode, hourIndex ?? -1)
   const signWord = signWords[hashVal % signWords.length]
-  const elemWord = elementWords[(hashVal >> 4) % elementWords.length]
+  const elemWord = elementWords[(hashVal >>> 4) % elementWords.length]
 
   // 50% chance to use qualifier, 50% chance to use element+sign pattern
   const useQualifier = (hashVal & 0x10) !== 0
   if (useQualifier) {
-    const qualifier = qualifiers[(hashVal >> 8) % qualifiers.length]
+    const qualifier = qualifiers[(hashVal >>> 8) % qualifiers.length]
     return `The ${qualifier} ${signWord}`
   } else {
     return `The ${elemWord} ${signWord}`

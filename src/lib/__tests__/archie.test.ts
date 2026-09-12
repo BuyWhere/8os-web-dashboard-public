@@ -343,6 +343,26 @@ describe('ARCHIE Engine, 50 Sample Profiles', () => {
     expect(r1.archetypeId).toBe(r2.archetypeId)
     expect(r1.archetypeName).toBe(r2.archetypeName)
   })
+
+  // OS-6899: hashVal can exceed 2^31, making (hashVal >> 4) negative in JS.
+  // Negative modulo produced out-of-bounds array access → "The undefined Echo".
+  // Fixed by using >>> (unsigned shift) instead of >> before each % index.
+  test('OS-6899: archetypeName must never contain "undefined"', () => {
+    const cases: Parameters<typeof generateArchetype>[] = [
+      { birthDate: '1990-06-15', personalityCode: 'sg' },   // hashVal 3895248037 > 2^31
+      { birthDate: '1990-06-15', personalityCode: 'sp' },
+      { birthDate: '1990-06-15', personalityCode: 'ig' },
+      { birthDate: '1990-06-15', personalityCode: 'ip' },
+      { birthDate: '1985-03-10', personalityCode: 'sg' },   // another high hash
+      { birthDate: '1970-12-31', personalityCode: 'sg' },
+      { birthDate: '2000-07-01', personalityCode: 'ip' },
+    ]
+    for (const input of cases) {
+      const result = generateArchetype(input)
+      expect(result.archetypeName).not.toMatch(/undefined/)
+      expect(result.archetypeName).toMatch(/^The /)
+    }
+  })
 })
 
 // ─── Task Template Generator Tests ───────────────────────────────────────────
