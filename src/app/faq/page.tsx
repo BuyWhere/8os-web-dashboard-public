@@ -216,7 +216,7 @@ export default function FAQPage() {
             href="/onboarding"
             style={{
               background: 'var(--color-accent)',
-              color: '#fff',
+              color: 'var(--color-accent-contrast)',
               padding: '14px 32px',
               borderRadius: '8px',
               textDecoration: 'none',
