@@ -299,14 +299,14 @@ function generateArchetypeName(
   personalityCode: PersonalityCode,
   hourIndex?: number,
 ): string {
-  // Check overrides first (no hour in key for override lookup)
-  const baseKey = `${sunSignKey}_${dayElement}_${strength}_${personalityCode}`
-  if (ARCHETYPE_NAME_OVERRIDES[baseKey]) return ARCHETYPE_NAME_OVERRIDES[baseKey]
-
   // Compositional generation
   const signWords = SUN_SIGN_NAME_WORDS[sunSignKey] ?? ['Star']
   const elementWords = DAY_MASTER_MODIFIERS[dayElement] ?? ['Core']
-  const qualifiers = STRENGTH_QUALIFIERS[strength] ?? ['Hidden', 'Quiet', 'Still', 'Soft', 'Veiled', 'Mystic', 'Silent', 'Unknown', 'Secret']
+  // Guard: always include 'Unknown' as the last fallback so no array access
+  // can ever produce JavaScript `undefined` — even if the strength enum value
+  // is wrong or the hash lands off the end of a short array.
+  const knownQualifiers = STRENGTH_QUALIFIERS[strength] ?? []
+  const qualifiers = [...knownQualifiers, 'Unknown']
   const suffixes = PERSONALITY_SUFFIXES[personalityCode] ?? ['Command', 'Summit', 'Throne', 'Apex', 'Path', 'Way', 'Journey', 'Realm', 'Cycle']
 
   // Use deterministic selection based on hash of inputs.
@@ -325,6 +325,27 @@ function generateArchetypeName(
   } else {
     return `The ${elemWord} ${signWord}`
   }
+}
+
+/**
+ * Overloaded generateArchetypeName that also checks the named-override table.
+ * Uses dayMasterRomanized (stem) to match the override key format so that
+ * hand-crafted names like "The Mountain Forge" are applied before the
+ * compositional generator runs.
+ */
+function generateArchetypeNameWithOverrides(
+  sunSignKey: string,
+  dayMasterRomanized: string,
+  dayElement: string,
+  strength: DayMasterStrength,
+  personalityCode: PersonalityCode,
+  hourIndex?: number,
+): string {
+  // Check overrides first (no hour in key for override lookup)
+  const baseKey = `${sunSignKey}_${dayMasterRomanized}_${strength}_${personalityCode}`
+  if (ARCHETYPE_NAME_OVERRIDES[baseKey]) return ARCHETYPE_NAME_OVERRIDES[baseKey]
+
+  return generateArchetypeName(sunSignKey, dayElement, strength, personalityCode, hourIndex)
 }
 
 function hashInputs(...args: (string | number)[]): number {
@@ -646,9 +667,9 @@ export function generateArchetype(input: ArchieInput): ArchieResult {
   // 7. Dashboard tokens
   const tokens = SUN_SIGN_DASHBOARD_TOKENS[sunSignKey] ?? SUN_SIGN_DASHBOARD_TOKENS.capricorn
 
-  // 8. Name & description
-  const archetypeName = generateArchetypeName(
-    sunSignKey, bazi.dayElement, strength, personalityCode, hourPillarIndex
+  // 8. Name & description (use override-aware variant so hand-crafted names are used)
+  const archetypeName = generateArchetypeNameWithOverrides(
+    sunSignKey, dayMasterRomanized, bazi.dayElement, strength, personalityCode, hourPillarIndex
   )
   const description = generateDescription(
     sunSignResult.sign.name,
@@ -730,7 +751,7 @@ export function getArchetypeDefinition(archetypeId: string): {
   const stem = stemEntry?.[0] as Stem | undefined
   const dayElement = stem ? STEM_ELEMENT[stem] : 'earth'
 
-  const name = generateArchetypeName(sunSignKey, dayElement, strength, pCode)
+  const name = generateArchetypeNameWithOverrides(sunSignKey, dayMasterRoman, dayElement, strength, pCode)
   const signData = SUN_SIGNS.find(s => s.key === sunSignKey)
   const desc = generateDescription(
     signData?.name ?? sunSignKey,
