@@ -7,5 +7,7 @@
   "tests/test_live_integration.py::TestOnboard::test_onboard_returns_briefing",
   "tests/test_live_integration.py::TestWaitlist::test_join_waitlist",
   "tests/test_live_integration.py::TestWaitlist::test_waitlist_rejects_invalid_email",
-  "tests/test_live_integration.py::TestWaitlist::test_waitlist_rejects_missing_email"
+  "tests/test_live_integration.py::TestWaitlist::test_waitlist_rejects_missing_email",
+  "tests/test_product_surface.py::test_product_catalog_routes_return_products",
+  "tests/test_product_surface.py::test_product_detail_routes_return_single_product"
 ]
