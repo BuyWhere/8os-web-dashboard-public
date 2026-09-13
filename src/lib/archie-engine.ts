@@ -290,6 +290,9 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   'leo_jia_strong_sg': 'The Solar Grove',
   'sagittarius_jia_strong_ig': 'The Forest Horizon',
   'libra_xin_balanced_sp': 'The Crystal Scale',
+  // OS-6899 remaining gaps: hash collides with Unknown in elementWords guard
+  'leo_ren_weak_sg':     'The Current Crown',
+  'pisces_wu_balanced_sg':'The Stone Tide',
 }
 
 function generateArchetypeName(
