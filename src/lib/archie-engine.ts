@@ -302,10 +302,12 @@ function generateArchetypeName(
   // Compositional generation
   const signWords = SUN_SIGN_NAME_WORDS[sunSignKey] ?? ['Star']
   // Guard: always include 'Unknown' as fallback for element words so no array
-  // access can ever produce JavaScript `undefined` — even if dayElement is
+  // access can ever produce JavaScript `undefined' — even if dayElement is
   // somehow invalid or the hash lands off the end of a short array.
+  // IMPORTANT: put Unknown at the START, not the end. If Unknown is at the end,
+  // it shifts all indices and breaks previously-working combinations.
   const knownElementWords = DAY_MASTER_MODIFIERS[dayElement] ?? []
-  const elementWords = [...knownElementWords, 'Unknown']
+  const elementWords = ['Unknown', ...knownElementWords]
   // Guard: always include 'Unknown' as the last fallback so no array access
   // can ever produce JavaScript `undefined` — even if the strength enum value
   // is wrong or the hash lands off the end of a short array.
