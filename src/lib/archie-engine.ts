@@ -296,6 +296,15 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   'gemini_yi_weak_sg':   'The Branch Weave',
 }
 
+function pickWord(words: string[], index: number, fallback: string): string {
+  if (!words.length) return fallback
+  const word = words[(index >>> 0) % words.length]
+  // Skip sentinel slots so hash indices stay aligned with the OS-6899
+  // Unknown-prefix arrays, but the user never sees "Unknown" or JS undefined.
+  if (!word || word === 'Unknown') return fallback
+  return word
+}
+
 function generateArchetypeName(
   sunSignKey: string,
   dayElement: string,
@@ -303,38 +312,24 @@ function generateArchetypeName(
   personalityCode: PersonalityCode,
   hourIndex?: number,
 ): string {
-  // Compositional generation
   const signWords = SUN_SIGN_NAME_WORDS[sunSignKey] ?? ['Star']
-  // Guard: always include 'Unknown' as fallback for element words so no array
-  // access can ever produce JavaScript `undefined' — even if dayElement is
-  // somehow invalid or the hash lands off the end of a short array.
-  // IMPORTANT: put Unknown at the START, not the end. If Unknown is at the end,
-  // it shifts all indices and breaks previously-working combinations.
+  // Keep Unknown at the START of elementWords so previously-working hash
+  // indices are unchanged (OS-6899). pickWord maps that slot to a real word.
   const knownElementWords = DAY_MASTER_MODIFIERS[dayElement] ?? []
   const elementWords = ['Unknown', ...knownElementWords]
-  // Guard: always include 'Unknown' as the last fallback so no array access
-  // can ever produce JavaScript `undefined` — even if the strength enum value
-  // is wrong or the hash lands off the end of a short array.
   const knownQualifiers = STRENGTH_QUALIFIERS[strength] ?? []
   const qualifiers = [...knownQualifiers, 'Unknown']
-  const suffixes = PERSONALITY_SUFFIXES[personalityCode] ?? ['Command', 'Summit', 'Throne', 'Apex', 'Path', 'Way', 'Journey', 'Realm', 'Cycle']
 
-  // Use deterministic selection based on hash of inputs.
-  // hashInputs returns unsigned 32-bit, but intermediate right-shifts can
-  // produce negative values in JS (signed 32-bit).  Normalize with >>> 0 before
-  // each modulo so the index is always non-negative.
   const hashVal = hashInputs(sunSignKey, dayElement, strength, personalityCode, hourIndex ?? -1)
-  const signWord = signWords[hashVal % signWords.length]
-  const elemWord = elementWords[(hashVal >>> 4) % elementWords.length]
+  const signWord = pickWord(signWords, hashVal, 'Star')
+  const elemWord = pickWord(elementWords, hashVal >>> 4, 'Steady')
 
-  // 50% chance to use qualifier, 50% chance to use element+sign pattern
   const useQualifier = (hashVal & 0x10) !== 0
   if (useQualifier) {
-    const qualifier = qualifiers[(hashVal >>> 8) % qualifiers.length]
+    const qualifier = pickWord(qualifiers, hashVal >>> 8, 'Steady')
     return `The ${qualifier} ${signWord}`
-  } else {
-    return `The ${elemWord} ${signWord}`
   }
+  return `The ${elemWord} ${signWord}`
 }
 
 /**

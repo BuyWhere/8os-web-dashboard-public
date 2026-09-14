@@ -387,6 +387,22 @@ describe('ARCHIE Engine, 50 Sample Profiles', () => {
       expect(result.archetypeName).toBe(expected)
     }
   })
+
+  // OS-7120: adjective slot was JS `undefined` (or later 'Unknown' sentinel)
+  // when hour pillar was present. Noun lookup worked; adjective map did not.
+  test('OS-7120: reported dates never interpolate undefined/Unknown', () => {
+    const dates = ['2000-01-01', '1999-12-31', '1995-05-05', '1982-11-11', '1955-07-04']
+    for (const birthDate of dates) {
+      for (const personalityCode of ['sg', 'sp', 'ig', 'ip'] as const) {
+        for (const birthTime of [undefined, '12:00'] as const) {
+          const result = generateArchetype({ birthDate, birthTime, personalityCode })
+          expect(result.archetypeName).not.toMatch(/undefined/i)
+          expect(result.archetypeName).not.toMatch(/\bUnknown\b/)
+          expect(result.archetypeName).toMatch(/^The [A-Z][a-z]+ [A-Z][a-z]+$/)
+        }
+      }
+    }
+  })
 })
 
 // ─── Task Template Generator Tests ───────────────────────────────────────────
