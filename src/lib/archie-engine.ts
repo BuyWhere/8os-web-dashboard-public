@@ -293,6 +293,7 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   // OS-6899 remaining gaps: hash collides with Unknown in elementWords guard
   'leo_ren_weak_sg':     'The Current Crown',
   'pisces_wu_balanced_sg':'The Stone Tide',
+  'gemini_yi_weak_sg':   'The Branch Weave',
 }
 
 function generateArchetypeName(
