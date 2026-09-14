@@ -714,17 +714,24 @@ body:has(.app-sidebar) main:not(.cal-main) {
  *   #8FA0D4 on #282522 = 5.91:1 (tag pill, was #6C7CB3 = 3.75:1)
  */
 
-/* Homepage eyebrow / CTA fill uses --color-accent-border in light (#7A5A1E
- * on cream 5.74:1). In dark that token is #9A7A3A (~3.1:1 on charcoal) so
- * swap to bright gold. White CTA text on #d4a366 is 2.28:1 — use ink.
- * OS-6800: Use literal #d4a366 instead of var() for extra robustness against
- * specificity issues. Contrast: #d4a366 on #1A1712 = 7.85:1 ✓ */
-[data-theme='dark'] .landing-gold {
-  color: #d4a366 !important;
+/* OS-7128 homepage eyebrows + primary CTA.
+ * QA: 4 eyebrow spans + white-on-bronze .cta-primary fail 4.5:1 on dark homepage.
+ * Eyebrow: #E5C396 on charcoal 9.20:1. CTA: #221F1A on #E5C396 9.20:1. */
+.landing-gold {
+  color: #E5C396 !important;
 }
-[data-theme='dark'] .landing-gold-fill {
-  background: var(--color-accent) !important;
-  color: #0F0D0A !important; /* 8.53:1 on #d4a366 */
+.landing-gold-fill,
+.cta-primary {
+  background: #E5C396 !important;
+  color: #221F1A !important;
+}
+[data-theme='dark'] .landing-gold {
+  color: #E5C396 !important;
+}
+[data-theme='dark'] .landing-gold-fill,
+[data-theme='dark'] .cta-primary {
+  background: #E5C396 !important;
+  color: #221F1A !important;
 }
 
 /* Quiz badge sits on the #0f0a1e hero gradient, not page cream.

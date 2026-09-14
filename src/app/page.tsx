@@ -48,6 +48,8 @@ const SURFACE = 'var(--color-bg-card)'
 // instead of accent-border because accent-border #9A7A3A fails 4.5:1 in dark
 // (4.44:1). OS-6800.
 const GOLD = 'var(--color-accent)'
+/** OS-7128: eyebrow tags on dark charcoal. #E5C396 on #221F1A = 9.20:1 (AA/AAA). */
+const GOLD_ON_DARK = '#E5C396'
 const HAIRLINE = 'var(--color-border)'
 const OXBLOOD = 'var(--color-accent-2)'
 const MAXW = 1360
@@ -197,7 +199,7 @@ export default function Home() {
                 fontWeight: 600,
                 letterSpacing: '0.14em',
                 textTransform: 'uppercase',
-                color: GOLD,
+                color: GOLD_ON_DARK,
                 marginBottom: '1.5rem',
               }}
             >
@@ -241,18 +243,18 @@ export default function Home() {
             </p>
             <a
               href="/onboarding"
-              className="landing-gold-fill"
+              className="landing-gold-fill cta-primary"
               style={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 padding: '0.9rem 1.75rem',
-                background: GOLD,
-                color: '#FFFFFF',
+                background: GOLD_ON_DARK,
+                color: '#221F1A',
                 fontWeight: 600,
                 fontSize: '1rem',
                 borderRadius: '10px',
                 textDecoration: 'none',
-                boxShadow: '0 6px 20px rgba(176, 134, 55, 0.28)',
+                boxShadow: '0 6px 20px rgba(229, 195, 150, 0.28)',
               }}
             >
               Get started
@@ -471,7 +473,7 @@ export default function Home() {
               fontWeight: 600,
               letterSpacing: '0.14em',
               textTransform: 'uppercase',
-              color: GOLD,
+              color: GOLD_ON_DARK,
               marginBottom: '1rem',
             }}
           >
@@ -564,7 +566,7 @@ function SectionHead({
           fontWeight: 600,
           letterSpacing: '0.14em',
           textTransform: 'uppercase',
-          color: GOLD,
+          color: GOLD_ON_DARK,
           marginBottom: '0.9rem',
         }}
       >
