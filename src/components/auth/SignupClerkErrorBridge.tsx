@@ -77,12 +77,16 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
   fallbackRedirectUrl,
 }) => {
   const [bridgeError, setBridgeError] = useState<BridgeError | null>(null)
+  // OS-7127: visible pending state while Clerk writes. Without this, fields
+  // disable then silently re-enable with no error, OTP, or progress.
+  const [pending, setPending] = useState(false)
   const { isLoaded, signUp, setActive } = useSignUp()
   const router = useRouter()
   const advancing = useRef(false)
   const lastInternalErrorText = useRef('')
   const bannerRef = useRef<HTMLDivElement | null>(null)
   const lastBannerAt = useRef<number>(0)
+  const pendingTimer = useRef<number | null>(null)
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -128,6 +132,7 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
       } catch (err) {
         if (watch) {
           const message = 'Network error reaching the sign-up service. Check your connection and try again.'
+          setPending(false)
           setBridgeError({ status: 0, message, endpoint: url, at: Date.now() })
           console.warn('[clerk-sign-up-bridge] network error', { endpoint: url, error: String(err) })
         }
@@ -135,6 +140,7 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
       }
 
       if (watch && response.ok) {
+        setPending(true)
         try {
           window.dispatchEvent(new CustomEvent('8os:clerk-signup-write', { detail: { url, status: response.status } }))
         } catch {
@@ -150,6 +156,7 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
           payload = null
         }
         const { message, severity, kind } = classify(response.status, payload, requestEmail)
+        setPending(false)
         setBridgeError({ status: response.status, message, endpoint: url, at: Date.now(), kind })
         console.warn('[clerk-sign-up-bridge] upstream error', {
           status: response.status,
@@ -180,16 +187,36 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
     }
   }, [])
 
+  function clearPendingTimer() {
+    if (pendingTimer.current != null) {
+      window.clearTimeout(pendingTimer.current)
+      pendingTimer.current = null
+    }
+  }
+
   async function advanceIfStuck() {
     if (advancing.current) return
     if (!isLoaded || !signUp) return
 
+    // Clerk's in-memory SignUp resource often lags the 2xx write. Reload it
+    // so status / unverifiedFields are current before we decide to navigate.
+    try {
+      if (typeof (signUp as { reload?: () => Promise<unknown> }).reload === 'function') {
+        await (signUp as { reload: () => Promise<unknown> }).reload()
+      }
+    } catch (err) {
+      console.warn('[clerk-sign-up-bridge] reload failed', err)
+    }
+
     const status = signUp.status
     const unverified = signUp.unverifiedFields ?? []
     const needsEmail =
-      status === 'missing_requirements' && unverified.includes('email_address')
+      status === 'missing_requirements' &&
+      (unverified.includes('email_address') || unverified.includes('email_address_id'))
 
     if (needsEmail) {
+      clearPendingTimer()
+      setPending(false)
       const path = window.location.pathname
       const hash = window.location.hash || ''
       if (!path.includes('verify-email') && !hash.includes('verify-email')) {
@@ -199,6 +226,8 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
     }
 
     if (status === 'complete' && signUp.createdSessionId) {
+      clearPendingTimer()
+      setPending(false)
       advancing.current = true
       try {
         await setActive({ session: signUp.createdSessionId })
@@ -206,6 +235,13 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
       } catch (err) {
         advancing.current = false
         console.warn('[clerk-sign-up-bridge] setActive failed', err)
+        setBridgeError({
+          status: 500,
+          message: 'Account created, but we could not start your session. Please try signing in.',
+          endpoint: 'setActive',
+          at: Date.now(),
+          kind: 'generic',
+        })
       }
     }
   }
@@ -213,12 +249,32 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
   useEffect(() => {
     if (typeof window === 'undefined') return
     const onWrite = () => {
+      setPending(true)
+      clearPendingTimer()
+      // If Clerk never paints OTP / never errors, don't leave a silent form.
+      pendingTimer.current = window.setTimeout(() => {
+        setPending(false)
+        setBridgeError((prev) => {
+          if (prev && Date.now() - prev.at < 8000) return prev
+          return {
+            status: 408,
+            message:
+              'Sign-up is taking longer than expected. Check your email for a verification code, or try again. If you already have an account, sign in instead.',
+            endpoint: 'signup-pending-timeout',
+            at: Date.now(),
+            kind: 'generic',
+          }
+        })
+      }, 8000)
       window.setTimeout(() => {
         void advanceIfStuck()
       }, 250)
     }
     window.addEventListener('8os:clerk-signup-write', onWrite)
-    return () => window.removeEventListener('8os:clerk-signup-write', onWrite)
+    return () => {
+      window.removeEventListener('8os:clerk-signup-write', onWrite)
+      clearPendingTimer()
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isLoaded, signUp?.status, signUp?.id])
 
@@ -361,7 +417,8 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
         /continue/i.test(button.textContent ?? '')
       if (!isContinue) return
       const form = button.closest('form') ?? root
-      applyClientValidation(event, form)
+      const blocked = applyClientValidation(event, form)
+      if (!blocked) setPending(true)
     }
 
     root.addEventListener('submit', onSubmit, true)
@@ -396,6 +453,26 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
           own field, then hide the skeleton. Same name/id/autocomplete as
           Clerk's identifier so first-load fill is robust. */}
       <SignupEmailSkeleton />
+      {pending && !bridgeError && (
+        <div
+          role="status"
+          aria-live="polite"
+          data-testid="clerk-sign-up-pending"
+          style={{
+            margin: '0 auto 1rem auto',
+            maxWidth: 480,
+            padding: '0.875rem 1rem',
+            borderRadius: 10,
+            border: '1px solid #C4B59A',
+            background: '#F7F3EC',
+            color: '#221F1A',
+            fontSize: 14,
+            lineHeight: 1.45,
+          }}
+        >
+          Creating your account… if email verification is required, the next step will appear here.
+        </div>
+      )}
       {bridgeError && (
         <div
           ref={bannerRef}
