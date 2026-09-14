@@ -356,11 +356,35 @@ describe('ARCHIE Engine, 50 Sample Profiles', () => {
       { birthDate: '1985-03-10', personalityCode: 'sg' },   // another high hash
       { birthDate: '1970-12-31', personalityCode: 'sg' },
       { birthDate: '2000-07-01', personalityCode: 'ip' },
+      // OS-6899 remaining: 6 specific dates that hit the >>> overflow bug
+      { birthDate: '1985-06-15', personalityCode: 'sg' },   // gemini_yi_weak_sg → The Branch Weave
+      { birthDate: '2010-06-15', personalityCode: 'sg' },   // gemini_bing_strong_sg → The Blaze Signal
+      { birthDate: '1988-08-15', personalityCode: 'sg' },   // leo_ren_weak_sg → The Current Crown
+      { birthDate: '1985-03-22', personalityCode: 'sg' },   // aries_geng_balanced_sg → The Clear Charge
+      { birthDate: '2000-01-01', personalityCode: 'sg' },   // capricorn_wu_strong_sg → The Clay Forge
+      { birthDate: '2000-06-15', personalityCode: 'sg' },   // gemini_jia_weak_sg → The Branch Weave
     ]
     for (const input of cases) {
       const result = generateArchetype(input)
       expect(result.archetypeName).not.toMatch(/undefined/)
       expect(result.archetypeName).toMatch(/^The /)
+    }
+  })
+
+  // OS-6899: verify specific archetype IDs produce expected names
+  test('OS-6899: known archetype IDs produce correct names', () => {
+    const known: Array<[string, string]> = [
+      ['1990-01-15', 'The Mountain Forge'],  // capricorn_geng_strong_sg (override)
+      ['1985-06-15', 'The Branch Weave'],   // gemini_yi_weak_sg (was: The undefined Signal)
+      ['2010-06-15', 'The Blaze Signal'],   // gemini_bing_strong_sg (was: The undefined Weave)
+      ['1988-08-15', 'The Current Crown'],   // leo_ren_weak_sg (was: The undefined Crown)
+      ['1985-03-22', 'The Clear Charge'],    // aries_geng_balanced_sg (was: The undefined Flame)
+      ['2000-01-01', 'The Clay Forge'],     // capricorn_wu_strong_sg (was: The undefined Stone)
+      ['2000-06-15', 'The Branch Weave'],   // gemini_jia_weak_sg (was: The undefined Signal)
+    ]
+    for (const [date, expected] of known) {
+      const result = generateArchetype({ birthDate: date, personalityCode: 'sg' })
+      expect(result.archetypeName).toBe(expected)
     }
   })
 })
