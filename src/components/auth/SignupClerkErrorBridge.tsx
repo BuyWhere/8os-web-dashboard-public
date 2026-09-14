@@ -13,6 +13,7 @@ import {
 } from './clerkEmailFormat'
 import { observeClerkContinueArrows } from './clerkContinueArrow'
 import { observeClerkAutocomplete } from './clerkAutocomplete'
+import { observeClerkOauthButtonNames } from './clerkOauthButtonNames'
 
 // OS-4316: Clerk's <SignUp> can return 4xx errors from /v1/client/sign_ups
 // without a clear inline error. OS-5954: distinguish email-format 422s from
@@ -87,6 +88,7 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
     if (typeof window === 'undefined') return
     const stopArrowPatch = observeClerkContinueArrows(document.body)
     const stopAutocomplete = observeClerkAutocomplete(document.body, 'signup')
+    const stopOauthNames = observeClerkOauthButtonNames(document.body)
     const originalFetch = window.fetch.bind(window)
 
     const isClerkSignUpEndpoint = (url: string): boolean => {
@@ -173,6 +175,7 @@ export const SignupClerkErrorBridge: FC<SignupClerkErrorBridgeProps> = ({
     return () => {
       stopArrowPatch()
       stopAutocomplete()
+      stopOauthNames()
       window.fetch = originalFetch
     }
   }, [])
