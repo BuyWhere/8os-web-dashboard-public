@@ -36,7 +36,10 @@ export default function SignupPage() {
           cached without the layout-level script's effect (e.g., Vercel edge
           caching). */}
       <script dangerouslySetInnerHTML={{ __html: `document.body.classList.add('signup-auth');` }} />
-      <main style={{ minHeight: "100vh", background: BG, color: INK, overflowX: "clip", maxWidth: "100%" }}>
+      {/* OS-7126: main itself is a block-level 100% width wrapper so mx-auto on
+          the inner grid actually centers against the 1440px viewport instead of
+          a shrink-to-content parent. */}
+      <main style={{ minHeight: "100vh", background: BG, color: INK, overflowX: "clip", width: "100%", maxWidth: "100%", boxSizing: "border-box" }}>
       {/* OS-3873 / OS-4745: the 1440px desktop shell needs to use the available
           viewport instead of reading like a narrow ~900px card pinned left. Keep
           a 32px gutter, widen to 1360px, and right-align the auth card so the
@@ -57,7 +60,11 @@ export default function SignupPage() {
           whitespace between the pitch text and the right column. */}
       {/* OS-6798: align-items: flex-start aligns both columns to the same top baseline
           instead of centering the shorter hero column against the taller signup card. */}
-      <div className="signup-grid" style={{ maxWidth: 1360, width: "100%", boxSizing: "border-box", margin: "0 auto", minHeight: "calc(100vh - var(--header-height))", display: "grid", gridTemplateColumns: "minmax(0, 460px) minmax(0, 520px)", alignItems: "flex-start", gap: "3rem", padding: "2rem 2rem 2rem" }}>
+      {/* OS-7126: justify-content:center so the 460+520+gap (~1028px) track pack sits
+          in the middle of the 1360px (and 1440px viewport) shell instead of hugging
+          the left edge and leaving ~600px of dead cream on the right. max-w-7xl
+          equivalent is 1280px; we keep 1360 to match the marketing header. */}
+      <div className="signup-grid" style={{ maxWidth: 1360, width: "100%", boxSizing: "border-box", margin: "0 auto", minHeight: "calc(100vh - var(--header-height))", display: "grid", gridTemplateColumns: "minmax(0, 460px) minmax(0, 520px)", justifyContent: "center", justifyItems: "stretch", alignItems: "flex-start", gap: "3rem", padding: "2rem 2rem 2rem" }}>
         {/* Left, product context. The 8os wordmark lives in the global Header, so
             we don't repeat it here — it would compete with the header and split
             attention across two brand marks on the same page. */}
@@ -231,8 +238,10 @@ export default function SignupPage() {
            in case the appearance.elements.cardBox override misses the cascade. */
         .signup-auth .cl-cardBox { box-shadow: none !important; border: none !important; }
         .signup-auth .cl-card { box-shadow: none !important; border: none !important; background: transparent !important; }
+        /* OS-7126: belt-and-suspenders if Clerk/SSR drops the inline justify. */
+        .signup-grid { justify-content: center; margin-left: auto; margin-right: auto; width: 100%; max-width: 1360px; }
         @media (max-width: 860px) {
-          .signup-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 1.5rem !important; padding: 2.5rem 1rem 2rem !important; }
+          .signup-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 1.5rem !important; padding: 2.5rem 1rem 2rem !important; justify-content: stretch !important; }
           .signup-pitch { max-width: 100% !important; text-align: center; }
           .signup-pitch ul { text-align: left; max-width: 360px; width: 100%; margin: 0 auto !important; }
         }
