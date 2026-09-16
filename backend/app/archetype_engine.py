@@ -336,6 +336,16 @@ def _hash_inputs(*args: object) -> int:
     return h
 
 
+def _pick_word(words: list[str], index: int, fallback: str) -> str:
+    """Pick a word by index, falling back gracefully for sentinel slots."""
+    if not words:
+        return fallback
+    word = words[index % len(words)]
+    if not word or word == 'Unknown':
+        return fallback
+    return word
+
+
 def generate_archetype_name(
     sun_sign_key: str,
     day_element: str,
@@ -348,16 +358,19 @@ def generate_archetype_name(
         return ARCHETYPE_NAME_OVERRIDES[base_key]
 
     sign_words = SUN_SIGN_NAME_WORDS.get(sun_sign_key, ['Star'])
-    element_words = DAY_MASTER_MODIFIERS.get(day_element, ['Core'])
-    qualifiers = STRENGTH_QUALIFIERS.get(strength, ['True'])
+    # Keep Unknown at the START so previously-working hash indices are unchanged
+    known_element_words = DAY_MASTER_MODIFIERS.get(day_element, ['Core'])
+    element_words = ['Unknown'] + known_element_words
+    known_qualifiers = STRENGTH_QUALIFIERS.get(strength, ['True'])
+    qualifiers = known_qualifiers + ['Unknown']
 
     hash_val = _hash_inputs(sun_sign_key, day_element, strength, personality_code, hour_index)
-    sign_word = sign_words[hash_val % len(sign_words)]
-    elem_word = element_words[(hash_val >> 4) % len(element_words)]
+    sign_word = _pick_word(sign_words, hash_val, 'Star')
+    elem_word = _pick_word(element_words, hash_val >> 4, 'Steady')
 
     use_qualifier = (hash_val & 0x10) != 0
     if use_qualifier:
-        qualifier = qualifiers[(hash_val >> 8) % len(qualifiers)]
+        qualifier = _pick_word(qualifiers, hash_val >> 8, 'Steady')
         return f"The {qualifier} {sign_word}"
     else:
         return f"The {elem_word} {sign_word}"
