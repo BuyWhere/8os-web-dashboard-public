@@ -558,6 +558,21 @@ async def join_waitlist(
     )
 
 
+@app.get("/waitlist/count")
+@app.get("/api/waitlist/count")
+@app.get("/api/count")
+async def public_waitlist_count(
+    db: AsyncSession = Depends(get_db_session),
+) -> dict:
+    # OS-7223: probes and older clients hit /api/count. Canonical public
+    # counter is /api/waitlist/count. api.8os.ai was returning FastAPI
+    # {"detail":"Not Found"} for the shorthand while /api/waitlist/count
+    # still 200'd. Dual-register both prefixes so Railway FastAPI and
+    # Next.js stay in lockstep.
+    count = await get_waitlist_count(db)
+    return {"count": count}
+
+
 @app.get("/waitlist/stats", response_model=WaitlistStatsResponse, dependencies=[Depends(require_admin)])
 async def get_waitlist_stats(
     db: AsyncSession = Depends(get_db_session),
