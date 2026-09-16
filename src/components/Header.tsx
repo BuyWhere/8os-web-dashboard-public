@@ -62,6 +62,9 @@ export function Header() {
   if (pathname === '/') return null;
 
   const appRoute = isAppRoute(pathname);
+  // OS-7221: /signup and /login sit on the warm cream canvas. A frosted
+  // cream bar + hairline still reads as a dark band against that page.
+  const isAuthRoute = pathname === '/signup' || pathname === '/login';
 
   // ── Authenticated app header: warm, account menu, no marketing nav ──────
   if (appRoute) {
@@ -158,20 +161,22 @@ export function Header() {
   // ── Marketing header (warm editorial, matches the landing) ──────────────
   return (
     <header
-      className={`${fraunces.variable} marketing-header`}
+      className={`${fraunces.variable} marketing-header${isAuthRoute ? ' marketing-header-auth' : ''}`}
       style={{
         position: 'fixed',
         top: 0,
         left: 0,
         right: 0,
         height: 'var(--header-height)',
-        // OS-6344: warm cream surface instead of near-black. Falls back to the
-        // opaque cream token when backdrop-filter isn't supported so the bar
-        // never disappears into the page background.
-        background: 'rgba(247, 243, 236, 0.85)',
-        backdropFilter: 'blur(12px)',
-        WebkitBackdropFilter: 'blur(12px)',
-        borderBottom: `1px solid ${HAIRLINE}`,
+        // OS-6344: warm cream surface instead of near-black on public pages.
+        // OS-7221: on /signup and /login dissolve the bar into the cream canvas
+        // (transparent + warm hairline) so it no longer reads as a dark band.
+        background: isAuthRoute ? 'transparent' : 'rgba(247, 243, 236, 0.85)',
+        backdropFilter: isAuthRoute ? 'none' : 'blur(12px)',
+        WebkitBackdropFilter: isAuthRoute ? 'none' : 'blur(12px)',
+        borderBottom: isAuthRoute
+          ? '1px solid rgba(34, 31, 26, 0.15)'
+          : `1px solid ${HAIRLINE}`,
         zIndex: 100,
         display: 'flex',
         alignItems: 'center',
@@ -302,10 +307,14 @@ export function Header() {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-          [data-theme='dark'] header.marketing-header {
+          [data-theme='dark'] header.marketing-header:not(.marketing-header-auth) {
             background: rgba(26, 23, 18, 0.85) !important;
           }
-          header.marketing-header { background-color: var(--color-bg-primary); }
+          header.marketing-header:not(.marketing-header-auth) { background-color: var(--color-bg-primary); }
+          header.marketing-header.marketing-header-auth {
+            background: transparent !important;
+            background-color: transparent !important;
+          }
           header.marketing-header nav.header-nav-links a:hover,
           header.marketing-header nav.header-nav-links a:focus-visible {
             color: var(--color-text-primary) !important;
