@@ -1,1 +1,1 @@
-2026-09-15T11:20:00Z OS-7129 force Railway orchestrator redeploy for product routes
+2026-09-16T01:16:18Z OS-6161 force Railway orchestrator redeploy for product routes; prior f0a7f2f is on forge/main but api.8os.ai still serving stale FastAPI without /products.
