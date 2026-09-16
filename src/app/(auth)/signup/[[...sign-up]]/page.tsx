@@ -88,8 +88,10 @@ export default function SignupPage() {
           </ul>
         </section>
 
-        {/* Right, the Clerk form — alignSelf centers it within its row so the
-            card floats between the hero copy top and the benefits list bottom.
+        {/* Right, the Clerk form — top-aligned with the hero (OS-7220).
+            alignSelf:center previously floated the taller card ~150px above the
+            shorter pitch column (card y≈160, hero y≈312). Grid is already
+            align-items:flex-start; keep the card at the same top baseline.
             OS-4316: wrapped in SignupClerkErrorBridge to catch Clerk 4xx/5xx
             errors (email already exists, rate limit, server errors) and show
             a clear inline message instead of a silent broken form.
@@ -99,7 +101,7 @@ export default function SignupPage() {
             rootBox border is removed so the outer wrapper is the only border,
             preventing the visual disconnect between the Clerk card and the
             Terms/Privacy line. */}
-        <section className="signup-auth" style={{ display: "flex", flexDirection: "column", alignItems: "stretch", alignSelf: "center", width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box" }}>
+        <section className="signup-auth" style={{ display: "flex", flexDirection: "column", alignItems: "stretch", alignSelf: "start", width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box" }}>
           <SignupPlanIntent />
           <div className="signup-auth-card" style={{ width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box", border: `1px solid ${BORDER}`, borderRadius: "16px", overflow: "hidden", background: CARD, boxShadow: "0 4px 24px rgba(34,31,26,0.06)" }}>
             <SignupClerkErrorBridge
