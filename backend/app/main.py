@@ -716,81 +716,16 @@ async def apple_exchange(
 
 
 # ---------------------------------------------------------------------------
-# Public Reveal API — /api/reveal (OS-6899 fix via Railway)
-# ---------------------------------------------------------------------------
-
-class RevealRequest(_BaseModel):
-    birthDate: str
-    birthTime: _Optional[str] = None
-    birthLocation: _Optional[str] = None
-    archetype: _Optional[str] = None
-
-
-ELEMENT_LABEL: dict[str, str] = {
-    'wood': 'Wood', 'fire': 'Fire', 'earth': 'Earth',
-    'metal': 'Metal', 'water': 'Water',
-}
-
-
-@app.post(
-    "/api/reveal",
-    tags=["Reveal API"],
-    summary="Free pre-signup archetype preview",
-    response_description="Computed archetype name, description, element, and phase teaser",
-)
-@limiter.limit("60/minute;300/hour")
-async def reveal_archetype(
-    request: Request,
-    payload: RevealRequest,
-):
-    """
-    Free top-of-funnel archetype preview — no signup, no auth, not persisted.
-    Takes birth date (+ optional time) and returns the computed archetype name
-    and description using the real ARCHIE engine.
-
-    Mirrors the Next.js /api/reveal route but runs on the FastAPI monolith so
-    Vercel frontends can proxy to it via vercel.json rewrite.
-    """
-    import re
-    from app.archetype_engine import generate_archetype_name as _gen_archetype_name
-
-    # Validate YYYY-MM-DD
-    if not re.match(r'^\d{4}-\d{2}-\d{2}$', payload.birthDate):
-        raise HTTPException(status_code=400, detail="birthDate must be YYYY-MM-DD format")
-
-    year, month, day = (int(p) for p in payload.birthDate.split('-'))
-    if not (1900 <= year <= 2100 and 1 <= month <= 12 and 1 <= day <= 31):
-        raise HTTPException(status_code=400, detail="birthDate must be a valid date")
-
-    birth_time = payload.birthTime
-    if birth_time and not re.match(r'^\d{2}:\d{2}$', birth_time):
-        birth_time = None
-
-    # Use the archetype engine with personality code 'sg' (no quiz in reveal flow)
-    result = _generate_archetype(
-        birth_date=payload.birthDate,
-        birth_time=birth_time,
-        personality_code='sg',
-    )
-
-    return {
-        "archetypeName": result.archetype_name,
-        "description": result.description,
-        "element": result.day_element,
-        "elementLabel": ELEMENT_LABEL.get(result.day_element, result.day_element),
-        "dayMasterEn": result.day_master_en,
-        "sunSignName": result.sun_sign,
-        "strength": result.strength,
-    }
-
-
-# ---------------------------------------------------------------------------
 # Developer API — v1/archetype
 # ---------------------------------------------------------------------------
 from pydantic import BaseModel as _BaseModel
 from typing import Optional as _Optional
 from app.archetype_engine import generate_archetype as _generate_archetype, lookup_archetype as _lookup_archetype
 
+
+# ---------------------------------------------------------------------------
+# Public Reveal API — /api/reveal (OS-6899 fix via Railway)
+# ---------------------------------------------------------------------------
 
 class RevealRequest(_BaseModel):
     birthDate: str
@@ -818,7 +753,6 @@ async def reveal_archetype(request: Request, payload: RevealRequest):
     frontends can proxy to Railway via vercel.json rewrite.
     """
     import re
-    from app.archetype_engine import generate_archetype as _gen_arch
 
     if not re.match(r'^\d{4}-\d{2}-\d{2}$', payload.birthDate):
         raise HTTPException(status_code=400, detail="birthDate must be YYYY-MM-DD format")
@@ -830,7 +764,7 @@ async def reveal_archetype(request: Request, payload: RevealRequest):
     if birth_time and not re.match(r'^\d{2}:\d{2}$', birth_time):
         birth_time = None
 
-    result = _gen_arch(
+    result = _generate_archetype(
         birth_date=payload.birthDate,
         birth_time=birth_time,
         personality_code='sg',
