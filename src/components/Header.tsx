@@ -237,10 +237,10 @@ export function Header() {
             conversion path; this clusters both buttons on the right. Hide the
             Log in link on /login to avoid a redundant dead self-link (OS-3976). */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
-          {/* CTA — shown on archetype SEO pages so organic visitors have an immediate
-              conversion path. Rendered INSIDE the auth-actions container so it clusters
-              with Log in on the right edge. */}
-          {pathname.startsWith('/archetypes/') && (
+          {/* CTA — shown on archetype SEO pages and /features so organic visitors have an
+              immediate conversion path. Rendered INSIDE the auth-actions container so it
+              clusters with Log in on the right edge. */}
+          {(pathname.startsWith('/archetypes/') || pathname === '/features') && (
             <Link
               href="/onboarding"
               style={{
