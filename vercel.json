@@ -92,10 +92,6 @@
     {
       "source": "/health",
       "destination": "https://orchestrator-production-1643.up.railway.app/health"
-    },
-    {
-      "source": "/api/reveal",
-      "destination": "https://api.8os.ai/api/reveal"
     }
   ]
 }
