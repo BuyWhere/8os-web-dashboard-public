@@ -1,5 +1,5 @@
 /**
- * POST /api/reveal
+ * POST /api/reveal  # OS-6899: Vercel serves this route directly (no proxy)
  *
  * FREE pre-signup archetype taste. Takes a birth date (+ optional time and
  * optional birth city) and returns the REAL engine-computed archetype name, a short description, the
