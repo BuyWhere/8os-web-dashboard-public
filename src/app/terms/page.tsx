@@ -9,8 +9,8 @@ export default function TermsPage() {
       color: 'var(--color-text-primary)',
       padding: '4rem 2rem',
     }}>
-      <div style={{ maxWidth: '720px', margin: '0 auto' }}>
-        <Link href="/" style={{ color: 'var(--color-text-primary)', textDecoration: 'none', fontSize: '0.875rem' }}>
+      <div style={{ maxWidth: '768px', margin: '0 auto' }}>
+        <Link href="/" style={{ color: '#d4a759', textDecoration: 'none', fontSize: '0.875rem', minHeight: '44px', display: 'inline-flex', alignItems: 'center' }}>
           ← Back to 8os
         </Link>
 
