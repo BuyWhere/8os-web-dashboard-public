@@ -1,0 +1,6 @@
+OS-7331 deploy trigger 2026-09-17T03:48:09Z
+Fix is on forge/main (commit b0a1d6e):
+- Hero CTAs in features/page.tsx (lines 104-135) — from OS-6987 fix (ffc11d7)
+- Nav CTA in Header.tsx — new improvement from this session (a4cb749)
+Railway token invalid. Railway token "14375261-8298-4079-b62b-6d51239ccae8" returned 403 on Railway API.
+Need: fresh RAILWAY_TOKEN from Railway dashboard + "railway up" from CWD.

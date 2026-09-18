@@ -1,0 +1,6 @@
+DEPLOY_OS6899R3
+Trigger: 2026-09-18 01:44 UTC
+Purpose: Push OS-6899 pickWord fix to Vercel — "The undefined Signal" regression still present in deployed build
+Fix: commit cc18477 — pickWord function in src/lib/archie-engine.ts
+Issue: 1975-06-20 returns "The undefined Signal" instead of valid archetype (Vercel build is stale)
+Status: Needs human to trigger Vercel deploy
