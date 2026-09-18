@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useState } from 'react';
 import { Inter } from 'next/font/google';
 import { SignedIn, SignedOut, ClerkLoading, ClerkLoaded } from '@clerk/nextjs';
 import { openSidebarDrawer } from '@/lib/ui/sidebarDrawer';
@@ -57,6 +58,7 @@ function Mark({ size = 24 }: { size?: number }) {
 
 export function Header() {
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // The landing page ("/") ships its own warm editorial header (LandingHeader).
   if (pathname === '/') return null;
@@ -232,11 +234,46 @@ export function Header() {
           ))}
         </nav>
 
+        {/* Mobile hamburger button - hidden on desktop, shown on mobile */}
+        <button
+          className="header-hamburger"
+          aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={mobileMenuOpen}
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          style={{
+            display: 'none',
+            background: 'transparent',
+            border: `1px solid ${HAIRLINE}`,
+            borderRadius: '9px',
+            width: '42px',
+            height: '42px',
+            cursor: 'pointer',
+            alignItems: 'center',
+            justifyContent: 'center',
+            flexShrink: 0,
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={INK} strokeWidth="2" strokeLinecap="round">
+            {mobileMenuOpen ? (
+              <>
+                <line x1="5" y1="5" x2="19" y2="19" />
+                <line x1="19" y1="5" x2="5" y2="19" />
+              </>
+            ) : (
+              <>
+                <line x1="3" y1="7" x2="21" y2="7" />
+                <line x1="3" y1="12" x2="21" y2="12" />
+                <line x1="3" y1="17" x2="21" y2="17" />
+              </>
+            )}
+          </svg>
+        </button>
+
         {/* Auth actions. Single primary CTA removed per OS-2515 — "Get started" in
             hero is the sole primary CTA. On archetype pages the CTA below is the
             conversion path; this clusters both buttons on the right. Hide the
             Log in link on /login to avoid a redundant dead self-link (OS-3976). */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+        <div className="header-auth-actions" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           {/* CTA — shown on archetype SEO pages and /features so organic visitors have an
               immediate conversion path. Rendered INSIDE the auth-actions container so it
               clusters with Log in on the right edge. */}
@@ -299,14 +336,92 @@ export function Header() {
           </ClerkLoaded>
         </div>
       </div>
+
+      {/* Mobile drawer - slides down when hamburger is tapped */}
+      {mobileMenuOpen && (
+        <div
+          className="header-mobile-menu"
+          style={{
+            borderTop: `1px solid ${HAIRLINE}`,
+            background: 'var(--color-bg-primary)',
+            padding: '1rem 1.5rem 1.5rem',
+          }}
+        >
+          <nav aria-label="Mobile navigation" style={{ display: 'flex', flexDirection: 'column', gap: '0.25rem' }}>
+            {NAV_LINKS.map(({ href, label }) => (
+              <Link
+                key={href}
+                href={href}
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  padding: '0.75rem 0',
+                  fontSize: '1.0625rem',
+                  fontWeight: 500,
+                  color: INK,
+                  textDecoration: 'none',
+                  borderBottom: `1px solid ${HAIRLINE}`,
+                }}
+              >
+                {label}
+              </Link>
+            ))}
+          </nav>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1.25rem' }}>
+            {/* Mobile "Get Started" CTA - shown on archetype pages and /features */}
+            {(pathname.startsWith('/archetypes/') || pathname === '/features') && (
+              <Link
+                href="/onboarding"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  textAlign: 'center',
+                  padding: '0.8rem',
+                  background: 'var(--color-accent)',
+                  color: 'var(--color-on-accent)',
+                  borderRadius: '10px',
+                  fontSize: '1rem',
+                  fontWeight: 700,
+                  textDecoration: 'none',
+                }}
+              >
+                Get Started →
+              </Link>
+            )}
+            {pathname !== '/login' && (
+              <Link
+                href="/login"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  textAlign: 'center',
+                  padding: '0.8rem',
+                  border: `1px solid ${HAIRLINE}`,
+                  borderRadius: '10px',
+                  fontSize: '1rem',
+                  fontWeight: 600,
+                  color: INK,
+                  textDecoration: 'none',
+                }}
+              >
+                Log in
+              </Link>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* OS-6344: in dark mode the cream translucent bar disappears against the
           warm-charcoal page bg. Re-tint to a dark translucent surface so the
           bar stays visible AND keeps its hairline + ink contrast. Also adds
           hover/focus darkening on nav links and the archetype CTA so the bar
           feels responsive without inline hover handlers. */}
+      {/* OS-7452: mobile hamburger menu - hide desktop nav/auth, show hamburger on small screens */}
       <style
         dangerouslySetInnerHTML={{
           __html: `
+          @media (max-width: 768px) {
+            header.marketing-header nav.header-nav-links { display: none !important; }
+            header.marketing-header div.header-auth-actions { display: none !important; }
+            header.marketing-header button.header-hamburger { display: flex !important; }
+          }
           [data-theme='dark'] header.marketing-header:not(.marketing-header-auth) {
             background: rgba(26, 23, 18, 0.85) !important;
           }
