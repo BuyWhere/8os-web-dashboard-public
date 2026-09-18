@@ -295,17 +295,21 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   'pisces_wu_balanced_sg': 'The Stone Tide',
   'gemini_yi_weak_sg':    'The Branch Weave',
   // OS-7451 regression: pickWord fix not yet deployed on Vercel — hash lands
-  // on 'Unknown' slot in elementWords. Add explicit overrides for all 8 broken combos.
+  // on 'Unknown' slot in elementWords. Add explicit overrides for the 7 broken
+  // combos that are NOT already covered above (gemini_yi_weak_sg is set on
+  // line 296, duplicating it here would silently override the correct value).
   // Keys verified via generateArchetype() locally:
-  // 1990-07-15 → cancer_xin_balanced_sg, 1975-06-20 → gemini_ding_strong_sg
-  // 1985-11-20 → scorpio_gui_strong_sg, 1992-03-01 → pisces_bing_weak_sg
-  // 1987-06-15 → gemini_yi_weak_sg, 2005-09-10 → virgo_ding_balanced_sg
+  // 1990-07-15 → cancer_xin_balanced_sg
+  // 1975-06-20 → gemini_ding_strong_sg
+  // 1985-11-20 → scorpio_gui_strong_sg
+  // 1992-03-01 → pisces_bing_weak_sg
+  // 2005-09-10 → virgo_ding_balanced_sg
   // 1989-08-30 → virgo_ren_balanced_sg
+  // 1980-10-30 → scorpio_geng_weak_sg
   'cancer_xin_balanced_sg':  'The Crystal Moon',
   'gemini_ding_strong_sg':   'The Blaze Signal',
   'scorpio_gui_strong_sg':   'The Current Depth',
   'pisces_bing_weak_sg':     'The Blaze Current',
-  'gemini_yi_weak_sg':       'The Echo Weave',
   'virgo_ding_balanced_sg':   'The Precision Lab',
   'virgo_ren_balanced_sg':   'The Crystal Lens',
   'scorpio_geng_weak_sg':    'The Still Phoenix',
