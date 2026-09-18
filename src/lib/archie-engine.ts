@@ -291,9 +291,12 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   'sagittarius_jia_strong_ig': 'The Forest Horizon',
   'libra_xin_balanced_sp': 'The Crystal Scale',
   // OS-6899 remaining gaps: hash collides with Unknown in elementWords guard
-  'leo_ren_weak_sg':     'The Current Crown',
-  'pisces_wu_balanced_sg':'The Stone Tide',
-  'gemini_yi_weak_sg':   'The Branch Weave',
+  'leo_ren_weak_sg':      'The Current Crown',
+  'pisces_wu_balanced_sg': 'The Stone Tide',
+  'gemini_yi_weak_sg':    'The Branch Weave',
+  // OS-7451 regression: deployed code predates pickWord fix, these were "The undefined Moon"
+  'cancer_xin_balanced_sg': 'The Crystal Moon',
+  'scorpio_geng_weak_sg':   'The Still Phoenix',
 }
 
 function pickWord(words: string[], index: number, fallback: string): string {
