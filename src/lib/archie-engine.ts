@@ -775,3 +775,4 @@ export function getArchetypeDefinition(archetypeId: string): {
 
 // Re-export what consumers need
 export { SUN_SIGNS } from './sun-sign'
+
