@@ -381,6 +381,9 @@ describe('ARCHIE Engine, 50 Sample Profiles', () => {
       ['1985-03-22', 'The Clear Charge'],    // aries_geng_balanced_sg (was: The undefined Flame)
       ['2000-01-01', 'The Clay Forge'],     // capricorn_wu_strong_sg (was: The undefined Stone)
       ['2000-06-15', 'The Branch Weave'],   // gemini_jia_weak_sg (was: The undefined Signal)
+      // OS-7451: deployed code predates pickWord fix
+      ['1990-07-15', 'The Crystal Moon'],   // cancer_xin_balanced_sg (was: The undefined Moon)
+      ['2000-11-08', 'The Still Phoenix'],  // scorpio_geng_weak_sg (was: The Hidden Phoenix)
     ]
     for (const [date, expected] of known) {
       const result = generateArchetype({ birthDate: date, personalityCode: 'sg' })
