@@ -313,6 +313,14 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   'virgo_ding_balanced_sg':   'The Precision Lab',
   'virgo_ren_balanced_sg':   'The Crystal Lens',
   'scorpio_geng_weak_sg':    'The Still Phoenix',
+  // OS-7451 additional overrides: deployed bundle is stale, missing these sg combos.
+  // Verified via local tsx: generateArchetype(birthDate, 'sg') produces these IDs.
+  'gemini_geng_weak_sg':      'The Steel Echo',
+  'leo_xin_strong_sg':        'The Steady Spotlight',
+  'cancer_jia_weak_sg':       'The Quiet Hearth',
+  'libra_wu_strong_sg':       'The Soil Accord',
+  'libra_bing_weak_sg':       'The Quiet Bridge',
+  'capricorn_wu_balanced_sg': 'The Steady Peak',
 }
 
 function pickWord(words: string[], index: number, fallback: string): string {
