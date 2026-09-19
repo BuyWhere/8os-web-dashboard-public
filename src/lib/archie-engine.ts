@@ -321,6 +321,9 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   'libra_wu_strong_sg':       'The Soil Accord',
   'libra_bing_weak_sg':       'The Quiet Bridge',
   'capricorn_wu_balanced_sg': 'The Steady Peak',
+  // OS-7451: taurus_geng_weak_sg was in the original OS-6899 fix but dropped
+  // during merge; 1993-05-19 returns "The undefined Hearth" without this.
+  'taurus_geng_weak_sg':     'The Still Forge',
 }
 
 function pickWord(words: string[], index: number, fallback: string): string {
