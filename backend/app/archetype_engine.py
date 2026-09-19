@@ -278,6 +278,29 @@ ARCHETYPE_NAME_OVERRIDES: dict[str, str] = {
     'leo_jia_strong_sg': 'The Solar Grove',
     'sagittarius_jia_strong_ig': 'The Forest Horizon',
     'libra_xin_balanced_sp': 'The Crystal Scale',
+    # OS-6899 remaining gaps: hash collides with Unknown in elementWords guard
+    'leo_ren_weak_sg':      'The Current Crown',
+    'pisces_wu_balanced_sg': 'The Stone Tide',
+    'gemini_yi_weak_sg':    'The Branch Weave',
+    # OS-7451 regression: pickWord fix not yet deployed on Vercel — hash lands
+    # on 'Unknown' slot in elementWords. Add explicit overrides for the 7 broken
+    # combos that are NOT already covered above (gemini_yi_weak_sg is set on
+    # the line above, duplicating it here would silently override the correct value).
+    # Keys verified via generateArchetype() locally:
+    # 1990-07-15 → cancer_xin_balanced_sg
+    # 1975-06-20 → gemini_ding_strong_sg
+    # 1985-11-20 → scorpio_gui_strong_sg
+    # 1992-03-01 → pisces_bing_weak_sg
+    # 2005-09-10 → virgo_ding_balanced_sg
+    # 1989-08-30 → virgo_ren_balanced_sg
+    # 1980-10-30 → scorpio_geng_weak_sg
+    'cancer_xin_balanced_sg':  'The Crystal Moon',
+    'gemini_ding_strong_sg':   'The Blaze Signal',
+    'scorpio_gui_strong_sg':   'The Current Depth',
+    'pisces_bing_weak_sg':     'The Blaze Current',
+    'virgo_ding_balanced_sg':  'The Precision Lab',
+    'virgo_ren_balanced_sg':   'The Crystal Lens',
+    'scorpio_geng_weak_sg':    'The Still Phoenix',
 }
 
 SUN_SIGN_THEMES: dict[str, str] = {
@@ -352,8 +375,14 @@ def generate_archetype_name(
     strength: str,
     personality_code: str,
     hour_index: int = -1,
+    day_master_romanized: Optional[str] = None,
 ) -> str:
-    base_key = f"{sun_sign_key}_{day_element}_{strength}_{personality_code}"
+    # OS-7544 fix: override key uses day_master_romanized (stem) — matching
+    # the TypeScript ARCHETYPE_NAME_OVERRIDES table. Previously used day_element
+    # which meant overrides NEVER matched (e.g. 'cancer_metal_balanced_sg' vs
+    # the actual key 'cancer_xin_balanced_sg').
+    roman = day_master_romanized if day_master_romanized else ''
+    base_key = f"{sun_sign_key}_{roman}_{strength}_{personality_code}"
     if base_key in ARCHETYPE_NAME_OVERRIDES:
         return ARCHETYPE_NAME_OVERRIDES[base_key]
 
@@ -435,7 +464,7 @@ def generate_archetype(
     day_master_roman = STEM_ROMANIZED[dp.stem]
     archetype_id = f"{sun_sign}_{day_master_roman}_{strength}_{personality_code}"
 
-    name = generate_archetype_name(sun_sign, dp.element, strength, personality_code)
+    name = generate_archetype_name(sun_sign, dp.element, strength, personality_code, day_master_romanized=day_master_roman)
     description = generate_description(sun_sign, dp.element, strength, personality_code)
 
     return ArchetypeResult(
