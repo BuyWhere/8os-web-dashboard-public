@@ -22,6 +22,8 @@ import type { Element } from '@/lib/bazi-phases'
 export const runtime = 'nodejs'
 
 const ELEMENT_LABEL: Record<string, string> = {
+  // OS-7593: verify deployed commit here
+  // Last push: ff9b092 - check Vercel picks it up
   wood: 'Wood', fire: 'Fire', earth: 'Earth', metal: 'Metal', water: 'Water',
 }
 
