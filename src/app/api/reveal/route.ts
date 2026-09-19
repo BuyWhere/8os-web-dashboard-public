@@ -77,13 +77,11 @@ export async function POST(req: NextRequest) {
     // we anchor to a stable default code — the birth date/time still fully
     // drives the sun sign, Day Master, strength and element, so different dates
     // yield different archetypes. (The full quiz refines this after signup.)
-    // OS-7451 diagnostic: log computed archetypeId to verify override lookup
     const result = generateArchetype({
       birthDate,
       birthTime,
       personalityCode: 'sg',
     })
-    console.log(`[OS-7451] birthDate=${birthDate} archetypeId=${result.archetypeId} archetypeName=${result.archetypeName}`)
 
     // Honest "current phase" teaser from the real phase engine (annual 流年
     // layer — HIGH confidence). Nothing here is faked.
