@@ -352,6 +352,8 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   'pisces_bing_balanced_sg':    'The Steady Mist',
   'pisces_ren_weak_sg':         'The Soft Dream',
   'pisces_xin_strong_sg':       'The Blade Tide',
+  // OS-7626: add pisces_geng_strong_sg — 2000-03-03 returns undefined without this
+  'pisces_geng_strong_sg':      'The Steel Current',
   'sagittarius_jia_balanced_sg': 'The Whole Arrow',
   'sagittarius_yi_weak_sg':      'The Quiet Horizon',
   'scorpio_bing_weak_sg':       'The Quiet Phoenix',
