@@ -14,7 +14,7 @@ function signupHref(tier: CheckoutButtonProps['tier']) {
 }
 
 /**
- * OS-6795 r1: useAuth removed — CheckoutButtonInner already handles the 401
+ * OS-7622: OS-6795 r1 fix — useAuth removed. CheckoutButtonInner already handles the 401
  * (unauthenticated) case by redirecting to /signup internally. The plain <a>
  * fallback is therefore redundant; always render CheckoutButtonInner so the
  * full loading/error states work on the marketing page.
