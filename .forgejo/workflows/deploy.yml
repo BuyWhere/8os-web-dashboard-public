@@ -31,6 +31,7 @@ name: deploy
 # the homepage with a JSON API. Do not reintroduce that mapping.
 
 on:
+  workflow_dispatch:
   push:
     branches: [main]
 
