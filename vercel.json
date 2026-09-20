@@ -90,6 +90,10 @@
       "destination": "https://orchestrator-production-1643.up.railway.app/waitlist/join"
     },
     {
+      "source": "/api/count",
+      "destination": "https://api.8os.ai/api/waitlist/count"
+    },
+    {
       "source": "/health",
       "destination": "https://orchestrator-production-1643.up.railway.app/health"
     }
