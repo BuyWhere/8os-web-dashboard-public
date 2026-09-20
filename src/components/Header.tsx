@@ -241,7 +241,6 @@ export function Header() {
           aria-expanded={mobileMenuOpen}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           style={{
-            display: 'none',
             background: 'transparent',
             border: `1px solid ${HAIRLINE}`,
             borderRadius: '9px',
