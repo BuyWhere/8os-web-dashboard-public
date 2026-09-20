@@ -106,7 +106,7 @@ export default function LandingHeader() {
         <div className="lh-desktop-auth" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
           <a
             href="/login"
-            style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none' }}
+            style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none', whiteSpace: 'nowrap' }}
           >
             Log in
           </a>
@@ -177,6 +177,23 @@ export default function LandingHeader() {
             ))}
           </nav>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1.25rem' }}>
+            {/* Mobile "Get Started" CTA - primary conversion path */}
+            <a
+              href="/onboarding"
+              onClick={() => setOpen(false)}
+              style={{
+                textAlign: 'center',
+                padding: '0.8rem',
+                background: GOLD,
+                color: '#1a1a1a',
+                borderRadius: '10px',
+                fontSize: '1rem',
+                fontWeight: 700,
+                textDecoration: 'none',
+              }}
+            >
+              Get Started →
+            </a>
             <a
               href="/login"
               onClick={() => setOpen(false)}
