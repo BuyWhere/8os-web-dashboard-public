@@ -40,13 +40,13 @@ const EMAIL_OPTIONS = [
 
 export default function ContactPage() {
   return (
-    <div style={{
+    <div className="contact-page" style={{
       minHeight: '100vh',
       background: 'var(--color-bg-primary)',
       color: 'var(--color-text-primary)',
       padding: '4rem 2rem 6rem',
     }}>
-      <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', gap: '3rem', alignItems: 'flex-start' }}>
+      <div className="contact-container" style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', gap: '3rem', alignItems: 'flex-start' }}>
 
         <SidebarNav sections={SECTIONS} />
 
@@ -71,7 +71,9 @@ export default function ContactPage() {
             <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1rem', lineHeight: 1.5 }}>
               Drop your details below and we&apos;ll reply within 1-2 business days.
             </p>
-            <ContactForm />
+            <div style={{ paddingBottom: '5rem' }}>
+              <ContactForm />
+            </div>
           </section>
 
           <section id="contact-options" aria-labelledby="contact-options-title" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
@@ -124,6 +126,16 @@ export default function ContactPage() {
           </section>
         </main>
       </div>
+      <style dangerouslySetInnerHTML={{ __html: `
+        @media (max-width: 767px) {
+          .contact-page { padding: 2rem 1rem 4rem !important; }
+          .contact-container { gap: 1.5rem !important; flex-direction: column !important; }
+          #contact-header { margin-top: 1rem !important; margin-bottom: 1rem !important; }
+          #contact-header h1 { font-size: 1.75rem !important; }
+          #contact-form { margin-bottom: 1rem !important; }
+          #contact-options { margin-top: 1rem !important; margin-bottom: 1rem !important; }
+        }
+      ` }} />
     </div>
   );
 }
