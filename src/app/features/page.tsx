@@ -88,8 +88,8 @@ export default function FeaturesPage() {
 
         <SidebarNav sections={SECTIONS} />
 
-        <main style={{ flex: '1 1 0%', minWidth: 0, width: '100%', paddingBottom: '6rem' }}>
-          <Link href="/" style={{ color: 'var(--color-accent)', textDecoration: 'none', fontSize: '0.875rem' }}>
+        <main style={{ flex: '1 1 0%', minWidth: 0, width: '100%', paddingBottom: 'calc(6rem + 96px)' }}>
+          <Link href="/" style={{ color: '#F3C978', textDecoration: 'none', fontSize: '0.875rem' }}>
             ← Back to 8os
           </Link>
 

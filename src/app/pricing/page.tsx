@@ -447,6 +447,7 @@ const tiersGridResponsiveStyle = `
   }
   @media (max-width: 600px) {
     .tiers-grid { grid-template-columns: 1fr !important; align-items: stretch; }
+    .pricing-inner { padding: 24px 20px !important; }
   }
   @media (max-width: 800px) {
     .quotes-grid { grid-template-columns: 1fr !important; }
@@ -487,13 +488,13 @@ const tiersGridResponsiveStyle = `
 `;
 
 const pageStyle: React.CSSProperties = { background: 'var(--color-bg-primary)', color: 'var(--color-text-primary)', minHeight: '100vh', paddingBottom: '6rem' };
-const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '3.5rem 2rem', minWidth: 0 };
+const innerStyle: React.CSSProperties = { maxWidth: '1200px', margin: '0 auto', padding: '3.5rem 16px', minWidth: 0 };
 const headerStyle: React.CSSProperties = { textAlign: 'center', marginBottom: '1rem' };
 const eyebrowStyle: React.CSSProperties = { margin: '0 0 0.75rem', fontSize: '0.78rem', fontWeight: 700, letterSpacing: '0.14em', textTransform: 'uppercase', color: 'var(--color-text-primary)' };
 const pageTitleStyle: React.CSSProperties = { margin: '0 0 1rem', fontSize: 'clamp(1.4rem, 6vw, 2.25rem)', lineHeight: 1.15, letterSpacing: '-0.035em', fontWeight: 800 };
 const pageDescStyle: React.CSSProperties = { margin: 0, fontSize: '1.1rem', color: 'var(--color-text-secondary)', maxWidth: '480px', marginLeft: 'auto', marginRight: 'auto', lineHeight: 1.65 };
 
-const tiersGridStyle: React.CSSProperties = { display: 'grid', gap: '1.25rem', alignItems: 'stretch' };
+const tiersGridStyle: React.CSSProperties = { display: 'grid', gap: '2rem', alignItems: 'stretch' };
 
 const tierCardStyle: React.CSSProperties = { position: 'relative', padding: '1.35rem', borderRadius: '20px', border: '1px solid var(--color-border)', background: 'var(--color-bg-card)', display: 'flex', flexDirection: 'column', gap: '0.85rem', overflow: 'visible', height: '100%' };
 const tierHighlightedStyle: React.CSSProperties = { border: '2px solid #C87055', background: 'var(--color-accent-soft)', boxShadow: '0 0 0 1px var(--color-accent-soft)' };

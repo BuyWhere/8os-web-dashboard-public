@@ -243,9 +243,9 @@ export default function SignupPage() {
         /* OS-7126: belt-and-suspenders if Clerk/SSR drops the inline justify. */
         .signup-grid { justify-content: center; margin-left: auto; margin-right: auto; width: 100%; max-width: 1360px; }
         @media (max-width: 860px) {
-          .signup-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 1.5rem !important; padding: 2.5rem 1rem 2rem !important; justify-content: stretch !important; }
-          .signup-pitch { max-width: 100% !important; text-align: center; }
-          .signup-pitch ul { text-align: left; max-width: 360px; width: 100%; margin: 0 auto !important; }
+          .signup-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 1rem !important; padding: 1.5rem 1rem 2rem !important; justify-content: stretch !important; }
+          .signup-pitch { display: none !important; }
+          .signup-auth { margin-top: 0 !important; }
         }
       ` }} />
     </main>
