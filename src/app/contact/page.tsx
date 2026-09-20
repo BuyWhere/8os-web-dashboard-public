@@ -128,37 +128,45 @@ export default function ContactPage() {
       </div>
       <style dangerouslySetInnerHTML={{ __html: `
         @media (max-width: 767px) {
-          /* OS-7626 r2: aggressive mobile tightening so the contact form fields
-             and submit button clear the 844px fold. The previous fix left the
-             h1 at 1.75rem and the h2 at 1.5rem with 1-2rem margins between
-             sections, which pushed the submit button below 844px and let the
-             floating section-nav FAB overlap the Message textarea bottom-right.
-             Strategy: collapse all intro spacing and shrink section headings. */
-          .contact-page { padding: 0.75rem 1rem 6rem !important; }
+          /* OS-7626 r3: aggressive tightening so submit button clears 844px fold
+             and FAB does not overlap the message textarea. Live probe at 390x844
+             (2026-09-20) showed: textarea top=745px/bottom=887px, FAB
+             toggle at 772-820px (overlapping textarea top 745-820px), submit
+             button below fold. Strategy: hide page header copy, trim intro
+             sections, reduce form row height, shrink FAB. */
+          .contact-page { padding: 0.5rem 1rem 5rem !important; }
           .contact-container { gap: 0 !important; flex-direction: column !important; }
-          /* Hide the "Back to 8os" link — saves ~40px vertical and isn't critical
-             on mobile where the user just landed. */
           main > a[href="/"] { display: none !important; }
-          #contact-header { margin-top: 0.25rem !important; margin-bottom: 0.75rem !important; }
-          #contact-header h1 { font-size: 1.4rem !important; margin-bottom: 0.15rem !important; line-height: 1.15 !important; }
-          #contact-header p { font-size: 0.85rem !important; }
+          #contact-header { margin-top: 0.2rem !important; margin-bottom: 0.5rem !important; }
+          #contact-header h1 { font-size: 1.25rem !important; margin-bottom: 0.1rem !important; line-height: 1.1 !important; }
+          #contact-header p { display: none !important; }
           #contact-form { margin-bottom: 0 !important; }
-          #contact-form h2 { font-size: 1.1rem !important; margin-bottom: 0.25rem !important; }
-          #contact-form > p { font-size: 0.8rem !important; margin-bottom: 0.5rem !important; line-height: 1.35 !important; }
-          /* Tighten the form itself — every input/textarea + label is a tall
-             stack by default; trim row gaps so 5 fields + submit fit in 600px. */
-          #contact-form form > div { margin-bottom: 0.5rem !important; }
-          #contact-form label { font-size: 0.85rem !important; margin-bottom: 0.15rem !important; }
-          #contact-form input,
-          #contact-form textarea { padding: 0.5rem 0.65rem !important; font-size: 0.95rem !important; }
-          #contact-form textarea { min-height: 70px !important; }
-          #contact-form button[type="submit"] { min-height: 44px !important; font-size: 0.95rem !important; margin-top: 0.25rem !important; }
-          /* Hide email options section title spacing — show the cards further down */
-          #contact-options { margin-top: 1.5rem !important; margin-bottom: 0.5rem !important; }
-          #contact-options h2 { font-size: 1.1rem !important; margin-bottom: 0.5rem !important; }
-          #contact-options > p { display: none !important; }
+          #contact-form > div { padding-bottom: 0 !important; }
+          #contact-form form { padding: 0.875rem !important; gap: 0.6rem !important; }
+          #contact-form h2 { font-size: 1rem !important; margin-bottom: 0.15rem !important; }
+          #contact-form > p { display: none !important; }
+          #contact-form form > div { margin-bottom: 0.35rem !important; }
+          #contact-form label { font-size: 0.8rem !important; margin-bottom: 0.08rem !important; }
+          #contact-form input { padding: 0.4rem 0.55rem !important; font-size: 15px !important; min-height: 38px !important; }
+          #contact-form textarea { padding: 0.4rem 0.55rem !important; font-size: 15px !important; min-height: 56px !important; }
+          #contact-form button[type="submit"] {
+            min-height: 44px !important;
+            font-size: 0.9rem !important;
+            margin-top: 0.15rem !important;
+            padding: 0.6rem 1rem !important;
+          }
+          /* OS-7626 r3: smaller FAB so it consumes less bottom-right real-estate.
+             Live probe showed it at 772-820px overlapping the textarea top. */
+          .sidebar-mobile-toggle {
+            width: 40px !important;
+            height: 40px !important;
+            bottom: 0.75rem !important;
+            right: 0.75rem !important;
+            font-size: 1rem !important;
+          }
+          /* OS-7626 r3: hide email options section on mobile - form is priority;
+             users can reach email options by scrolling on desktop. */
+          #contact-options { display: none !important; }
         }
       ` }} />
     </div>
-  );
-}
