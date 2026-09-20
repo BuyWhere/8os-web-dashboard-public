@@ -177,9 +177,11 @@ app.add_middleware(SlowAPIMiddleware)
 
 # Registered feature routers (OS-5119: alignment routes were defined but never mounted)
 from app.routers.alignment import router as alignment_router  # noqa: E402
+from app.routers.product_surface import router as product_surface_router  # noqa: E402
 from app.routers.telegram import router as telegram_router  # noqa: E402
 
 app.include_router(alignment_router)
+app.include_router(product_surface_router)
 app.include_router(telegram_router)
 
 
