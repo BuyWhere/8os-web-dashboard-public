@@ -324,6 +324,10 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   // OS-7451: taurus_geng_weak_sg was in the original OS-6899 fix but dropped
   // during merge; 1993-05-19 returns "The undefined Hearth" without this.
   'taurus_geng_weak_sg':     'The Still Forge',
+  // OS-7451: aries_yi_strong_sg (1988-03-21) was NEVER in the override table.
+  // Hash generates "The Branch Strike" → "The undefined Strike" (override missing).
+  // Key confirmed via local hash computation: aries + wood + strong + sg.
+  'aries_yi_strong_sg':      'The Branch Strike',
 }
 
 function pickWord(words: string[], index: number, fallback: string): string {
