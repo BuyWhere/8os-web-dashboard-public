@@ -44,7 +44,7 @@ export default function ContactPage() {
       minHeight: '100vh',
       background: 'var(--color-bg-primary)',
       color: 'var(--color-text-primary)',
-      padding: '4rem 2rem',
+      padding: '4rem 2rem 6rem',
     }}>
       <div style={{ maxWidth: '1100px', margin: '0 auto', display: 'flex', gap: '3rem', alignItems: 'flex-start' }}>
 
@@ -55,7 +55,7 @@ export default function ContactPage() {
             ← Back to 8os
           </Link>
 
-          <section id="contact-header" style={{ marginTop: '2rem', marginBottom: '3rem' }}>
+          <section id="contact-header" style={{ marginTop: '1.5rem', marginBottom: '2rem' }}>
             <h1 style={{ fontSize: '2.5rem', fontWeight: 800, marginBottom: '0.5rem' }}>
               Contact
             </h1>
@@ -65,16 +65,16 @@ export default function ContactPage() {
           </section>
 
           <section id="contact-form">
-            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem' }}>
+            <h2 style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.5rem' }}>
               Send a message
             </h2>
-            <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1.25rem', lineHeight: 1.5 }}>
+            <p style={{ color: 'var(--color-text-secondary)', marginBottom: '1rem', lineHeight: 1.5 }}>
               Drop your details below and we&apos;ll reply within 1-2 business days.
             </p>
             <ContactForm />
           </section>
 
-          <section id="contact-options" aria-labelledby="contact-options-title" style={{ marginTop: '3rem', marginBottom: '3rem' }}>
+          <section id="contact-options" aria-labelledby="contact-options-title" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
             <h2 id="contact-options-title" style={{ fontSize: '1.5rem', fontWeight: 700, marginBottom: '0.75rem' }}>
               Email Options
             </h2>
