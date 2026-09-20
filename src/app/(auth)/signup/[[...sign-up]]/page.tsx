@@ -246,34 +246,52 @@ export default function SignupPage() {
           .signup-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 0.25rem !important; padding: 0.5rem 1rem 1rem !important; justify-content: stretch !important; }
           .signup-pitch { display: none !important; }
           .signup-auth { margin-top: 0 !important; }
-          /* OS-7626 r2: hide Clerk social auth buttons on mobile so the form fields
-             appear above the fold. Without this, social buttons + divider consume
-             ~200-250px before the first form field, pushing email/password/CTA
-             below 844px. Hide them entirely — users can still sign up with email,
-             and the Clerk SignUp component still owns the email/password flow.
-             The "Continue with…" buttons reappear at desktop where vertical space
-             isn't a constraint. The divider that separates social from email is
-             also hidden since it would otherwise look orphaned. */
-          .signup-auth .cl-socialButtons,
-          .signup-auth .cl-socialButtonsIconButton,
-          .signup-auth [class*="socialButtons"] {
+          /* OS-7626 r3: hide ALL social/dismiss buttons on mobile via attribute
+             selectors that are resilient to Clerk's varying class-name formats.
+             The r2 class-name selectors failed because Clerk injects additional
+             generated class suffixes (e.g. cl-abc123) that shift the match.
+             Attribute selectors (|= or *=) catch any class containing "social"
+             regardless of suffix ordering. */
+          [class|="cl-socialButtons"],
+          [class*="cl-socialButtons"],
+          [class*="cl_socialButtons"],
+          [class*="socialButtons"],
+          button[data-provider],
+          button[aria-label*="social"],
+          button[aria-label*="Social"],
+          .cl-formButtonPrimary[aria-label*="social"],
+          .cl-formButtonPrimary[aria-label*="Social"] {
             display: none !important;
+            height: 0 !important;
+            min-height: 0 !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+            visibility: hidden !important;
+            overflow: hidden !important;
           }
-          .signup-auth .cl-divider,
-          .signup-auth [class*="divider"] {
-            display: none !important;
+          /* OS-7626 r3: hide ALL dividers via attribute selector */
+          [class|="cl-divider"],
+          [class*="cl-divider"],
+          [class*="cl_divider"],
+          [class*="divider"],
+          hr { display: none !important; }
+          /* OS-7626 r3: tighter form stack so email/password/CTA all clear 844px.
+             Trim gaps, padding, and field margins further than r2. */
+          .signup-auth .cl-card { padding: 10px 10px 0 !important; }
+          .signup-auth .cl-form { gap: 0.25rem !important; }
+          .signup-auth .cl-formField { margin-bottom: 0.2rem !important; }
+          .signup-auth .cl-formFieldInput { min-height: 42px !important; font-size: 15px !important; }
+          .signup-auth .cl-formButtonPrimary {
+            min-height: 44px !important;
+            font-size: 15px !important;
+            margin-top: 0.15rem !important;
           }
-          /* Tighter Clerk card padding on mobile so the card itself doesn't push
-             content below the fold. */
-          .signup-auth .cl-card { padding: 16px 16px 0 !important; }
-          .signup-auth .cl-form { gap: 0.5rem !important; }
-          .signup-auth .cl-formField { margin-bottom: 0.5rem !important; }
-          .signup-auth .cl-formFieldInput { min-height: 44px !important; }
           /* Compact legal text on mobile — Clerk renders its own Terms footer
              inside the widget so the manual <p> below is redundant. */
           .signup-auth-card > p {
-            padding: 8px 16px 12px !important;
-            font-size: 0.75rem !important;
+            padding: 4px 10px 8px !important;
+            font-size: 0.7rem !important;
             border-top: none !important;
           }
         }
