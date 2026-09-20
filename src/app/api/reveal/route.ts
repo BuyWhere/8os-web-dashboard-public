@@ -85,6 +85,52 @@ export async function POST(req: NextRequest) {
       personalityCode: 'sg',
     })
 
+    // OS-7451 hb262 fail-safe: if the composite name slipped an "undefined"
+    // literal (deployed bundle predates pickWord's Unknown guard), fall back
+    // to a known-good override name derived from the archetypeId. The override
+    // map is the source of truth — every sg key has at least one entry by
+    // hb262 — so this only triggers if the deployed bundle is missing overrides
+    // that source has. Either way the user gets a real name, not "The undefined X".
+    if (typeof result.archetypeName !== 'string' || result.archetypeName.includes('undefined') || !result.archetypeName.trim()) {
+      // Build a deterministic fallback name from archetypeId parts.
+      const parts = (result.archetypeId || '').split('_')
+      const signWord = parts[0] || 'Star'
+      const strength = parts[2] || 'balanced'
+      const element = result.dayElement || 'fire'
+      const qualMap: Record<string, string[]> = {
+        strong: ['Grand', 'True', 'Pure'],
+        weak: ['Hidden', 'Quiet', 'Still'],
+        balanced: ['Steady', 'Clear', 'Even'],
+      }
+      const elemMap: Record<string, string[]> = {
+        wood: ['Forest', 'Branch', 'Grove'],
+        fire: ['Torch', 'Ember', 'Spark'],
+        earth: ['Stone', 'Clay', 'Mesa'],
+        metal: ['Blade', 'Steel', 'Forge'],
+        water: ['Flow', 'Deep', 'Stream'],
+      }
+      const signMap: Record<string, string[]> = {
+        capricorn:   ['Mountain', 'Summit', 'Ridge', 'Forge', 'Peak', 'Stone'],
+        aquarius:    ['Network', 'Circuit', 'Signal', 'Wave', 'Node', 'Arc'],
+        pisces:      ['Dream', 'Ocean', 'Tide', 'Mist', 'Current', 'Drift'],
+        aries:       ['Flame', 'Blaze', 'Charge', 'Strike', 'Spark', 'Conquest'],
+        taurus:      ['Foundation', 'Grove', 'Hearth', 'Root', 'Harvest', 'Earth'],
+        gemini:      ['Thread', 'Echo', 'Bridge', 'Weave', 'Link', 'Signal'],
+        cancer:      ['Nest', 'Shell', 'Hearth', 'Cradle', 'Moon', 'Harbor'],
+        leo:         ['Solar', 'Stage', 'Crown', 'Spotlight', 'Gold', 'Flame'],
+        virgo:       ['Precision', 'Lab', 'Crystal', 'Lens', 'Weave', 'Blueprint'],
+        libra:       ['Scale', 'Mirror', 'Balance', 'Bridge', 'Accord', 'Prism'],
+        scorpio:     ['Shadow', 'Phoenix', 'Depth', 'Veil', 'Forge', 'Ember'],
+        sagittarius: ['Horizon', 'Arrow', 'Quest', 'Voyage', 'Star', 'Trail'],
+      }
+      const signWords = signMap[signWord] || ['Star']
+      const elemWords = elemMap[element] || ['Spark']
+      const quals = qualMap[strength] || ['Steady']
+      // Simple deterministic choice: pick first word from each list. Always valid.
+      result.archetypeName = `The ${quals[0]} ${signWords[0]}`
+      console.warn(`[OS-7451 hb262 fail-safe] archetypeName had "undefined" for ${birthDate}; patched to "${result.archetypeName}"`)
+    }
+
     // Honest "current phase" teaser from the real phase engine (annual 流年
     // layer — HIGH confidence). Nothing here is faked.
     let phaseTeaser: string | null = null

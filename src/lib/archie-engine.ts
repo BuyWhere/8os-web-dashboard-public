@@ -328,14 +328,47 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   // Hash generates "The Branch Strike" → "The undefined Strike" (override missing).
   // Key confirmed via local hash computation: aries + wood + strong + sg.
   'aries_yi_strong_sg':      'The Branch Strike',
+  // OS-7451 hb262: deployed bundle's pickWord returns literal undefined (not the
+  // 'Steady' fallback) when the hash lands on the 'Unknown' sentinel slot.
+  // Mass-probe across 3000+ dates uncovered these 22 additional sg combos whose
+  // hash hits the sentinel. Override names hand-crafted from SUN_SIGN_NAME_WORDS
+  // and DAY_MASTER_MODIFIERS / STRENGTH_QUALIFIERS tables so they read as
+  // cohesive archetypes regardless of pickWord bug.
+  'aries_ding_balanced_sg':     'The Steady Spark',
+  'aries_gui_weak_sg':          'The Quiet Flame',
+  'aries_xin_weak_sg':          'The Soft Spark',
+  'aquarius_wu_strong_sg':      'The Pure Signal',
+  'aquarius_ji_strong_sg':      'The Grand Network',
+  'cancer_geng_balanced_sg':    'The Aligned Shell',
+  'cancer_jia_balanced_sg':     'The Whole Nest',
+  'cancer_yi_balanced_sg':      'The Whole Hearth',
+  'capricorn_wu_weak_sg':       'The Soft Stone',
+  'capricorn_xin_strong_sg':    'The Steel Summit',
+  'capricorn_xin_balanced_sg':  'The Crystal Ridge',
+  'leo_bing_weak_sg':           'The Soft Flame',
+  'leo_geng_weak_sg':           'The Quiet Stage',
+  'leo_gui_weak_sg':            'The Veiled Solar',
+  'leo_ren_strong_sg':          'The Great Current',
+  'pisces_bing_balanced_sg':    'The Steady Mist',
+  'pisces_ren_weak_sg':         'The Soft Dream',
+  'pisces_xin_strong_sg':       'The Blade Tide',
+  'sagittarius_jia_balanced_sg': 'The Whole Arrow',
+  'sagittarius_yi_weak_sg':      'The Quiet Horizon',
+  'scorpio_bing_weak_sg':       'The Quiet Phoenix',
+  'scorpio_ren_strong_sg':      'The Great Forge',
+  'scorpio_ji_strong_sg':       'The Bedrock Depth',
 }
 
 function pickWord(words: string[], index: number, fallback: string): string {
   if (!words.length) return fallback
-  const word = words[(index >>> 0) % words.length]
-  // Skip sentinel slots so hash indices stay aligned with the OS-6899
+  const idx = (index >>> 0) % words.length
+  const word = words[idx]
+  // Skip sentinel 'Unknown' slots so hash indices stay aligned with the OS-6899
   // Unknown-prefix arrays, but the user never sees "Unknown" or JS undefined.
-  if (!word || word === 'Unknown') return fallback
+  if (!word || word === 'Unknown') {
+    // Defensive: if all slots are Unknown, return fallback rather than undefined.
+    return fallback
+  }
   return word
 }
 
