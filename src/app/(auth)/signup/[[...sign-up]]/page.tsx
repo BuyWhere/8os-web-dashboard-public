@@ -243,9 +243,39 @@ export default function SignupPage() {
         /* OS-7126: belt-and-suspenders if Clerk/SSR drops the inline justify. */
         .signup-grid { justify-content: center; margin-left: auto; margin-right: auto; width: 100%; max-width: 1360px; }
         @media (max-width: 860px) {
-          .signup-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 0.5rem !important; padding: 0.75rem 1rem 2rem !important; justify-content: stretch !important; }
+          .signup-grid { grid-template-columns: minmax(0, 1fr) !important; gap: 0.25rem !important; padding: 0.5rem 1rem 1rem !important; justify-content: stretch !important; }
           .signup-pitch { display: none !important; }
           .signup-auth { margin-top: 0 !important; }
+          /* OS-7626 r2: hide Clerk social auth buttons on mobile so the form fields
+             appear above the fold. Without this, social buttons + divider consume
+             ~200-250px before the first form field, pushing email/password/CTA
+             below 844px. Hide them entirely — users can still sign up with email,
+             and the Clerk SignUp component still owns the email/password flow.
+             The "Continue with…" buttons reappear at desktop where vertical space
+             isn't a constraint. The divider that separates social from email is
+             also hidden since it would otherwise look orphaned. */
+          .signup-auth .cl-socialButtons,
+          .signup-auth .cl-socialButtonsIconButton,
+          .signup-auth [class*="socialButtons"] {
+            display: none !important;
+          }
+          .signup-auth .cl-divider,
+          .signup-auth [class*="divider"] {
+            display: none !important;
+          }
+          /* Tighter Clerk card padding on mobile so the card itself doesn't push
+             content below the fold. */
+          .signup-auth .cl-card { padding: 16px 16px 0 !important; }
+          .signup-auth .cl-form { gap: 0.5rem !important; }
+          .signup-auth .cl-formField { margin-bottom: 0.5rem !important; }
+          .signup-auth .cl-formFieldInput { min-height: 44px !important; }
+          /* Compact legal text on mobile — Clerk renders its own Terms footer
+             inside the widget so the manual <p> below is redundant. */
+          .signup-auth-card > p {
+            padding: 8px 16px 12px !important;
+            font-size: 0.75rem !important;
+            border-top: none !important;
+          }
         }
       ` }} />
     </main>
