@@ -357,6 +357,12 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   'scorpio_bing_weak_sg':       'The Quiet Phoenix',
   'scorpio_ren_strong_sg':      'The Great Forge',
   'scorpio_ji_strong_sg':       'The Bedrock Depth',
+  // OS-7616 hb271: 4 missing sg combos uncovered by 2026-09-20 mass-probe.
+  // Names follow the SUN_SIGN_NAME_WORDS + DAY_MASTER_MODIFIERS vocabulary.
+  'capricorn_yi_weak_sg':         'The Quiet Grove',
+  'sagittarius_yi_balanced_sg':   'The Balanced Arrow',
+  'gemini_jia_weak_sg':            'The Soft Branch',
+  'pisces_bing_strong_sg':         'The Bright Current',
 }
 
 function pickWord(words: string[], index: number, fallback: string): string {
