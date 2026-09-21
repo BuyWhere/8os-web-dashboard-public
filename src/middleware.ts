@@ -142,6 +142,16 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
     return applyCSP(NextResponse.redirect(new URL('/developers', req.url), 307))
   }
 
+  // OS-7223: production 8os.ai is Railway Next.js (x-railway-edge), not Vercel.
+  // vercel.json rewrites never fire there. The /api/count App Router handler
+  // is also missing from the stale Railway standalone build, so probes get
+  // HTML 404. Rewrite at the edge to the live FastAPI counter.
+  if (pathname === '/api/count') {
+    return applyCSP(
+      NextResponse.rewrite(new URL('https://api.8os.ai/api/waitlist/count')),
+    )
+  }
+
   try {
     const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || ''
     if (host.endsWith('.up.railway.app')) {
