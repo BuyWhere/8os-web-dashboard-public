@@ -69,6 +69,7 @@ export default function LoginPage() {
               card: {
                 border: `1px solid ${BORDER}`,
                 boxShadow: "0 4px 24px rgba(34,31,26,0.06)",
+                overflow: "hidden", // OS-7709: clip form/footer radius seam
               },
               formFieldLabel: { color: LINK_DARK }, // dark label for WCAG AA 12.4:1 on white
               footerActionLink: { color: LINK_DARK, fontWeight: 600 }, // dark "Sign up" link for WCAG AA 12.4:1
@@ -142,6 +143,24 @@ export default function LoginPage() {
             display: flex !important;
             flex-direction: column !important;
             gap: 0.75rem !important;
+          }
+          /* OS-7709: clip Clerk card footer/body radius seam */
+          .login-auth .cl-card,
+          .login-auth .cl-cardBox {
+            overflow: hidden !important;
+          }
+          /* OS-7709: identifier-first step — hint that password is next
+             (not OTP / magic link). Hidden once Clerk leaves start. */
+          .login-auth .cl-signIn-start .cl-formFieldRow__identifier::after {
+            content: "Next you'll enter your password.";
+            display: block;
+            margin-top: 0.4rem;
+            font-size: 0.8125rem;
+            line-height: 1.35;
+            color: ${MUTED};
+          }
+          .login-auth .cl-signIn-password .cl-formFieldRow__identifier::after {
+            content: none;
           }
         ` }} />
       </main>
