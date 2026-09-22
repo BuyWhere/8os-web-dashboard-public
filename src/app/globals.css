@@ -802,15 +802,23 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: var(--color-text-primary) !important;
   border-color: var(--color-border) !important;
 }
-/* OS-6089 QA reopen: keep chip wrapping tight on tablet. `align-items: center`
- * never fixed the orphan — instead ensure all chips share consistent width so
- * they never wrap as a single trailing chip. `flex: 1 1 calc(50% - 10px)` forces
- * a clean 2-col wrap at tablet, side-by-side pairs, no lonesome row. */
+/* OS-7807 / OS-6404: single-row chips with horizontal scroll. Do not wrap —
+ * tablet `flex: 1 1 33%` previously orphaned "Comparisons (5)" on a second row.
+ * Inline nowrap is not enough once CSS flex-basis forces wrap; pin wrap off here. */
 .blog-category-chips {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
   align-items: stretch;
+  gap: 4px;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.blog-category-chips::-webkit-scrollbar {
+  display: none;
 }
 .blog-category-chip {
-  flex: 0 1 auto;
+  flex: 0 0 auto;
   white-space: nowrap;
   text-align: center;
   justify-content: center;
@@ -819,10 +827,6 @@ body:has(.app-sidebar) main:not(.cal-main) {
    * 12px so even at the smallest viewport the hit area meets the AAA
    * threshold used by comparable primary navigation patterns. */
   min-height: 44px;
-}
-@media (min-width: 700px) and (max-width: 1099px) {
-  /* Tablet: force 3 per row so total wraps cleanly into 6 + search = 2 rows. */
-  .blog-category-chip { flex: 1 1 calc(33.33% - 10px); min-width: 0; }
 }
 /* OS-6089 (QA 2026-09-03 r2): inline `color:#fff` on the All chip = 3.65:1 (FAIL).
  * Specificity: inline=(1,0,0), 2 classes=(0,2,0), 2 classes+attr=(0,3,0).
