@@ -36,8 +36,8 @@ export default function LoginPage() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          minHeight: "100vh",
-          padding: "1rem",
+          minHeight: "calc(100vh - 5rem)",
+          padding: "1.5rem",
           background: BG,
         }}
       >
@@ -69,7 +69,20 @@ export default function LoginPage() {
               card: {
                 border: `1px solid ${BORDER}`,
                 boxShadow: "0 4px 24px rgba(34,31,26,0.06)",
-                overflow: "hidden", // OS-7709: clip form/footer radius seam
+                overflow: "hidden",
+                borderRadius: "1.5rem",
+              },
+              cardBox: {
+                overflow: "hidden",
+                borderRadius: "1.5rem",
+              },
+              main: {
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
+              },
+              form: {
+                borderBottomLeftRadius: 0,
+                borderBottomRightRadius: 0,
               },
               formFieldLabel: { color: LINK_DARK }, // dark label for WCAG AA 12.4:1 on white
               footerActionLink: { color: LINK_DARK, fontWeight: 600 }, // dark "Sign up" link for WCAG AA 12.4:1
@@ -144,10 +157,23 @@ export default function LoginPage() {
             flex-direction: column !important;
             gap: 0.75rem !important;
           }
-          /* OS-7709: clip Clerk card footer/body radius seam */
+          /* OS-7806 / OS-7709: one rounded shell; zero inner form bottom radii
+             so the footer ('Don't have an account?') doesn't double-border. */
           .login-auth .cl-card,
           .login-auth .cl-cardBox {
             overflow: hidden !important;
+            border-radius: 1.5rem !important;
+          }
+          .login-auth .cl-main,
+          .login-auth .cl-form,
+          .login-auth .cl-internal-form {
+            border-bottom-left-radius: 0 !important;
+            border-bottom-right-radius: 0 !important;
+          }
+          .login-auth .cl-footer {
+            border-top-left-radius: 0 !important;
+            border-top-right-radius: 0 !important;
+            box-shadow: none !important;
           }
           /* OS-7709: identifier-first step — hint that password is next
              (not OTP / magic link). Hidden once Clerk leaves start. */

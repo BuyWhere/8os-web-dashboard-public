@@ -182,23 +182,32 @@ export function Header() {
         zIndex: 100,
         display: 'flex',
         alignItems: 'center',
-        padding: '0 2rem',
+        padding: '0 1.5rem',
       }}
     >
+      {/* OS-7806: share max-w-7xl (80rem) + px-6 with auth/marketing mains.
+          Cluster wordmark + nav on the left so Features/Pricing/Blog don't
+          float in a 750px+ space-between gap on wide desktop. */}
       <div
+        className="marketing-header-inner"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           width: '100%',
-          maxWidth: '1360px',
+          maxWidth: '80rem',
           margin: '0 auto',
+          gap: '1.5rem',
         }}
       >
+        <div
+          className="marketing-header-left"
+          style={{ display: 'flex', alignItems: 'center', gap: '2rem', minWidth: 0 }}
+        >
         {/* Wordmark */}
         <Link
           href="/"
-          style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', textDecoration: 'none' }}
+          style={{ display: 'flex', alignItems: 'center', gap: '0.55rem', textDecoration: 'none', flexShrink: 0 }}
           aria-label="8os home"
         >
           <Mark size={24} />
@@ -233,14 +242,16 @@ export function Header() {
             </Link>
           ))}
         </nav>
+        </div>
 
-        {/* Mobile hamburger button - hidden on desktop, shown on mobile */}
+        {/* Mobile hamburger — hidden on desktop so it doesn't take a space-between slot (OS-7806). */}
         <button
           className="header-hamburger"
           aria-label={mobileMenuOpen ? 'Close menu' : 'Open menu'}
           aria-expanded={mobileMenuOpen}
           onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           style={{
+            display: 'none',
             background: 'transparent',
             border: `1px solid ${HAIRLINE}`,
             borderRadius: '9px',
