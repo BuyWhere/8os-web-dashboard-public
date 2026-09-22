@@ -1,0 +1,8 @@
+2026-09-22T13:40:00Z OS-7824 R2 deploy trigger — 3 remaining "undefined" archetype combos.
+2026-09-22 13:23Z live probe (birthTime=12:00): 9/12 named, 3 undefined:
+  1995-06-12 → gemini_jia_weak_sg      (The Branch Weave)
+  1979-12-05 → sagittarius_bing_balanced_sg (The Steady Arrow)
+  1986-08-30 → virgo_bing_strong_sp    (The Ember Blueprint)
+Root cause: hour pillar shifts strength/personality; these combos had no
+override entry. Fixes added to BOTH src/lib/archie-engine.ts and
+backend/app/archetype_engine.py. Python override tests 14/14 pass.
