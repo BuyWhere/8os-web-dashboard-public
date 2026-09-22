@@ -1,0 +1,4 @@
+OS-7223 hb0922: trigger Railway monolith redeploy — /api/count fix confirmed on forge/main (inline proxy).
+Fix: src/app/api/count/route.ts re-exports /api/waitlist/count proxy (same pattern as OS-6991 /api/join).
+Commit cda2050d on main = 2156d6f5 (blog lock) + the count fix.
+Waiting for Railway to pick up the main branch.
