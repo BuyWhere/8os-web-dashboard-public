@@ -324,6 +324,7 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   // OS-7451: taurus_geng_weak_sg was in the original OS-6899 fix but dropped
   // during merge; 1993-05-19 returns "The undefined Hearth" without this.
   'taurus_geng_weak_sg':     'The Still Forge',
+  'virgo_ding_strong_sg':   'The Precision Forge',
   // OS-7451: aries_yi_strong_sg (1988-03-21) was NEVER in the override table.
   // Hash generates "The Branch Strike" → "The undefined Strike" (override missing).
   // Key confirmed via local hash computation: aries + wood + strong + sg.
@@ -373,7 +374,17 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   'leo_gui_balanced_sg':           'The Steady Gold',
   'aries_jia_strong_sg':           'The Branch Strike',
   'cancer_yi_weak_sg':             'The Quiet Hearth',
+
   'virgo_ding_strong_sg':     'The Precision Forge',
+  // OS-7824 hour-pillar combos (2026-09-22 13:23Z probe): 3 of 12 probe dates
+  // render "The undefined X" on prod when birthTime is supplied — the hour
+  // pillar shifts strength/personality so the combo has no override yet.
+  // Keys verified via local generate_archetype() with birthTime='12:00'.
+  // 1995-06-12 → gemini_jia_weak_sg   1979-12-05 → sagittarius_bing_balanced_sg
+  // 1986-08-30 → virgo_bing_strong_sp
+  'gemini_jia_weak_sg':             'The Branch Weave',
+  'sagittarius_bing_balanced_sg':   'The Steady Arrow',
+  'virgo_bing_strong_sp':           'The Ember Blueprint',
 }
 
 function pickWord(words: string[], index: number, fallback: string): string {

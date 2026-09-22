@@ -321,6 +321,13 @@ ARCHETYPE_NAME_OVERRIDES: dict[str, str] = {
     'pisces_jia_balanced_sg': 'The Branch Drift',
     'cancer_yi_weak_sg':      'The Quiet Hearth',
     'cancer_bing_strong_sg':  'The Full Nest',
+    # OS-7824 hour-pillar combos (2026-09-22 13:23Z probe): 3 of 12 probe dates
+    # render "The undefined X" on prod when birthTime is supplied — the hour
+    # pillar shifts strength/personality so the combo has no override yet.
+    # Keys verified via local generate_archetype() with birthTime='12:00'.
+    'gemini_jia_weak_sg':           'The Branch Weave',
+    'sagittarius_bing_balanced_sg': 'The Steady Arrow',
+    'virgo_bing_strong_sp':         'The Ember Blueprint',
 }
 
 SUN_SIGN_THEMES: dict[str, str] = {
