@@ -1,0 +1,1 @@
+Vex heartbeat 2026-09-22 force-redeploy — Vercel build is stale Sep 7-10; pickWord fix not yet deployed
