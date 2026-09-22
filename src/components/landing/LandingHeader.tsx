@@ -48,11 +48,13 @@ export default function LandingHeader() {
         style={{
           maxWidth: 1360,
           margin: '0 auto',
-          padding: '0 2rem',
+          padding: '0 1rem',
           height: '68px',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
+          width: '100%',
+          boxSizing: 'border-box',
         }}
       >
         {/* Wordmark */}
@@ -103,10 +105,10 @@ export default function LandingHeader() {
         </nav>
 
         {/* Desktop auth — single secondary nav link. Primary CTA is "Get started" in hero. */}
-        <div className="lh-desktop-auth" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem' }}>
+        <div className="lh-desktop-auth" style={{ display: 'flex', alignItems: 'center', gap: '1.25rem', flexShrink: 0 }}>
           <a
             href="/login"
-            style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none' }}
+            style={{ fontSize: '0.9375rem', fontWeight: 600, color: INK, textDecoration: 'none', whiteSpace: 'nowrap' }}
           >
             Log in
           </a>
@@ -119,7 +121,6 @@ export default function LandingHeader() {
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
           style={{
-            display: 'none',
             background: 'transparent',
             border: `1px solid ${HAIRLINE}`,
             borderRadius: '9px',
@@ -153,7 +154,7 @@ export default function LandingHeader() {
           className="lh-mobile-menu"
           style={{
             borderTop: `1px solid ${HAIRLINE}`,
-            background: 'var(--color-bg-primary)',
+            background: 'rgba(13, 13, 15, 0.97)',
             padding: '1rem 1.5rem 1.5rem',
           }}
         >
@@ -177,6 +178,23 @@ export default function LandingHeader() {
             ))}
           </nav>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', marginTop: '1.25rem' }}>
+            {/* Mobile "Get Started" CTA - primary conversion path */}
+            <a
+              href="/onboarding"
+              onClick={() => setOpen(false)}
+              style={{
+                textAlign: 'center',
+                padding: '0.8rem',
+                background: GOLD,
+                color: '#1a1a1a',
+                borderRadius: '10px',
+                fontSize: '1rem',
+                fontWeight: 700,
+                textDecoration: 'none',
+              }}
+            >
+              Get Started →
+            </a>
             <a
               href="/login"
               onClick={() => setOpen(false)}
@@ -204,6 +222,9 @@ export default function LandingHeader() {
             .lh-desktop-nav { display: none !important; }
             .lh-desktop-auth { display: none !important; }
             .lh-hamburger { display: flex !important; }
+          }
+          @media (max-width: 400px) {
+            header [style*="height: 68px"] > div { padding: 0 0.75rem !important; }
           }
         `,
         }}

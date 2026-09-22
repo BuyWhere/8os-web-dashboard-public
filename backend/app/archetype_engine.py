@@ -301,6 +301,33 @@ ARCHETYPE_NAME_OVERRIDES: dict[str, str] = {
     'virgo_ding_balanced_sg':  'The Precision Lab',
     'virgo_ren_balanced_sg':   'The Crystal Lens',
     'scorpio_geng_weak_sg':    'The Still Phoenix',
+    # OS-6899 additional gaps: 13 more dates need overrides — the hash-based
+    # pickWord() lands on "Unknown" for these combos. Adding explicit overrides:
+    # 1990-08-15 → leo_ren_strong_sg      2000-02-29 → pisces_ding_strong_sg
+    # 2020-12-31 → capricorn_wu_balanced  2000-02-28 → pisces_bing_balanced_sg
+    # 2024-02-28 → pisces_ren_weak_sg      1970-01-01 → capricorn_xin_balanced_sg
+    # 1985-06-15 → gemini_yi_weak_sg      2026-02-28 → pisces_gui_weak_sg
+    # 2026-03-01 → pisces_jia_balanced_sg 2026-06-30 → cancer_yi_weak_sg
+    # 2026-07-01 → cancer_bing_strong_sg   1991-01-01 → capricorn_xin_balanced_sg
+    'leo_ren_strong_sg':       'The Steady Stage',
+    'pisces_ding_strong_sg':   'The Pure Drift',
+    'capricorn_wu_balanced_sg': 'The Steady Peak',
+    'virgo_wu_balanced_sg':   'The Steady Precision',
+    'virgo_gui_balanced_sg':  'The Steady Lens',
+    'pisces_bing_balanced_sg': 'The Ember Current',
+    'pisces_ren_weak_sg':     'The Still Drift',
+    'capricorn_xin_balanced_sg': 'The Steady Summit',
+    'pisces_gui_weak_sg':     'The Still Drift',
+    'pisces_jia_balanced_sg': 'The Branch Drift',
+    'cancer_yi_weak_sg':      'The Quiet Hearth',
+    'cancer_bing_strong_sg':  'The Full Nest',
+    # OS-7824 hour-pillar combos (2026-09-22 13:23Z probe): 3 of 12 probe dates
+    # render "The undefined X" on prod when birthTime is supplied — the hour
+    # pillar shifts strength/personality so the combo has no override yet.
+    # Keys verified via local generate_archetype() with birthTime='12:00'.
+    'gemini_jia_weak_sg':           'The Branch Weave',
+    'sagittarius_bing_balanced_sg': 'The Steady Arrow',
+    'virgo_bing_strong_sp':         'The Ember Blueprint',
 }
 
 SUN_SIGN_THEMES: dict[str, str] = {

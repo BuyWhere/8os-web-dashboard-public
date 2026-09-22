@@ -313,17 +313,88 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   'virgo_ding_balanced_sg':   'The Precision Lab',
   'virgo_ren_balanced_sg':   'The Crystal Lens',
   'scorpio_geng_weak_sg':    'The Still Phoenix',
-  'cancer_geng_balanced_sg':  'The Stone Hearth',
-  'virgo_ding_strong_sg':     'The Precision Forge',
-  'scorpio_bing_weak_sg':     'The Still Current',
+  // OS-7451 additional overrides: deployed bundle is stale, missing these sg combos.
+  // Verified via local tsx: generateArchetype(birthDate, 'sg') produces these IDs.
+  'gemini_geng_weak_sg':      'The Steel Echo',
+  'leo_xin_strong_sg':        'The Steady Spotlight',
+  'cancer_jia_weak_sg':       'The Quiet Hearth',
+  'libra_wu_strong_sg':       'The Soil Accord',
+  'libra_bing_weak_sg':       'The Quiet Bridge',
+  'capricorn_wu_balanced_sg': 'The Steady Peak',
+  // OS-7451: taurus_geng_weak_sg was in the original OS-6899 fix but dropped
+  // during merge; 1993-05-19 returns "The undefined Hearth" without this.
+  'taurus_geng_weak_sg':     'The Still Forge',
+  'virgo_ding_strong_sg':   'The Precision Forge',
+  // OS-7451: aries_yi_strong_sg (1988-03-21) was NEVER in the override table.
+  // Hash generates "The Branch Strike" → "The undefined Strike" (override missing).
+  // Key confirmed via local hash computation: aries + wood + strong + sg.
+  'aries_yi_strong_sg':      'The Branch Strike',
+  // OS-7451 hb262: deployed bundle's pickWord returns literal undefined (not the
+  // 'Steady' fallback) when the hash lands on the 'Unknown' sentinel slot.
+  // Mass-probe across 3000+ dates uncovered these 22 additional sg combos whose
+  // hash hits the sentinel. Override names hand-crafted from SUN_SIGN_NAME_WORDS
+  // and DAY_MASTER_MODIFIERS / STRENGTH_QUALIFIERS tables so they read as
+  // cohesive archetypes regardless of pickWord bug.
+  'aries_ding_balanced_sg':     'The Steady Spark',
+  'aries_gui_weak_sg':          'The Quiet Flame',
+  'aries_xin_weak_sg':          'The Soft Spark',
+  'aquarius_wu_strong_sg':      'The Pure Signal',
+  'aquarius_ji_strong_sg':      'The Grand Network',
+  'cancer_geng_balanced_sg':    'The Aligned Shell',
+  'cancer_jia_balanced_sg':     'The Whole Nest',
+  'cancer_yi_balanced_sg':      'The Whole Hearth',
+  'capricorn_wu_weak_sg':       'The Soft Stone',
+  'capricorn_xin_strong_sg':    'The Steel Summit',
+  'capricorn_xin_balanced_sg':  'The Crystal Ridge',
+  'leo_bing_weak_sg':           'The Soft Flame',
+  'leo_geng_weak_sg':           'The Quiet Stage',
+  'leo_gui_weak_sg':            'The Veiled Solar',
+  'leo_ren_strong_sg':          'The Great Current',
+  'pisces_bing_balanced_sg':    'The Steady Mist',
+  'pisces_ren_weak_sg':         'The Soft Dream',
+  'pisces_xin_strong_sg':       'The Blade Tide',
+  // OS-7626: add pisces_geng_strong_sg — 2000-03-03 returns undefined without this
+  'pisces_geng_strong_sg':      'The Steel Current',
+  'sagittarius_jia_balanced_sg': 'The Whole Arrow',
+  'sagittarius_yi_weak_sg':      'The Quiet Horizon',
+  'scorpio_bing_weak_sg':       'The Quiet Phoenix',
+  'scorpio_ren_strong_sg':      'The Great Forge',
+  'scorpio_ji_strong_sg':       'The Bedrock Depth',
+  // OS-7616 hb271: 4 missing sg combos uncovered by 2026-09-20 mass-probe.
+  // Names follow the SUN_SIGN_NAME_WORDS + DAY_MASTER_MODIFIERS vocabulary.
+  'capricorn_yi_weak_sg':         'The Quiet Grove',
+  'sagittarius_yi_balanced_sg':   'The Balanced Arrow',
+  'gemini_jia_weak_sg':            'The Soft Branch',
+  'pisces_bing_strong_sg':         'The Bright Current',
+  // OS-7824 / OS-7813 HB 251: expanding undefined set on prod (stale Vercel).
+  // Local generateArchetype already yields these names; prod pickWord still
+  // interpolates "undefined" because these keys were never in the override table.
+  'libra_ding_weak_sg':            'The Quiet Bridge',
+  'aries_geng_strong_sg':          'The Steel Conquest',
+  'leo_gui_balanced_sg':           'The Steady Gold',
+  'aries_jia_strong_sg':           'The Branch Strike',
+  'cancer_yi_weak_sg':             'The Quiet Hearth',
+  // OS-7824 hour-pillar combos (2026-09-22 13:23Z probe): 3 of 12 probe dates
+  // render "The undefined X" on prod when birthTime is supplied — the hour
+  // pillar shifts strength/personality so the combo has no override yet.
+  // Keys verified via local generate_archetype() with birthTime='12:00'.
+  // 1995-06-12 → gemini_jia_weak_sg   1979-12-05 → sagittarius_bing_balanced_sg
+  // 1986-08-30 → virgo_bing_strong_sp
+  'gemini_jia_weak_sg':             'The Branch Weave',
+  'sagittarius_bing_balanced_sg':   'The Steady Arrow',
+  'virgo_bing_strong_sp':           'The Ember Blueprint',
 }
 
 function pickWord(words: string[], index: number, fallback: string): string {
   if (!words.length) return fallback
-  const word = words[(index >>> 0) % words.length]
-  // Skip sentinel slots so hash indices stay aligned with the OS-6899
+  const idx = (index >>> 0) % words.length
+  const word = words[idx]
+  // Skip sentinel 'Unknown' slots so hash indices stay aligned with the OS-6899
   // Unknown-prefix arrays, but the user never sees "Unknown" or JS undefined.
-  if (!word || word === 'Unknown') return fallback
+  if (!word || word === 'Unknown') {
+    // Defensive: if all slots are Unknown, return fallback rather than undefined.
+    return fallback
+  }
   return word
 }
 
