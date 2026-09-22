@@ -1,0 +1,6 @@
+DEPLOY_OS6899_ARCHIE_HB
+Trigger: 2026-09-22T1102Z
+Purpose: Push OS-6899 pickWord fix to Vercel — cancer_xin_balanced_sg still returns 'undefined Moon'
+Fix: pickWord() with >>> unsigned shift + override table covers cancer_xin_balanced_sg
+Issue: Vercel build is stale, hasn't picked up the pickWord fix
+Status: Triggering rebuild
