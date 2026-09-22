@@ -373,6 +373,7 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   'leo_gui_balanced_sg':           'The Steady Gold',
   'aries_jia_strong_sg':           'The Branch Strike',
   'cancer_yi_weak_sg':             'The Quiet Hearth',
+  'virgo_ding_strong_sg':     'The Precision Forge',
 }
 
 function pickWord(words: string[], index: number, fallback: string): string {

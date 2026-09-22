@@ -63,11 +63,14 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Invalid JSON body.' }, { status: 400 })
   }
 
-  const parsed = parseBirthDate(body.birthDate)
+  // Accept `date` as an alias — some clients / probes send YYYY-MM-DD under
+  // that key. Canonical field remains birthDate.
+  const rawDate = body.birthDate || (typeof (body as { date?: unknown }).date === 'string' ? (body as { date?: string }).date : undefined)
+  const parsed = parseBirthDate(rawDate)
   if (!parsed.ok) {
     return NextResponse.json({ error: 'Please enter a valid birth date (YYYY-MM-DD).' }, { status: 400 })
   }
-  const birthDate = body.birthDate as string
+  const birthDate = rawDate as string
   const birthTime = parseBirthTime(body.birthTime)
   // birthLocation is accepted so the public form can collect it, but BaZi
   // year/month/day pillars are solar-calendar (not Western longitude). Hour
@@ -159,8 +162,17 @@ export async function POST(req: NextRequest) {
       phaseTeaser = null
     }
 
+    let archetypeName = result.archetypeName
+    // OS-7844 / OS-7451: never leak JS "undefined" or Unknown sentinel into
+    // the public reveal payload, even if a stale hash slot still fires.
+    if (!archetypeName || /undefined|Unknown/i.test(archetypeName)) {
+      const elem = (ELEMENT_LABEL[result.dayElement] ?? result.dayElement) || 'Core'
+      const sign = result.sunSignName || 'Star'
+      archetypeName = `The ${elem} ${sign}`
+    }
+
     return NextResponse.json({
-      archetypeName: result.archetypeName,
+      archetypeName,
       description: result.description,
       element: result.dayElement,
       elementLabel: ELEMENT_LABEL[result.dayElement] ?? result.dayElement,
