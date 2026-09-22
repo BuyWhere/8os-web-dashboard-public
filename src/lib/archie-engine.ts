@@ -313,6 +313,9 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   'virgo_ding_balanced_sg':   'The Precision Lab',
   'virgo_ren_balanced_sg':   'The Crystal Lens',
   'scorpio_geng_weak_sg':    'The Still Phoenix',
+  'cancer_geng_balanced_sg':  'The Stone Hearth',
+  'virgo_ding_strong_sg':     'The Precision Forge',
+  'scorpio_bing_weak_sg':     'The Still Current',
 }
 
 function pickWord(words: string[], index: number, fallback: string): string {
