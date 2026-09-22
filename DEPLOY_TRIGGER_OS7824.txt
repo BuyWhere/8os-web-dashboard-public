@@ -1,0 +1,3 @@
+2026-09-22T07:05:00Z OS-7824 force Vercel rebuild — 7/12 undefined archetypes (HB 251).
+Overrides added: libra_ding_weak_sg, aries_geng_strong_sg, leo_gui_balanced_sg, aries_jia_strong_sg, cancer_yi_weak_sg.
+Railway GraphQL still Not Authorized (OS-6847). This commit is the Vercel-path deploy trigger.

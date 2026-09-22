@@ -365,6 +365,14 @@ const ARCHETYPE_NAME_OVERRIDES: Record<string, string> = {
   'sagittarius_yi_balanced_sg':   'The Balanced Arrow',
   'gemini_jia_weak_sg':            'The Soft Branch',
   'pisces_bing_strong_sg':         'The Bright Current',
+  // OS-7824 / OS-7813 HB 251: expanding undefined set on prod (stale Vercel).
+  // Local generateArchetype already yields these names; prod pickWord still
+  // interpolates "undefined" because these keys were never in the override table.
+  'libra_ding_weak_sg':            'The Quiet Bridge',
+  'aries_geng_strong_sg':          'The Steel Conquest',
+  'leo_gui_balanced_sg':           'The Steady Gold',
+  'aries_jia_strong_sg':           'The Branch Strike',
+  'cancer_yi_weak_sg':             'The Quiet Hearth',
 }
 
 function pickWord(words: string[], index: number, fallback: string): string {
