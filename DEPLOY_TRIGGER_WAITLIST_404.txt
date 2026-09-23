@@ -1,0 +1,1 @@
+2026-09-23T02:57:00Z Archie heartbeat: dash.8os.ai/waitlist 404 regression, touch deploy
