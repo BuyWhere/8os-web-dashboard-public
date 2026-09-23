@@ -1,1 +1,1 @@
-trigger-1789883919.txt
+os-7901-hb 2026-09-23T02:11Z force Railway/Vercel rebuild — OS-7620 userTextLength gate already on main but production extras still omit it
