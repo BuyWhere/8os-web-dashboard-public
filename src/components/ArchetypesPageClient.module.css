@@ -1,0 +1,19 @@
+/* /archetypes comparison grid.
+ * Phone: 1 column. Tablet (≥640px, including 768px iPad portrait): 2 columns
+ * so the page's "side by side" promise holds without a 900px JS cutoff.
+ */
+.grid {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+@media (min-width: 640px) {
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}

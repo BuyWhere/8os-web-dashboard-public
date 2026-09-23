@@ -8,6 +8,7 @@ import {
   type ArchetypeElement,
   type ArchetypeId,
 } from '@/types/archetype';
+import styles from './ArchetypesPageClient.module.css';
 
 const ARCHETYPE_ORDER: ArchetypeId[] = [
   'strategic_commander',
@@ -51,26 +52,17 @@ function getActiveArchetypeId(): ArchetypeId | null {
 
 export default function ArchetypesPageClient() {
   const [activeArchetypeId, setActiveArchetypeId] = useState<ArchetypeId | null>(null);
-  const [isCompact, setIsCompact] = useState(false);
 
   useEffect(() => {
     const syncActiveArchetype = () => {
       setActiveArchetypeId(getActiveArchetypeId());
     };
 
-    const syncViewport = () => {
-      setIsCompact(window.innerWidth < 900);
-    };
-
     syncActiveArchetype();
-    syncViewport();
-
     window.addEventListener('storage', syncActiveArchetype);
-    window.addEventListener('resize', syncViewport);
 
     return () => {
       window.removeEventListener('storage', syncActiveArchetype);
-      window.removeEventListener('resize', syncViewport);
     };
   }, []);
 
@@ -99,7 +91,7 @@ export default function ArchetypesPageClient() {
         )}
       </section>
 
-      <section style={gridStyle(isCompact)}>
+      <section className={styles.grid}>
         {ARCHETYPE_ORDER.map((archetypeId) => {
           const archetypeName = ARCHETYPE_NAMES_BY_ID[archetypeId];
           const archetype = MOCK_ARCHETYPES[archetypeName];
@@ -227,16 +219,6 @@ const ctaButtonStyle: React.CSSProperties = {
   transition: 'transform 0.2s ease, box-shadow 0.2s ease',
   cursor: 'pointer',
 };
-
-const gridStyle = (isCompact: boolean): React.CSSProperties => ({
-  position: 'relative',
-  zIndex: 1,
-  display: 'grid',
-  gridTemplateColumns: isCompact ? '1fr' : 'repeat(2, minmax(0, 1fr))',
-  gap: '1rem',
-  maxWidth: '1120px',
-  margin: '0 auto',
-});
 
 const cardStyle: React.CSSProperties = {
   borderRadius: '28px',
