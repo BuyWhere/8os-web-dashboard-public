@@ -16,6 +16,12 @@ describe('signup visible fallback (OS-5655)', () => {
     expect(bridge).toContain('data-testid="signup-email-skeleton"')
     expect(bridge).toContain('data-testid="signup-email-input"')
     expect(bridge).toContain('placeholder="Enter your email address"')
+    expect(bridge).toContain('type="email"')
+  })
+
+  it('does not unmount the native type=email field after Clerk hydrates (OS-7905)', () => {
+    expect(bridge).not.toContain('if (clerkReady) return null')
+    expect(bridge).toContain('clerk.type = \'email\'')
   })
 
   it('still renders the Clerk SignUp widget after the fallback', () => {
@@ -27,5 +33,11 @@ describe('signup visible fallback (OS-5655)', () => {
   it('wraps the auth region in the bordered signup card', () => {
     expect(page).toContain('className="signup-auth-card"')
     expect(page).toContain('<SignupClerkErrorBridge')
+  })
+
+  it('ships a server-rendered type=email in the signup page (OS-7905)', () => {
+    expect(page).toContain('className="signup-ssr-email"')
+    expect(page).toContain('type="email"')
+    expect(page).toContain('data-testid="signup-email-input"')
   })
 })

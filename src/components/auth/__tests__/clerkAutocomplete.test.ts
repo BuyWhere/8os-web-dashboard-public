@@ -37,4 +37,9 @@ describe('clerkAutocomplete (OS-5894 / OS-5937)', () => {
     expect(src).toContain('patchedCreateElement')
     expect(src).toContain("tagName.toLowerCase() === 'input'")
   })
+
+  it('pins Clerk identifier fields to type=email (OS-7905)', () => {
+    expect(src).toContain("input.type = 'email'")
+    expect(src).toContain("input.type !== 'password'")
+  })
 })

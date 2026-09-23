@@ -46,8 +46,17 @@ export function applyAutocomplete(input: HTMLInputElement, mode: ClerkAutocomple
   const next = desiredAutocomplete(input, mode)
   if (!next) return
   const current = input.getAttribute('autocomplete')
-  if (current === next) return
-  input.setAttribute('autocomplete', next)
+  if (current !== next) input.setAttribute('autocomplete', next)
+  // OS-7905: Clerk paints identifier as type=text. VidMee and native
+  // email keyboards look for input[type=email]. Pin the type once the
+  // field is known to be an email identifier — password fields stay put.
+  if (isEmailField(input) && input.type !== 'email' && input.type !== 'password') {
+    try {
+      input.type = 'email'
+    } catch {
+      input.setAttribute('type', 'email')
+    }
+  }
 }
 
 export function patchClerkAutocomplete(

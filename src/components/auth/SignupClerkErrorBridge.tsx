@@ -545,10 +545,18 @@ function SignupEmailSkeleton() {
         clerk.dispatchEvent(new Event('input', { bubbles: true }))
         clerk.dispatchEvent(new Event('change', { bubbles: true }))
       }
-      // Stable selector for automation after Clerk hydrates (OS-5944).
+      // Stable selector for automation after Clerk hydrates (OS-5944 / OS-7905).
       if (!clerk.getAttribute('name') || clerk.getAttribute('name') === 'emailAddress') {
         clerk.setAttribute('data-email-alias', 'email')
       }
+      if (clerk.type !== 'email') {
+        try {
+          clerk.type = 'email'
+        } catch {
+          clerk.setAttribute('type', 'email')
+        }
+      }
+      clerk.setAttribute('inputmode', 'email')
       setClerkReady(true)
       return true
     }
@@ -560,13 +568,22 @@ function SignupEmailSkeleton() {
     return () => observer.disconnect()
   }, [])
 
-  if (clerkReady) return null
-
+  // OS-7905: never unmount the native type=email field. VidMee snapshots
+  // SSR HTML and Clerk's identifier is type=text until patched. Keep the
+  // skeleton in the document (visually hidden after Clerk paints) so
+  // input[type=email] is always queryable.
   return (
     <div
       data-testid="signup-email-skeleton"
-      aria-hidden={false}
-      style={{ padding: '24px 24px 0' }}
+      aria-hidden={clerkReady}
+      style={{
+        padding: clerkReady ? 0 : '24px 24px 0',
+        height: clerkReady ? 0 : undefined,
+        overflow: clerkReady ? 'hidden' : undefined,
+        position: clerkReady ? 'absolute' : undefined,
+        width: clerkReady ? 1 : undefined,
+        clip: clerkReady ? 'rect(0 0 0 0)' : undefined,
+      }}
     >
       <label
         htmlFor="email"

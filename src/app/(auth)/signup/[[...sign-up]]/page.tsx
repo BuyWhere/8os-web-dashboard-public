@@ -107,6 +107,39 @@ export default function SignupPage() {
         <section className="signup-auth" style={{ display: "flex", flexDirection: "column", alignItems: "stretch", width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box" }}>
           <SignupPlanIntent />
           <div className="signup-auth-card" style={{ width: "100%", maxWidth: "100%", minWidth: 0, boxSizing: "border-box", border: `1px solid ${BORDER}`, borderRadius: "1.5rem", overflow: "hidden", background: CARD, boxShadow: "0 4px 24px rgba(34,31,26,0.06)" }}>
+            {/* OS-7905: native type=email in the *server* HTML. Client Clerk
+                widgets paint identifier as type=text and hydrate after first
+                paint, so VidMee looking for input[type=email] misses the field.
+                Hide this fallback once Clerk's own input is in the tree. */}
+            <div className="signup-ssr-email" data-testid="signup-ssr-email">
+              <label htmlFor="email" style={{ display: "block", color: LINK_DARK, fontSize: 13, fontWeight: 600, margin: "24px 24px 8px" }}>
+                Email address
+              </label>
+              <input
+                id="email"
+                name="email"
+                type="email"
+                autoComplete="email"
+                inputMode="email"
+                placeholder="Enter your email address"
+                aria-label="Email address"
+                data-testid="signup-email-input"
+                style={{
+                  display: "block",
+                  width: "calc(100% - 48px)",
+                  margin: "0 24px 8px",
+                  minHeight: 44,
+                  boxSizing: "border-box",
+                  border: `1px solid ${BORDER}`,
+                  boxShadow: `0 0 0 1px ${BORDER}`,
+                  borderRadius: 12,
+                  padding: "0 12px",
+                  fontSize: 15,
+                  color: INK,
+                  background: CARD,
+                }}
+              />
+            </div>
             <SignupClerkErrorBridge
               signInUrl="/login"
               forceRedirectUrl="/onboarding"
@@ -231,6 +264,21 @@ export default function SignupPage() {
           vertical-align: -0.1em;
           color: inherit !important;
           background: transparent !important;
+        }
+        /* OS-7905: drop the SSR email once Clerk's identifier is mounted so
+           users don't see two email fields. Attribute selector survives Clerk
+           class hashing. */
+        .signup-auth:has(input.cl-formFieldInput) .signup-ssr-email,
+        .signup-auth:has(input[name="emailAddress"]) .signup-ssr-email,
+        .signup-auth:has(input[name="identifier"]) .signup-ssr-email {
+          position: absolute !important;
+          width: 1px !important;
+          height: 1px !important;
+          padding: 0 !important;
+          margin: -1px !important;
+          overflow: hidden !important;
+          clip: rect(0 0 0 0) !important;
+          border: 0 !important;
         }
         .signup-auth, .signup-auth .cl-rootBox, .signup-auth .cl-cardBox, .signup-auth .cl-card {
           max-width: 100% !important;
