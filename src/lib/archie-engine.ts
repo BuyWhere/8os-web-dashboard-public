@@ -392,9 +392,10 @@ function pickWord(words: string[], index: number, fallback: string): string {
   const idx = (index >>> 0) % words.length
   const word = words[idx]
   // Skip sentinel 'Unknown' slots so hash indices stay aligned with the OS-6899
-  // Unknown-prefix arrays, but the user never sees "Unknown" or JS undefined.
-  if (!word || word === 'Unknown') {
-    // Defensive: if all slots are Unknown, return fallback rather than undefined.
+  // Unknown-prefix arrays, but the user never sees "Unknown", JS undefined, or
+  // the literal string "undefined".
+  if (!word || word === 'Unknown' || word === 'undefined') {
+    // Defensive: if all slots are Unknown/undefined, return fallback rather than undefined.
     return fallback
   }
   return word
