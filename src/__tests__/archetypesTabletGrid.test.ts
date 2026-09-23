@@ -21,4 +21,9 @@ describe("OS-7908 /archetypes tablet comparison grid", () => {
     expect(src).not.toMatch(/innerWidth\s*<\s*900/);
     expect(src).toMatch(/className=\{styles\.grid\}/);
   });
+
+  it("uses a 4-column desktop grid so all archetypes sit side by side (OS-7906)", () => {
+    expect(css).toMatch(/@media\s*\(min-width:\s*1100px\)/);
+    expect(css).toMatch(/repeat\(4,\s*minmax\(0,\s*1fr\)\)/);
+  });
 });
