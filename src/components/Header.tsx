@@ -427,7 +427,7 @@ export function Header() {
       <style
         dangerouslySetInnerHTML={{
           __html: `
-          @media (max-width: 768px) {
+          @media (max-width: 640px) {
             header.marketing-header nav.header-nav-links { display: none !important; }
             header.marketing-header div.header-auth-actions { display: none !important; }
             header.marketing-header button.header-hamburger { display: flex !important; }

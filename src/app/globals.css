@@ -405,12 +405,13 @@ body:has(.app-sidebar) main:not(.cal-main) {
   display: none;
 }
 
-@media (max-width: 700px) {
-  /* OS-5962: at 768px tablet the FAB overlapped the bottom-right card on
-     /features (and any 2-col auto-fit grid). Match the mobile breakpoint used
-     by the features-card-grid so the FAB only appears where the cards stack
-     to a single column (true phones), not on tablets where the desktop
-     sidebar already fits. */
+@media (max-width: 640px) {
+  /* OS-7907: never show the in-page floating TOC FAB while desktop header
+     nav links are still visible. `.header-nav-links` hide at 640px
+     (globals.css); live previously used 768px for this FAB so tablet had
+     both header links AND a bottom-right hamburger overlapping the 2-col
+     features cards. OS-5962 moved the FAB to 700px — still overlaps
+     641–700px. Keep `.sidebar-desktop` (sticky TOC) down to 640px. */
   .sidebar-desktop {
     display: none;
   }
