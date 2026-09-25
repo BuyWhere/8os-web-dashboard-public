@@ -42,22 +42,52 @@ export default function AboutPage() {
             </p>
 
             <p style={highlightStyle}>8os.ai is that bridge, and that push.</p>
+          </div>
+        </section>
 
-            <p style={bodyStyle}>
-              We believe your birth data isn&apos;t a destiny sentence. It&apos;s an <strong>operating manual</strong>.
-              It shows you <em>how</em> you&apos;re built to achieve, <em>when</em> you&apos;re built to push, and{' '}
-              <em>what</em> kind of success will actually make you happy. Not someone else&apos;s version of success.
-              Yours.
-            </p>
-
-            {/* Mid-story conversion CTA — OS-6554 */}
-            <div style={midCtaWrapStyle}>
-              <Link href="/signup" style={primaryLinkStyle}>
-                Try it free
-              </Link>
-              <span style={midCtaHintStyle}>Free. No credit card. Works in your browser.</span>
+        {/* Two Systems, One You — OS-8028 */}
+        <section style={sectionStyle}>
+          <h2 style={h2Style}>Two Systems, One You</h2>
+          <div style={systemsGridStyle}>
+            <div style={systemCardStyle}>
+              <h3 style={systemTitleStyle}>Western Astrology</h3>
+              <ul style={systemListStyle}>
+                <li>Sun sign focus (12 types)</li>
+                <li>Character-focused</li>
+                <li>Month-based seasons</li>
+                <li>Psychological</li>
+              </ul>
+            </div>
+            <div style={{...systemCardStyle, borderColor: 'var(--color-accent)', background: 'var(--color-accent-soft)'}}>
+              <h3 style={systemTitleStyle}>BaZi (Eight Characters)</h3>
+              <ul style={systemListStyle}>
+                <li>Full birth chart (10M+ combos)</li>
+                <li>Timing-focused</li>
+                <li>Hour-based energy cycles</li>
+                <li>Action-oriented</li>
+              </ul>
             </div>
           </div>
+          <p style={{...bodyStyle, marginTop: '1.5rem', textAlign: 'center'}}>
+            Both systems describe the same person. 8os bridges them.
+          </p>
+        </section>
+
+        {/* Four Pillars visual — OS-8028 */}
+        <section style={sectionStyle}>
+          <h2 style={h2Style}>The Four Pillars</h2>
+          <div style={pillarsGridStyle}>
+            {PILLARS.map((pillar) => (
+              <div key={pillar.title} style={pillarCardStyle}>
+                <div style={pillarLabelStyle}>{pillar.label}</div>
+                <h3 style={pillarTitleStyle}>{pillar.title}</h3>
+                <p style={pillarBodyStyle}>{pillar.body}</p>
+              </div>
+            ))}
+          </div>
+          <p style={{...bodyStyle, marginTop: '1.5rem', fontStyle: 'italic', textAlign: 'center'}}>
+            Your Daymaster — the stem of your Day pillar — is your core energy type.
+          </p>
         </section>
 
         {/* Core beliefs */}
@@ -109,6 +139,29 @@ const BELIEFS = [
   {
     title: 'Ancient wisdom + modern systems',
     body: 'BaZi is 1,500 years old. AI is months old. The combination is new. But both are tools in service of the same goal: helping you understand yourself and operate at your best.',
+  },
+];
+
+const PILLARS = [
+  {
+    label: 'I',
+    title: 'Year Pillar',
+    body: 'Your ancestral influence and outer personality. The trunk shows your hidden motivations.',
+  },
+  {
+    label: 'II',
+    title: 'Month Pillar',
+    body: 'Your core self and work style. The branch reveals your monthly energy cycles.',
+  },
+  {
+    label: 'III',
+    title: 'Day Pillar',
+    body: 'Contains your Daymaster — your core energy type that drives your approach to life.',
+  },
+  {
+    label: 'IV',
+    title: 'Hour Pillar',
+    body: 'Your visible behavior and how others perceive you. Shows your daily rhythm.',
   },
 ];
 
@@ -179,6 +232,80 @@ const highlightStyle: React.CSSProperties = {
   color: 'var(--color-text-primary)',
   background: 'var(--color-accent-soft)',
   borderRadius: '0 12px 12px 0',
+};
+
+// Two Systems comparison — OS-8028
+const systemsGridStyle: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+  gap: '1.5rem',
+  marginTop: '1rem',
+};
+
+const systemCardStyle: React.CSSProperties = {
+  padding: '1.75rem',
+  borderRadius: '16px',
+  border: '1px solid var(--color-border)',
+  background: 'var(--color-bg-card)',
+};
+
+const systemTitleStyle: React.CSSProperties = {
+  margin: '0 0 1rem',
+  fontSize: '1.15rem',
+  fontWeight: 700,
+  color: 'var(--color-text-primary)',
+};
+
+const systemListStyle: React.CSSProperties = {
+  margin: 0,
+  padding: 0,
+  listStyle: 'none',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: '0.6rem',
+};
+
+// Four Pillars grid — OS-8028
+const pillarsGridStyle: React.CSSProperties = {
+  display: 'grid',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+  gap: '1.25rem',
+  marginTop: '1rem',
+};
+
+const pillarCardStyle: React.CSSProperties = {
+  padding: '1.5rem',
+  borderRadius: '12px',
+  border: '1px solid var(--color-border)',
+  background: 'var(--color-bg-card)',
+  textAlign: 'center',
+};
+
+const pillarLabelStyle: React.CSSProperties = {
+  display: 'inline-block',
+  width: '28px',
+  height: '28px',
+  lineHeight: '28px',
+  borderRadius: '50%',
+  background: 'var(--color-accent)',
+  color: 'var(--color-on-accent)',
+  fontSize: '0.8rem',
+  fontWeight: 700,
+  marginBottom: '0.75rem',
+};
+
+const pillarTitleStyle: React.CSSProperties = {
+  margin: '0 0 0.5rem',
+  fontSize: '1rem',
+  fontWeight: 700,
+  color: 'var(--color-text-primary)',
+};
+
+const pillarBodyStyle: React.CSSProperties = {
+  margin: 0,
+  fontSize: '0.85rem',
+  lineHeight: 1.6,
+  color: 'var(--color-text-secondary)',
 };
 
 const beliefsSection: React.CSSProperties = {
