@@ -186,7 +186,7 @@ export default function Home() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'minmax(0, 1.35fr) minmax(0, 1fr)',
+            gridTemplateColumns: 'minmax(0, 1.5fr) minmax(0, 1fr)',
             gap: '3.5rem',
             alignItems: 'center',
           }}
@@ -216,6 +216,7 @@ export default function Home() {
                 letterSpacing: '-0.02em',
                 margin: '0 0 1.25rem',
                 color: INK,
+                maxWidth: '40rem',
               }}
             >
               Right goal, right season.
@@ -235,7 +236,7 @@ export default function Home() {
                 fontSize: '1.1875rem',
                 lineHeight: 1.6,
                 color: GRAY,
-                maxWidth: '34rem',
+                maxWidth: '38rem',
                 margin: '0 0 2.25rem',
               }}
             >
