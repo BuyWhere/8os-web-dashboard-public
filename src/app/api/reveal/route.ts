@@ -31,6 +31,7 @@ interface RevealBody {
   birthDate?: string      // YYYY-MM-DD
   birthTime?: string      // HH:MM (24h), optional
   birthLocation?: string  // free-text city, optional; not persisted, not used in pillar math
+  archetype?: string      // OS-8062: user-provided archetype name to bypass birthDate computation
 }
 
 // Validate YYYY-MM-DD and a real calendar date.
@@ -82,11 +83,18 @@ export async function POST(req: NextRequest) {
     // we anchor to a stable default code — the birth date/time still fully
     // drives the sun sign, Day Master, strength and element, so different dates
     // yield different archetypes. (The full quiz refines this after signup.)
+    // OS-8062: If user provides archetype, use it directly (bypass birthDate computation)
+    const userArchetype = body.archetype?.trim()
     const result = generateArchetype({
       birthDate,
       birthTime,
       personalityCode: 'sg',
     })
+
+    // OS-8062: Override archetypeName if user provided one
+    if (userArchetype) {
+      result.archetypeName = userArchetype
+    }
 
     // OS-7451 hb262 fail-safe: if the composite name slipped an "undefined"
     // literal (deployed bundle predates pickWord's Unknown guard), fall back
