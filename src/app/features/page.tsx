@@ -135,7 +135,7 @@ export default function FeaturesPage() {
             </div>
           </section>
 
-          <section id="all-features" style={{ marginBottom: '7rem', width: '100%' }}>
+          <section id="all-features" style={{ marginBottom: '4rem', width: '100%', paddingBottom: '7rem' }}>
             {/* OS-5939: 280px minmax so 1440x900 with sidebar is 3 cols, not cramped 4. */}
             {/* OS-6415: align-items: stretch + height: 100% for equal card heights */}
             <div className="features-card-grid" style={{
