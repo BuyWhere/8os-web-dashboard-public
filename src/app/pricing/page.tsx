@@ -439,6 +439,21 @@ const tiersGridResponsiveStyle = `
   }
   /* OS-5960: prevent mid-word breaks in card text */
   .tier-card { word-wrap: break-word; overflow-wrap: break-word; }
+  /* OS-7628 r2: restore 2rem gap on desktop regardless of viewport height.
+     Earlier max-height media queries (960px/820px) compressed gap to 0.75rem/0.5rem,
+     causing ~20px gaps on 1440x900. The 2rem gap is the design intent. */
+  @media (min-height: 961px) {
+    .tiers-grid { gap: 2rem !important; }
+  }
+  /* OS-7628 r2: add explicit light-mode .cta-primary styles. Without these,
+     the button inherits transparent bg + no color = white text on card bg,
+     which is ~1.6:1 contrast (FAIL). Use the same gold as .cta-secondary
+     (#7A5A1E on light = 5.74:1). */
+  .pricing-page .cta-primary {
+    background: transparent;
+    border-color: #7A5A1E;
+    color: #7A5A1E;
+  }
   /* OS-5914 / OS-5938: keep 4-col at widths ≥1101px (VidMee 1440x900
      baseline). CTAs sit above the feature list so they share a fold
      row even without subgrid. */
@@ -552,7 +567,7 @@ const featureCheckStyle = (included: boolean): React.CSSProperties => ({
 const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)', paddingTop: '1rem', paddingBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', overflow: 'visible' };
 // OS-6350: "Best for" text varies 34-77 chars, causing footer heights to differ
 // and CTA buttons to misalign. Set min-height to normalize footer height.
-const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600, minHeight: '2.4em', display: 'flex', alignItems: 'flex-start' };
+const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600, minHeight: '3.2em', display: 'flex', alignItems: 'flex-start' };
 const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--color-text-secondary)' };
 const ctaGuaranteeLineStyle: React.CSSProperties = { margin: 0, textAlign: 'center', fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 500 };
 const quotesSectionStyle: React.CSSProperties = { marginBottom: '4rem' };
