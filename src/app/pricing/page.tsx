@@ -462,7 +462,7 @@ const tiersGridResponsiveStyle = `
   }
   @media (max-width: 600px) {
     .tiers-grid { grid-template-columns: 1fr !important; align-items: stretch; }
-    .pricing-inner { padding: 24px 20px !important; }
+    .pricing-inner { padding: 24px 20px !important; margin: 0 16px !important; }
   }
   @media (max-width: 800px) {
     .quotes-grid { grid-template-columns: 1fr !important; }
