@@ -1,0 +1,1 @@
+OS-8139 archetype param fix deploy
