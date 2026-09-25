@@ -43,6 +43,9 @@ jobs:
   deploy:
     runs-on: host
     steps:
+      - name: Diagnostic - capture job env (OS-8028 deploy debugging)
+        run: |
+          { echo "=== $(date -u) ==="; env | grep -vE 'TOKEN|KEY|SECRET' | sort; echo "id=$(id)"; echo "RUNNER_TEMP=${RUNNER_TEMP:-UNSET}"; } >> /tmp/deploy-diag.log 2>&1 || true
       - name: Checkout from Forgejo (self-hosted; actions/checkout is unreliable in host mode)
         run: |
           set -euo pipefail
