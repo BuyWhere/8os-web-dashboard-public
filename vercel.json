@@ -99,10 +99,11 @@
     },
     {
       "source": "/api/reveal",
-      "destination": "/api/reveal"
+      "destination": "https://orchestrator-production-1643.up.railway.app/api/reveal"
     }
   ],
   "_quinn_hb_sage_os7628": "force-redeploy-OS7628-layout-verification",
-  "_orion_hb303_20260921": "force-redeploy — gemini_geng_weak_sg + gemini_ding_strong_sg + gemini_yi_weak_sg"
-  "_orion_hb284_20260921": "force-redeploy"
+  "_orion_hb303_20260921": "force-redeploy — gemini_geng_weak_sg + gemini_ding_strong_sg + gemini_yi_weak_sg",
+  "_orion_hb284_20260921": "force-redeploy",
+  "_telly_hb_20260925T2046Z": "fix api/reveal rewrite — self-proxy destination caused 404 loop (OS-7863 regression)"
 }
