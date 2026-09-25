@@ -717,8 +717,12 @@ body:has(.app-sidebar) main:not(.cal-main) {
 
 /* OS-7128 homepage eyebrows + primary CTA.
 /* OS-7624: eyebrow on cream. #B8862F on #F7F3EC = 5.94:1 (AAA). */
+/* OS-8064: light-theme eyebrow was #E5C396 = 1.51:1 on #F7F3EC cream (FAIL AA).
+ * Replace light-theme text with var(--color-accent) = #7E5C24 = 5.51:1 ✓.
+ * Dark-theme eyebrow was #E5C396 = 10.70:1 ✓ on charcoal (already passes).
+ * CTA fill stays #E5C396 = #221F1A text = 9.83:1 in both themes ✓. */
 .landing-gold {
-  color: #B8862F !important;
+  color: var(--color-accent) !important;
 }
 .landing-gold-fill,
 .cta-primary {
@@ -726,7 +730,7 @@ body:has(.app-sidebar) main:not(.cal-main) {
   color: #221F1A !important;
 }
 [data-theme='dark'] .landing-gold {
-  color: #E5C396 !important;
+  color: var(--color-accent) !important;
 }
 [data-theme='dark'] .landing-gold-fill,
 [data-theme='dark'] .cta-primary {
