@@ -1,4 +1,4 @@
-# Rebuild trigger: 2026-09-08T18:08:12+00:00
+# Rebuild trigger: 2026-09-25T19:35:00+00:00
 FROM node:22-alpine AS deps
 WORKDIR /app
 COPY package.json package-lock.json ./
