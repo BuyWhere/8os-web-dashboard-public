@@ -93,7 +93,8 @@ jobs:
         run: |
           set -euo pipefail
           cd "$RUNNER_TEMP/src"
-          railway up --service web-dashboard --ci
+          { echo "=== railway $(date -u) ==="; echo "RAILWAY_TOKEN len: ${#RAILWAY_TOKEN}"; } >> /tmp/deploy-diag.log 2>&1 || true
+          railway up --service web-dashboard --ci 2>>/tmp/deploy-diag.log || { echo "RAILWAY UP FAILED exit=$?" >> /tmp/deploy-diag.log; exit 1; }
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
