@@ -404,7 +404,7 @@ const tiersGridResponsiveStyle = `
   @media (max-height: 960px) {
     .pricing-inner { padding-top: 1.5rem !important; padding-bottom: 2rem !important; }
     .pricing-page h1 { margin-bottom: 0.5rem !important; font-size: 1.7rem !important; }
-    .tiers-grid { margin-bottom: 2rem; gap: 0.75rem; }
+    .tiers-grid { margin-bottom: 2rem; gap: 2rem; }
     .tier-card { padding: 0.95rem !important; gap: 0.4rem !important; }
     .tier-card ul { gap: 0.2rem !important; }
     .tier-card ul li { line-height: 1.25 !important; font-size: 0.78rem !important; }
@@ -418,7 +418,7 @@ const tiersGridResponsiveStyle = `
     .pricing-inner { padding-top: 1rem !important; padding-bottom: 1.5rem !important; }
     .pricing-page h1 { margin-bottom: 0.25rem !important; font-size: 1.5rem !important; }
     .pricing-page > div > p:nth-of-type(2) { display: none; }
-    .tiers-grid { margin-bottom: 1.5rem; gap: 0.5rem; }
+    .tiers-grid { margin-bottom: 1.5rem; gap: 1.5rem; }
     .tier-card { padding: 0.75rem !important; gap: 0.25rem !important; border-radius: 12px !important; }
     .tier-card > div:first-child > div:first-child { top: -6px !important; font-size: 0.6rem !important; padding: 0.15rem 0.5rem !important; }
     /* DOM order: header(div#1) > desc(p#2) > ul(ul#3) > footer(div#4).
@@ -567,7 +567,7 @@ const featureCheckStyle = (included: boolean): React.CSSProperties => ({
 const tierFooterStyle: React.CSSProperties = { borderTop: '1px solid var(--color-border)', borderBottom: '1px solid var(--color-border)', paddingTop: '1rem', paddingBottom: '1rem', display: 'flex', flexDirection: 'column', gap: '0.75rem', overflow: 'visible' };
 // OS-6350: "Best for" text varies 34-77 chars, causing footer heights to differ
 // and CTA buttons to misalign. Set min-height to normalize footer height.
-const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600, minHeight: '3.2em', display: 'flex', alignItems: 'flex-start' };
+const bestForLabelStyle: React.CSSProperties = { margin: 0, fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 600, minHeight: '2.4em', display: 'flex', alignItems: 'flex-start' };
 const bestForTextStyle: React.CSSProperties = { fontWeight: 400, color: 'var(--color-text-secondary)' };
 const ctaGuaranteeLineStyle: React.CSSProperties = { margin: 0, textAlign: 'center', fontSize: '0.78rem', color: 'var(--color-text-secondary)', fontWeight: 500 };
 const quotesSectionStyle: React.CSSProperties = { marginBottom: '4rem' };
