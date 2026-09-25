@@ -88,7 +88,7 @@ export default function FeaturesPage() {
 
         <SidebarNav sections={SECTIONS} />
 
-        <main style={{ flex: '1 1 0%', minWidth: 0, width: '100%', paddingBottom: 'calc(6rem + 96px)' }}>
+        <main style={{ flex: '1 1 0%', minWidth: 0, width: '100%', paddingBottom: '6rem' }}>
           <Link href="/" style={{ color: '#F3C978', textDecoration: 'none', fontSize: '0.875rem' }}>
             ← Back to 8os
           </Link>
@@ -135,7 +135,7 @@ export default function FeaturesPage() {
             </div>
           </section>
 
-          <section id="all-features" style={{ marginBottom: '4rem', width: '100%' }}>
+          <section id="all-features" style={{ marginBottom: '7rem', width: '100%' }}>
             {/* OS-5939: 280px minmax so 1440x900 with sidebar is 3 cols, not cramped 4. */}
             {/* OS-6415: align-items: stretch + height: 100% for equal card heights */}
             <div className="features-card-grid" style={{
