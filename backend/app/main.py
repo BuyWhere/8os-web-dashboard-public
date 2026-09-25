@@ -756,7 +756,7 @@ async def reveal_archetype(
     Vercel frontends can proxy to it via vercel.json rewrite.
     """
     import re
-    from app.archetype_engine import generate_archetype_name as _gen_archetype_name
+    from app.archetype_engine import generate_archetype_name as _gen_archetype_name, lookup_archetype
 
     # Validate YYYY-MM-DD
     if not re.match(r'^\d{4}-\d{2}-\d{2}$', payload.birthDate):
@@ -769,6 +769,21 @@ async def reveal_archetype(
     birth_time = payload.birthTime
     if birth_time and not re.match(r'^\d{2}:\d{2}$', birth_time):
         birth_time = None
+
+    # If archetype name is provided, look up the archetype directly
+    if payload.archetype:
+        archetype_data = lookup_archetype(payload.archetype)
+        if archetype_data:
+            return {
+                "archetypeName": archetype_data.get("name", payload.archetype),
+                "description": archetype_data.get("description", ""),
+                "element": archetype_data.get("element", ""),
+                "elementLabel": ELEMENT_LABEL.get(archetype_data.get("element", ""), archetype_data.get("element", "")),
+                "dayMasterEn": archetype_data.get("day_master", ""),
+                "sunSignName": archetype_data.get("sun_sign", ""),
+                "strength": archetype_data.get("strength", ""),
+            }
+        # Fall through to generate if lookup failed
 
     # Use the archetype engine with personality code 'sg' (no quiz in reveal flow)
     result = _generate_archetype(

@@ -1,1 +1,1 @@
-# OS-6899 backend deploy trigger
+OS-7863: triggering Railway rebuild for /api/reveal route
