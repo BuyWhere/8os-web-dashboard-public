@@ -43,17 +43,13 @@ jobs:
   deploy:
     runs-on: host
     steps:
-      - name: Diagnostic - capture job env (OS-8028 deploy debugging)
-        run: |
-          { echo "=== $(date -u) ==="; env | grep -vE 'TOKEN|KEY|SECRET' | sort; echo "id=$(id)"; echo "RUNNER_TEMP=${RUNNER_TEMP:-UNSET}"; } >> /tmp/deploy-diag.log 2>&1 || true
       - name: Checkout from Forgejo (self-hosted; actions/checkout is unreliable in host mode)
         run: |
           set -euo pipefail
-          { echo "=== checkout $(date -u) ==="; echo "FORGE_TOKEN len: ${#FORGE_TOKEN}"; } >> /tmp/deploy-diag.log 2>&1 || true
           rm -rf "$RUNNER_TEMP/src"
           git clone --branch main \
             "https://richmond:${FORGE_TOKEN}@forgejo-production-4fb0.up.railway.app/richmond/8os-web-dashboard.git" \
-            "$RUNNER_TEMP/src" 2>>/tmp/deploy-diag.log || { echo "CLONE FAILED exit=$?" >> /tmp/deploy-diag.log; exit 1; }
+            "$RUNNER_TEMP/src"
         env:
           FORGE_TOKEN: ${{ secrets.FORGE_TOKEN }}
 
@@ -93,8 +89,7 @@ jobs:
         run: |
           set -euo pipefail
           cd "$RUNNER_TEMP/src"
-          { echo "=== railway $(date -u) ==="; echo "RAILWAY_TOKEN len: ${#RAILWAY_TOKEN}"; } >> /tmp/deploy-diag.log 2>&1 || true
-          railway up --service web-dashboard --ci 2>>/tmp/deploy-diag.log || { echo "RAILWAY UP FAILED exit=$?" >> /tmp/deploy-diag.log; exit 1; }
+          railway up --service web-dashboard --ci
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
 
