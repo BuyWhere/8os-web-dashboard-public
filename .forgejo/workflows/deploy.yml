@@ -49,10 +49,11 @@ jobs:
       - name: Checkout from Forgejo (self-hosted; actions/checkout is unreliable in host mode)
         run: |
           set -euo pipefail
+          { echo "=== checkout $(date -u) ==="; echo "FORGE_TOKEN len: ${#FORGE_TOKEN}"; } >> /tmp/deploy-diag.log 2>&1 || true
           rm -rf "$RUNNER_TEMP/src"
           git clone --branch main \
             "https://richmond:${FORGE_TOKEN}@forgejo-production-4fb0.up.railway.app/richmond/8os-web-dashboard.git" \
-            "$RUNNER_TEMP/src"
+            "$RUNNER_TEMP/src" 2>>/tmp/deploy-diag.log || { echo "CLONE FAILED exit=$?" >> /tmp/deploy-diag.log; exit 1; }
         env:
           FORGE_TOKEN: ${{ secrets.FORGE_TOKEN }}
 
