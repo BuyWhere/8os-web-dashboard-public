@@ -1,1 +1,1 @@
-OS-8139 archetype param fix deploy
+vex heartbeat 2026-09-26T0123Z: vercel.json reverted to Railway, need self-route
