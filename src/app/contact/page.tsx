@@ -169,4 +169,5 @@ export default function ContactPage() {
           #contact-options { display: none !important; }
         }
       ` }} />
-    </div>
+    </div>  );
+}
