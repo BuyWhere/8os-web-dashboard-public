@@ -59,6 +59,13 @@ const nextConfig = {
       { source: '/waitlist/join', destination: '/api/waitlist/join', permanent: false },
     ]
   },
+  async rewrites() {
+    return [
+      // OS-8313: shorthand /api/count must stay same-origin. An absolute rewrite
+      // to api.8os.ai surfaces Cloudflare Error 1000 HTML (403) to browsers.
+      { source: '/api/count', destination: '/api/waitlist/count' },
+    ]
+  },
 }
 
 module.exports = nextConfig
