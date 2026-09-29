@@ -1,5 +1,6 @@
 'use client';
 
+import { useAuth } from '@clerk/nextjs';
 import { CheckoutButtonInner } from './CheckoutButtonInner';
 
 interface CheckoutButtonProps {
@@ -14,17 +15,31 @@ function signupHref(tier: CheckoutButtonProps['tier']) {
 }
 
 /**
- * OS-7622: OS-6795 r1 fix — useAuth removed. CheckoutButtonInner already handles the 401
- * (unauthenticated) case by redirecting to /signup internally. The plain <a>
- * fallback is therefore redundant; always render CheckoutButtonInner so the
- * full loading/error states work on the marketing page.
- *
- * OS-6536 original fix intent: pricing CTAs should always link to /signup
- * for unauthenticated visitors. The CheckoutButtonInner 401 handler achieves
- * the same UX without importing @clerk/nextjs here, avoiding any risk of
- * useAuth being called outside ClerkProvider context.
+ * Unauthenticated (and Clerk-not-yet-loaded) visitors get a direct <a> link.
+ * Never POST /api/stripe/checkout unauthenticated — that 401s and looks like
+ * a dead CTA. Fixes OS-6383 (pricing CTAs missing plan= params for logged-out users).
  */
 export function CheckoutButton({ tier, label, style, className }: CheckoutButtonProps) {
+  const { isLoaded, isSignedIn } = useAuth();
+
+  const sharedStyle: React.CSSProperties = {
+    ...style,
+    display: 'block',
+    textAlign: 'center',
+    textDecoration: 'none',
+    boxSizing: 'border-box',
+    width: '100%',
+  };
+
+  // Logged-out (and Clerk-not-yet-loaded) visitors get a real <a href="/signup?plan=...">.
+  if (!isLoaded || !isSignedIn) {
+    return (
+      <a href={signupHref(tier)} style={sharedStyle} className={className}>
+        {label}
+      </a>
+    );
+  }
+
   return (
     <CheckoutButtonInner
       tier={tier}
