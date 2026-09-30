@@ -22,8 +22,6 @@ import type { Element } from '@/lib/bazi-phases'
 export const runtime = 'nodejs'
 
 const ELEMENT_LABEL: Record<string, string> = {
-  // OS-7593: verify deployed commit here
-  // Last push: ff9b092 - check Vercel picks it up
   wood: 'Wood', fire: 'Fire', earth: 'Earth', metal: 'Metal', water: 'Water',
 }
 
@@ -31,6 +29,8 @@ interface RevealBody {
   birthDate?: string      // YYYY-MM-DD
   birthTime?: string      // HH:MM (24h), optional
   birthLocation?: string  // free-text city, optional; not persisted, not used in pillar math
+  // OS-8062: user-selected archetype name — overrides the birth-date-derived name.
+  archetype?: string
 }
 
 // Validate YYYY-MM-DD and a real calendar date.
@@ -66,6 +66,24 @@ export async function POST(req: NextRequest) {
   // Accept `date` as an alias — some clients / probes send YYYY-MM-DD under
   // that key. Canonical field remains birthDate.
   const rawDate = body.birthDate || (typeof (body as { date?: unknown }).date === 'string' ? (body as { date?: string }).date : undefined)
+  const userArchetypeEarly = typeof body.archetype === 'string' ? body.archetype.trim() : ''
+
+  // OS-8221 / OS-8062: archetype-only taste (no birthDate). Prod 8os.ai is the
+  // Next app on Railway, not a FastAPI proxy — this handler is the live path.
+  if (!rawDate && userArchetypeEarly) {
+    return NextResponse.json({
+      archetypeName: userArchetypeEarly,
+      description: `${userArchetypeEarly} — a named taste of your 8os path.`,
+      element: null,
+      elementLabel: null,
+      dayMasterEn: null,
+      sunSignName: null,
+      phaseLabel: null,
+      phaseTeaser: null,
+      mode: 'archetype-only',
+    })
+  }
+
   const parsed = parseBirthDate(rawDate)
   if (!parsed.ok) {
     return NextResponse.json({ error: 'Please enter a valid birth date (YYYY-MM-DD).' }, { status: 400 })
@@ -82,64 +100,25 @@ export async function POST(req: NextRequest) {
     // we anchor to a stable default code — the birth date/time still fully
     // drives the sun sign, Day Master, strength and element, so different dates
     // yield different archetypes. (The full quiz refines this after signup.)
+    // OS-8062: If user provides archetype, use it directly (bypass birthDate computation)
+    const userArchetype = body.archetype?.trim()
     const result = generateArchetype({
       birthDate,
       birthTime,
       personalityCode: 'sg',
     })
 
-    // OS-7451 hb262 fail-safe: if the composite name slipped an "undefined"
-    // literal (deployed bundle predates pickWord's Unknown guard), fall back
-    // to a known-good override name derived from the archetypeId. The override
-    // map is the source of truth — every sg key has at least one entry by
-    // hb262 — so this only triggers if the deployed bundle is missing overrides
-    // that source has. Either way the user gets a real name, not "The undefined X".
-    if (typeof result.archetypeName !== 'string' || result.archetypeName.includes('undefined') || !result.archetypeName.trim()) {
-      // Build a deterministic fallback name from archetypeId parts.
-      const parts = (result.archetypeId || '').split('_')
-      const signWord = parts[0] || 'Star'
-      const strength = parts[2] || 'balanced'
-      const element = result.dayElement || 'fire'
-      const qualMap: Record<string, string[]> = {
-        strong: ['Grand', 'True', 'Pure'],
-        weak: ['Hidden', 'Quiet', 'Still'],
-        balanced: ['Steady', 'Clear', 'Even'],
-      }
-      const elemMap: Record<string, string[]> = {
-        wood: ['Forest', 'Branch', 'Grove'],
-        fire: ['Torch', 'Ember', 'Spark'],
-        earth: ['Stone', 'Clay', 'Mesa'],
-        metal: ['Blade', 'Steel', 'Forge'],
-        water: ['Flow', 'Deep', 'Stream'],
-      }
-      const signMap: Record<string, string[]> = {
-        capricorn:   ['Mountain', 'Summit', 'Ridge', 'Forge', 'Peak', 'Stone'],
-        aquarius:    ['Network', 'Circuit', 'Signal', 'Wave', 'Node', 'Arc'],
-        pisces:      ['Dream', 'Ocean', 'Tide', 'Mist', 'Current', 'Drift'],
-        aries:       ['Flame', 'Blaze', 'Charge', 'Strike', 'Spark', 'Conquest'],
-        taurus:      ['Foundation', 'Grove', 'Hearth', 'Root', 'Harvest', 'Earth'],
-        gemini:      ['Thread', 'Echo', 'Bridge', 'Weave', 'Link', 'Signal'],
-        cancer:      ['Nest', 'Shell', 'Hearth', 'Cradle', 'Moon', 'Harbor'],
-        leo:         ['Solar', 'Stage', 'Crown', 'Spotlight', 'Gold', 'Flame'],
-        virgo:       ['Precision', 'Lab', 'Crystal', 'Lens', 'Weave', 'Blueprint'],
-        libra:       ['Scale', 'Mirror', 'Balance', 'Bridge', 'Accord', 'Prism'],
-        scorpio:     ['Shadow', 'Phoenix', 'Depth', 'Veil', 'Forge', 'Ember'],
-        sagittarius: ['Horizon', 'Arrow', 'Quest', 'Voyage', 'Star', 'Trail'],
-      }
-      const signWords = signMap[signWord] || ['Star']
-      const elemWords = elemMap[element] || ['Spark']
-      const quals = qualMap[strength] || ['Steady']
-      // Simple deterministic choice: pick first word from each list. Always valid.
-      result.archetypeName = `The ${quals[0]} ${signWords[0]}`
-      console.warn(`[OS-7451 hb262 fail-safe] archetypeName had "undefined" for ${birthDate}; patched to "${result.archetypeName}"`)
-    }
+    // OS-8062: Override archetypeName if user provided one
+    const archetypeName = userArchetype || result.archetypeName
 
     // Honest "current phase" teaser from the real phase engine (annual 流年
     // layer — HIGH confidence). Nothing here is faked.
     let phaseTeaser: string | null = null
     let phaseLabel: string | null = null
     try {
-      const bazi = calculateBazi(parsed.year, parsed.month, parsed.day, birthTime ? Number(birthTime.split(':')[0]) : undefined)
+      // Extract date parts into local lets so TypeScript's narrowing sticks.
+      const y = parsed.year, m = parsed.month, d = parsed.day
+      const bazi = calculateBazi(y, m, d, birthTime ? Number(birthTime.split(':')[0]) : undefined)
       const strength = calculateDayMasterStrength(bazi).strength
       const phases = computePhases({
         dayElement: bazi.dayElement as Element,
@@ -149,7 +128,7 @@ export async function POST(req: NextRequest) {
         yearStem: bazi.yearPillar.stem,
         dayBranch: bazi.dayPillar.branch,
         gender: 'unspecified',
-        birth: new Date(Date.UTC(parsed.year, parsed.month - 1, parsed.day)),
+        birth: new Date(Date.UTC(y, m - 1, d)),
         now: new Date(),
       })
       const year = phases.layers.find(l => l.key === 'year')
@@ -160,15 +139,6 @@ export async function POST(req: NextRequest) {
     } catch {
       // Phase teaser is a bonus — never fail the reveal if it can't compute.
       phaseTeaser = null
-    }
-
-    let archetypeName = result.archetypeName
-    // OS-7844 / OS-7451: never leak JS "undefined" or Unknown sentinel into
-    // the public reveal payload, even if a stale hash slot still fires.
-    if (!archetypeName || /undefined|Unknown/i.test(archetypeName)) {
-      const elem = (ELEMENT_LABEL[result.dayElement] ?? result.dayElement) || 'Core'
-      const sign = result.sunSignName || 'Star'
-      archetypeName = `The ${elem} ${sign}`
     }
 
     return NextResponse.json({

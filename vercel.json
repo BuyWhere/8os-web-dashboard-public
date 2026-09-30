@@ -10,6 +10,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/reveal",
+      "destination": "/api/reveal"
+    },
+    {
       "source": "/telegram/webhook",
       "destination": "https://orchestrator-production-1643.up.railway.app/telegram/webhook"
     },
@@ -98,7 +102,7 @@
       "destination": "https://orchestrator-production-1643.up.railway.app/health"
     }
   ],
-  "_quinn_hb_sage_os7628": "force-redeploy-OS7628-layout-verification",
-  "_orion_hb303_20260921": "force-redeploy — gemini_geng_weak_sg + gemini_ding_strong_sg + gemini_yi_weak_sg"
-  "_orion_hb284_20260921": "force-redeploy"
+  "_mira_hb20260924_os8062": "force-redeploy — reveal API archetype param fix",
+  "_archie_force": "redeploy-1742Z",
+  "_mira_hb_202609251140z": "force-redeploy OS-8062 archetype override fix"
 }
