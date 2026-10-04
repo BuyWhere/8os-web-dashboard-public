@@ -282,7 +282,7 @@ export default function CommunityPage() {
         {/* CTA */}
         <div style={{ textAlign: 'center' }}>
           <Link
-            href="/onboarding"
+            href="/onboarding?plan=free"
             style={{
               background: 'var(--color-accent)',
               color: '#fff',

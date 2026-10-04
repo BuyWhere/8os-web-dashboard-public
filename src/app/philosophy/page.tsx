@@ -119,7 +119,7 @@ export default function PhilosophyPage() {
           <p style={ctaLabelStyle}>Start your journey</p>
           <h2 style={ctaTitleStyle}>Live your path. On your terms.</h2>
           <div style={ctaGroupStyle}>
-            <Link href="/onboarding" style={primaryCtaStyle}>
+            <Link href="/onboarding?plan=free" style={primaryCtaStyle}>
               Get Your Free Archetype →
             </Link>
             <Link href="/methodology" style={secondaryCtaStyle}>

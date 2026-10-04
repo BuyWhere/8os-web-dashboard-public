@@ -185,7 +185,7 @@ export default function MethodologyPage() {
         <section style={ctaSectionStyle}>
           <h2 style={ctaTitleStyle}>Ready to see your synthesis?</h2>
           <div style={ctaGroupStyle}>
-            <Link href="/onboarding" style={primaryCtaStyle}>
+            <Link href="/onboarding?plan=free" style={primaryCtaStyle}>
               Get Your Archetype →
             </Link>
             <Link href="/archetypes/explorer" style={secondaryCtaStyle}>

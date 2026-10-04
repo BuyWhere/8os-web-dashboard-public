@@ -147,6 +147,17 @@ export default function middleware(req: NextRequest, event: NextFetchEvent) {
     return applyCSP(NextResponse.redirect(new URL('/developers', req.url), 307))
   }
 
+  // OS-8313: do NOT rewrite /api/count to https://api.8os.ai (absolute
+  // cross-origin). Cloudflare then returns 403 Error 1000 HTML instead of
+  // JSON. Canonical counter is the same-origin Next handler at
+  // /api/waitlist/count (server-side proxy to api.8os.ai). Keep this rewrite
+  // INTERNAL so the browser never hits api.8os.ai.
+  if (pathname === '/api/count') {
+    const url = req.nextUrl.clone()
+    url.pathname = '/api/waitlist/count'
+    return applyCSP(NextResponse.rewrite(url))
+  }
+
   try {
     const host = req.headers.get('x-forwarded-host') || req.headers.get('host') || ''
     if (host.endsWith('.up.railway.app')) {

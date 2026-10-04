@@ -126,7 +126,7 @@ export default function BlogPage() {
             90 seconds. No birth time required. Get your personal operating system free.
           </p>
           <Link
-            href="/onboarding"
+            href="/onboarding?plan=free"
             style={{
               background: '#7c3aed',
               color: '#fff',

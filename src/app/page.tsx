@@ -245,7 +245,7 @@ export default function Home() {
               by an AI assistant that actually does the work.
             </p>
             <a
-              href="/onboarding"
+              href="/onboarding?plan=free"
               className="landing-gold-fill cta-primary"
               style={{
                 display: 'inline-flex',

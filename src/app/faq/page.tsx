@@ -213,7 +213,7 @@ export default function FAQPage() {
             The fastest way to understand 8os is to try it. Discover your archetype free in 90 seconds.
           </p>
           <Link
-            href="/onboarding"
+            href="/onboarding?plan=free"
             style={{
               background: 'var(--color-accent)',
               color: 'var(--color-accent-contrast)',
