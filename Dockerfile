@@ -70,4 +70,4 @@ USER nextjs
 EXPOSE 3000
 
 CMD ["./railway-start.sh"]
-VEX_OS6448_TRIGGER=1
+# OS-6448: rebuild trigger 2026-10-06T18:30Z — removed invalid VEX_OS6448_TRIGGER=1 line that broke build
