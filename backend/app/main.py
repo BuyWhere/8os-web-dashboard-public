@@ -9,7 +9,7 @@ import httpx
 import jwt as pyjwt
 import sentry_sdk
 from fastapi import Depends, FastAPI, Form, HTTPException, Request, status
-from fastapi.responses import JSONResponse, RedirectResponse
+from fastapi.responses import JSONResponse, RedirectResponse, Response
 from redis.asyncio import Redis
 from sentry_sdk.integrations.fastapi import FastApiIntegration
 from sentry_sdk.integrations.sqlalchemy import SqlalchemyIntegration
@@ -523,7 +523,7 @@ async def join_waitlist(
     request: Request,
     payload: WaitlistJoinRequest,
     db: AsyncSession = Depends(get_db_session),
-) -> WaitlistJoinResponse:
+) -> Response:
     # OS-1120 + OS-1173: services.add_waitlist_entry has a hardcoded
     # _ALLOWED_SOURCES whitelist that silently coerces any unknown source to
     # "dashboard", which breaks channel attribution for marketing (OS-1083,
@@ -551,14 +551,32 @@ async def join_waitlist(
         await db.rollback()
         # OS-1173: surface duplicate as 409 so the Next.js proxy can map it
         # to a clean "Email already on waitlist" error instead of 500.
-        raise HTTPException(status_code=409, detail="Email already on waitlist")
+        # OS-9083: also set Cache-Control on the 409 duplicate response so Vercel
+        # Edge does not cache and serve it to subsequent fresh-signup requests.
+        raise HTTPException(
+            status_code=409,
+            detail="Email already on waitlist",
+            headers={"Cache-Control": "no-store, no-cache, must-revalidate, private"},
+        )
     await db.refresh(entry)
     total = await get_waitlist_count(db)
-    return WaitlistJoinResponse(
+    body = WaitlistJoinResponse(
         success=True,
         message="Successfully joined waitlist",
         position=total,
         total=total,
+    )
+    # OS-9083: Railway FastAPI responses must not be cached. Vercel's Edge layer
+    # can cache POST responses without Cache-Control: no-store, causing fresh emails
+    # to receive cached 409 responses from other users and triggering false "already
+    # on waitlist" errors. This fixes the divergence where www.8os.ai rejected fresh
+    # signups that 8os.ai accepted.
+    json_body = json.dumps(body.model_dump(mode="json"))
+    return Response(
+        content=json_body,
+        media_type="application/json",
+        headers={"Cache-Control": "no-store, no-cache, must-revalidate, private"},
+        status_code=200,
     )
 
 
