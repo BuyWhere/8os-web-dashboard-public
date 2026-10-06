@@ -1,3 +1,4 @@
+RUN touch /tmp/rebuild_marker
 FROM python:3.12-slim
 
 WORKDIR /app
