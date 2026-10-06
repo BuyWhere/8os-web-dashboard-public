@@ -63,31 +63,36 @@ function normalizeSource(raw: string): string {
   return slug || 'dashboard';
 }
 
+// Vercel Edge (Vercel Functions / Edge Runtime) caches POST responses by default.
+// The /api/join endpoint is idempotent from the client's perspective (fresh emails
+// succeed, duplicates get 409) but POST responses MUST NOT be cached. Without these
+// headers, Vercel returns a cached 409 for a fresh email that was submitted by another
+// user from a different IP, causing false "already on waitlist" rejections on www.8os.ai.
+// This is the root cause of OS-9083: www.8os.ai returned 409 while 8os.ai returned 200
+// for the same fresh email because Vercel's Edge layer cached the 409 response.
+function waitlistJson(body: unknown, init?: ResponseInit): NextResponse {
+  const headers = new Headers(init?.statusText ? { 'Cache-Control': 'no-store, no-cache, must-revalidate, private' } : undefined);
+  const res = NextResponse.json(body, { ...init, headers });
+  res.headers.set('Cache-Control', 'no-store, no-cache, must-revalidate, private');
+  return res;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
     const { email } = body;
 
     if (!email || typeof email !== 'string') {
-      return NextResponse.json(
-        { error: 'Email is required' },
-        { status: 400 }
-      );
+      return waitlistJson({ error: 'Email is required' }, { status: 400 });
     }
 
     if (email.length > 254) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      );
+      return waitlistJson({ error: 'Invalid email format' }, { status: 400 });
     }
 
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      );
+      return waitlistJson({ error: 'Invalid email format' }, { status: 400 });
     }
 
     // OS-1242: pre-validate reserved/special-use TLDs (RFC 6761 / RFC 2606)
@@ -101,10 +106,7 @@ export async function POST(request: NextRequest) {
     // to avoid the round-trip and the misleading 502.
     const tld = email.toLowerCase().split('.').pop() ?? '';
     if (RESERVED_TLDS.has(tld)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      );
+      return waitlistJson({ error: 'Invalid email format' }, { status: 400 });
     }
 
     const rawSource = typeof body.source === 'string' ? body.source : 'dashboard';
@@ -149,15 +151,9 @@ export async function POST(request: NextRequest) {
       } catch (insertErr) {
         const msg = insertErr instanceof Error ? insertErr.message : '';
         if (msg.includes('unique') || msg.includes('duplicate')) {
-          return NextResponse.json(
-            { error: 'Email already on waitlist' },
-            { status: 409 }
-          );
+          return waitlistJson({ error: 'Email already on waitlist' }, { status: 409 });
         }
-        return NextResponse.json(
-          { error: 'Failed to join waitlist' },
-          { status: 500 }
-        );
+        return waitlistJson({ error: 'Failed to join waitlist' }, { status: 500 });
       }
       // Compute position and total from local DB (fallback path only)
       const posRow = await prisma.$queryRaw<[{ position: bigint; total: bigint }]>`
@@ -165,7 +161,7 @@ export async function POST(request: NextRequest) {
           (SELECT COUNT(*)::bigint FROM waitlist_entries WHERE email <= ${email}) AS position,
           (SELECT COUNT(*)::bigint FROM waitlist_entries) AS total
       `;
-      return NextResponse.json({
+      return waitlistJson({
         success: true,
         message: 'Successfully joined waitlist',
         position: Number(posRow[0].position),
@@ -182,10 +178,10 @@ export async function POST(request: NextRequest) {
       /* keep raw */
     }
     if (joinResponse!.ok) {
-      return NextResponse.json(payload, { status: 200 });
+      return waitlistJson(payload);
     }
     if (joinResponse!.status === 409) {
-      return NextResponse.json(payload, { status: 409 });
+      return waitlistJson(payload, { status: 409 });
     }
     // Orchestrator returned non-OK/non-409 — try local Prisma as last resort
     console.error(`Orchestrator returned ${joinResponse!.status}, falling back to local Prisma`);
@@ -198,22 +194,16 @@ export async function POST(request: NextRequest) {
     } catch (insertErr) {
       const msg = insertErr instanceof Error ? insertErr.message : '';
       if (msg.includes('unique') || msg.includes('duplicate')) {
-        return NextResponse.json(
-          { error: 'Email already on waitlist' },
-          { status: 409 }
-        );
+        return waitlistJson({ error: 'Email already on waitlist' }, { status: 409 });
       }
-      return NextResponse.json(
-        { error: 'Failed to join waitlist' },
-        { status: 500 }
-      );
+      return waitlistJson({ error: 'Failed to join waitlist' }, { status: 500 });
     }
     const posRow = await prisma.$queryRaw<[{ position: bigint; total: bigint }]>`
       SELECT
         (SELECT COUNT(*)::bigint FROM waitlist_entries WHERE email <= ${email}) AS position,
         (SELECT COUNT(*)::bigint FROM waitlist_entries) AS total
     `;
-    return NextResponse.json({
+    return waitlistJson({
       success: true,
       message: 'Successfully joined waitlist',
       position: Number(posRow[0].position),
@@ -224,15 +214,9 @@ export async function POST(request: NextRequest) {
     console.error('Waitlist POST unexpected error:', err);
     const msg = err instanceof Error ? err.message : 'Unknown error';
     if (msg.includes('JSON')) {
-      return NextResponse.json(
-        { error: 'Invalid request body' },
-        { status: 400 }
-      );
+      return waitlistJson({ error: 'Invalid request body' }, { status: 400 });
     }
-    return NextResponse.json(
-      { error: 'Failed to join waitlist' },
-      { status: 500 }
-    );
+    return waitlistJson({ error: 'Failed to join waitlist' }, { status: 500 });
   }
 }
 
