@@ -71,3 +71,5 @@ EXPOSE 3000
 
 CMD ["./railway-start.sh"]
 # OS-6448: rebuild trigger 2026-10-06T18:30Z — removed invalid VEX_OS6448_TRIGGER=1 line that broke build
+
+# OS-9351: rebuild trigger 2026-10-06T21:44Z — pricing tier CTAs still pre-fix <button>
