@@ -70,3 +70,4 @@ USER nextjs
 EXPOSE 3000
 
 CMD ["./railway-start.sh"]
+VEX_OS6448_TRIGGER=1
