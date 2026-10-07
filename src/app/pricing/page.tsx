@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { CheckoutButton } from '@/components/CheckoutButton';
 
 export const dynamic = 'force-dynamic';
 
@@ -161,17 +160,6 @@ function TierCta({ tier }: { tier: (typeof TIERS)[number] }) {
   // OS-6088: class lets page-local CSS beat dark --color-accent-border (#9A7A3A
   // on #221E18 = 4.12:1 FAIL). Inline color still used as the light-theme default.
   const className = tier.highlighted ? 'cta-highlighted' : 'cta-primary';
-
-  if (tier.id === 'agent-connect' || tier.id === 'pro') {
-    return (
-      <CheckoutButton
-        tier={tier.id as 'agent-connect' | 'pro'}
-        label={tier.cta}
-        style={style}
-        className={className}
-      />
-    );
-  }
 
   return (
     <Link href={tier.ctaHref} style={style} className={className}>
