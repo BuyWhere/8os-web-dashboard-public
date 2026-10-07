@@ -24,8 +24,8 @@ const TIERS = [
     period: 'forever',
     description: 'Discover your archetype and explore your blueprint. No credit card required.',
     cta: 'Get Started Free',
-    // OS-6475: carry plan intent so the signup redirect can preserve it.
-    ctaHref: '/onboarding?plan=free',
+    // OS-6475 / OS-9351 r2: direct /signup preserves plan intent; /onboarding loses it.
+    ctaHref: '/signup?plan=free',
     highlighted: false,
     features: [
       { label: 'Basic archetype card (Western + BaZi synthesis)', included: true },
@@ -306,11 +306,11 @@ export default function PricingPage() {
           <h2 style={ctaTitleStyle}>Start for free today</h2>
           <p style={ctaDescStyle}>30 seconds. No credit card. Your archetype is waiting.</p>
           <div style={{ display: 'flex', gap: '1rem', justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link href="/onboarding?plan=free" style={ctaButtonStyle}>Get Your Free Archetype</Link>
+            <Link href="/signup?plan=free" style={ctaButtonStyle}>Get Your Free Archetype</Link>
             {/* De-prelaunch: product is live; secondary CTA sends high-intent
                 pricing visitors straight to account creation. */}
             <Link
-              href="/onboarding?plan=free"
+              href="/signup?plan=free"
               style={{
                 ...ctaButtonStyle,
                 background: 'var(--color-accent-soft)',
